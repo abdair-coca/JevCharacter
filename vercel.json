@@ -1,0 +1,8 @@
+{
+  "framework": "vite",
+  "functions": {
+    "api/decide.ts": {
+      "maxDuration": 10
+    }
+  }
+}
