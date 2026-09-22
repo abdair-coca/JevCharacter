@@ -6,8 +6,7 @@ import BrainHUD from "./components/BrainHUD";
 import ContextWhisper from "./components/ContextWhisper";
 import DebugPanel from "./components/DebugPanel";
 
-import type { CharacterController, CharacterState } from "./character/useCharacterController";
-import type { Reaction } from "./creature/brain/brain.types";
+import type { CharacterController } from "./character/useCharacterController";
 import { useCreatureBrain } from "./hooks/useCreatureBrain";
 import { usePointerSensor } from "./creature/sensors/pointerSensor";
 
@@ -27,25 +26,6 @@ export default function App() {
   const wakePlayedRef = useRef(false);
   const sensors = usePointerSensor(stageRef, creatureShellRef);
   const brain = useCreatureBrain(sensors, characterRef);
-
-  const handleDebugState = useCallback((state: CharacterState) => {
-    if (state === "Cloud") {
-      void characterRef.current?.cloud();
-      return;
-    }
-    if (state === "Talk") {
-      void characterRef.current?.talk();
-      return;
-    }
-
-    const reactionByState: Record<Exclude<CharacterState, "Cloud" | "Talk">, Reaction> = {
-      Base: "BASE",
-      Hello: "HELLO",
-      Ghost: "GHOST",
-      Flower: "FLOWER",
-    };
-    brain.forceReaction(reactionByState[state]);
-  }, [brain.forceReaction]);
 
   const handleStagePointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
     const target = event.target;
@@ -161,7 +141,7 @@ export default function App() {
         personality={brain.personality}
         decision={brain.decision}
         latencyMs={brain.apiLatencyMs}
-        onState={handleDebugState}
+        onState={brain.forceState}
         onClose={() => setDebugActive(false)}
       />
 

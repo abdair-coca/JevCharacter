@@ -27,9 +27,7 @@ type SensorState = {
   returnedUntil: number;
   clickBurstVersion: number;
   returnedVersion: number;
-  strongMotionVersion: number;
   lastBurstAt: number;
-  lastStrongMotionAt: number;
   animationFrame: number | null;
 };
 
@@ -71,9 +69,7 @@ export function usePointerSensor(
     returnedUntil: 0,
     clickBurstVersion: 0,
     returnedVersion: 0,
-    strongMotionVersion: 0,
     lastBurstAt: 0,
-    lastStrongMotionAt: 0,
     animationFrame: null,
   });
 
@@ -84,12 +80,6 @@ export function usePointerSensor(
     const mountedAt = performance.now();
     if (state.sessionStart === 0) state.sessionStart = mountedAt;
     if (state.lastInteractionAt === 0) state.lastInteractionAt = mountedAt;
-
-    const distanceFromCreature = (x: number, y: number) => {
-      const rect = creatureRef.current?.getBoundingClientRect();
-      if (!rect) return Number.POSITIVE_INFINITY;
-      return Math.hypot(x - (rect.left + rect.width / 2), y - (rect.top + rect.height / 2));
-    };
 
     const paintPointer = () => {
       state.animationFrame = null;
@@ -128,15 +118,6 @@ export function usePointerSensor(
         state.lastCountedMoveAt = now;
         state.lastInteractionAt = now;
         state.interactions += 1;
-      }
-
-      if (
-        state.speed >= BRAIN_CONFIG.strongMotionSpeed &&
-        distanceFromCreature(event.clientX, event.clientY) < BRAIN_CONFIG.nearDistancePx * 1.25 &&
-        now - state.lastStrongMotionAt > BRAIN_CONFIG.decisionCooldownMs
-      ) {
-        state.lastStrongMotionAt = now;
-        state.strongMotionVersion += 1;
       }
 
       schedulePaint();
@@ -262,7 +243,6 @@ export function usePointerSensor(
       eventVersions: {
         clickBurst: state.clickBurstVersion,
         returned: state.returnedVersion,
-        strongMotion: state.strongMotionVersion,
       },
     };
   }, [creatureRef]);

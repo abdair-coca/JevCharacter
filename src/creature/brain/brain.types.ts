@@ -31,24 +31,15 @@ export type SensorSnapshot = {
   eventVersions: {
     clickBurst: number;
     returned: number;
-    strongMotion: number;
   };
 };
 
 export type CreatureWorldState = {
   userContext: string;
   interaction: {
-    cursorDistance: number;
-    cursorSpeed: number;
-    cursorNearCreature: boolean;
-    mouseInsideStage: boolean;
-    recentClicks: number;
-    interactionBurst: boolean;
     idleSeconds: number;
     returnedAfterAbsence: boolean;
     absenceSeconds: number;
-    pointerType: PointerKind;
-    pointerHoldSeconds: number;
   };
   creature: {
     previousReaction: Reaction;
@@ -57,7 +48,6 @@ export type CreatureWorldState = {
   };
   session: {
     secondsAlive: number;
-    interactions: number;
   };
 };
 
@@ -78,12 +68,7 @@ export type ReactionHistoryEntry = {
   timestamp: number;
 };
 
-export type DecisionReason =
-  | "periodic"
-  | "context"
-  | "return"
-  | "click-burst"
-  | "strong-motion";
+export type DecisionReason = "context" | "return";
 
 export type SchedulerFrame = {
   state: CreatureWorldState;

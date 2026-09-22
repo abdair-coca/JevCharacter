@@ -13,9 +13,8 @@ import { fallbackBrain } from "./fallbackBrain";
 
 type SchedulerOptions = {
   getFrame: () => SchedulerFrame;
-  onDecision: (decision: BrainDecision, latencyMs: number) => void;
+  onDecision: (decision: BrainDecision, latencyMs: number, reason: DecisionReason) => void;
   onStatus: (status: BrainStatus) => void;
-  onObserving: () => void;
 };
 
 type CachedDecision = {
@@ -67,22 +66,13 @@ function parseDecision(value: unknown): BrainDecision | null {
 function fingerprint(state: CreatureWorldState) {
   return JSON.stringify({
     context: state.userContext,
-    distance: Math.round(state.interaction.cursorDistance / 80),
-    speed: Math.round(state.interaction.cursorSpeed / 250),
-    near: state.interaction.cursorNearCreature,
-    clicks: state.interaction.recentClicks,
-    burst: state.interaction.interactionBurst,
     idle: Math.round(state.interaction.idleSeconds / 4),
     returned: state.interaction.returnedAfterAbsence,
     absence: Math.round(state.interaction.absenceSeconds / 5),
-    inside: state.interaction.mouseInsideStage,
-    pointer: state.interaction.pointerType,
-    hold: Math.round(state.interaction.pointerHoldSeconds * 2),
     previous: state.creature.previousReaction,
     energy: Math.round(state.creature.personality.energy / 5),
     trust: Math.round(state.creature.personality.trust / 5),
     curiosity: Math.round(state.creature.personality.curiosity / 5),
-    interactions: Math.round(state.session.interactions / 3),
   });
 }
 
@@ -139,12 +129,10 @@ export class DecisionScheduler {
   private activeRequest: AbortController | null = null;
   private activeFingerprint = "";
   private lastDecisionAt = 0;
-  private lastFingerprint = "";
-  private lastInteractionCount = 0;
   private requestTimes: number[] = [];
   private history: ReactionHistoryEntry[] = [];
   private cache = new Map<string, CachedDecision>();
-  private eventVersions = { clickBurst: 0, returned: 0, strongMotion: 0 };
+  private returnedVersion = 0;
 
   constructor(options: SchedulerOptions) {
     this.options = options;
@@ -153,8 +141,7 @@ export class DecisionScheduler {
   start() {
     if (this.timer !== null) return;
     const initial = this.options.getFrame().sensors;
-    this.lastInteractionCount = initial.interactionCount;
-    this.eventVersions = { ...initial.eventVersions };
+    this.returnedVersion = initial.eventVersions.returned;
     this.timer = window.setInterval(() => this.tick(), BRAIN_CONFIG.schedulerPollMs);
   }
 
@@ -172,46 +159,17 @@ export class DecisionScheduler {
 
   private tick() {
     if (document.visibilityState !== "visible") return;
-    const frame = this.options.getFrame();
-    const sensors = frame.sensors;
+    const sensors = this.options.getFrame().sensors;
     const now = performance.now();
     const cooledDown = now - this.lastDecisionAt >= BRAIN_CONFIG.decisionCooldownMs;
     if (this.activeRequest) return;
 
-    if (sensors.eventVersions.returned !== this.eventVersions.returned) {
+    if (sensors.eventVersions.returned !== this.returnedVersion) {
       if (cooledDown) {
-        this.eventVersions.returned = sensors.eventVersions.returned;
+        this.returnedVersion = sensors.eventVersions.returned;
         void this.decide("return");
       }
       return;
-    }
-
-    if (sensors.eventVersions.clickBurst !== this.eventVersions.clickBurst) {
-      if (cooledDown) {
-        this.eventVersions.clickBurst = sensors.eventVersions.clickBurst;
-        void this.decide("click-burst");
-      }
-      return;
-    }
-
-    if (sensors.eventVersions.strongMotion !== this.eventVersions.strongMotion) {
-      if (cooledDown) {
-        this.eventVersions.strongMotion = sensors.eventVersions.strongMotion;
-        void this.decide("strong-motion");
-      }
-      return;
-    }
-
-    const hasActivity = sensors.interactionCount > this.lastInteractionCount;
-    if (hasActivity) this.lastInteractionCount = sensors.interactionCount;
-
-    if (
-      hasActivity &&
-      sensors.idleSeconds * 1000 < BRAIN_CONFIG.idleStopMs &&
-      now - this.lastDecisionAt >= BRAIN_CONFIG.periodicDecisionMs
-    ) {
-      const nextFingerprint = fingerprint(frame.state);
-      if (nextFingerprint !== this.lastFingerprint) void this.decide("periodic");
     }
   }
 
@@ -241,13 +199,13 @@ export class DecisionScheduler {
     const cached = this.cache.get(stateFingerprint);
 
     if (cached && now - cached.savedAt < BRAIN_CONFIG.cacheTtlMs) {
-      this.finishDecision(cached.decision, frame.state, 0, stateFingerprint);
+      this.finishDecision(cached.decision, frame.state, 0, reason);
       return;
     }
 
     if (!this.withinRateLimit()) {
       const fallback = fallbackBrain(frame.state, reason);
-      this.finishDecision(fallback, frame.state, 0, stateFingerprint);
+      this.finishDecision(fallback, frame.state, 0, reason);
       return;
     }
 
@@ -258,7 +216,6 @@ export class DecisionScheduler {
     this.activeFingerprint = stateFingerprint;
     this.requestTimes.push(Date.now());
     this.options.onStatus("deciding");
-    this.options.onObserving();
 
     try {
       const response = await fetch("/api/decide", {
@@ -272,7 +229,12 @@ export class DecisionScheduler {
       if (this.activeRequest !== controller) return;
       if (isUnavailableResponse(payload)) {
         const fallback = fallbackBrain(frame.state, reason);
-        this.finishDecision(fallback, frame.state, performance.now() - startedAt, stateFingerprint);
+        this.finishDecision(
+          fallback,
+          frame.state,
+          performance.now() - startedAt,
+          reason,
+        );
         return;
       }
       const decision = parseDecision(payload);
@@ -282,12 +244,22 @@ export class DecisionScheduler {
         if (oldestKey) this.cache.delete(oldestKey);
       }
       this.cache.set(stateFingerprint, { decision, savedAt: performance.now() });
-      this.finishDecision(decision, frame.state, performance.now() - startedAt, stateFingerprint);
+      this.finishDecision(
+        decision,
+        frame.state,
+        performance.now() - startedAt,
+        reason,
+      );
     } catch (error) {
       if (controller.signal.aborted && this.activeRequest !== controller) return;
       if (import.meta.env.DEV) console.warn("[jevling] Jev unavailable; using local instinct", error);
       const fallback = fallbackBrain(frame.state, reason);
-      this.finishDecision(fallback, frame.state, performance.now() - startedAt, stateFingerprint);
+      this.finishDecision(
+        fallback,
+        frame.state,
+        performance.now() - startedAt,
+        reason,
+      );
     } finally {
       window.clearTimeout(timeout);
       if (this.activeRequest === controller) {
@@ -301,7 +273,7 @@ export class DecisionScheduler {
     rawDecision: BrainDecision,
     state: CreatureWorldState,
     latencyMs: number,
-    stateFingerprint: string,
+    reason: DecisionReason,
   ) {
     const decision = cohereDecision(rawDecision, state, this.history);
     const timestamp = Date.now();
@@ -310,8 +282,7 @@ export class DecisionScheduler {
       { reaction: decision.reaction, confidence: decision.reactionConfidence, timestamp },
     ].slice(-5);
     this.lastDecisionAt = performance.now();
-    this.lastFingerprint = stateFingerprint;
-    this.options.onDecision(decision, latencyMs);
+    this.options.onDecision(decision, latencyMs, reason);
     this.options.onStatus("observing");
   }
 }

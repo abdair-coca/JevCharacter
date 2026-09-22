@@ -56,26 +56,15 @@ function isWorldState(value: unknown): value is CreatureWorldState {
   const interaction = value.interaction;
   const creature = value.creature;
   const session = value.session;
-  const pointerTypes = ["mouse", "touch", "pen", "unknown"];
 
   return (
-    isFiniteInRange(interaction.cursorDistance, 0, 2000) &&
-    isFiniteInRange(interaction.cursorSpeed, 0, BRAIN_CONFIG.maxCursorSpeed) &&
-    isBoolean(interaction.cursorNearCreature) &&
-    isBoolean(interaction.mouseInsideStage) &&
-    isFiniteInRange(interaction.recentClicks, 0, 20) &&
-    isBoolean(interaction.interactionBurst) &&
     isFiniteInRange(interaction.idleSeconds, 0, 86_400) &&
     isBoolean(interaction.returnedAfterAbsence) &&
     isFiniteInRange(interaction.absenceSeconds, 0, 604_800) &&
-    typeof interaction.pointerType === "string" &&
-    pointerTypes.includes(interaction.pointerType) &&
-    isFiniteInRange(interaction.pointerHoldSeconds, 0, 3600) &&
     isReaction(creature.previousReaction) &&
     isFiniteInRange(creature.secondsSinceReaction, 0, 86_400) &&
     isPersonality(creature.personality) &&
-    isFiniteInRange(session.secondsAlive, 0, 604_800) &&
-    isFiniteInRange(session.interactions, 0, 10_000_000)
+    isFiniteInRange(session.secondsAlive, 0, 604_800)
   );
 }
 
@@ -138,11 +127,11 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         state: body.state,
         questions: {
           reaction: choice(
-            "Choose the most coherent visible behavior for this creature now. Prefer restraint and continuity; doing little is often intentional.",
+            "Choose the most coherent visible behavior for this creature now. Read state.userContext as direct user intent and give it priority. A submitted message is not automatically a greeting. Prefer restraint and continuity; doing little is often intentional. Interpret explicit intent such as scare, frighten, intimidate, threaten, or a playful attempt to frighten as GHOST. Use HELLO only for a greeting, arrival, or reunion; use FLOWER for affection, reassurance, or delight; otherwise use BASE.",
             {
               BASE: "Neutral observation. Stay present without a dramatic action.",
-              HELLO: "Warm recognition, especially for arrival, reunion, or friendly acknowledgment.",
-              GHOST: "Startled, wary, strange, or dramatic response to abrupt or threatening interaction.",
+              HELLO: "Warm recognition for an explicit greeting, arrival, reunion, or friendly acknowledgment.",
+              GHOST: "Startled, wary, strange, or dramatic response to explicit frightening, threatening, intimidating, or playful-scaring intent in the user's context.",
               FLOWER: "Gentle affection, trust, delight, reassurance, or curious warmth.",
             },
           ),

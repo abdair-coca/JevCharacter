@@ -24,10 +24,6 @@ export async function reactWithRive(
   await character.playFor(STATE_BY_REACTION[reaction], REACTION_DURATIONS[reaction]);
 }
 
-export function showRiveObserving(character: CharacterController | null) {
-  return character?.play("Cloud");
-}
-
 export function playRiveReaction(character: CharacterController | null, reaction: Reaction) {
   return reactWithRive(character, { reaction });
 }

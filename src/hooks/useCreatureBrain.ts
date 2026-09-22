@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 
-import type { CharacterController } from "../character/useCharacterController";
+import type { CharacterController, CharacterState } from "../character/useCharacterController";
 import { BRAIN_CONFIG } from "../creature/brain/brainConfig";
 import { DecisionScheduler } from "../creature/brain/decisionScheduler";
 import type {
@@ -18,9 +18,7 @@ import {
   savePersonality,
 } from "../creature/personality/personalityStorage";
 import {
-  playRiveReaction,
   reactWithRive,
-  showRiveObserving,
 } from "../creature/rive/riveReactionAdapter";
 import type { SensorController } from "../creature/sensors/pointerSensor";
 import { readStorage, writeStorage } from "../lib/storage";
@@ -58,7 +56,7 @@ type CreatureBrain = {
   apiLatencyMs: number;
   submitContext: (context: string) => void;
   clearContext: () => void;
-  forceReaction: (reaction: Reaction) => void;
+  forceState: (state: CharacterState) => void;
 };
 
 export function useCreatureBrain(
@@ -77,6 +75,10 @@ export function useCreatureBrain(
   const decisionRef = useRef(decision);
   const lastReactionAtRef = useRef(0);
   const contextEventRef = useRef(0);
+  const statusRef = useRef<BrainStatus>("observing");
+  const thinkingTimerRef = useRef<number | null>(null);
+  const thinkingShownRef = useRef(false);
+  const pendingMessageRef = useRef(false);
   const consumedEventRef = useRef({ clickBurst: 0, returned: 0, context: 0 });
 
   const getFrame = useCallback((): SchedulerFrame => {
@@ -84,17 +86,9 @@ export function useCreatureBrain(
     const state: CreatureWorldState = {
       userContext: contextRef.current,
       interaction: {
-        cursorDistance: snapshot.cursorDistance,
-        cursorSpeed: snapshot.cursorSpeed,
-        cursorNearCreature: snapshot.cursorNearCreature,
-        mouseInsideStage: snapshot.mouseInsideStage,
-        recentClicks: snapshot.recentClicks,
-        interactionBurst: snapshot.interactionBurst,
         idleSeconds: Number(snapshot.idleSeconds.toFixed(1)),
         returnedAfterAbsence: snapshot.returnedAfterAbsence,
         absenceSeconds: Number(snapshot.absenceSeconds.toFixed(1)),
-        pointerType: snapshot.pointerType,
-        pointerHoldSeconds: Number(snapshot.pointerHoldSeconds.toFixed(1)),
       },
       creature: {
         previousReaction: decisionRef.current.reaction,
@@ -103,7 +97,6 @@ export function useCreatureBrain(
       },
       session: {
         secondsAlive: Number(snapshot.sessionSeconds.toFixed(1)),
-        interactions: snapshot.interactionCount,
       },
     };
     return { state, sensors: snapshot };
@@ -111,15 +104,48 @@ export function useCreatureBrain(
 
   useEffect(() => {
     lastReactionAtRef.current = performance.now() - BRAIN_CONFIG.strongReactionCooldownMs;
+
+    const clearThinkingTimer = () => {
+      if (thinkingTimerRef.current === null) return;
+      window.clearTimeout(thinkingTimerRef.current);
+      thinkingTimerRef.current = null;
+    };
+
+    const updateStatus = (nextStatus: BrainStatus) => {
+      statusRef.current = nextStatus;
+      setStatus(nextStatus);
+      clearThinkingTimer();
+
+      if (nextStatus === "deciding") {
+        thinkingTimerRef.current = window.setTimeout(() => {
+          thinkingTimerRef.current = null;
+          if (statusRef.current === "deciding") {
+            thinkingShownRef.current = true;
+            void characterRef.current?.cloud();
+          }
+        }, BRAIN_CONFIG.thinkingDelayMs);
+      }
+    };
+
     const scheduler = new DecisionScheduler({
       getFrame,
-      onStatus: setStatus,
-      onObserving: () => {
-        void showRiveObserving(characterRef.current);
-      },
-      onDecision: (nextDecision, latencyMs) => {
+      onStatus: updateStatus,
+      onDecision: (nextDecision, latencyMs, reason) => {
+        const previousDecision = decisionRef.current;
+        const reactionChanged = previousDecision.reaction !== nextDecision.reaction;
+        const wasThinking = thinkingShownRef.current;
+        const contextMessage = reason === "context" && pendingMessageRef.current;
+        const shouldTalk =
+          contextMessage &&
+          nextDecision.source === "jev" &&
+          nextDecision.reaction === "BASE" &&
+          nextDecision.wantsAttention >= BRAIN_CONFIG.talkAttentionThreshold;
+
+        clearThinkingTimer();
+        thinkingShownRef.current = false;
+        if (reason === "context") pendingMessageRef.current = false;
         decisionRef.current = nextDecision;
-        lastReactionAtRef.current = performance.now();
+        if (reactionChanged) lastReactionAtRef.current = performance.now();
         setDecision(nextDecision);
         setApiLatencyMs(Math.round(latencyMs));
         setHistory((current) => [
@@ -130,13 +156,19 @@ export function useCreatureBrain(
             timestamp: Date.now(),
           },
         ].slice(-5));
-        void reactWithRive(characterRef.current, nextDecision);
+
+        if (shouldTalk) {
+          void characterRef.current?.talk();
+        } else if (reactionChanged || wasThinking) {
+          void reactWithRive(characterRef.current, nextDecision);
+        }
       },
     });
     schedulerRef.current = scheduler;
     scheduler.start();
 
     return () => {
+      clearThinkingTimer();
       scheduler.stop();
       schedulerRef.current = null;
     };
@@ -172,6 +204,7 @@ export function useCreatureBrain(
   const submitContext = useCallback(
     (context: string) => {
       const safeContext = context.slice(0, BRAIN_CONFIG.contextMaxLength);
+      pendingMessageRef.current = true;
       contextRef.current = safeContext;
       setUserContext(safeContext);
       writeStorage(CONTEXT_KEY, { version: 1, value: safeContext });
@@ -183,6 +216,7 @@ export function useCreatureBrain(
   );
 
   const clearContext = useCallback(() => {
+    pendingMessageRef.current = false;
     contextRef.current = "";
     setUserContext("");
     writeStorage(CONTEXT_KEY, { version: 1, value: "" });
@@ -190,8 +224,24 @@ export function useCreatureBrain(
     schedulerRef.current?.requestContextDecision();
   }, [sensors]);
 
-  const forceReaction = useCallback(
-    (reaction: Reaction) => {
+  const forceState = useCallback(
+    (state: CharacterState) => {
+      if (state === "Cloud") {
+        void characterRef.current?.cloud();
+        return;
+      }
+      if (state === "Talk") {
+        void characterRef.current?.talk();
+        return;
+      }
+
+      const reactionByState: Record<Exclude<CharacterState, "Cloud" | "Talk">, Reaction> = {
+        Base: "BASE",
+        Hello: "HELLO",
+        Ghost: "GHOST",
+        Flower: "FLOWER",
+      };
+      const reaction = reactionByState[state];
       const next = {
         ...decisionRef.current,
         reaction,
@@ -200,7 +250,7 @@ export function useCreatureBrain(
       decisionRef.current = next;
       lastReactionAtRef.current = performance.now();
       setDecision(next);
-      void playRiveReaction(characterRef.current, reaction);
+      void reactWithRive(characterRef.current, next);
     },
     [characterRef],
   );
@@ -214,6 +264,6 @@ export function useCreatureBrain(
     apiLatencyMs,
     submitContext,
     clearContext,
-    forceReaction,
+    forceState,
   };
 }
