@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { REACTIONS, type BrainDecision, type Personality, type Reaction, type SensorSnapshot } from "../creature/brain/brain.types";
+import { CHARACTER_STATES, type CharacterState } from "../character/useCharacterController";
+import { type BrainDecision, type Personality, type SensorSnapshot } from "../creature/brain/brain.types";
 
 type Props = {
   active: boolean;
@@ -8,7 +9,7 @@ type Props = {
   personality: Personality;
   decision: BrainDecision;
   latencyMs: number;
-  onReaction: (reaction: Reaction) => void;
+  onState: (state: CharacterState) => void;
   onClose: () => void;
 };
 
@@ -18,7 +19,7 @@ export default function DebugPanel({
   personality,
   decision,
   latencyMs,
-  onReaction,
+  onState,
   onClose,
 }: Props) {
   const [snapshot, setSnapshot] = useState<SensorSnapshot | null>(null);
@@ -53,9 +54,9 @@ export default function DebugPanel({
         <div><dt>latency</dt><dd>{latencyMs}ms</dd></div>
       </dl>
       <div className="debug-panel__actions">
-        {REACTIONS.map((reaction) => (
-          <button type="button" key={reaction} onClick={() => onReaction(reaction)}>
-            {reaction}
+        {CHARACTER_STATES.map((state) => (
+          <button type="button" key={state} onClick={() => onState(state)}>
+            {state}
           </button>
         ))}
       </div>

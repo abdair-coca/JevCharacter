@@ -33,7 +33,8 @@ const Character = forwardRef<CharacterController, Props>(
       src: "/rive/character.riv",
       stateMachine: STATE_MACHINE,
       autoplay: true,
-      autoBind: false,
+      autoBind: true,
+      shouldDisableRiveListeners: false,
 
       layout: new Layout({
         fit: Fit.Contain,
@@ -66,7 +67,7 @@ const Character = forwardRef<CharacterController, Props>(
     const character =
       useCharacterController(
         setState,
-        triggerState
+        triggerState,
       );
 
     useImperativeHandle(
@@ -77,7 +78,7 @@ const Character = forwardRef<CharacterController, Props>(
 
     useEffect(() => {
       if (rive) onReady?.();
-    }, [onReady, rive, setState, triggerState]);
+    }, [onReady, rive]);
 
     return (
       <div

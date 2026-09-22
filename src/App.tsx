@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 
 import Character from "./components/Character";
 import AmbientStage from "./components/AmbientStage";
@@ -6,9 +6,8 @@ import BrainHUD from "./components/BrainHUD";
 import ContextWhisper from "./components/ContextWhisper";
 import DebugPanel from "./components/DebugPanel";
 
-import type {
-  CharacterController,
-} from "./character/useCharacterController";
+import type { CharacterController, CharacterState } from "./character/useCharacterController";
+import type { Reaction } from "./creature/brain/brain.types";
 import { useCreatureBrain } from "./hooks/useCreatureBrain";
 import { usePointerSensor } from "./creature/sensors/pointerSensor";
 
@@ -28,6 +27,45 @@ export default function App() {
   const wakePlayedRef = useRef(false);
   const sensors = usePointerSensor(stageRef, creatureShellRef);
   const brain = useCreatureBrain(sensors, characterRef);
+
+  const handleDebugState = useCallback((state: CharacterState) => {
+    if (state === "Cloud") {
+      void characterRef.current?.cloud();
+      return;
+    }
+    if (state === "Talk") {
+      void characterRef.current?.talk();
+      return;
+    }
+
+    const reactionByState: Record<Exclude<CharacterState, "Cloud" | "Talk">, Reaction> = {
+      Base: "BASE",
+      Hello: "HELLO",
+      Ghost: "GHOST",
+      Flower: "FLOWER",
+    };
+    brain.forceReaction(reactionByState[state]);
+  }, [brain.forceReaction]);
+
+  const handleStagePointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
+    const target = event.target;
+    if (target instanceof HTMLCanvasElement) {
+      const creature = creatureShellRef.current?.getBoundingClientRect();
+      const insideCreature = creature &&
+        event.clientX >= creature.left &&
+        event.clientX <= creature.right &&
+        event.clientY >= creature.top &&
+        event.clientY <= creature.bottom;
+      if (insideCreature) return;
+    }
+    if (
+      target instanceof HTMLElement &&
+      target.closest("button, input, textarea, select, a, [role='button']")
+    ) {
+      return;
+    }
+    void characterRef.current?.bump();
+  }, []);
 
   const wakeCharacter = useCallback(() => {
     if (wakePlayedRef.current) return;
@@ -57,7 +95,7 @@ export default function App() {
   };
 
   return (
-    <main className="stage" ref={stageRef} style={stageStyle}>
+    <main className="stage" ref={stageRef} style={stageStyle} onPointerDown={handleStagePointerDown}>
       <AmbientStage
         intensity={brain.decision.intensity}
         wantsAttention={brain.decision.wantsAttention}
@@ -71,7 +109,7 @@ export default function App() {
         <div className={`brain-link ${brain.status === "deciding" ? "brain-link--deciding" : ""}`}>
           <span />
           {brain.status === "deciding"
-            ? "OBSERVING"
+            ? "DECIDING"
             : brain.decision.source === "jev"
               ? "JEV ONLINE"
               : "LOCAL INSTINCT"}
@@ -123,7 +161,7 @@ export default function App() {
         personality={brain.personality}
         decision={brain.decision}
         latencyMs={brain.apiLatencyMs}
-        onReaction={brain.forceReaction}
+        onState={handleDebugState}
         onClose={() => setDebugActive(false)}
       />
 

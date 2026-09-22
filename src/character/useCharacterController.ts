@@ -1,5 +1,7 @@
 import { useCallback, useRef } from "react";
 
+import { BRAIN_CONFIG } from "../creature/brain/brainConfig";
+
 export const CHARACTER_STATES = [
   "Base",
   "Hello",
@@ -29,14 +31,27 @@ const nextFrame = () =>
 
 export function useCharacterController(
   setRiveState: SetState,
-  triggerState: Trigger
+  triggerState: Trigger,
 ) {
   const executionId = useRef(0);
+  const currentState = useRef<CharacterState>("Base");
+  const lastBumpAt = useRef(0);
+
+  const bump = useCallback(async () => {
+    const now = performance.now();
+    if (!setRiveState || !triggerState || now - lastBumpAt.current < BRAIN_CONFIG.bumpCooldownMs) return;
+
+    lastBumpAt.current = now;
+    const state = currentState.current;
+    setRiveState(state);
+    await nextFrame();
+    triggerState();
+  }, [setRiveState, triggerState]);
 
   // Función interna.
   // No cancela secuencias por sí misma.
   const rawPlay = useCallback(
-    async (state: CharacterState) => {
+    async (state: CharacterState, expectedExecutionId?: number) => {
       if (!setRiveState || !triggerState) return;
 
       // Cambiamos el enum
@@ -45,8 +60,15 @@ export function useCharacterController(
       // Dejamos que Rive procese el cambio
       await nextFrame();
 
+      if (expectedExecutionId !== undefined && expectedExecutionId !== executionId.current) return;
+
+      currentState.current = state;
+
       // Disparamos la transición
       triggerState();
+
+      // The state trigger is also the Rive-native bump for a form change.
+      // Do not fire a second animation here: it makes quick transitions feel noisy.
     },
     [setRiveState, triggerState]
   );
@@ -54,8 +76,8 @@ export function useCharacterController(
   // Reproduce un estado manualmente
   const play = useCallback(
     async (state: CharacterState) => {
-      executionId.current++;
-      await rawPlay(state);
+      const id = ++executionId.current;
+      await rawPlay(state, id);
     },
     [rawPlay]
   );
@@ -68,13 +90,13 @@ export function useCharacterController(
     ) => {
       const id = ++executionId.current;
 
-      await rawPlay(state);
+      await rawPlay(state, id);
       await sleep(duration);
 
       // Si otra animación empezó, cancelamos esta
       if (id !== executionId.current) return;
 
-      await rawPlay("Base");
+      await rawPlay("Base", id);
     },
     [rawPlay]
   );
@@ -87,12 +109,12 @@ export function useCharacterController(
       for (const step of steps) {
         if (id !== executionId.current) return;
 
-        await rawPlay(step.state);
+        await rawPlay(step.state, id);
         await sleep(step.duration);
       }
 
       if (id === executionId.current) {
-        await rawPlay("Base");
+        await rawPlay("Base", id);
       }
     },
     [rawPlay]
@@ -107,13 +129,14 @@ export function useCharacterController(
     playFor,
     sequence,
     stop,
+    bump,
 
     idle: () => play("Base"),
     hello: () => play("Hello"),
     ghost: () => play("Ghost"),
     flower: () => play("Flower"),
-    talk: () => play("Talk"),
-    cloud: () => play("Cloud"),
+    talk: () => playFor("Talk", BRAIN_CONFIG.talkDurationMs),
+    cloud: () => playFor("Cloud", BRAIN_CONFIG.cloudDurationMs),
   };
 }
 export type CharacterController =
