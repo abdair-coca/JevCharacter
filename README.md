@@ -13,13 +13,15 @@ npm install
 npm run dev
 ```
 
-Vite development mode runs the full experience with local-instinct fallback. To test the real serverless Jev route locally, create `.env.local` from `.env.example`, add your key, then run:
+Vite reads `TYPESAFE_API_KEY`, `JEV_MODEL`, `GROQ_API_KEY`, and optional `GROQ_MODEL` from the root `.env` on the server only, then runs the real `api/decide.ts` and `api/talk.ts` handlers locally. Groq is called only after Jev selects a contextual talk action; credentials are never exposed to the browser bundle.
+
+To use Vercel's local function runtime instead, link the project and run:
 
 ```bash
 npx vercel dev
 ```
 
-Never use a `VITE_` prefix for the key. `TYPESAFE_API_KEY` must remain server-side.
+Never use a `VITE_` prefix for credentials. `TYPESAFE_API_KEY` and `GROQ_API_KEY` must remain server-side.
 
 Optional model pinning:
 
@@ -38,11 +40,11 @@ Local personality = memory
 
 Rive follow behavior stays local and immediate. Summarized behavior reaches `/api/decide` only after meaningful activity, with cooldown, deduplication, caching, and client rate limits. Network or configuration failures automatically use `fallbackBrain.ts`.
 
-Press `D` outside the context input to open diagnostics and manually test every supported Rive reaction.
+Press `D` outside the context input to open diagnostics and manually test supported reactions, yes/no, and talk animation states. Morph remains automatic and is not exposed as a control.
 
 ## Why Jev?
 
-JEVLING needs a decision, not generated conversation. Jev evaluates one structured state and returns reaction choice, environmental intensity, and attention intent through `choice`, `score`, and `noul`.
+JEVLING separates behavior from generated conversation. Jev selects one validated action (reaction, visual yes/no, talk animation, or explicit morph) plus ambient intensity and attention intent through `choice`, `score`, and `noul`. Only a contextual talk action proceeds to server-side Groq streaming; other actions never request text.
 
 ## Checks
 
@@ -55,8 +57,8 @@ npm run build
 ## Deploy to Vercel
 
 1. Import this repository into Vercel.
-2. Add `TYPESAFE_API_KEY` under Project Settings → Environment Variables.
-3. Optionally add `JEV_MODEL`.
-4. Deploy. Vercel detects Vite and serves `api/decide.ts` as the only serverless function.
+2. Add `TYPESAFE_API_KEY` and `GROQ_API_KEY` under Project Settings → Environment Variables.
+3. Optionally add `JEV_MODEL` and `GROQ_MODEL`.
+4. Deploy. Vercel detects Vite and serves `api/decide.ts` and `api/talk.ts` as serverless functions.
 
 No database, authentication, or separate backend is required.

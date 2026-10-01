@@ -16,11 +16,11 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 - React compone la experiencia; TypeScript define contratos; Vite sirve el desarrollo y prepara el build. Rive presenta el personaje. Jev puede producir decisiones estructuradas mediante `POST /api/decide`; existe también una ruta de fallback local.
 - Decisión describe reacción, confianza, probabilidades, intensidad ambiental e intención de atención. No genera una respuesta textual para mostrar como chat.
 - Pointer-follow y lecturas de sensor ocurren localmente. No confundir movimiento del cursor con una solicitud al modelo ni con el `CreatureWorldState` enviado al endpoint.
-- Contexto y personalidad se guardan en `localStorage` del navegador. No asumir sincronización entre dispositivos.
+- El contexto y hasta cuatro intercambios completos viven solo en memoria de sesión. La personalidad sí se guarda en `localStorage`; nada se sincroniza entre dispositivos.
 
 ## Límites de evidencia
 
-- El middleware de Vite responde que la decisión remota no está disponible; la app usa `fallbackBrain`. `api/decide.ts` contiene una implementación opcional de servidor. Su presencia en el repositorio no prueba que esté desplegada o configurada.
+- Vite ejecuta `api/decide.ts` y `api/talk.ts` como middleware local. Carga las claves Jev/Groq solo en el servidor; `/api/talk` llama a Groq únicamente tras una acción contextual `talk`.
 - `Character` depende de un asset Rive propiedad del usuario, cargado desde la ruta configurada en la fuente. No duplicar bytes, extraer, incrustar ni describir contenido propietario de Rive o de otros medios en documentación o exports. La ruta y los archivos locales pueden cambiar.
 - No incluir valores de `.env`, claves ni secretos.
 

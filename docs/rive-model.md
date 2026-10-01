@@ -87,21 +87,11 @@ Las mayúsculas importan: los valores son `talkb`, `talkc`, `talkbc`, no `talkB`
 
 El informe encontró referencias a deformación procedural de paths (`WidthPathEffect`, `activeShape`, `fromShape`, `targetShape`, `morphTime`, `morphActive`) y operaciones geométricas (`Vector`, `Path`, `moveTo`, `lineTo`, `close`, `sqrt`, `floor`). Por tanto, las variables parecen controlar algo más que una lista fija de animaciones; validar implementación y límites con el editor antes de diseñar controles.
 
-Mapa de `shapeType` propuesto por el informe, aún pendiente de prueba visual:
-
-| Valor | Forma reportada |
-|---:|---|
-| 0 | Forma original animada |
-| 1 | Cuadrado redondeado |
-| 2 | Diamante |
-| 3 | Triángulo |
-| 4 | Blob orgánico |
-
-Preservar `shapeType = 0` como ruta para la forma original; no sustituirla por una aproximación procedural.
+El informe externo propuso un mapa numérico para `shapeType`, pero la integración actual no lo usa para seleccionar formas. La prueba visual no confirmó ese mapa; no tratarlo como contrato.
 
 ## Relación con este repositorio
 
-En el checkout actual, `Character.tsx` carga el asset indicado, selecciona `State Machine 1`, enlaza `ViewModel1` y expone `state` más `trigState`. `useCharacterController` asigna el enum, espera un frame y luego activa el trigger. El controlador actual incluye `Base`, `Hello`, `Ghost`, `Flower`, `Talk` y `Cloud`; no expone aún el conjunto de propiedades de morphing.
+La integración actual enlaza `ViewModel1.state` y `trigState`. El morph temporal selecciona un valor enum de `state` y luego restaura `Base`; `shapeType` no forma parte del contrato de selección. `think` es interno y `Cloud` queda disponible para diagnóstico. Seguimiento y click permanecen dentro del modelo Rive.
 
 Los problemas del informe externo describen otra integración. No asumir que sean bugs confirmados aquí:
 
