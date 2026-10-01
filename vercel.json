@@ -3,6 +3,9 @@
   "functions": {
     "api/decide.ts": {
       "maxDuration": 10
+    },
+    "api/talk.ts": {
+      "maxDuration": 10
     }
   }
 }

@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+/public/rive/prove1.riv
 .env
 .env.*
 !.env.example
@@ -29,3 +30,5 @@ dist-ssr
 
 # Local agent skill registry
 .atl/
+
+.vercel
