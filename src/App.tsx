@@ -17,6 +17,54 @@ type StageStyle = CSSProperties & {
   "--attention": number;
 };
 
+type SpeechCaptionProps = {
+  text: string;
+  complete: boolean;
+  generation: number;
+  onRevealed: (generation: number) => void;
+};
+
+function SpeechCaption({ text, complete, generation, onRevealed }: SpeechCaptionProps) {
+  const [visibleText, setVisibleText] = useState("");
+  const [revealed, setRevealed] = useState(false);
+  const targetRef = useRef(text);
+  const completeRef = useRef(complete);
+  const revealIndexRef = useRef(0);
+  targetRef.current = text;
+  completeRef.current = complete;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      const characters = Array.from(targetRef.current);
+      if (revealIndexRef.current < characters.length) {
+        revealIndexRef.current += 1;
+        setVisibleText(characters.slice(0, revealIndexRef.current).join(""));
+        return;
+      }
+      if (completeRef.current) {
+        window.clearInterval(timer);
+        setRevealed(true);
+        onRevealed(generation);
+      }
+    }, 28);
+    return () => window.clearInterval(timer);
+  }, [generation, onRevealed]);
+
+  return (
+    <>
+      <div
+        className={`speech-caption ${revealed ? "speech-caption--complete" : ""}`}
+        aria-hidden="true"
+      >
+        <span className={!revealed ? "speech-caption__typing" : undefined}>{visibleText}</span>
+      </div>
+      {revealed && (
+        <div className="sr-only" role="status" aria-live="polite">{text}</div>
+      )}
+    </>
+  );
+}
+
 export default function App() {
   const stageRef = useRef<HTMLElement | null>(null);
   const creatureShellRef = useRef<HTMLDivElement | null>(null);
@@ -118,6 +166,16 @@ export default function App() {
         <div key={thoughtPulse} className="thought-transfer" aria-hidden="true">
           <i /><i /><i /><i /><i />
         </div>
+      )}
+
+      {brain.speechCaption && (
+        <SpeechCaption
+          key={brain.speechCaption.generation}
+          text={brain.speechCaption.text}
+          complete={brain.speechCaption.complete}
+          generation={brain.speechCaption.generation}
+          onRevealed={brain.onSpeechCaptionRevealed}
+        />
       )}
 
       <div className="interaction-dock">
