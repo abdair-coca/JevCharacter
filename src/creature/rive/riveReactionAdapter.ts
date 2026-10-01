@@ -24,6 +24,28 @@ export async function reactWithRive(
   await character.playFor(STATE_BY_REACTION[reaction], REACTION_DURATIONS[reaction]);
 }
 
+export async function executeDecisionAction(
+  character: CharacterController | null,
+  decision: BrainDecision,
+) {
+  if (!character) return;
+
+  switch (decision.action.kind) {
+    case "reaction":
+      await reactWithRive(character, { ...decision, reaction: decision.action.reaction });
+      return;
+    case "answer":
+      await character.answer(decision.action.answer);
+      return;
+    case "talk":
+      await character.talk(decision.action.state);
+      return;
+    case "morph":
+      await character.morph(decision.action.form);
+      return;
+  }
+}
+
 export function playRiveReaction(character: CharacterController | null, reaction: Reaction) {
   return reactWithRive(character, { reaction });
 }

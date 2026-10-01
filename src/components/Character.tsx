@@ -10,6 +10,7 @@ import {
   useViewModel,
   useViewModelInstance,
   useViewModelInstanceEnum,
+  useViewModelInstanceNumber,
   useViewModelInstanceTrigger,
   Layout,
   Fit,
@@ -30,7 +31,7 @@ type Props = {
 const Character = forwardRef<CharacterController, Props>(
   function Character({ onReady }, ref) {
     const { rive, RiveComponent } = useRive({
-      src: "/rive/character.riv",
+      src: "/rive/prove1.riv",
       stateMachine: STATE_MACHINE,
       autoplay: true,
       autoBind: true,
@@ -64,10 +65,14 @@ const Character = forwardRef<CharacterController, Props>(
         viewModelInstance
       );
 
+    const { value: shapeTypeValue, setValue: setShapeType } =
+      useViewModelInstanceNumber("shapeType", viewModelInstance);
+
     const character =
       useCharacterController(
         setState,
         triggerState,
+        shapeTypeValue === null ? undefined : setShapeType,
       );
 
     useImperativeHandle(
