@@ -3,10 +3,13 @@ import type {
   BrainDecision,
   BrainStatus,
   CreatureWorldState,
+  DecisionAction,
   DecisionReason,
+  MorphForm,
   Reaction,
   ReactionHistoryEntry,
   SchedulerFrame,
+  TalkState,
 } from "./brain.types";
 import { REACTIONS } from "./brain.types";
 import { fallbackBrain } from "./fallbackBrain";
@@ -30,25 +33,86 @@ const isUnavailableResponse = (value: unknown) => {
   return value.unavailable === true;
 };
 
-function parseDecision(value: unknown): BrainDecision | null {
-  if (!value || typeof value !== "object") return null;
-  const candidate = value as Partial<BrainDecision>;
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const hasExactKeys = (value: Record<string, unknown>, keys: readonly string[]) =>
+  Object.keys(value).length === keys.length && keys.every((key) => key in value);
+
+const isTalkState = (value: unknown): value is TalkState =>
+  value === "Talk" || value === "talkb" || value === "talkc" || value === "talkbc";
+
+const isMorphForm = (value: unknown): value is MorphForm =>
+  value === "star" || value === "square" || value === "triangle";
+
+function parseAction(value: unknown): DecisionAction | null {
+  if (!isRecord(value) || typeof value.kind !== "string") return null;
+
   if (
+    value.kind === "reaction" &&
+    hasExactKeys(value, ["kind", "reaction"]) &&
+    isReaction(value.reaction)
+  ) {
+    return { kind: "reaction", reaction: value.reaction };
+  }
+  if (
+    value.kind === "answer" &&
+    hasExactKeys(value, ["kind", "answer"]) &&
+    (value.answer === "yes" || value.answer === "no")
+  ) {
+    return { kind: "answer", answer: value.answer };
+  }
+  if (
+    value.kind === "talk" &&
+    hasExactKeys(value, ["kind", "state"]) &&
+    isTalkState(value.state)
+  ) {
+    return { kind: "talk", state: value.state };
+  }
+  if (
+    value.kind === "morph" &&
+    hasExactKeys(value, ["kind", "form"]) &&
+    isMorphForm(value.form)
+  ) {
+    return { kind: "morph", form: value.form };
+  }
+  return null;
+}
+
+function parseDecision(value: unknown): BrainDecision | null {
+  if (!isRecord(value)) return null;
+  const candidate = value as Partial<BrainDecision>;
+  const action = parseAction(candidate.action);
+  if (
+    !action ||
+    typeof candidate.actionConfidence !== "number" ||
+    !Number.isFinite(candidate.actionConfidence) ||
     !isReaction(candidate.reaction) ||
     typeof candidate.reactionConfidence !== "number" ||
+    !Number.isFinite(candidate.reactionConfidence) ||
     typeof candidate.intensity !== "number" ||
+    !Number.isFinite(candidate.intensity) ||
     typeof candidate.wantsAttention !== "number" ||
+    !Number.isFinite(candidate.wantsAttention) ||
     candidate.source !== "jev" ||
-    !candidate.probabilities ||
-    typeof candidate.probabilities !== "object"
+    !isRecord(candidate.probabilities)
   ) {
     return null;
   }
 
-  const probabilities = candidate.probabilities as Record<string, unknown>;
-  if (REACTIONS.some((reaction) => typeof probabilities[reaction] !== "number")) return null;
+  const probabilities = candidate.probabilities;
+  if (
+    REACTIONS.some(
+      (reaction) =>
+        typeof probabilities[reaction] !== "number" ||
+        !Number.isFinite(probabilities[reaction]),
+    )
+  ) return null;
+  if (action.kind === "reaction" && action.reaction !== candidate.reaction) return null;
 
   return {
+    action,
+    actionConfidence: Math.max(0, Math.min(1, candidate.actionConfidence)),
     reaction: candidate.reaction,
     reactionConfidence: Math.max(0, Math.min(1, candidate.reactionConfidence)),
     probabilities: {
@@ -120,7 +184,9 @@ function cohereDecision(
     };
   }
 
-  return next;
+  return next.action.kind === "reaction"
+    ? { ...next, action: { kind: "reaction" as const, reaction: next.reaction } }
+    : next;
 }
 
 export class DecisionScheduler {

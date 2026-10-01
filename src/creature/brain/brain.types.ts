@@ -1,6 +1,14 @@
 export const REACTIONS = ["BASE", "HELLO", "GHOST", "FLOWER"] as const;
 
 export type Reaction = (typeof REACTIONS)[number];
+export type BinaryAnswer = "yes" | "no";
+export type TalkState = "Talk" | "talkb" | "talkc" | "talkbc";
+export type MorphForm = "star" | "square" | "triangle";
+export type DecisionAction =
+  | { kind: "reaction"; reaction: Reaction }
+  | { kind: "answer"; answer: BinaryAnswer }
+  | { kind: "talk"; state: TalkState }
+  | { kind: "morph"; form: MorphForm };
 export type BrainSource = "jev" | "fallback";
 export type BrainStatus = "observing" | "deciding";
 
@@ -54,6 +62,8 @@ export type CreatureWorldState = {
 export type ReactionProbabilities = Record<Reaction, number>;
 
 export type BrainDecision = {
+  action: DecisionAction;
+  actionConfidence: number;
   reaction: Reaction;
   reactionConfidence: number;
   probabilities: ReactionProbabilities;

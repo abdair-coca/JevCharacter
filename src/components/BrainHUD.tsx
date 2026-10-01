@@ -14,6 +14,15 @@ const intensityLabel = (intensity: number) => {
   return "INTENSE";
 };
 
+const actionLabel = (decision: BrainDecision) => {
+  switch (decision.action.kind) {
+    case "reaction": return decision.action.reaction;
+    case "answer": return decision.action.answer.toUpperCase();
+    case "talk": return `TALK / ${decision.action.state}`;
+    case "morph": return `MORPH / ${decision.action.form.toUpperCase()}`;
+  }
+};
+
 const Metric = ({ label, value }: { label: string; value: number }) => (
   <div className="brain-hud__metric">
     <span>{label}</span>
@@ -24,8 +33,8 @@ const Metric = ({ label, value }: { label: string; value: number }) => (
 
 export default function BrainHUD({ decision, status, personality }: Props) {
   const [expanded, setExpanded] = useState(false);
-  const confidence = Math.round(decision.reactionConfidence * 100);
-  const headline = status === "deciding" ? "DECIDING" : decision.reaction;
+  const confidence = Math.round(decision.actionConfidence * 100);
+  const headline = status === "deciding" ? "DECIDING" : actionLabel(decision);
 
   return (
     <aside className={`brain-hud ${expanded ? "brain-hud--expanded" : ""}`}>
@@ -47,7 +56,7 @@ export default function BrainHUD({ decision, status, personality }: Props) {
 
       <div className="brain-hud__details" id="brain-details" aria-hidden={!expanded}>
         <div className="brain-hud__eyebrow">
-          <span>BEHAVIOR PROBABILITY</span>
+          <span>REACTION PROBABILITY</span>
           <span>{decision.source === "jev" ? "JEV ONLINE" : "LOCAL INSTINCT"}</span>
         </div>
         <div className="brain-hud__probabilities">

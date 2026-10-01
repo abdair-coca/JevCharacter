@@ -88,6 +88,8 @@ export function fallbackBrain(
   );
 
   return {
+    action: { kind: "reaction", reaction },
+    actionConfidence: confidence,
     reaction,
     reactionConfidence: confidence,
     probabilities,

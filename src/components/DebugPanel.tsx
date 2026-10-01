@@ -48,8 +48,10 @@ export default function DebugPanel({
         <div><dt>energy</dt><dd>{personality.energy.toFixed(1)}</dd></div>
         <div><dt>trust</dt><dd>{personality.trust.toFixed(1)}</dd></div>
         <div><dt>curiosity</dt><dd>{personality.curiosity.toFixed(1)}</dd></div>
+        <div><dt>action</dt><dd>{decision.action.kind}</dd></div>
+        <div><dt>action confidence</dt><dd>{decision.actionConfidence.toFixed(2)}</dd></div>
         <div><dt>reaction</dt><dd>{decision.reaction}</dd></div>
-        <div><dt>confidence</dt><dd>{decision.reactionConfidence.toFixed(2)}</dd></div>
+        <div><dt>reaction confidence</dt><dd>{decision.reactionConfidence.toFixed(2)}</dd></div>
         <div><dt>source</dt><dd>{decision.source}</dd></div>
         <div><dt>latency</dt><dd>{latencyMs}ms</dd></div>
       </dl>
