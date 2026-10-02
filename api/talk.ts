@@ -135,6 +135,10 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     }
   });
 
+  const model = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-20b";
+  // GPT-OSS spends completion tokens on reasoning; low effort preserves room for the short reply.
+  const supportsReasoningEffort = model === "openai/gpt-oss-20b" || model === "openai/gpt-oss-120b";
+
   try {
     const upstream = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -143,12 +147,13 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-20b",
+        model,
         messages: upstreamMessages(body),
         stream: true,
         store: false,
         temperature: 0.55,
         max_completion_tokens: 64,
+        ...(supportsReasoningEffort ? { reasoning_effort: "low" } : {}),
       }),
       signal: abortController.signal,
     });
