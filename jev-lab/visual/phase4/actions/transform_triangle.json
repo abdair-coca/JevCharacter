@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "id": "transform_triangle",
+  "intent": "Transformación a triangle: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+  "durationMs": 1700,
+  "channels": [
+    "morph",
+    "gazeY",
+    "leftOpen",
+    "rightOpen"
+  ],
+  "poses": {
+    "neutral": {
+      "morph": 0,
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1
+    },
+    "notice": {
+      "morph": 0,
+      "gazeY": -2,
+      "leftOpen": 1.1,
+      "rightOpen": 1.1
+    },
+    "shape": {
+      "morph": 1,
+      "gazeY": -1,
+      "leftOpen": 1.1,
+      "rightOpen": 1.1
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "arrive",
+      "timeMs": 450,
+      "pose": "shape",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "recognize",
+      "timeMs": 1200,
+      "pose": "shape",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 1666.6666666666667,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 1700,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "targetShape": "triangle",
+  "originalState": "triangle"
+}

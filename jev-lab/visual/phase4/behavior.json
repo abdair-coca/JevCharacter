@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "recoveryMs": 150,
+  "takeoverMs": 150,
+  "ambient": {
+    "seed": 731,
+    "enabled": false,
+    "breath": {
+      "durationMs": 2800,
+      "pauseMs": [
+        5000,
+        9000
+      ],
+      "channels": [
+        "bodyScaleX",
+        "bodyScaleY",
+        "bodyY"
+      ]
+    },
+    "blink": {
+      "durationMs": 150,
+      "pauseMs": [
+        5000,
+        12000
+      ],
+      "channels": [
+        "blink"
+      ]
+    }
+  }
+}

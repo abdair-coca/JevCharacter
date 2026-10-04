@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "id": "hello",
+  "intent": "Saludo atento: ojos se abren primero; dos inclinaciones suaves, hold y regreso.",
+  "durationMs": 1200,
+  "channels": [
+    "gazeY",
+    "leftOpen",
+    "rightOpen",
+    "bodyRotation",
+    "bodyY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyRotation": 0,
+      "bodyY": 0
+    },
+    "notice": {
+      "gazeY": -2,
+      "leftOpen": 1.2,
+      "rightOpen": 1.2,
+      "bodyRotation": 0,
+      "bodyY": 0
+    },
+    "lean": {
+      "gazeY": -2,
+      "leftOpen": 1.2,
+      "rightOpen": 1.2,
+      "bodyRotation": 0.1,
+      "bodyY": -2
+    },
+    "answer": {
+      "gazeY": -1,
+      "leftOpen": 1.1,
+      "rightOpen": 1.1,
+      "bodyRotation": -0.07,
+      "bodyY": -1
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "lean",
+      "timeMs": 250,
+      "pose": "lean",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold",
+      "timeMs": 500,
+      "pose": "lean",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "answer",
+      "timeMs": 700,
+      "pose": "answer",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold_again",
+      "timeMs": 900,
+      "pose": "answer",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 1166.6666666666667,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 1200,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "originalState": "Hello"
+}

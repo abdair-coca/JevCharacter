@@ -1,0 +1,255 @@
+{
+  "schema": 1,
+  "id": "happy_bounce",
+  "intent": "Alegría breve: mirada primero, anticipación, salto pequeño, aterrizaje suave y quietud.",
+  "durationMs": 750,
+  "channels": [
+    "gazeX",
+    "gazeY",
+    "leftOpen",
+    "rightOpen",
+    "bodyY",
+    "bodyRotation",
+    "bodyScaleX",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyY": 0,
+      "bodyRotation": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "notice": {
+      "gazeX": 2,
+      "gazeY": -2,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyY": 0,
+      "bodyRotation": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "anticipation": {
+      "gazeX": 2,
+      "gazeY": -2,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyY": 5,
+      "bodyRotation": 0,
+      "bodyScaleX": 1.07,
+      "bodyScaleY": 0.93
+    },
+    "stretch": {
+      "gazeX": 2,
+      "gazeY": -2,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyY": -5,
+      "bodyRotation": 0,
+      "bodyScaleX": 0.94,
+      "bodyScaleY": 1.09
+    },
+    "apex": {
+      "gazeX": 2,
+      "gazeY": -2,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyY": -10,
+      "bodyRotation": 0.035,
+      "bodyScaleX": 1.03,
+      "bodyScaleY": 0.97
+    },
+    "fall": {
+      "gazeX": 1,
+      "gazeY": -1,
+      "leftOpen": 0.7,
+      "rightOpen": 0.7,
+      "bodyY": -3,
+      "bodyRotation": -0.025,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "landing": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 0.65,
+      "rightOpen": 0.65,
+      "bodyY": 4,
+      "bodyRotation": 0,
+      "bodyScaleX": 1.08,
+      "bodyScaleY": 0.92
+    },
+    "settle": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyY": -1,
+      "bodyRotation": 0,
+      "bodyScaleX": 0.99,
+      "bodyScaleY": 1.01
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 50,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "body_wait",
+      "timeMs": 66.66666666666667,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "anticipation",
+      "timeMs": 150,
+      "pose": "anticipation",
+      "curve": [
+        0.42,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stretch",
+      "timeMs": 233.33333333333334,
+      "pose": "stretch",
+      "curve": [
+        0,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "apex",
+      "timeMs": 350,
+      "pose": "apex",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "controlled_fall",
+      "timeMs": 416.6666666666667,
+      "pose": "apex",
+      "curve": [
+        0.42,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "fall",
+      "timeMs": 483.3333333333333,
+      "pose": "fall",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "landing",
+      "timeMs": 533.3333333333334,
+      "pose": "landing",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "settle",
+      "timeMs": 633.3333333333334,
+      "pose": "settle",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 716.6666666666666,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 750,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "variants": {
+    "gentle": {
+      "anticipation": {
+        "bodyY": 2.5
+      },
+      "stretch": {
+        "bodyY": -2.5
+      },
+      "apex": {
+        "bodyY": -5.0
+      },
+      "fall": {
+        "bodyY": -1.5
+      },
+      "landing": {
+        "bodyY": 2.0
+      },
+      "settle": {
+        "bodyY": -0.5
+      }
+    }
+  },
+  "originalState": null
+}

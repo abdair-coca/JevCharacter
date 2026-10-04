@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "id": "think",
+  "intent": "Pensamiento sostenido: ojos arriba primero; inclinación pequeña, quietud reconocible y ciclo lento.",
+  "durationMs": 2300,
+  "channels": [
+    "gazeX",
+    "gazeY",
+    "leftOpen",
+    "rightOpen",
+    "bodyRotation",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyRotation": 0,
+      "bodyScaleY": 1
+    },
+    "notice": {
+      "gazeX": 4,
+      "gazeY": -4,
+      "leftOpen": 0.8,
+      "rightOpen": 1.12,
+      "bodyRotation": 0,
+      "bodyScaleY": 1
+    },
+    "ponder": {
+      "gazeX": 4,
+      "gazeY": -4,
+      "leftOpen": 0.8,
+      "rightOpen": 1.12,
+      "bodyRotation": 0.07,
+      "bodyScaleY": 1.025
+    },
+    "reflect": {
+      "gazeX": 3,
+      "gazeY": -4,
+      "leftOpen": 0.9,
+      "rightOpen": 1.05,
+      "bodyRotation": 0.05,
+      "bodyScaleY": 1.02
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "cycle_start",
+      "timeMs": 400,
+      "pose": "ponder",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "quiet_hold",
+      "timeMs": 900,
+      "pose": "ponder",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "reflect",
+      "timeMs": 1200,
+      "pose": "reflect",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "cycle_end",
+      "timeMs": 1600,
+      "pose": "ponder",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "recognize",
+      "timeMs": 2000,
+      "pose": "ponder",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 2266.6666666666665,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 2300,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "behavior": {
+    "kind": "sustained",
+    "entryEndMs": 400,
+    "cycleStartMs": 400,
+    "cycleEndMs": 1600,
+    "exitStartMs": 2000
+  },
+  "originalState": "think"
+}

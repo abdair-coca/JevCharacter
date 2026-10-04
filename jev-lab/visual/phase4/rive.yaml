@@ -1,0 +1,4 @@
+name: jev_personality_v4
+main: JevRigV2
+output:
+  dir: ../../output/visual-phase4/build/manual
