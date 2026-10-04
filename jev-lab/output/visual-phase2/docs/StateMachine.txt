@@ -1,0 +1,13 @@
+StateMachine  (typeKey 53)
+extends StateMachineResolver > Animation > ArtboardProvider
+
+own properties:
+  flags                              uint         key 960     = 0
+      bits (write each as its own attribute, e.g. listenersExpanded="true"): listenersExpanded inputsExpanded
+
+inherited from Animation:
+  name                               String       key 55
+      Name of the animation.
+
+2 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

@@ -1,0 +1,26 @@
+GradientStop  (typeKey 19)
+extends Component > ArtboardProvider
+
+own properties:
+  colorValue                    AB   Color        key 38      = 0xFFFFFFFF
+  position                      AB   double       key 39      = 0
+  colorRed                      AB   uint         key 118     = 0
+      Red channel (0-255) of the host colorValue. Passthrough view.
+  colorGreen                    AB   uint         key 136     = 0
+      Green channel (0-255) of the host colorValue. Passthrough view.
+  colorBlue                     AB   uint         key 210     = 0
+      Blue channel (0-255) of the host colorValue. Passthrough view.
+  colorAlpha                    AB   uint         key 218     = 0
+      Alpha channel (0-255) of the host colorValue. Passthrough view.
+
+inherited from Component:
+  name                               String       key 4
+      Non-unique identifier, used to give friendly names to elements in the hierarchy. Runtimes provide an API for finding components by this [name].
+  parentId                           Id           key 5
+      Identifier used to track parent ContainerComponent.
+  flags                              uint         key 130     = 0
+      Component state. Runtime export folds visibility and selectable state into drawable flags; editor-only flags stay in the editor.
+      bits (write each as its own attribute, e.g. hidden="true"): hidden locked disconnected opaque guide isolated visibleOverride unlockedOverride participatesInLayout complexDependency selectable
+
+9 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

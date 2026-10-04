@@ -1,0 +1,44 @@
+PointsPath  (typeKey 16)
+extends PointsCommonPath > Path > Node > TransformComponent > WorldTransformComponent > ContainerComponent > Component > ArtboardProvider
+
+inherited from PointsCommonPath:
+  isClosed                           bool         key 32      = false
+      If the path should close back on its first vertex.
+
+inherited from Path:
+  pathFlags                          uint         key 128     = 0
+      Bitmask on the path itself, separate from the component hidden attribute: bit 0 (1) stops the path drawing, bit 1 (2) marks its vertices counter-clockwise.
+  isHole                        AB   bool         key 770
+      With clockwise fill rule, this marks the path as a hole.
+
+inherited from Node:
+  x                             AB   double       key 13      = 0
+  y                             AB   double       key 14      = 0
+  computedLocalX                 BD  double       key 806     = 0
+  computedLocalY                 BD  double       key 807     = 0
+  computedWorldX                 BD  double       key 808     = 0
+  computedWorldY                 BD  double       key 809     = 0
+  computedRootX                  BD  double       key 864     = 0
+  computedRootY                  BD  double       key 865     = 0
+  computedWidth                  BD  double       key 810     = 0
+  computedHeight                 BD  double       key 811     = 0
+
+inherited from TransformComponent:
+  rotation                      AB   double       key 15      = 0
+  scaleX                        AB   double       key 16      = 1
+  scaleY                        AB   double       key 17      = 1
+
+inherited from WorldTransformComponent:
+  opacity                       AB   double       key 18      = 1
+
+inherited from Component:
+  name                               String       key 4
+      Non-unique identifier, used to give friendly names to elements in the hierarchy. Runtimes provide an API for finding components by this [name].
+  parentId                           Id           key 5
+      Identifier used to track parent ContainerComponent.
+  flags                              uint         key 130     = 0
+      Component state. Runtime export folds visibility and selectable state into drawable flags; editor-only flags stay in the editor.
+      bits (write each as its own attribute, e.g. hidden="true"): hidden locked disconnected opaque guide isolated visibleOverride unlockedOverride participatesInLayout complexDependency selectable
+
+20 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

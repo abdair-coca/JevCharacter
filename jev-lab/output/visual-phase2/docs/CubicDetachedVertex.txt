@@ -1,0 +1,30 @@
+CubicDetachedVertex  (typeKey 6)
+extends CubicVertex > PathVertex > Vertex > ContainerComponent > Component > ArtboardProvider
+
+own properties:
+  inRotation                    AB   double       key 84      = 0
+      The in point's angle.
+  inDistance                    AB   double       key 85      = 0
+      The in point's distance from the translation of the point.
+  outRotation                   AB   double       key 86      = 0
+      The out point's angle.
+  outDistance                   AB   double       key 87      = 0
+      The out point's distance from the translation of the point.
+
+inherited from Vertex:
+  x                             AB   double       key 24      = 0
+      X value for the translation of the vertex.
+  y                             AB   double       key 25      = 0
+      Y value for the translation of the vertex.
+
+inherited from Component:
+  name                               String       key 4
+      Non-unique identifier, used to give friendly names to elements in the hierarchy. Runtimes provide an API for finding components by this [name].
+  parentId                           Id           key 5
+      Identifier used to track parent ContainerComponent.
+  flags                              uint         key 130     = 0
+      Component state. Runtime export folds visibility and selectable state into drawable flags; editor-only flags stay in the editor.
+      bits (write each as its own attribute, e.g. hidden="true"): hidden locked disconnected opaque guide isolated visibleOverride unlockedOverride participatesInLayout complexDependency selectable
+
+9 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

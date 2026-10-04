@@ -1,0 +1,11 @@
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'api/decide.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/BrainHUD.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/creature/brain/brain.types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/creature/brain/decisionScheduler.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/creature/brain/fallbackBrain.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/creature/rive/riveReactionAdapter.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/hooks/useCreatureBrain.ts', LF will be replaced by CRLF the next time Git touches it

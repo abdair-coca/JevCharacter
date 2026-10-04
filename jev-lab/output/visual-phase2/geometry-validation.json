@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "pairs": 21,
+  "samples": 861,
+  "transitionSteps": 40,
+  "minimumArea": 7841.48912734712,
+  "eyeEnvelopeRadius": 26.70995799902858,
+  "minimumEyeMargin": 6.290042000971422,
+  "minimumPolarCoefficient": 112.38087170549201,
+  "baseRadiusError": 1.424439233232988e-09,
+  "artboardExtent": 145.52,
+  "continuousSegmentProof": "positive Bernstein coefficients for cross(P, P'); one full polar turn",
+  "interpolationScope": "41 samples per pair; continuous cubic segment proof at each sample",
+  "cli": "1.3.0",
+  "runtime": "2.42.2",
+  "contractSha256": "4671b41192387feffcc6d95a8830dfc0d9058d67a5b71a25d2ad0cbec2bcce61",
+  "sceneSha256": "c956627078bcb7bdec6eb6cc0316a3c60e08bb8debedf4a8a4e6ccbfa59f10b4"
+}

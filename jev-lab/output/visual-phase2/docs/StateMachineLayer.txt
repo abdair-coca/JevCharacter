@@ -1,0 +1,13 @@
+StateMachineLayer  (typeKey 57)
+extends StateMachineComponent > ArtboardProvider
+
+own properties:
+  flags                              uint         key 754     = 0
+      bits (write each as its own attribute, e.g. disabled="true"): disabled
+
+inherited from StateMachineComponent:
+  name                               String       key 138
+      Non-unique identifier, used to give friendly names to state machine components (like layers or inputs).
+
+2 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JEV · Rig fase 2</title><link rel="stylesheet" href="/style.css">
+  <script src="/rive.js" defer></script><script src="/app.mjs" type="module"></script>
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">JEV LAB · FASE 2</p><h1>Un cuerpo. Siete formas.</h1><p>Prueba mirada, ojos y deformación. Cada cambio compone una pose; Neutral restaura todo.</p></header>
+    <p id="status" role="status">Cargando rig Rive local…</p>
+    <div class="workspace">
+      <section class="preview" aria-label="Vista del personaje">
+        <div id="stage"><canvas id="character" width="720" height="680" aria-label="JEV, pose actual"></canvas></div>
+        <div class="toolbar"><button id="neutral" disabled>Neutral completo</button><button id="extreme" disabled>Extremos permitidos</button><button id="theme" disabled>Fondo claro</button><button id="capture" disabled>Guardar captura</button></div>
+        <div id="poses" aria-label="Poses ilustrativas"></div>
+        <p class="hint">Poses estáticas de alegría, curiosidad, pensamiento y habla. Parpadeo: 1 abierto · 0 cerrado.</p>
+        <details><summary>Estado de la pose</summary><pre id="diagnostics"></pre></details>
+      </section>
+      <section class="controls" aria-label="Controles del rig"><h2>Forma y canales</h2><div id="shapes"></div><div id="sliders"></div></section>
+    </div>
+  </main>
+</body>
+</html>

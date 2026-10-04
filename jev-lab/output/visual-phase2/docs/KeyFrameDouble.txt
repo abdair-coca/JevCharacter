@@ -1,0 +1,19 @@
+KeyFrameDouble  (typeKey 30)
+extends InterpolatingKeyFrame > KeyFrame > ArtboardProvider
+
+own properties:
+  value                          B   double       key 70      = 0
+
+inherited from InterpolatingKeyFrame:
+  interpolationType                  uint         key 68      = hold
+      The type of interpolation index in KeyframeInterpolation applied to this keyframe.
+      accepts: hold, linear, cubic, cubicValue, elastic, scripted
+  interpolatorId                     Id           key 69
+      The id of the custom interpolator used when interpolation is Cubic.
+
+inherited from KeyFrame:
+  frame                              uint         key 67      = 0
+      Timecode as frame number can be converted to time by dividing by animation fps.
+
+4 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

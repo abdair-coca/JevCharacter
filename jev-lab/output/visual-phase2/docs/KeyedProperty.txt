@@ -1,0 +1,9 @@
+KeyedProperty  (typeKey 26)
+extends ArtboardProvider
+
+own properties:
+  propertyKey                        uint         key 53      = CoreContext.invalidPropertyKey
+      The property type that is keyed.
+
+1 property.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "cli": "1.3.0",
+  "defaultArtboard": {
+    "id": "0:1",
+    "name": "JevRigV2"
+  },
+  "artboards": [
+    {
+      "name": "JevRigV2",
+      "width": 360,
+      "height": 340
+    }
+  ],
+  "objects": 37570,
+  "counts": {
+    "Artboard": 1,
+    "LayoutComponentStyle": 1,
+    "Node": 11,
+    "Shape": 8,
+    "Ellipse": 4,
+    "Fill": 7,
+    "SolidColor": 3,
+    "PointsPath": 4,
+    "CubicDetachedVertex": 240,
+    "Stroke": 1,
+    "RadialGradient": 5,
+    "GradientStop": 27,
+    "StateMachine": 1,
+    "StateMachineLayer": 1,
+    "AnyState": 1,
+    "ExitState": 1,
+    "EntryState": 1,
+    "StateTransition": 1,
+    "AnimationState": 1,
+    "LinearAnimation": 21,
+    "KeyedObject": 1989,
+    "KeyedProperty": 11747,
+    "KeyFrameDouble": 23494
+  },
+  "clips": [
+    "neutral",
+    "shape_base",
+    "shape_star",
+    "shape_square",
+    "shape_triangle",
+    "shape_ghost",
+    "shape_flower",
+    "shape_cloud",
+    "channel_bodyX",
+    "channel_bodyY",
+    "channel_bodyRotation",
+    "channel_bodyScaleX",
+    "channel_bodyScaleY",
+    "channel_gazeX",
+    "channel_gazeY",
+    "channel_leftTilt",
+    "channel_leftOpen",
+    "channel_rightTilt",
+    "channel_rightOpen",
+    "channel_blink",
+    "channel_light"
+  ],
+  "problems": []
+}

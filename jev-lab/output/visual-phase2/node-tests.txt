@@ -1,0 +1,37 @@
+✔ only body silhouette accepts clicks; halo and rounded corners do not (2.5891ms)
+✔ hit test inverts both transforms and contain offsets (0.6517ms)
+✔ busy requests are ignored without queue or timeline restart (1.2963ms)
+✔ entry blend occupies original first 80 ms, not extra duration (0.737ms)
+✔ curiosity keeps original 800 ms and neutral owner precedes resumed tracking (3.5725ms)
+✔ capture remains immutable and repeated blend never accumulates (0.7635ms)
+✔ cancellation releases ownership without deferred reaction (0.4074ms)
+✔ invalid action, time and inverse transforms fail closed (0.5095ms)
+✔ keyboard activation requires focus; Space prevents scrolling; repeats never restart (0.5804ms)
+✔ suspension deletes active instance, resets every field and leaves no deferred reaction (1.2585ms)
+✔ suspension also clears the final-neutral latch before new interaction (0.6952ms)
+✔ silhouette hit remains correct after narrow and wide CSS resize, independent of DPR (0.956ms)
+✔ settings stay inside the existing anatomy contract (3.7281ms)
+✔ contain maps centered horizontal and vertical letterboxing (2.4066ms)
+✔ character center stays neutral after resize with no DPR input (0.459ms)
+✔ far cursor positions clamp exactly to eye and body bounds (0.3383ms)
+✔ exponential response agrees at 30, 60 and 144 fps (1.1168ms)
+✔ eye response leads body response without overshoot (0.4086ms)
+✔ pointer leave settles to exact neutral so scheduling can stop (0.6868ms)
+✔ invalid coordinates and elapsed time fail closed (0.4095ms)
+✔ all finite range edges accepted; malformed input rejected before Rive writes (6.8694ms)
+✔ each sample resets full neutral, then pair blend, then disjoint channels (0.955ms)
+✔ independent eye channels compose with closure and repeated neutral (0.9462ms)
+✔ dispose idempotent; incomplete runtime cleans earlier instances (1.1582ms)
+✔ all body widths match and body centers coincide at both requested sizes (1.3358ms)
+✔ malformed calibration fails before rendering (0.8297ms)
+✔ dark sphere interior remains opaque while connected exterior black disappears (1.3295ms)
+✔ exterior glow reconstructs the source RGB over black within one byte (0.247ms)
+✔ source eye and highlights within the measured sphere are untouched (0.1645ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 215.1102

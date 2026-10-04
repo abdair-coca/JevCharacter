@@ -1,0 +1,842 @@
+[
+  {
+    "label": "neutral-initial",
+    "project": "visual\\phase2",
+    "frame": 0,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:19.133] rive  deferred replay: inline\n[10:35:22.115] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/build/jev_rig_v2.riv (303257 bytes, 2980ms, 0 errors, 0 warnings)\n[10:35:22.129] rive  showing JevRigV2 [1/1]\n[10:35:22.130] rive  viewport 360x340 @1x\n[10:35:22.368] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\neutral-initial.png\n"
+  },
+  {
+    "label": "base-star-25",
+    "project": "output\\visual-phase2\\harness\\base-star",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:22.720] rive  deferred replay: inline\n[10:35:23.241] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-star/build/proof.riv (101701 bytes, 519ms, 0 errors, 0 warnings)\n[10:35:23.243] rive  showing JevRigV2 [1/1]\n[10:35:23.247] rive  viewport 360x340 @1x\n[10:35:23.425] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-star-25.png\n"
+  },
+  {
+    "label": "base-star-50",
+    "project": "output\\visual-phase2\\harness\\base-star",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:23.610] rive  deferred replay: inline\n[10:35:24.099] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-star/build/proof.riv (101701 bytes, 487ms, 0 errors, 0 warnings)\n[10:35:24.101] rive  showing JevRigV2 [1/1]\n[10:35:24.102] rive  viewport 360x340 @1x\n[10:35:24.279] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-star-50.png\n"
+  },
+  {
+    "label": "base-star-75",
+    "project": "output\\visual-phase2\\harness\\base-star",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:24.453] rive  deferred replay: inline\n[10:35:25.004] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-star/build/proof.riv (101701 bytes, 550ms, 0 errors, 0 warnings)\n[10:35:25.007] rive  showing JevRigV2 [1/1]\n[10:35:25.009] rive  viewport 360x340 @1x\n[10:35:25.195] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-star-75.png\n"
+  },
+  {
+    "label": "shape-star",
+    "project": "output\\visual-phase2\\harness\\base-star",
+    "frame": 55,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:25.348] rive  deferred replay: inline\n[10:35:25.840] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-star/build/proof.riv (101701 bytes, 491ms, 0 errors, 0 warnings)\n[10:35:25.842] rive  showing JevRigV2 [1/1]\n[10:35:25.844] rive  viewport 360x340 @1x\n[10:35:26.011] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\shape-star.png\n"
+  },
+  {
+    "label": "base-star-neutral",
+    "project": "output\\visual-phase2\\harness\\base-star",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:26.180] rive  deferred replay: inline\n[10:35:26.689] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-star/build/proof.riv (101701 bytes, 508ms, 0 errors, 0 warnings)\n[10:35:26.690] rive  showing JevRigV2 [1/1]\n[10:35:26.693] rive  viewport 360x340 @1x\n[10:35:26.855] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-star-neutral.png\n"
+  },
+  {
+    "label": "base-square-25",
+    "project": "output\\visual-phase2\\harness\\base-square",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:27.127] rive  deferred replay: inline\n[10:35:27.732] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-square/build/proof.riv (101681 bytes, 604ms, 0 errors, 0 warnings)\n[10:35:27.733] rive  showing JevRigV2 [1/1]\n[10:35:27.735] rive  viewport 360x340 @1x\n[10:35:27.913] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-square-25.png\n"
+  },
+  {
+    "label": "base-square-50",
+    "project": "output\\visual-phase2\\harness\\base-square",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:28.072] rive  deferred replay: inline\n[10:35:28.587] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-square/build/proof.riv (101681 bytes, 514ms, 0 errors, 0 warnings)\n[10:35:28.589] rive  showing JevRigV2 [1/1]\n[10:35:28.590] rive  viewport 360x340 @1x\n[10:35:28.760] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-square-50.png\n"
+  },
+  {
+    "label": "base-square-75",
+    "project": "output\\visual-phase2\\harness\\base-square",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:28.926] rive  deferred replay: inline\n[10:35:29.540] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-square/build/proof.riv (101681 bytes, 613ms, 0 errors, 0 warnings)\n[10:35:29.542] rive  showing JevRigV2 [1/1]\n[10:35:29.544] rive  viewport 360x340 @1x\n[10:35:29.741] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-square-75.png\n"
+  },
+  {
+    "label": "shape-square",
+    "project": "output\\visual-phase2\\harness\\base-square",
+    "frame": 55,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:29.891] rive  deferred replay: inline\n[10:35:30.476] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-square/build/proof.riv (101681 bytes, 583ms, 0 errors, 0 warnings)\n[10:35:30.478] rive  showing JevRigV2 [1/1]\n[10:35:30.482] rive  viewport 360x340 @1x\n[10:35:30.726] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\shape-square.png\n"
+  },
+  {
+    "label": "base-square-neutral",
+    "project": "output\\visual-phase2\\harness\\base-square",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:30.879] rive  deferred replay: inline\n[10:35:31.420] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-square/build/proof.riv (101681 bytes, 539ms, 0 errors, 0 warnings)\n[10:35:31.422] rive  showing JevRigV2 [1/1]\n[10:35:31.425] rive  viewport 360x340 @1x\n[10:35:31.737] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-square-neutral.png\n"
+  },
+  {
+    "label": "base-triangle-25",
+    "project": "output\\visual-phase2\\harness\\base-triangle",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:32.045] rive  deferred replay: inline\n[10:35:32.598] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-triangle/build/proof.riv (101701 bytes, 552ms, 0 errors, 0 warnings)\n[10:35:32.600] rive  showing JevRigV2 [1/1]\n[10:35:32.601] rive  viewport 360x340 @1x\n[10:35:32.832] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-triangle-25.png\n"
+  },
+  {
+    "label": "base-triangle-50",
+    "project": "output\\visual-phase2\\harness\\base-triangle",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:33.022] rive  deferred replay: inline\n[10:35:33.540] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-triangle/build/proof.riv (101701 bytes, 516ms, 0 errors, 0 warnings)\n[10:35:33.542] rive  showing JevRigV2 [1/1]\n[10:35:33.543] rive  viewport 360x340 @1x\n[10:35:33.711] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-triangle-50.png\n"
+  },
+  {
+    "label": "base-triangle-75",
+    "project": "output\\visual-phase2\\harness\\base-triangle",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:33.862] rive  deferred replay: inline\n[10:35:34.359] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-triangle/build/proof.riv (101701 bytes, 496ms, 0 errors, 0 warnings)\n[10:35:34.361] rive  showing JevRigV2 [1/1]\n[10:35:34.362] rive  viewport 360x340 @1x\n[10:35:34.539] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-triangle-75.png\n"
+  },
+  {
+    "label": "shape-triangle",
+    "project": "output\\visual-phase2\\harness\\base-triangle",
+    "frame": 55,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:34.724] rive  deferred replay: inline\n[10:35:35.278] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-triangle/build/proof.riv (101701 bytes, 553ms, 0 errors, 0 warnings)\n[10:35:35.280] rive  showing JevRigV2 [1/1]\n[10:35:35.282] rive  viewport 360x340 @1x\n[10:35:35.450] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\shape-triangle.png\n"
+  },
+  {
+    "label": "base-triangle-neutral",
+    "project": "output\\visual-phase2\\harness\\base-triangle",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:35.606] rive  deferred replay: inline\n[10:35:36.087] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-triangle/build/proof.riv (101701 bytes, 481ms, 0 errors, 0 warnings)\n[10:35:36.089] rive  showing JevRigV2 [1/1]\n[10:35:36.092] rive  viewport 360x340 @1x\n[10:35:36.253] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-triangle-neutral.png\n"
+  },
+  {
+    "label": "base-ghost-25",
+    "project": "output\\visual-phase2\\harness\\base-ghost",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:36.549] rive  deferred replay: inline\n[10:35:37.060] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-ghost/build/proof.riv (101681 bytes, 509ms, 0 errors, 0 warnings)\n[10:35:37.061] rive  showing JevRigV2 [1/1]\n[10:35:37.062] rive  viewport 360x340 @1x\n[10:35:37.231] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-ghost-25.png\n"
+  },
+  {
+    "label": "base-ghost-50",
+    "project": "output\\visual-phase2\\harness\\base-ghost",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:37.377] rive  deferred replay: inline\n[10:35:37.902] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-ghost/build/proof.riv (101681 bytes, 523ms, 0 errors, 0 warnings)\n[10:35:37.903] rive  showing JevRigV2 [1/1]\n[10:35:37.905] rive  viewport 360x340 @1x\n[10:35:38.086] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-ghost-50.png\n"
+  },
+  {
+    "label": "base-ghost-75",
+    "project": "output\\visual-phase2\\harness\\base-ghost",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:38.238] rive  deferred replay: inline\n[10:35:38.735] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-ghost/build/proof.riv (101681 bytes, 497ms, 0 errors, 0 warnings)\n[10:35:38.737] rive  showing JevRigV2 [1/1]\n[10:35:38.738] rive  viewport 360x340 @1x\n[10:35:38.904] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-ghost-75.png\n"
+  },
+  {
+    "label": "shape-ghost",
+    "project": "output\\visual-phase2\\harness\\base-ghost",
+    "frame": 55,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:39.076] rive  deferred replay: inline\n[10:35:39.631] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-ghost/build/proof.riv (101681 bytes, 553ms, 0 errors, 0 warnings)\n[10:35:39.633] rive  showing JevRigV2 [1/1]\n[10:35:39.635] rive  viewport 360x340 @1x\n[10:35:39.818] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\shape-ghost.png\n"
+  },
+  {
+    "label": "base-ghost-neutral",
+    "project": "output\\visual-phase2\\harness\\base-ghost",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:39.971] rive  deferred replay: inline\n[10:35:40.497] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-ghost/build/proof.riv (101681 bytes, 525ms, 0 errors, 0 warnings)\n[10:35:40.499] rive  showing JevRigV2 [1/1]\n[10:35:40.502] rive  viewport 360x340 @1x\n[10:35:40.678] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-ghost-neutral.png\n"
+  },
+  {
+    "label": "base-flower-25",
+    "project": "output\\visual-phase2\\harness\\base-flower",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:40.954] rive  deferred replay: inline\n[10:35:41.482] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-flower/build/proof.riv (101701 bytes, 527ms, 0 errors, 0 warnings)\n[10:35:41.483] rive  showing JevRigV2 [1/1]\n[10:35:41.484] rive  viewport 360x340 @1x\n[10:35:41.665] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-flower-25.png\n"
+  },
+  {
+    "label": "base-flower-50",
+    "project": "output\\visual-phase2\\harness\\base-flower",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:41.814] rive  deferred replay: inline\n[10:35:42.332] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-flower/build/proof.riv (101701 bytes, 517ms, 0 errors, 0 warnings)\n[10:35:42.333] rive  showing JevRigV2 [1/1]\n[10:35:42.335] rive  viewport 360x340 @1x\n[10:35:42.507] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-flower-50.png\n"
+  },
+  {
+    "label": "base-flower-75",
+    "project": "output\\visual-phase2\\harness\\base-flower",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:42.663] rive  deferred replay: inline\n[10:35:43.211] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-flower/build/proof.riv (101701 bytes, 547ms, 0 errors, 0 warnings)\n[10:35:43.212] rive  showing JevRigV2 [1/1]\n[10:35:43.215] rive  viewport 360x340 @1x\n[10:35:43.398] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-flower-75.png\n"
+  },
+  {
+    "label": "shape-flower",
+    "project": "output\\visual-phase2\\harness\\base-flower",
+    "frame": 55,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:43.544] rive  deferred replay: inline\n[10:35:44.044] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-flower/build/proof.riv (101701 bytes, 499ms, 0 errors, 0 warnings)\n[10:35:44.046] rive  showing JevRigV2 [1/1]\n[10:35:44.048] rive  viewport 360x340 @1x\n[10:35:44.216] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\shape-flower.png\n"
+  },
+  {
+    "label": "base-flower-neutral",
+    "project": "output\\visual-phase2\\harness\\base-flower",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:44.385] rive  deferred replay: inline\n[10:35:44.900] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-flower/build/proof.riv (101701 bytes, 514ms, 0 errors, 0 warnings)\n[10:35:44.902] rive  showing JevRigV2 [1/1]\n[10:35:44.904] rive  viewport 360x340 @1x\n[10:35:45.075] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-flower-neutral.png\n"
+  },
+  {
+    "label": "base-cloud-25",
+    "project": "output\\visual-phase2\\harness\\base-cloud",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:45.358] rive  deferred replay: inline\n[10:35:45.868] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-cloud/build/proof.riv (101701 bytes, 509ms, 0 errors, 0 warnings)\n[10:35:45.870] rive  showing JevRigV2 [1/1]\n[10:35:45.870] rive  viewport 360x340 @1x\n[10:35:46.056] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-cloud-25.png\n"
+  },
+  {
+    "label": "base-cloud-50",
+    "project": "output\\visual-phase2\\harness\\base-cloud",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:46.217] rive  deferred replay: inline\n[10:35:46.714] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-cloud/build/proof.riv (101701 bytes, 497ms, 0 errors, 0 warnings)\n[10:35:46.716] rive  showing JevRigV2 [1/1]\n[10:35:46.717] rive  viewport 360x340 @1x\n[10:35:46.881] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-cloud-50.png\n"
+  },
+  {
+    "label": "base-cloud-75",
+    "project": "output\\visual-phase2\\harness\\base-cloud",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:47.034] rive  deferred replay: inline\n[10:35:47.572] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-cloud/build/proof.riv (101701 bytes, 536ms, 0 errors, 0 warnings)\n[10:35:47.573] rive  showing JevRigV2 [1/1]\n[10:35:47.574] rive  viewport 360x340 @1x\n[10:35:47.758] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-cloud-75.png\n"
+  },
+  {
+    "label": "shape-cloud",
+    "project": "output\\visual-phase2\\harness\\base-cloud",
+    "frame": 55,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:47.920] rive  deferred replay: inline\n[10:35:48.412] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-cloud/build/proof.riv (101701 bytes, 490ms, 0 errors, 0 warnings)\n[10:35:48.413] rive  showing JevRigV2 [1/1]\n[10:35:48.415] rive  viewport 360x340 @1x\n[10:35:48.584] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\shape-cloud.png\n"
+  },
+  {
+    "label": "base-cloud-neutral",
+    "project": "output\\visual-phase2\\harness\\base-cloud",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:48.766] rive  deferred replay: inline\n[10:35:49.279] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/base-cloud/build/proof.riv (101701 bytes, 512ms, 0 errors, 0 warnings)\n[10:35:49.280] rive  showing JevRigV2 [1/1]\n[10:35:49.283] rive  viewport 360x340 @1x\n[10:35:49.450] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\base-cloud-neutral.png\n"
+  },
+  {
+    "label": "star-square-25",
+    "project": "output\\visual-phase2\\harness\\star-square",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:49.705] rive  deferred replay: inline\n[10:35:50.250] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-square/build/proof.riv (101706 bytes, 545ms, 0 errors, 0 warnings)\n[10:35:50.252] rive  showing JevRigV2 [1/1]\n[10:35:50.253] rive  viewport 360x340 @1x\n[10:35:50.418] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-square-25.png\n"
+  },
+  {
+    "label": "star-square-50",
+    "project": "output\\visual-phase2\\harness\\star-square",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:50.576] rive  deferred replay: inline\n[10:35:51.074] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-square/build/proof.riv (101706 bytes, 497ms, 0 errors, 0 warnings)\n[10:35:51.076] rive  showing JevRigV2 [1/1]\n[10:35:51.078] rive  viewport 360x340 @1x\n[10:35:51.262] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-square-50.png\n"
+  },
+  {
+    "label": "star-square-75",
+    "project": "output\\visual-phase2\\harness\\star-square",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:51.441] rive  deferred replay: inline\n[10:35:51.950] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-square/build/proof.riv (101706 bytes, 507ms, 0 errors, 0 warnings)\n[10:35:51.951] rive  showing JevRigV2 [1/1]\n[10:35:51.953] rive  viewport 360x340 @1x\n[10:35:52.134] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-square-75.png\n"
+  },
+  {
+    "label": "star-square-neutral",
+    "project": "output\\visual-phase2\\harness\\star-square",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:52.323] rive  deferred replay: inline\n[10:35:52.943] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-square/build/proof.riv (101706 bytes, 619ms, 0 errors, 0 warnings)\n[10:35:52.947] rive  showing JevRigV2 [1/1]\n[10:35:52.953] rive  viewport 360x340 @1x\n[10:35:53.153] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-square-neutral.png\n"
+  },
+  {
+    "label": "star-triangle-25",
+    "project": "output\\visual-phase2\\harness\\star-triangle",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:53.431] rive  deferred replay: inline\n[10:35:54.019] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-triangle/build/proof.riv (101726 bytes, 586ms, 0 errors, 0 warnings)\n[10:35:54.020] rive  showing JevRigV2 [1/1]\n[10:35:54.021] rive  viewport 360x340 @1x\n[10:35:54.241] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-triangle-25.png\n"
+  },
+  {
+    "label": "star-triangle-50",
+    "project": "output\\visual-phase2\\harness\\star-triangle",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:54.434] rive  deferred replay: inline\n[10:35:55.103] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-triangle/build/proof.riv (101726 bytes, 667ms, 0 errors, 0 warnings)\n[10:35:55.105] rive  showing JevRigV2 [1/1]\n[10:35:55.107] rive  viewport 360x340 @1x\n[10:35:55.351] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-triangle-50.png\n"
+  },
+  {
+    "label": "star-triangle-75",
+    "project": "output\\visual-phase2\\harness\\star-triangle",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:55.533] rive  deferred replay: inline\n[10:35:56.128] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-triangle/build/proof.riv (101726 bytes, 594ms, 0 errors, 0 warnings)\n[10:35:56.130] rive  showing JevRigV2 [1/1]\n[10:35:56.132] rive  viewport 360x340 @1x\n[10:35:56.333] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-triangle-75.png\n"
+  },
+  {
+    "label": "star-triangle-neutral",
+    "project": "output\\visual-phase2\\harness\\star-triangle",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:56.516] rive  deferred replay: inline\n[10:35:57.100] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-triangle/build/proof.riv (101726 bytes, 583ms, 0 errors, 0 warnings)\n[10:35:57.102] rive  showing JevRigV2 [1/1]\n[10:35:57.106] rive  viewport 360x340 @1x\n[10:35:57.302] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-triangle-neutral.png\n"
+  },
+  {
+    "label": "star-ghost-25",
+    "project": "output\\visual-phase2\\harness\\star-ghost",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:57.580] rive  deferred replay: inline\n[10:35:58.096] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-ghost/build/proof.riv (101706 bytes, 515ms, 0 errors, 0 warnings)\n[10:35:58.098] rive  showing JevRigV2 [1/1]\n[10:35:58.099] rive  viewport 360x340 @1x\n[10:35:58.287] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-ghost-25.png\n"
+  },
+  {
+    "label": "star-ghost-50",
+    "project": "output\\visual-phase2\\harness\\star-ghost",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:58.438] rive  deferred replay: inline\n[10:35:58.978] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-ghost/build/proof.riv (101706 bytes, 539ms, 0 errors, 0 warnings)\n[10:35:58.981] rive  showing JevRigV2 [1/1]\n[10:35:58.983] rive  viewport 360x340 @1x\n[10:35:59.260] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-ghost-50.png\n"
+  },
+  {
+    "label": "star-ghost-75",
+    "project": "output\\visual-phase2\\harness\\star-ghost",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:35:59.528] rive  deferred replay: inline\n[10:36:00.358] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-ghost/build/proof.riv (101706 bytes, 828ms, 0 errors, 0 warnings)\n[10:36:00.363] rive  showing JevRigV2 [1/1]\n[10:36:00.369] rive  viewport 360x340 @1x\n[10:36:00.686] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-ghost-75.png\n"
+  },
+  {
+    "label": "star-ghost-neutral",
+    "project": "output\\visual-phase2\\harness\\star-ghost",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:00.937] rive  deferred replay: inline\n[10:36:01.719] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-ghost/build/proof.riv (101706 bytes, 780ms, 0 errors, 0 warnings)\n[10:36:01.722] rive  showing JevRigV2 [1/1]\n[10:36:01.729] rive  viewport 360x340 @1x\n[10:36:01.984] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-ghost-neutral.png\n"
+  },
+  {
+    "label": "star-flower-25",
+    "project": "output\\visual-phase2\\harness\\star-flower",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:02.344] rive  deferred replay: inline\n[10:36:02.909] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-flower/build/proof.riv (101726 bytes, 563ms, 0 errors, 0 warnings)\n[10:36:02.911] rive  showing JevRigV2 [1/1]\n[10:36:02.912] rive  viewport 360x340 @1x\n[10:36:03.090] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-flower-25.png\n"
+  },
+  {
+    "label": "star-flower-50",
+    "project": "output\\visual-phase2\\harness\\star-flower",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:03.243] rive  deferred replay: inline\n[10:36:03.739] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-flower/build/proof.riv (101726 bytes, 494ms, 0 errors, 0 warnings)\n[10:36:03.740] rive  showing JevRigV2 [1/1]\n[10:36:03.742] rive  viewport 360x340 @1x\n[10:36:03.928] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-flower-50.png\n"
+  },
+  {
+    "label": "star-flower-75",
+    "project": "output\\visual-phase2\\harness\\star-flower",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:04.126] rive  deferred replay: inline\n[10:36:04.648] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-flower/build/proof.riv (101726 bytes, 521ms, 0 errors, 0 warnings)\n[10:36:04.650] rive  showing JevRigV2 [1/1]\n[10:36:04.652] rive  viewport 360x340 @1x\n[10:36:04.840] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-flower-75.png\n"
+  },
+  {
+    "label": "star-flower-neutral",
+    "project": "output\\visual-phase2\\harness\\star-flower",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:05.008] rive  deferred replay: inline\n[10:36:05.558] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-flower/build/proof.riv (101726 bytes, 548ms, 0 errors, 0 warnings)\n[10:36:05.560] rive  showing JevRigV2 [1/1]\n[10:36:05.566] rive  viewport 360x340 @1x\n[10:36:05.759] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-flower-neutral.png\n"
+  },
+  {
+    "label": "star-cloud-25",
+    "project": "output\\visual-phase2\\harness\\star-cloud",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:06.051] rive  deferred replay: inline\n[10:36:06.609] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-cloud/build/proof.riv (101726 bytes, 558ms, 0 errors, 0 warnings)\n[10:36:06.611] rive  showing JevRigV2 [1/1]\n[10:36:06.612] rive  viewport 360x340 @1x\n[10:36:06.792] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-cloud-25.png\n"
+  },
+  {
+    "label": "star-cloud-50",
+    "project": "output\\visual-phase2\\harness\\star-cloud",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:06.966] rive  deferred replay: inline\n[10:36:07.493] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-cloud/build/proof.riv (101726 bytes, 526ms, 0 errors, 0 warnings)\n[10:36:07.495] rive  showing JevRigV2 [1/1]\n[10:36:07.496] rive  viewport 360x340 @1x\n[10:36:07.661] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-cloud-50.png\n"
+  },
+  {
+    "label": "star-cloud-75",
+    "project": "output\\visual-phase2\\harness\\star-cloud",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:07.818] rive  deferred replay: inline\n[10:36:08.378] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-cloud/build/proof.riv (101726 bytes, 559ms, 0 errors, 0 warnings)\n[10:36:08.381] rive  showing JevRigV2 [1/1]\n[10:36:08.384] rive  viewport 360x340 @1x\n[10:36:08.561] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-cloud-75.png\n"
+  },
+  {
+    "label": "star-cloud-neutral",
+    "project": "output\\visual-phase2\\harness\\star-cloud",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:08.710] rive  deferred replay: inline\n[10:36:09.226] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/star-cloud/build/proof.riv (101726 bytes, 514ms, 0 errors, 0 warnings)\n[10:36:09.227] rive  showing JevRigV2 [1/1]\n[10:36:09.230] rive  viewport 360x340 @1x\n[10:36:09.404] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\star-cloud-neutral.png\n"
+  },
+  {
+    "label": "square-triangle-25",
+    "project": "output\\visual-phase2\\harness\\square-triangle",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:09.667] rive  deferred replay: inline\n[10:36:10.176] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-triangle/build/proof.riv (101706 bytes, 507ms, 0 errors, 0 warnings)\n[10:36:10.177] rive  showing JevRigV2 [1/1]\n[10:36:10.178] rive  viewport 360x340 @1x\n[10:36:10.363] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-triangle-25.png\n"
+  },
+  {
+    "label": "square-triangle-50",
+    "project": "output\\visual-phase2\\harness\\square-triangle",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:10.521] rive  deferred replay: inline\n[10:36:11.056] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-triangle/build/proof.riv (101706 bytes, 534ms, 0 errors, 0 warnings)\n[10:36:11.057] rive  showing JevRigV2 [1/1]\n[10:36:11.059] rive  viewport 360x340 @1x\n[10:36:11.226] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-triangle-50.png\n"
+  },
+  {
+    "label": "square-triangle-75",
+    "project": "output\\visual-phase2\\harness\\square-triangle",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:11.370] rive  deferred replay: inline\n[10:36:11.887] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-triangle/build/proof.riv (101706 bytes, 516ms, 0 errors, 0 warnings)\n[10:36:11.889] rive  showing JevRigV2 [1/1]\n[10:36:11.891] rive  viewport 360x340 @1x\n[10:36:12.061] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-triangle-75.png\n"
+  },
+  {
+    "label": "square-triangle-neutral",
+    "project": "output\\visual-phase2\\harness\\square-triangle",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:12.205] rive  deferred replay: inline\n[10:36:12.714] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-triangle/build/proof.riv (101706 bytes, 508ms, 0 errors, 0 warnings)\n[10:36:12.715] rive  showing JevRigV2 [1/1]\n[10:36:12.718] rive  viewport 360x340 @1x\n[10:36:12.920] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-triangle-neutral.png\n"
+  },
+  {
+    "label": "square-ghost-25",
+    "project": "output\\visual-phase2\\harness\\square-ghost",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:13.207] rive  deferred replay: inline\n[10:36:13.738] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-ghost/build/proof.riv (101686 bytes, 529ms, 0 errors, 0 warnings)\n[10:36:13.740] rive  showing JevRigV2 [1/1]\n[10:36:13.741] rive  viewport 360x340 @1x\n[10:36:13.911] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-ghost-25.png\n"
+  },
+  {
+    "label": "square-ghost-50",
+    "project": "output\\visual-phase2\\harness\\square-ghost",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:14.055] rive  deferred replay: inline\n[10:36:14.590] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-ghost/build/proof.riv (101686 bytes, 534ms, 0 errors, 0 warnings)\n[10:36:14.592] rive  showing JevRigV2 [1/1]\n[10:36:14.593] rive  viewport 360x340 @1x\n[10:36:14.769] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-ghost-50.png\n"
+  },
+  {
+    "label": "square-ghost-75",
+    "project": "output\\visual-phase2\\harness\\square-ghost",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:14.921] rive  deferred replay: inline\n[10:36:15.412] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-ghost/build/proof.riv (101686 bytes, 489ms, 0 errors, 0 warnings)\n[10:36:15.413] rive  showing JevRigV2 [1/1]\n[10:36:15.415] rive  viewport 360x340 @1x\n[10:36:15.578] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-ghost-75.png\n"
+  },
+  {
+    "label": "square-ghost-neutral",
+    "project": "output\\visual-phase2\\harness\\square-ghost",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:15.747] rive  deferred replay: inline\n[10:36:16.278] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-ghost/build/proof.riv (101686 bytes, 529ms, 0 errors, 0 warnings)\n[10:36:16.279] rive  showing JevRigV2 [1/1]\n[10:36:16.283] rive  viewport 360x340 @1x\n[10:36:16.495] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-ghost-neutral.png\n"
+  },
+  {
+    "label": "square-flower-25",
+    "project": "output\\visual-phase2\\harness\\square-flower",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:16.751] rive  deferred replay: inline\n[10:36:17.255] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-flower/build/proof.riv (101706 bytes, 503ms, 0 errors, 0 warnings)\n[10:36:17.257] rive  showing JevRigV2 [1/1]\n[10:36:17.258] rive  viewport 360x340 @1x\n[10:36:17.435] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-flower-25.png\n"
+  },
+  {
+    "label": "square-flower-50",
+    "project": "output\\visual-phase2\\harness\\square-flower",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:17.587] rive  deferred replay: inline\n[10:36:18.086] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-flower/build/proof.riv (101706 bytes, 497ms, 0 errors, 0 warnings)\n[10:36:18.087] rive  showing JevRigV2 [1/1]\n[10:36:18.088] rive  viewport 360x340 @1x\n[10:36:18.259] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-flower-50.png\n"
+  },
+  {
+    "label": "square-flower-75",
+    "project": "output\\visual-phase2\\harness\\square-flower",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:18.406] rive  deferred replay: inline\n[10:36:18.940] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-flower/build/proof.riv (101706 bytes, 534ms, 0 errors, 0 warnings)\n[10:36:18.942] rive  showing JevRigV2 [1/1]\n[10:36:18.944] rive  viewport 360x340 @1x\n[10:36:19.125] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-flower-75.png\n"
+  },
+  {
+    "label": "square-flower-neutral",
+    "project": "output\\visual-phase2\\harness\\square-flower",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:19.271] rive  deferred replay: inline\n[10:36:19.775] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-flower/build/proof.riv (101706 bytes, 502ms, 0 errors, 0 warnings)\n[10:36:19.776] rive  showing JevRigV2 [1/1]\n[10:36:19.779] rive  viewport 360x340 @1x\n[10:36:19.973] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-flower-neutral.png\n"
+  },
+  {
+    "label": "square-cloud-25",
+    "project": "output\\visual-phase2\\harness\\square-cloud",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:20.310] rive  deferred replay: inline\n[10:36:20.826] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-cloud/build/proof.riv (101706 bytes, 515ms, 0 errors, 0 warnings)\n[10:36:20.827] rive  showing JevRigV2 [1/1]\n[10:36:20.828] rive  viewport 360x340 @1x\n[10:36:20.990] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-cloud-25.png\n"
+  },
+  {
+    "label": "square-cloud-50",
+    "project": "output\\visual-phase2\\harness\\square-cloud",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:21.136] rive  deferred replay: inline\n[10:36:21.676] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-cloud/build/proof.riv (101706 bytes, 538ms, 0 errors, 0 warnings)\n[10:36:21.677] rive  showing JevRigV2 [1/1]\n[10:36:21.679] rive  viewport 360x340 @1x\n[10:36:21.854] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-cloud-50.png\n"
+  },
+  {
+    "label": "square-cloud-75",
+    "project": "output\\visual-phase2\\harness\\square-cloud",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:22.009] rive  deferred replay: inline\n[10:36:22.529] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-cloud/build/proof.riv (101706 bytes, 518ms, 0 errors, 0 warnings)\n[10:36:22.530] rive  showing JevRigV2 [1/1]\n[10:36:22.532] rive  viewport 360x340 @1x\n[10:36:22.700] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-cloud-75.png\n"
+  },
+  {
+    "label": "square-cloud-neutral",
+    "project": "output\\visual-phase2\\harness\\square-cloud",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:22.869] rive  deferred replay: inline\n[10:36:23.395] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/square-cloud/build/proof.riv (101706 bytes, 524ms, 0 errors, 0 warnings)\n[10:36:23.396] rive  showing JevRigV2 [1/1]\n[10:36:23.400] rive  viewport 360x340 @1x\n[10:36:23.593] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\square-cloud-neutral.png\n"
+  },
+  {
+    "label": "triangle-ghost-25",
+    "project": "output\\visual-phase2\\harness\\triangle-ghost",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:23.870] rive  deferred replay: inline\n[10:36:24.412] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-ghost/build/proof.riv (101706 bytes, 542ms, 0 errors, 0 warnings)\n[10:36:24.414] rive  showing JevRigV2 [1/1]\n[10:36:24.415] rive  viewport 360x340 @1x\n[10:36:24.580] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-ghost-25.png\n"
+  },
+  {
+    "label": "triangle-ghost-50",
+    "project": "output\\visual-phase2\\harness\\triangle-ghost",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:24.728] rive  deferred replay: inline\n[10:36:25.203] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-ghost/build/proof.riv (101706 bytes, 473ms, 0 errors, 0 warnings)\n[10:36:25.204] rive  showing JevRigV2 [1/1]\n[10:36:25.206] rive  viewport 360x340 @1x\n[10:36:25.381] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-ghost-50.png\n"
+  },
+  {
+    "label": "triangle-ghost-75",
+    "project": "output\\visual-phase2\\harness\\triangle-ghost",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:25.545] rive  deferred replay: inline\n[10:36:26.082] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-ghost/build/proof.riv (101706 bytes, 535ms, 0 errors, 0 warnings)\n[10:36:26.083] rive  showing JevRigV2 [1/1]\n[10:36:26.085] rive  viewport 360x340 @1x\n[10:36:26.256] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-ghost-75.png\n"
+  },
+  {
+    "label": "triangle-ghost-neutral",
+    "project": "output\\visual-phase2\\harness\\triangle-ghost",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:26.407] rive  deferred replay: inline\n[10:36:26.909] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-ghost/build/proof.riv (101706 bytes, 501ms, 0 errors, 0 warnings)\n[10:36:26.911] rive  showing JevRigV2 [1/1]\n[10:36:26.914] rive  viewport 360x340 @1x\n[10:36:27.117] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-ghost-neutral.png\n"
+  },
+  {
+    "label": "triangle-flower-25",
+    "project": "output\\visual-phase2\\harness\\triangle-flower",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:27.408] rive  deferred replay: inline\n[10:36:27.917] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-flower/build/proof.riv (101726 bytes, 508ms, 0 errors, 0 warnings)\n[10:36:27.919] rive  showing JevRigV2 [1/1]\n[10:36:27.920] rive  viewport 360x340 @1x\n[10:36:28.096] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-flower-25.png\n"
+  },
+  {
+    "label": "triangle-flower-50",
+    "project": "output\\visual-phase2\\harness\\triangle-flower",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:28.241] rive  deferred replay: inline\n[10:36:28.813] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-flower/build/proof.riv (101726 bytes, 570ms, 0 errors, 0 warnings)\n[10:36:28.815] rive  showing JevRigV2 [1/1]\n[10:36:28.816] rive  viewport 360x340 @1x\n[10:36:28.983] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-flower-50.png\n"
+  },
+  {
+    "label": "triangle-flower-75",
+    "project": "output\\visual-phase2\\harness\\triangle-flower",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:29.137] rive  deferred replay: inline\n[10:36:29.634] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-flower/build/proof.riv (101726 bytes, 495ms, 0 errors, 0 warnings)\n[10:36:29.635] rive  showing JevRigV2 [1/1]\n[10:36:29.637] rive  viewport 360x340 @1x\n[10:36:29.802] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-flower-75.png\n"
+  },
+  {
+    "label": "triangle-flower-neutral",
+    "project": "output\\visual-phase2\\harness\\triangle-flower",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:29.969] rive  deferred replay: inline\n[10:36:30.536] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-flower/build/proof.riv (101726 bytes, 566ms, 0 errors, 0 warnings)\n[10:36:30.538] rive  showing JevRigV2 [1/1]\n[10:36:30.544] rive  viewport 360x340 @1x\n[10:36:30.746] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-flower-neutral.png\n"
+  },
+  {
+    "label": "triangle-cloud-25",
+    "project": "output\\visual-phase2\\harness\\triangle-cloud",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:31.015] rive  deferred replay: inline\n[10:36:31.535] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-cloud/build/proof.riv (101726 bytes, 520ms, 0 errors, 0 warnings)\n[10:36:31.537] rive  showing JevRigV2 [1/1]\n[10:36:31.538] rive  viewport 360x340 @1x\n[10:36:31.718] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-cloud-25.png\n"
+  },
+  {
+    "label": "triangle-cloud-50",
+    "project": "output\\visual-phase2\\harness\\triangle-cloud",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:31.872] rive  deferred replay: inline\n[10:36:32.402] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-cloud/build/proof.riv (101726 bytes, 530ms, 0 errors, 0 warnings)\n[10:36:32.404] rive  showing JevRigV2 [1/1]\n[10:36:32.405] rive  viewport 360x340 @1x\n[10:36:32.580] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-cloud-50.png\n"
+  },
+  {
+    "label": "triangle-cloud-75",
+    "project": "output\\visual-phase2\\harness\\triangle-cloud",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:32.731] rive  deferred replay: inline\n[10:36:33.347] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-cloud/build/proof.riv (101726 bytes, 615ms, 0 errors, 0 warnings)\n[10:36:33.349] rive  showing JevRigV2 [1/1]\n[10:36:33.352] rive  viewport 360x340 @1x\n[10:36:33.596] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-cloud-75.png\n"
+  },
+  {
+    "label": "triangle-cloud-neutral",
+    "project": "output\\visual-phase2\\harness\\triangle-cloud",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:33.822] rive  deferred replay: inline\n[10:36:34.477] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/triangle-cloud/build/proof.riv (101726 bytes, 654ms, 0 errors, 0 warnings)\n[10:36:34.481] rive  showing JevRigV2 [1/1]\n[10:36:34.486] rive  viewport 360x340 @1x\n[10:36:34.777] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\triangle-cloud-neutral.png\n"
+  },
+  {
+    "label": "ghost-flower-25",
+    "project": "output\\visual-phase2\\harness\\ghost-flower",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:35.122] rive  deferred replay: inline\n[10:36:35.703] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-flower/build/proof.riv (101706 bytes, 580ms, 0 errors, 0 warnings)\n[10:36:35.705] rive  showing JevRigV2 [1/1]\n[10:36:35.706] rive  viewport 360x340 @1x\n[10:36:35.887] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-flower-25.png\n"
+  },
+  {
+    "label": "ghost-flower-50",
+    "project": "output\\visual-phase2\\harness\\ghost-flower",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:36.042] rive  deferred replay: inline\n[10:36:36.551] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-flower/build/proof.riv (101706 bytes, 508ms, 0 errors, 0 warnings)\n[10:36:36.553] rive  showing JevRigV2 [1/1]\n[10:36:36.554] rive  viewport 360x340 @1x\n[10:36:36.752] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-flower-50.png\n"
+  },
+  {
+    "label": "ghost-flower-75",
+    "project": "output\\visual-phase2\\harness\\ghost-flower",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:36.916] rive  deferred replay: inline\n[10:36:37.458] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-flower/build/proof.riv (101706 bytes, 541ms, 0 errors, 0 warnings)\n[10:36:37.459] rive  showing JevRigV2 [1/1]\n[10:36:37.461] rive  viewport 360x340 @1x\n[10:36:37.643] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-flower-75.png\n"
+  },
+  {
+    "label": "ghost-flower-neutral",
+    "project": "output\\visual-phase2\\harness\\ghost-flower",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:37.794] rive  deferred replay: inline\n[10:36:38.349] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-flower/build/proof.riv (101706 bytes, 554ms, 0 errors, 0 warnings)\n[10:36:38.351] rive  showing JevRigV2 [1/1]\n[10:36:38.355] rive  viewport 360x340 @1x\n[10:36:38.531] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-flower-neutral.png\n"
+  },
+  {
+    "label": "ghost-cloud-25",
+    "project": "output\\visual-phase2\\harness\\ghost-cloud",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:38.811] rive  deferred replay: inline\n[10:36:39.369] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-cloud/build/proof.riv (101706 bytes, 557ms, 0 errors, 0 warnings)\n[10:36:39.372] rive  showing JevRigV2 [1/1]\n[10:36:39.374] rive  viewport 360x340 @1x\n[10:36:39.576] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-cloud-25.png\n"
+  },
+  {
+    "label": "ghost-cloud-50",
+    "project": "output\\visual-phase2\\harness\\ghost-cloud",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:39.737] rive  deferred replay: inline\n[10:36:40.324] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-cloud/build/proof.riv (101706 bytes, 586ms, 0 errors, 0 warnings)\n[10:36:40.327] rive  showing JevRigV2 [1/1]\n[10:36:40.328] rive  viewport 360x340 @1x\n[10:36:40.530] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-cloud-50.png\n"
+  },
+  {
+    "label": "ghost-cloud-75",
+    "project": "output\\visual-phase2\\harness\\ghost-cloud",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:40.728] rive  deferred replay: inline\n[10:36:41.357] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-cloud/build/proof.riv (101706 bytes, 628ms, 0 errors, 0 warnings)\n[10:36:41.360] rive  showing JevRigV2 [1/1]\n[10:36:41.362] rive  viewport 360x340 @1x\n[10:36:41.586] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-cloud-75.png\n"
+  },
+  {
+    "label": "ghost-cloud-neutral",
+    "project": "output\\visual-phase2\\harness\\ghost-cloud",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:41.763] rive  deferred replay: inline\n[10:36:42.315] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/ghost-cloud/build/proof.riv (101706 bytes, 551ms, 0 errors, 0 warnings)\n[10:36:42.316] rive  showing JevRigV2 [1/1]\n[10:36:42.320] rive  viewport 360x340 @1x\n[10:36:42.511] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\ghost-cloud-neutral.png\n"
+  },
+  {
+    "label": "flower-cloud-25",
+    "project": "output\\visual-phase2\\harness\\flower-cloud",
+    "frame": 25,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:42.766] rive  deferred replay: inline\n[10:36:43.291] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/flower-cloud/build/proof.riv (101726 bytes, 524ms, 0 errors, 0 warnings)\n[10:36:43.292] rive  showing JevRigV2 [1/1]\n[10:36:43.294] rive  viewport 360x340 @1x\n[10:36:43.476] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\flower-cloud-25.png\n"
+  },
+  {
+    "label": "flower-cloud-50",
+    "project": "output\\visual-phase2\\harness\\flower-cloud",
+    "frame": 35,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:43.632] rive  deferred replay: inline\n[10:36:44.142] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/flower-cloud/build/proof.riv (101726 bytes, 509ms, 0 errors, 0 warnings)\n[10:36:44.144] rive  showing JevRigV2 [1/1]\n[10:36:44.146] rive  viewport 360x340 @1x\n[10:36:44.337] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\flower-cloud-50.png\n"
+  },
+  {
+    "label": "flower-cloud-75",
+    "project": "output\\visual-phase2\\harness\\flower-cloud",
+    "frame": 45,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:44.505] rive  deferred replay: inline\n[10:36:45.030] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/flower-cloud/build/proof.riv (101726 bytes, 524ms, 0 errors, 0 warnings)\n[10:36:45.031] rive  showing JevRigV2 [1/1]\n[10:36:45.033] rive  viewport 360x340 @1x\n[10:36:45.198] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\flower-cloud-75.png\n"
+  },
+  {
+    "label": "flower-cloud-neutral",
+    "project": "output\\visual-phase2\\harness\\flower-cloud",
+    "frame": 80,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:45.358] rive  deferred replay: inline\n[10:36:45.969] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/flower-cloud/build/proof.riv (101726 bytes, 610ms, 0 errors, 0 warnings)\n[10:36:45.971] rive  showing JevRigV2 [1/1]\n[10:36:45.976] rive  viewport 360x340 @1x\n[10:36:46.185] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\flower-cloud-neutral.png\n"
+  },
+  {
+    "label": "pose-alegría",
+    "project": "output\\visual-phase2\\harness\\pose-alegría",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:46.549] rive  deferred replay: inline\n[10:36:46.990] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-alegr�a/build/proof.riv (84823 bytes, 440ms, 0 errors, 0 warnings)\n[10:36:46.992] rive  showing JevRigV2 [1/1]\n[10:36:46.993] rive  viewport 360x340 @1x\n[10:36:47.162] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-alegr�a.png\n"
+  },
+  {
+    "label": "pose-alegría-neutral",
+    "project": "output\\visual-phase2\\harness\\pose-alegría",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:47.324] rive  deferred replay: inline\n[10:36:47.788] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-alegr�a/build/proof.riv (84823 bytes, 462ms, 0 errors, 0 warnings)\n[10:36:47.789] rive  showing JevRigV2 [1/1]\n[10:36:47.791] rive  viewport 360x340 @1x\n[10:36:47.979] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-alegr�a-neutral.png\n"
+  },
+  {
+    "label": "pose-curiosidad",
+    "project": "output\\visual-phase2\\harness\\pose-curiosidad",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:48.239] rive  deferred replay: inline\n[10:36:48.686] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-curiosidad/build/proof.riv (84838 bytes, 445ms, 0 errors, 0 warnings)\n[10:36:48.687] rive  showing JevRigV2 [1/1]\n[10:36:48.688] rive  viewport 360x340 @1x\n[10:36:48.868] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-curiosidad.png\n"
+  },
+  {
+    "label": "pose-curiosidad-neutral",
+    "project": "output\\visual-phase2\\harness\\pose-curiosidad",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:49.026] rive  deferred replay: inline\n[10:36:49.457] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-curiosidad/build/proof.riv (84838 bytes, 429ms, 0 errors, 0 warnings)\n[10:36:49.459] rive  showing JevRigV2 [1/1]\n[10:36:49.460] rive  viewport 360x340 @1x\n[10:36:49.633] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-curiosidad-neutral.png\n"
+  },
+  {
+    "label": "pose-pensamiento",
+    "project": "output\\visual-phase2\\harness\\pose-pensamiento",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:49.898] rive  deferred replay: inline\n[10:36:50.429] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-pensamiento/build/proof.riv (84838 bytes, 530ms, 0 errors, 0 warnings)\n[10:36:50.431] rive  showing JevRigV2 [1/1]\n[10:36:50.431] rive  viewport 360x340 @1x\n[10:36:50.630] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-pensamiento.png\n"
+  },
+  {
+    "label": "pose-pensamiento-neutral",
+    "project": "output\\visual-phase2\\harness\\pose-pensamiento",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:50.780] rive  deferred replay: inline\n[10:36:51.215] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-pensamiento/build/proof.riv (84838 bytes, 435ms, 0 errors, 0 warnings)\n[10:36:51.217] rive  showing JevRigV2 [1/1]\n[10:36:51.219] rive  viewport 360x340 @1x\n[10:36:51.421] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-pensamiento-neutral.png\n"
+  },
+  {
+    "label": "pose-habla",
+    "project": "output\\visual-phase2\\harness\\pose-habla",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:51.698] rive  deferred replay: inline\n[10:36:52.128] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-habla/build/proof.riv (84828 bytes, 429ms, 0 errors, 0 warnings)\n[10:36:52.130] rive  showing JevRigV2 [1/1]\n[10:36:52.130] rive  viewport 360x340 @1x\n[10:36:52.309] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-habla.png\n"
+  },
+  {
+    "label": "pose-habla-neutral",
+    "project": "output\\visual-phase2\\harness\\pose-habla",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:52.502] rive  deferred replay: inline\n[10:36:52.987] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/pose-habla/build/proof.riv (84828 bytes, 484ms, 0 errors, 0 warnings)\n[10:36:52.988] rive  showing JevRigV2 [1/1]\n[10:36:52.990] rive  viewport 360x340 @1x\n[10:36:53.154] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\pose-habla-neutral.png\n"
+  },
+  {
+    "label": "extreme-open",
+    "project": "output\\visual-phase2\\harness\\extreme-open",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:53.399] rive  deferred replay: inline\n[10:36:53.853] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/extreme-open/build/proof.riv (84863 bytes, 454ms, 0 errors, 0 warnings)\n[10:36:53.855] rive  showing JevRigV2 [1/1]\n[10:36:53.855] rive  viewport 360x340 @1x\n[10:36:54.054] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\extreme-open.png\n"
+  },
+  {
+    "label": "extreme-open-neutral",
+    "project": "output\\visual-phase2\\harness\\extreme-open",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:54.198] rive  deferred replay: inline\n[10:36:54.695] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/extreme-open/build/proof.riv (84863 bytes, 496ms, 0 errors, 0 warnings)\n[10:36:54.697] rive  showing JevRigV2 [1/1]\n[10:36:54.698] rive  viewport 360x340 @1x\n[10:36:54.882] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\extreme-open-neutral.png\n"
+  },
+  {
+    "label": "extreme-blink",
+    "project": "output\\visual-phase2\\harness\\extreme-blink",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:55.187] rive  deferred replay: inline\n[10:36:55.722] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/extreme-blink/build/proof.riv (84863 bytes, 534ms, 0 errors, 0 warnings)\n[10:36:55.723] rive  showing JevRigV2 [1/1]\n[10:36:55.725] rive  viewport 360x340 @1x\n[10:36:55.980] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\extreme-blink.png\n"
+  },
+  {
+    "label": "extreme-blink-neutral",
+    "project": "output\\visual-phase2\\harness\\extreme-blink",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:56.210] rive  deferred replay: inline\n[10:36:56.861] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/extreme-blink/build/proof.riv (84863 bytes, 649ms, 0 errors, 0 warnings)\n[10:36:56.862] rive  showing JevRigV2 [1/1]\n[10:36:56.864] rive  viewport 360x340 @1x\n[10:36:57.089] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\extreme-blink-neutral.png\n"
+  },
+  {
+    "label": "extreme-closed",
+    "project": "output\\visual-phase2\\harness\\extreme-closed",
+    "frame": 15,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:57.434] rive  deferred replay: inline\n[10:36:58.739] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/extreme-closed/build/proof.riv (84803 bytes, 1303ms, 0 errors, 0 warnings)\n[10:36:58.748] rive  showing JevRigV2 [1/1]\n[10:36:58.750] rive  viewport 360x340 @1x\n[10:36:59.052] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\extreme-closed.png\n"
+  },
+  {
+    "label": "extreme-closed-neutral",
+    "project": "output\\visual-phase2\\harness\\extreme-closed",
+    "frame": 40,
+    "exit": 0,
+    "stdout": "",
+    "stderr": "[10:36:59.337] rive  deferred replay: inline\n[10:36:59.945] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase2/harness/extreme-closed/build/proof.riv (84803 bytes, 604ms, 0 errors, 0 warnings)\n[10:36:59.946] rive  showing JevRigV2 [1/1]\n[10:36:59.949] rive  viewport 360x340 @1x\n[10:37:00.164] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase2\\renders\\extreme-closed-neutral.png\n"
+  }
+]

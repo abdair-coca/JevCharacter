@@ -1,0 +1,21 @@
+RadialGradient  (typeKey 17)
+extends LinearGradient > ContainerComponent > Component > ArtboardProvider
+
+inherited from LinearGradient:
+  startX                        AB   double       key 42      = 0
+  startY                        AB   double       key 33      = 0
+  endX                          AB   double       key 34      = 0
+  endY                          AB   double       key 35      = 0
+  opacity                       AB   double       key 46      = 1
+
+inherited from Component:
+  name                               String       key 4
+      Non-unique identifier, used to give friendly names to elements in the hierarchy. Runtimes provide an API for finding components by this [name].
+  parentId                           Id           key 5
+      Identifier used to track parent ContainerComponent.
+  flags                              uint         key 130     = 0
+      Component state. Runtime export folds visibility and selectable state into drawable flags; editor-only flags stay in the editor.
+      bits (write each as its own attribute, e.g. hidden="true"): hidden locked disconnected opaque guide isolated visibleOverride unlockedOverride participatesInLayout complexDependency selectable
+
+8 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

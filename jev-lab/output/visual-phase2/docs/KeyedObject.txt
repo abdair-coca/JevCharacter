@@ -1,0 +1,9 @@
+KeyedObject  (typeKey 25)
+extends ArtboardProvider
+
+own properties:
+  objectId                           Id           key 51
+      Identifier used to track the object that is keyed.
+
+1 property.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

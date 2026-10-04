@@ -1,0 +1,30 @@
+Stroke  (typeKey 24)
+extends ShapePaint > ContainerComponent > Component > ArtboardProvider
+
+own properties:
+  thickness                     AB   double       key 47      = 1
+  cap                                uint8        key 48      = butt
+      accepts: butt, round, square
+  join                               uint8        key 49      = miter
+      accepts: miter, round, bevel
+  transformAffectsStroke             bool         key 50      = true
+
+inherited from ShapePaint:
+  isVisible                          bool         key 41      = true
+  blendModeValue                     uint8        key 747     = inherit
+      Shape paint blend mode value. 127 means inherit.
+      accepts: inherit, srcOver, additive, screen, overlay, darken, lighten, colorDodge, colorBurn, hardLight, softLight, difference, exclusion, multiply, hue, saturation, color, luminosity
+  additiveAmount                AB   uint8        key 452     = 255
+      How much of the additive blend mode to mix in, 0-255. Only meaningful when blendModeValue is additive.
+
+inherited from Component:
+  name                               String       key 4
+      Non-unique identifier, used to give friendly names to elements in the hierarchy. Runtimes provide an API for finding components by this [name].
+  parentId                           Id           key 5
+      Identifier used to track parent ContainerComponent.
+  flags                              uint         key 130     = 0
+      Component state. Runtime export folds visibility and selectable state into drawable flags; editor-only flags stay in the editor.
+      bits (write each as its own attribute, e.g. hidden="true"): hidden locked disconnected opaque guide isolated visibleOverride unlockedOverride participatesInLayout complexDependency selectable
+
+10 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

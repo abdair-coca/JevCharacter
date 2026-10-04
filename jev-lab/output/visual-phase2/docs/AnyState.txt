@@ -1,0 +1,9 @@
+AnyState  (typeKey 62)
+extends LayerState > StateMachineLayerComponent > ArtboardProvider
+
+inherited from LayerState:
+  flags                              uint         key 536     = 0
+      bits (write each as its own attribute, e.g. random="true"): random reset
+
+1 property.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

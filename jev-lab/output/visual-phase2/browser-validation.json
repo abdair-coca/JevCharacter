@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "date": "2026-10-04",
+  "timezone": "America/La_Paz",
+  "actor": "primary agent, CUA in-app browser",
+  "url": "http://127.0.0.1:4182/",
+  "runtime": "WebGL2/WASM 2.42.2, local",
+  "checks": {
+    "readyWithRealRiveAsset": true,
+    "starRecognizableAndEyesContained": true,
+    "cloudOnLightBackground": true,
+    "combinedExtremePoseAndLightUpperBoundOne": true,
+    "neutralAll16StateFieldsRestored": true,
+    "neutralFullPageScreenshotBytesEqualBeforeAfterExtreme": true,
+    "extremeScreenshotDiffersFromNeutral": true,
+    "independentEyeOpeningAndTiltExtremes": true,
+    "blinkClosureChangesScreenshot": true,
+    "blinkReopeningScreenshotBytesEqualWithSameFocus": true,
+    "illustrativePoses": ["alegría", "curiosidad", "pensamiento", "habla"],
+    "consoleWarningsOrErrors": []
+  },
+  "limits": [
+    "Browser JPEG equality compares the same full-page view and focus before/after; CLI evidence separately checks exact RGBA.",
+    "Optional capture download was clicked, but the IAB download event did not arrive within 30 seconds. Download completion remains unverified; CLI PNG evidence is available.",
+    "Visual acceptance remains with the developer."
+  ]
+}

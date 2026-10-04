@@ -1,0 +1,16 @@
+AnimationState  (typeKey 61)
+extends AdvanceableState > LayerState > StateMachineLayerComponent > ArtboardProvider
+
+own properties:
+  animationId                        Id           key 149
+      Id of the animation this layer state refers to.
+
+inherited from AdvanceableState:
+  speed                              double       key 292     = 1
+
+inherited from LayerState:
+  flags                              uint         key 536     = 0
+      bits (write each as its own attribute, e.g. random="true"): random reset
+
+3 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

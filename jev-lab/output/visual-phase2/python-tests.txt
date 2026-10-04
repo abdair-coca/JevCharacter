@@ -1,0 +1,16 @@
+..................................................127.0.0.1 - - [04/Oct/2026 10:36:39] "GET /original.riv HTTP/1.1" 200 -
+127.0.0.1 - - [04/Oct/2026 10:36:39] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 10:36:39] "GET /../package.json HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 10:36:39] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 10:36:39] "GET /%2e%2e/package.json HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 10:36:39] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 10:36:39] "GET /visual/ HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 10:36:39] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 10:36:39] "GET /original.riv/ HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 10:36:39] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 10:36:39] "GET /output/ HTTP/1.1" 403 -
+.
+----------------------------------------------------------------------
+Ran 51 tests in 5.989s
+
+OK

@@ -1,0 +1,22 @@
+StateTransition  (typeKey 65)
+extends StateMachineLayerComponent > ArtboardProvider
+
+own properties:
+  stateToId                          Id           key 151
+      Id of the state this transition originates from.
+  flags                              uint         key 152     = 0
+      bits (write each as its own attribute, e.g. disabled="true"): disabled durationIsPercentage enableExitTime exitTimeIsPercetange pauseOnExit enableEarlyExit
+  duration                       B   uint         key 158     = 0
+      Duration of the trasition (mix time) in milliseconds or percentage (0-100) based on flags.
+  exitTime                           uint         key 160     = 0
+      Duration in milliseconds that must elapse before allowing the state to change. If the flags mark this property as being percentage based, the value is in 0-100% of the outgoing animation's duration
+  interpolationType                  uint         key 349     = linear
+      The type of interpolation index in Interpolation applied to this state transition ('linear' by default).
+      accepts: hold, linear, cubic, cubicValue, elastic, scripted
+  interpolatorId                     Id           key 350
+      The id of the custom interpolator used when interpolation is Cubic.
+  randomWeight                       uint         key 537     = 1
+      Weight of the transition in the overall random options
+
+7 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

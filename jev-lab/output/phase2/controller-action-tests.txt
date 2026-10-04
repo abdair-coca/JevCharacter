@@ -1,0 +1,24 @@
+✔ only body silhouette accepts clicks; halo and rounded corners do not (4.0715ms)
+✔ hit test inverts both transforms and contain offsets (0.7063ms)
+✔ busy requests are ignored without queue or timeline restart (1.77ms)
+✔ entry blend occupies original first 80 ms, not extra duration (0.7229ms)
+✔ curiosity keeps original 800 ms and neutral owner precedes resumed tracking (2.5435ms)
+✔ capture remains immutable and repeated blend never accumulates (0.7919ms)
+✔ cancellation releases ownership without deferred reaction (0.5554ms)
+✔ invalid action, time and inverse transforms fail closed (0.7853ms)
+✔ settings stay inside the existing anatomy contract (6.0502ms)
+✔ contain maps centered horizontal and vertical letterboxing (2.1358ms)
+✔ character center stays neutral after resize with no DPR input (0.9001ms)
+✔ far cursor positions clamp exactly to eye and body bounds (0.6522ms)
+✔ exponential response agrees at 30, 60 and 144 fps (1.1383ms)
+✔ eye response leads body response without overshoot (0.5153ms)
+✔ pointer leave settles to exact neutral so scheduling can stop (0.9593ms)
+✔ invalid coordinates and elapsed time fail closed (0.5449ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 212.2437
