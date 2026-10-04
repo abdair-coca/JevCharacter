@@ -1,0 +1,7 @@
+name: mini_jev
+main: MiniJev
+output:
+  dir: ../output/build
+exclude:
+  - character
+  - animations

@@ -1,0 +1,16 @@
+{
+  "revision": 2,
+  "archivedOn": "2026-10-04",
+  "reason": "User accepts shape/eyes, requests original colors and illumination",
+  "files": {
+    "visual/phase1/proposal/visual.json": "c91fb601fce87302d658f176e385413d185e7c21f3caa09f0792a359954de9df",
+    "visual/phase1/proposal/scene.rml": "082a4da1e92e83a53d27de2a659cd1f907cb7a566cd7f00943dd8002683cbec3",
+    "visual/phase1/comparison.json": "47d661d301af176f0501f818aa301a679c9bbbca2414ce93c2830ac75f98d5fd",
+    "visual/phase1/README.md": "6f791893747a33caa6f72cbde3ba716c2fb7632ec854908cfed7db979a3ab2d2",
+    "validators/visual_phase1.py": "29c6ca4eec00fdc7b341ef1d567fd664ddb5749967d8d81b2930dff5e604d5dc",
+    "output/visual-phase1/comparison.png": "238f184e395c5d86c54e070200b6e0679c701c8fd705cf8c52793abedf55640f",
+    "output/visual-phase1/proposal-neutral.png": "dd4217a33fb6a85fccc3cd1c29d9b487d8696c8c3c97d4f704e8c535cfaf5c34",
+    "output/visual-phase1/proposal-small.png": "a0a826f0cc973242fc9c72c63c960e41af4fdf71f26022b1d59cfe546e4725ed",
+    "output/visual-phase1/validation-report.md": "771d89a66a51b016a03ffd960aab922b96adf3302c52748398c0387b62d5c0c3"
+  }
+}

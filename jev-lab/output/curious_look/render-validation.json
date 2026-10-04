@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "animation": "curious_look",
+  "durationMs": 800,
+  "source": "Rive CLI 1.3.0 screenshots",
+  "frames": 18,
+  "pixelFormat": "RGBA",
+  "finalPixelEquality": true,
+  "postFinalPixelEquality": true,
+  "visibility": [
+    {
+      "ms": 0,
+      "bodyPixels": 7260,
+      "eyePixels": 68
+    },
+    {
+      "ms": 50,
+      "bodyPixels": 7260,
+      "eyePixels": 60
+    },
+    {
+      "ms": 100,
+      "bodyPixels": 7260,
+      "eyePixels": 60
+    },
+    {
+      "ms": 150,
+      "bodyPixels": 7294,
+      "eyePixels": 69
+    },
+    {
+      "ms": 200,
+      "bodyPixels": 7445,
+      "eyePixels": 66
+    },
+    {
+      "ms": 250,
+      "bodyPixels": 7657,
+      "eyePixels": 66
+    },
+    {
+      "ms": 300,
+      "bodyPixels": 7762,
+      "eyePixels": 65
+    },
+    {
+      "ms": 350,
+      "bodyPixels": 7773,
+      "eyePixels": 66
+    },
+    {
+      "ms": 400,
+      "bodyPixels": 7773,
+      "eyePixels": 66
+    },
+    {
+      "ms": 450,
+      "bodyPixels": 7773,
+      "eyePixels": 66
+    },
+    {
+      "ms": 500,
+      "bodyPixels": 7773,
+      "eyePixels": 66
+    },
+    {
+      "ms": 550,
+      "bodyPixels": 7754,
+      "eyePixels": 65
+    },
+    {
+      "ms": 600,
+      "bodyPixels": 7673,
+      "eyePixels": 73
+    },
+    {
+      "ms": 650,
+      "bodyPixels": 7515,
+      "eyePixels": 69
+    },
+    {
+      "ms": 700,
+      "bodyPixels": 7364,
+      "eyePixels": 61
+    },
+    {
+      "ms": 750,
+      "bodyPixels": 7285,
+      "eyePixels": 66
+    },
+    {
+      "ms": 800,
+      "bodyPixels": 7260,
+      "eyePixels": 68
+    },
+    {
+      "ms": 1000,
+      "bodyPixels": 7260,
+      "eyePixels": 68
+    }
+  ]
+}

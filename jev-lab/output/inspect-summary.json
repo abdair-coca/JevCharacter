@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "summary": true,
+  "problems": [],
+  "artboards": [
+    {"name": "MiniJev", "objects": 199, "types": {"AnimationState": 1, "AnyState": 1, "Artboard": 1, "CubicEaseInterpolator": 61, "Ellipse": 2, "EntryState": 1, "ExitState": 1, "Fill": 5, "GradientStop": 5, "KeyFrameDouble": 85, "KeyedObject": 4, "KeyedProperty": 12, "LayoutComponentStyle": 1, "LinearAnimation": 1, "LinearGradient": 1, "Node": 4, "RadialGradient": 1, "Rectangle": 2, "Shape": 4, "SolidColor": 3, "StateMachine": 1, "StateMachineLayer": 1, "StateTransition": 1}}
+  ],
+  "roots": {"objects": 1, "types": {"Backboard": 1}}
+}

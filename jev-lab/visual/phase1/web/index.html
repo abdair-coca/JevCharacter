@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JEV · Comparación visual</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/rive.js" defer></script><script src="/app.mjs" type="module"></script>
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">JEV LAB · FASE 1</p><h1>La misma identidad.<br>Más presencia.</h1>
+      <p class="intro">Tres versiones en neutral, al mismo ancho corporal. Compara silueta, volumen y lectura de los ojos.</p>
+    </header>
+    <section class="toolbar" aria-label="Opciones de comparación">
+      <div class="controls"><span class="control-label">Fondo</span><button data-background="dark" aria-pressed="true">Oscuro</button><button data-background="light" aria-pressed="false">Claro</button></div>
+      <button id="capture" disabled>Descargar comparación PNG</button>
+    </section>
+    <p id="status" role="status">Cargando las tres versiones…</p>
+    <section id="comparison" class="comparison" aria-label="Comparación de personajes"></section>
+    <footer><p>Cuerpo morado · Dos ojos · Sin boca ni extremidades</p><p>Neutral congelado · 140 y 48 px de ancho corporal · Misma superficie</p></footer>
+    <details id="technical"><summary>Medición y referencia original</summary><p id="calibration"></p><button id="raw">Mostrar original sin recorte</button><button id="raw-download">Descargar original sin recorte PNG</button><canvas id="raw-original" width="800" height="600" hidden aria-label="Artboard completo del original"></canvas><pre id="diagnostics"></pre></details>
+  </main>
+</body>
+</html>

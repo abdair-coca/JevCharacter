@@ -1,0 +1,41 @@
+<Rive version="1" kind="fragment">
+  <Node id="0:20" name="Jev" x="180" y="207" rotation="0" scaleX="1" scaleY="1">
+    <Node id="0:21" name="BodyTransform" scaleX="1" scaleY="1">
+      <Node id="0:22" name="Eyes" x="0" y="-9" scaleX="1" scaleY="1">
+        <Node id="0:23" name="Blink" scaleY="1">
+          <Shape id="0:24" name="LeftEye" x="-11.0">
+            <Ellipse id="0:25" width="4.5" height="13" originX="0.5" originY="0.5" />
+            <Fill id="0:26">
+              <SolidColor id="0:27" colorValue="FFF9F6FF" />
+            </Fill>
+          </Shape>
+          <Shape id="0:28" name="RightEye" x="11.0">
+            <Ellipse id="0:29" width="4.5" height="13" originX="0.5" originY="0.5" />
+            <Fill id="0:30">
+              <SolidColor id="0:31" colorValue="FFF9F6FF" />
+            </Fill>
+          </Shape>
+        </Node>
+      </Node>
+      <Shape id="0:32" name="Body">
+        <Rectangle id="0:33" width="122" height="114" originX="0.5" originY="0.5" cornerRadiusTL="57" linkCornerRadius="true" />
+        <Fill id="0:34">
+          <LinearGradient id="0:35" startX="39" startY="-44" endX="-27" endY="48">
+            <GradientStop id="0:36" colorValue="FF8550B8" position="0" />
+            <GradientStop id="0:37" colorValue="FF332143" position="0.32" />
+            <GradientStop id="0:38" colorValue="FF191520" position="1" />
+          </LinearGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:39" name="VioletHalo">
+        <Rectangle id="0:40" width="148" height="140" originX="0.5" originY="0.5" cornerRadiusTL="70" linkCornerRadius="true" />
+        <Fill id="0:41">
+          <RadialGradient id="0:42" startX="0" startY="0" endX="74" endY="0">
+            <GradientStop id="0:43" colorValue="606D329E" position="0" />
+            <GradientStop id="0:44" colorValue="006D329E" position="1" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+    </Node>
+  </Node>
+</Rive>

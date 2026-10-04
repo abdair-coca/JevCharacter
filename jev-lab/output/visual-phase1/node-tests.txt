@@ -1,0 +1,33 @@
+✔ only body silhouette accepts clicks; halo and rounded corners do not (3.2876ms)
+✔ hit test inverts both transforms and contain offsets (0.6949ms)
+✔ busy requests are ignored without queue or timeline restart (2.7161ms)
+✔ entry blend occupies original first 80 ms, not extra duration (1.7274ms)
+✔ curiosity keeps original 800 ms and neutral owner precedes resumed tracking (7.8731ms)
+✔ capture remains immutable and repeated blend never accumulates (0.7673ms)
+✔ cancellation releases ownership without deferred reaction (0.3072ms)
+✔ invalid action, time and inverse transforms fail closed (0.7638ms)
+✔ keyboard activation requires focus; Space prevents scrolling; repeats never restart (0.3459ms)
+✔ suspension deletes active instance, resets every field and leaves no deferred reaction (0.4606ms)
+✔ suspension also clears the final-neutral latch before new interaction (0.2813ms)
+✔ silhouette hit remains correct after narrow and wide CSS resize, independent of DPR (0.2807ms)
+✔ settings stay inside the existing anatomy contract (3.3381ms)
+✔ contain maps centered horizontal and vertical letterboxing (2.8427ms)
+✔ character center stays neutral after resize with no DPR input (0.7756ms)
+✔ far cursor positions clamp exactly to eye and body bounds (0.4135ms)
+✔ exponential response agrees at 30, 60 and 144 fps (1.5ms)
+✔ eye response leads body response without overshoot (0.3632ms)
+✔ pointer leave settles to exact neutral so scheduling can stop (0.4411ms)
+✔ invalid coordinates and elapsed time fail closed (0.2574ms)
+✔ all body widths match and body centers coincide at both requested sizes (3.4101ms)
+✔ malformed calibration fails before rendering (1.2155ms)
+✔ dark sphere interior remains opaque while connected exterior black disappears (1.8126ms)
+✔ exterior glow reconstructs the source RGB over black within one byte (0.2771ms)
+✔ source eye and highlights within the measured sphere are untouched (0.1934ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 371.2196

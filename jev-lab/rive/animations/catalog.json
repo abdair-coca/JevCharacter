@@ -1,0 +1,4 @@
+{
+  "happy_bounce": {"id": "0:100", "intent": "joy", "durationRange": [0.6, 0.85], "maxScale": 1.2, "maxRotation": 8},
+  "curious_look": {"id": "0:500", "intent": "curiosity", "durationRange": [0.7, 0.9], "maxScale": 1.1, "maxRotation": 6}
+}

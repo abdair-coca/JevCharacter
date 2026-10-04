@@ -1,0 +1,13 @@
+✔ all body widths match and body centers coincide at both requested sizes (1.9779ms)
+✔ malformed calibration fails before rendering (1.7191ms)
+✔ dark sphere interior remains opaque while connected exterior black disappears (2.8234ms)
+✔ exterior glow reconstructs the source RGB over black within one byte (0.5784ms)
+✔ source eye and highlights within the measured sphere are untouched (0.4016ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 188.1857

@@ -1,0 +1,72 @@
+{
+  "revision": 4,
+  "date": "2026-10-04",
+  "status": "PASS",
+  "unchangedKeys": [
+    "schema",
+    "artboard",
+    "body",
+    "eyes",
+    "scope"
+  ],
+  "unchangedLightLayers": [
+    "VioletRim",
+    "PurpleVolume",
+    "PinkBacklight",
+    "VioletBacklight"
+  ],
+  "unchangedLayerOrder": true,
+  "allowedChanges": [
+    "FrontShadow coordinates and black alpha stops",
+    "UpperLeftShade removed",
+    "revision and intent",
+    "proposal comparison description"
+  ],
+  "shadow": {
+    "name": "FrontShadow",
+    "kind": "RadialGradient",
+    "coordinates": {
+      "startX": -8,
+      "startY": 10,
+      "endX": 60,
+      "endY": 10
+    },
+    "stops": [
+      [
+        0,
+        "FF000000"
+      ],
+      [
+        0.4,
+        "FF000000"
+      ],
+      [
+        0.5,
+        "F0000000"
+      ],
+      [
+        0.6,
+        "CC000000"
+      ],
+      [
+        0.7,
+        "8B000000"
+      ],
+      [
+        0.8,
+        "47000000"
+      ],
+      [
+        0.9,
+        "15000000"
+      ],
+      [
+        1,
+        "00000000"
+      ]
+    ]
+  },
+  "generatorUnchanged": true,
+  "comparisonGeometryAndReferencesUnchanged": true,
+  "archivedRevision03FilesVerified": 9
+}

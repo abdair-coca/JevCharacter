@@ -1,0 +1,51 @@
+{
+  "phase": 1,
+  "status": "PASS",
+  "changed": [
+    "jev-lab/README.md"
+  ],
+  "added": [
+    "jev-lab/output/interactive/phase-1-follow.jpg",
+    "jev-lab/output/phase1/controller-tests.txt",
+    "jev-lab/output/phase1/diff-review.txt",
+    "jev-lab/output/phase1/inspect-summary.json",
+    "jev-lab/output/phase1/python-tests.txt",
+    "jev-lab/output/phase1/validation-report.md",
+    "jev-lab/output/phase1/verify.json",
+    "jev-lab/tests/test_controller.mjs",
+    "jev-lab/tests/test_preview_server.py",
+    "jev-lab/validators/preview.py",
+    "jev-lab/web/app.mjs",
+    "jev-lab/web/controller.mjs",
+    "jev-lab/web/follow.json",
+    "jev-lab/web/index.html",
+    "jev-lab/web/style.css"
+  ],
+  "outsideChanges": [],
+  "protectedSourcesUnchanged": true,
+  "originalRiveAssets": [
+    {
+      "path": "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\public\\rive\\character.riv",
+      "hash": "4510A86E8D878062E4141CD5AD37618ABE3567EFD632CD8487CCDFC8480B3749"
+    },
+    {
+      "path": "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\public\\rive\\prove1.riv",
+      "hash": "98AA68170540D448DEAED0DB6FA57C11B062CEBF9036DC1CFADA4376254A8DAF"
+    }
+  ],
+  "browser": {
+    "neutralExact": true,
+    "followingDirections": [
+      "right",
+      "left",
+      "up",
+      "down"
+    ],
+    "eyeLeadObserved": true,
+    "framesStopAtNeutral": true,
+    "consoleErrors": [],
+    "screenshot": "phase-1-follow.jpg"
+  },
+  "userApproval": "pending",
+  "nextPhaseStarted": false
+}

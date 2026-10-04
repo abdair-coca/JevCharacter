@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "artboard": {"width": 360, "height": 340, "name": "MiniJev", "background": "FF15131E"},
+  "ids": {
+    "artboard": "0:1", "style": "0:2", "machine": "0:3", "backgroundFill": "0:4", "backgroundColor": "0:5",
+    "layer": "0:6", "any": "0:7", "exit": "0:8", "entry": "0:9", "transition": "0:10", "state": "0:11",
+    "root": "0:20", "bodyTransform": "0:21", "eyes": "0:22", "blink": "0:23",
+    "leftEye": "0:24", "leftGeometry": "0:25", "leftFill": "0:26", "leftColor": "0:27",
+    "rightEye": "0:28", "rightGeometry": "0:29", "rightFill": "0:30", "rightColor": "0:31",
+    "body": "0:32", "bodyGeometry": "0:33", "bodyFill": "0:34", "bodyGradient": "0:35", "bodyStop1": "0:36", "bodyStop2": "0:37", "bodyStop3": "0:38",
+    "halo": "0:39", "haloGeometry": "0:40", "haloFill": "0:41", "haloGradient": "0:42", "haloStop1": "0:43", "haloStop2": "0:44",
+    "animation": "0:100"
+  },
+  "neutral": {"x": 180, "y": 207, "rotation": 0, "scaleX": 1, "scaleY": 1, "eyeX": 0, "eyeY": -9, "eyeScale": 1, "blinkScale": 1},
+  "body": {"width": 122, "height": 114, "roundness": 57, "haloWidth": 148, "haloHeight": 140, "haloRadius": 70},
+  "eyes": {"separation": 22, "width": 4.5, "height": 13, "color": "FFF9F6FF"},
+  "palette": {"light": "FF8550B8", "mid": "FF332143", "dark": "FF191520", "haloInner": "606D329E", "haloOuter": "006D329E"},
+  "gradient": {"startX": 39, "startY": -44, "endX": -27, "endY": 48, "midPosition": 0.32, "haloEndX": 74},
+  "limits": {"bodyDimensionRatio": [0.7, 1.4], "scale": [0.75, 1.3], "rotationDegrees": [-25, 25], "eyeScale": [0.7, 1.3], "blink": [0, 1], "eyeX": [-24, 24], "eyeY": [-27, 15], "roundnessRatio": [0.8, 1.0], "x": [90, 270], "y": [100, 240], "faceMargin": 8, "visibilityMargin": 4},
+  "propertyKeys": {"x": 13, "y": 14, "rotation": 15, "scaleX": 16, "scaleY": 17, "width": 20, "height": 21, "cornerRadiusTL": 31},
+  "sampling": {"subframes": 8, "curveIterations": 45, "neutralHoldFrames": 2}
+}

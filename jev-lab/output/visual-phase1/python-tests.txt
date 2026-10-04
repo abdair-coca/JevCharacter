@@ -1,0 +1,58 @@
+test_body_cannot_start_too_late (test_curious_look.CuriousLookTests.test_body_cannot_start_too_late) ... ok
+test_brief_hold_required (test_curious_look.CuriousLookTests.test_brief_hold_required) ... ok
+test_delay_measures_segment_start_not_arrival (test_curious_look.CuriousLookTests.test_delay_measures_segment_start_not_arrival) ... ok
+test_eyes_cannot_look_left (test_curious_look.CuriousLookTests.test_eyes_cannot_look_left) ... ok
+test_eyes_do_not_signal_surprise (test_curious_look.CuriousLookTests.test_eyes_do_not_signal_surprise) ... ok
+test_neutral_hold_has_no_residual (test_curious_look.CuriousLookTests.test_neutral_hold_has_no_residual) ... ok
+test_only_two_known_animations (test_curious_look.CuriousLookTests.test_only_two_known_animations) ... ok
+test_scene_selection_must_match_preview (test_curious_look.CuriousLookTests.test_scene_selection_must_match_preview) ... ok
+test_stretch_at_least_five_percent (test_curious_look.CuriousLookTests.test_stretch_at_least_five_percent) ... ok
+test_stretch_at_most_ten_percent (test_curious_look.CuriousLookTests.test_stretch_at_most_ten_percent) ... ok
+test_stretch_follows_tilt_onset (test_curious_look.CuriousLookTests.test_stretch_follows_tilt_onset) ... ok
+test_tilt_direction_top_moves_right (test_curious_look.CuriousLookTests.test_tilt_direction_top_moves_right) ... ok
+test_valid_perceptive_sequence (test_curious_look.CuriousLookTests.test_valid_perceptive_sequence) ... ok
+test_absolute_windows_path_rejected (test_preview_server.PreviewServerTests.test_absolute_windows_path_rejected) ... ok
+test_local_asset_allowed (test_preview_server.PreviewServerTests.test_local_asset_allowed) ... ok
+test_parent_traversal_rejected (test_preview_server.PreviewServerTests.test_parent_traversal_rejected) ... ok
+test_root_opens_only_local_web_preview (test_preview_server.PreviewServerTests.test_root_opens_only_local_web_preview) ... ok
+test_composed_scale_not_only_local_keys (test_validator.ValidatorTests.test_composed_scale_not_only_local_keys) ... ok
+test_cubic_overshoot_rejected (test_validator.ValidatorTests.test_cubic_overshoot_rejected) ... ok
+test_duplicate_frame (test_validator.ValidatorTests.test_duplicate_frame) ... ok
+test_duration_spec (test_validator.ValidatorTests.test_duration_spec) ... ok
+test_expanded_body_visibility_not_only_halo (test_validator.ValidatorTests.test_expanded_body_visibility_not_only_halo) ... ok
+test_eye_containment_even_with_legal_local_values (test_validator.ValidatorTests.test_eye_containment_even_with_legal_local_values) ... ok
+test_eye_scale_must_be_uniform (test_validator.ValidatorTests.test_eye_scale_must_be_uniform) ... ok
+test_final_pose_residue (test_validator.ValidatorTests.test_final_pose_residue) ... ok
+test_hold_must_already_be_neutral (test_validator.ValidatorTests.test_hold_must_already_be_neutral) ... ok
+test_illegal_local_scales_cannot_cancel (test_validator.ValidatorTests.test_illegal_local_scales_cannot_cancel) ... ok
+test_missing_required_track (test_validator.ValidatorTests.test_missing_required_track) ... ok
+test_nonfinite (test_validator.ValidatorTests.test_nonfinite) ... ok
+test_resolved_runtime_mismatch (test_validator.ValidatorTests.test_resolved_runtime_mismatch) ... ok
+test_scale_out_of_bounds (test_validator.ValidatorTests.test_scale_out_of_bounds) ... ok
+test_static_anatomy_changed (test_validator.ValidatorTests.test_static_anatomy_changed) ... ok
+test_unknown_track (test_validator.ValidatorTests.test_unknown_track) ... ok
+test_unsupported_easing (test_validator.ValidatorTests.test_unsupported_easing) ... ok
+test_valid_scene (test_validator.ValidatorTests.test_valid_scene) ... ok
+test_all_original_sources_and_renders_preserved (test_visual_phase1.VisualReferenceTests.test_all_original_sources_and_renders_preserved) ... ok
+test_original_endpoint_cannot_select_other_files (test_visual_phase1.VisualReferenceTests.test_original_endpoint_cannot_select_other_files) ... ok
+test_proposal_is_neutral_only_with_two_eyes (test_visual_phase1.VisualReferenceTests.test_proposal_is_neutral_only_with_two_eyes) ... ok
+test_reference_only_separates_the_backdrop (test_visual_phase1.VisualReferenceTests.test_reference_only_separates_the_backdrop) ... ok
+test_rejected_revision_is_preserved_by_checksum (test_visual_phase1.VisualReferenceTests.test_rejected_revision_is_preserved_by_checksum) ... ok
+test_revised_proposal_has_circular_body_and_centered_round_eyes (test_visual_phase1.VisualReferenceTests.test_revised_proposal_has_circular_body_and_centered_round_eyes) ... ok
+test_server_rejects_lists_traversal_and_allows_exact_read_only_original (test_visual_phase1.VisualReferenceTests.test_server_rejects_lists_traversal_and_allows_exact_read_only_original) ... 127.0.0.1 - - [04/Oct/2026 09:06:34] "GET /original.riv HTTP/1.1" 200 -
+127.0.0.1 - - [04/Oct/2026 09:06:34] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 09:06:34] "GET /../package.json HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 09:06:34] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 09:06:34] "GET /%2e%2e/package.json HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 09:06:34] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 09:06:34] "GET /visual/ HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 09:06:34] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 09:06:34] "GET /original.riv/ HTTP/1.1" 403 -
+127.0.0.1 - - [04/Oct/2026 09:06:35] code 403, message Ruta no autorizada
+127.0.0.1 - - [04/Oct/2026 09:06:35] "GET /output/ HTTP/1.1" 403 -
+ok
+
+----------------------------------------------------------------------
+Ran 42 tests in 4.892s
+
+OK

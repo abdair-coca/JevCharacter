@@ -1,0 +1,27 @@
+warning: in the working copy of 'jev-lab/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/README.md', LF will be replaced by CRLF the next time Git touches it
+157	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/README.md
+warning: in the working copy of 'jev-lab/web/index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/web/index.html', LF will be replaced by CRLF the next time Git touches it
+26	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/web/index.html
+warning: in the working copy of 'jev-lab/web/style.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/web/style.css', LF will be replaced by CRLF the next time Git touches it
+22	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/web/style.css
+warning: in the working copy of 'jev-lab/web/app.mjs', LF will be replaced by CRLF the next time Git touches it
+201	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/web/app.mjs
+warning: in the working copy of 'jev-lab/web/app.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/web/controller.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/web/controller.mjs', LF will be replaced by CRLF the next time Git touches it
+74	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/web/controller.mjs
+warning: in the working copy of 'jev-lab/web/follow.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/web/follow.json', LF will be replaced by CRLF the next time Git touches it
+6	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/web/follow.json
+warning: in the working copy of 'jev-lab/validators/preview.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/validators/preview.py', LF will be replaced by CRLF the next time Git touches it
+73	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/validators/preview.py
+warning: in the working copy of 'jev-lab/tests/test_controller.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/tests/test_controller.mjs', LF will be replaced by CRLF the next time Git touches it
+76	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/tests/test_controller.mjs
+warning: in the working copy of 'jev-lab/tests/test_preview_server.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'jev-lab/tests/test_preview_server.py', LF will be replaced by CRLF the next time Git touches it
+27	0	"C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\review-empty.txt" => jev-lab/tests/test_preview_server.py

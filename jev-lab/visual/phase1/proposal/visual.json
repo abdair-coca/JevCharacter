@@ -1,0 +1,202 @@
+{
+  "schema": 1,
+  "artboard": {
+    "name": "JevNeutralProposal",
+    "width": 360,
+    "height": 340
+  },
+  "revision": 4,
+  "body": {
+    "geometry": "Ellipse",
+    "width": 122,
+    "height": 122,
+    "centerX": 180,
+    "centerY": 170
+  },
+  "eyes": {
+    "width": 9,
+    "height": 11,
+    "separation": 18,
+    "offsetY": 0,
+    "color": "FFFFFAFF"
+  },
+  "lighting": [
+    {
+      "name": "VioletRim",
+      "kind": "RadialGradient",
+      "coordinates": {
+        "startX": 0,
+        "startY": 0,
+        "endX": 61,
+        "endY": 0
+      },
+      "stops": [
+        [
+          0,
+          "002C00BC"
+        ],
+        [
+          0.7,
+          "002C00BC"
+        ],
+        [
+          0.87,
+          "702C00BC"
+        ],
+        [
+          0.97,
+          "AA2C00BC"
+        ],
+        [
+          1,
+          "C04900DB"
+        ]
+      ],
+      "blendModeValue": "screen"
+    },
+    {
+      "name": "FrontShadow",
+      "kind": "RadialGradient",
+      "coordinates": {
+        "startX": -8,
+        "startY": 10,
+        "endX": 60,
+        "endY": 10
+      },
+      "stops": [
+        [
+          0,
+          "FF000000"
+        ],
+        [
+          0.4,
+          "FF000000"
+        ],
+        [
+          0.5,
+          "F0000000"
+        ],
+        [
+          0.6,
+          "CC000000"
+        ],
+        [
+          0.7,
+          "8B000000"
+        ],
+        [
+          0.8,
+          "47000000"
+        ],
+        [
+          0.9,
+          "15000000"
+        ],
+        [
+          1,
+          "00000000"
+        ]
+      ]
+    },
+    {
+      "name": "PurpleVolume",
+      "kind": "RadialGradient",
+      "coordinates": {
+        "startX": 42,
+        "startY": -37,
+        "endX": 162,
+        "endY": -37
+      },
+      "stops": [
+        [
+          0,
+          "FFF400FF"
+        ],
+        [
+          0.12,
+          "FFEF02FD"
+        ],
+        [
+          0.22,
+          "FFC400FF"
+        ],
+        [
+          0.5,
+          "FF5600B9"
+        ],
+        [
+          0.8,
+          "FF2C0084"
+        ],
+        [
+          1,
+          "FF0E0050"
+        ]
+      ]
+    },
+    {
+      "name": "PinkBacklight",
+      "kind": "RadialGradient",
+      "width": 204,
+      "height": 204,
+      "x": 12,
+      "y": -13,
+      "coordinates": {
+        "startX": 0,
+        "startY": 0,
+        "endX": 102,
+        "endY": 0
+      },
+      "stops": [
+        [
+          0,
+          "2A9700ED"
+        ],
+        [
+          0.45,
+          "249700ED"
+        ],
+        [
+          0.75,
+          "0B7900DF"
+        ],
+        [
+          1,
+          "007900DF"
+        ]
+      ]
+    },
+    {
+      "name": "VioletBacklight",
+      "kind": "RadialGradient",
+      "width": 242,
+      "height": 242,
+      "coordinates": {
+        "startX": 0,
+        "startY": 0,
+        "endX": 121,
+        "endY": 0
+      },
+      "stops": [
+        [
+          0,
+          "707800DE"
+        ],
+        [
+          0.48,
+          "627800DE"
+        ],
+        [
+          0.75,
+          "226500D1"
+        ],
+        [
+          1,
+          "006500D1"
+        ]
+      ]
+    }
+  ],
+  "intent": "Únicamente sombra central: una radial negra continua y redondeada, sin lóbulo superior izquierdo, con caída suave. Colores, luces aprobadas, halo, cuerpo, ojos y artboard idénticos a revisión03.",
+  "scope": "Neutral visual solamente; sin rig expresivo ni animaciones. Autoridad separada del contrato corporal histórico."
+}

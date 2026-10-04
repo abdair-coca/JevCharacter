@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini JEV · Seguimiento suave</title>
+  <link rel="stylesheet" href="/web/style.css">
+  <script src="/output/tools/browser/rive.js" defer></script>
+  <script type="module" src="/web/app.mjs"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">JEV LAB · FASE 3</p>
+      <h1>Mini JEV</h1>
+      <p class="intro">Mueve el cursor. Toca a JEV para alegrarlo.</p>
+    </header>
+    <div class="stage">
+      <canvas id="jev" tabindex="0" aria-disabled="true" aria-label="Alegrar a Mini JEV. Haz clic o toca su cuerpo, o pulsa Enter o Espacio con JEV enfocado." role="button"></canvas>
+    </div>
+    <p id="status" role="status" aria-live="polite">Cargando Mini JEV…</p>
+    <div class="actions"><button id="curiosity" type="button" disabled>Curiosidad</button></div>
+    <output id="diagnostics" class="sr-only" aria-label="Estado de seguimiento" data-state="loading">Cargando.</output>
+    <p class="hint">Tab para enfocar a JEV; Enter o Espacio para alegrarlo. Una reacción a la vez.</p>
+  </main>
+</body>
+</html>

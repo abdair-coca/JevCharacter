@@ -1,0 +1,3354 @@
+{
+  "schema": 1,
+  "problems": [],
+  "backboard": {
+    "type": "Backboard",
+    "line": 0
+  },
+  "defaultArtboard": {
+    "id": "0:1",
+    "name": "MiniJev"
+  },
+  "artboards": [
+    {
+      "type": "Artboard",
+      "id": "0:1",
+      "line": 2,
+      "originX": 0,
+      "originY": 0,
+      "defaultStateMachineId": "0:3",
+      "clip": false,
+      "width": 360,
+      "height": 340,
+      "styleId": "0:2",
+      "fractionalWidth": 1,
+      "fractionalHeight": 1,
+      "blendModeValue": 3,
+      "additiveAmount": 255,
+      "drawableFlags": 0,
+      "x": 0,
+      "y": 0,
+      "computedLocalX": 0,
+      "computedLocalY": 0,
+      "computedWorldX": 0,
+      "computedWorldY": 0,
+      "computedRootX": 0,
+      "computedRootY": 0,
+      "computedWidth": 0,
+      "computedHeight": 0,
+      "rotation": 0,
+      "scaleX": 1,
+      "scaleY": 1,
+      "opacity": 1,
+      "name": "MiniJev",
+      "enums": {
+        "blendModeValue": "srcOver"
+      },
+      "children": [
+        {
+          "type": "LayoutComponentStyle",
+          "id": "0:2",
+          "line": 3,
+          "gapHorizontal": 0,
+          "gapVertical": 0,
+          "borderLeft": 0,
+          "borderRight": 0,
+          "borderTop": 0,
+          "borderBottom": 0,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "positionLeft": 0,
+          "positionRight": 0,
+          "positionTop": 0,
+          "positionBottom": 0,
+          "positionLeftUnitsValue": 0,
+          "positionRightUnitsValue": 0,
+          "positionTopUnitsValue": 0,
+          "positionBottomUnitsValue": 0,
+          "flexBasis": 0,
+          "aspectRatio": 0,
+          "interpolationTime": 0,
+          "flexBasisUnitsValue": 3,
+          "layoutAlignmentType": 0,
+          "animationStyleType": 0,
+          "interpolationType": 0,
+          "positionTypeValue": 1,
+          "flexDirectionValue": 2,
+          "directionValue": 0,
+          "flexWrapValue": 0,
+          "overflowValue": 0,
+          "intrinsicallySizedValue": false,
+          "borderLeftUnitsValue": 0,
+          "borderRightUnitsValue": 0,
+          "borderTopUnitsValue": 0,
+          "borderBottomUnitsValue": 0,
+          "marginLeftUnitsValue": 1,
+          "marginRightUnitsValue": 1,
+          "marginTopUnitsValue": 1,
+          "marginBottomUnitsValue": 1,
+          "paddingLeftUnitsValue": 1,
+          "paddingRightUnitsValue": 1,
+          "paddingTopUnitsValue": 1,
+          "paddingBottomUnitsValue": 1,
+          "gapHorizontalUnitsValue": 1,
+          "gapVerticalUnitsValue": 1,
+          "justifyItemsValue": 7,
+          "layoutTypeValue": 0,
+          "linkCornerRadius": true,
+          "cornerRadiusTL": 0,
+          "cornerRadiusTR": 0,
+          "cornerRadiusBL": 0,
+          "cornerRadiusBR": 0,
+          "minWidth": 0,
+          "maxWidth": 0,
+          "minHeight": 0,
+          "maxHeight": 0,
+          "minWidthUnitsValue": 0,
+          "maxWidthUnitsValue": 0,
+          "minHeightUnitsValue": 0,
+          "maxHeightUnitsValue": 0,
+          "layoutWidthScaleType": 0,
+          "layoutHeightScaleType": 0,
+          "hugUnbounded": false,
+          "widthUnitsValue": 1,
+          "heightUnitsValue": 1,
+          "justifySelfValue": 6,
+          "displayValue": 0,
+          "name": "",
+          "enums": {
+            "positionLeftUnitsValue": "undefined",
+            "positionRightUnitsValue": "undefined",
+            "positionTopUnitsValue": "undefined",
+            "positionBottomUnitsValue": "undefined",
+            "flexBasisUnitsValue": "auto",
+            "layoutAlignmentType": "topLeft",
+            "animationStyleType": "none",
+            "interpolationType": "hold",
+            "positionTypeValue": "relative",
+            "flexDirectionValue": "row",
+            "directionValue": "inherit",
+            "flexWrapValue": "noWrap",
+            "overflowValue": "visible",
+            "borderLeftUnitsValue": "undefined",
+            "borderRightUnitsValue": "undefined",
+            "borderTopUnitsValue": "undefined",
+            "borderBottomUnitsValue": "undefined",
+            "marginLeftUnitsValue": "points",
+            "marginRightUnitsValue": "points",
+            "marginTopUnitsValue": "points",
+            "marginBottomUnitsValue": "points",
+            "paddingLeftUnitsValue": "points",
+            "paddingRightUnitsValue": "points",
+            "paddingTopUnitsValue": "points",
+            "paddingBottomUnitsValue": "points",
+            "gapHorizontalUnitsValue": "points",
+            "gapVerticalUnitsValue": "points",
+            "justifyItemsValue": "stretch",
+            "layoutTypeValue": "flex",
+            "minWidthUnitsValue": "undefined",
+            "maxWidthUnitsValue": "undefined",
+            "minHeightUnitsValue": "undefined",
+            "maxHeightUnitsValue": "undefined",
+            "layoutWidthScaleType": "fixed",
+            "layoutHeightScaleType": "fixed",
+            "widthUnitsValue": "points",
+            "heightUnitsValue": "points",
+            "justifySelfValue": "auto",
+            "displayValue": "flex"
+          }
+        },
+        {
+          "type": "Fill",
+          "id": "0:4",
+          "line": 4,
+          "fillRule": 0,
+          "isVisible": true,
+          "blendModeValue": 127,
+          "additiveAmount": 255,
+          "name": "",
+          "enums": {
+            "fillRule": "nonZero",
+            "blendModeValue": "inherit"
+          },
+          "children": [
+            {
+              "type": "SolidColor",
+              "id": "0:5",
+              "line": 5,
+              "colorValue": "FF15131E",
+              "colorRed": 0,
+              "colorGreen": 0,
+              "colorBlue": 0,
+              "colorAlpha": 0,
+              "name": ""
+            }
+          ]
+        },
+        {
+          "type": "StateMachine",
+          "id": "0:3",
+          "line": 7,
+          "name": "Preview",
+          "children": [
+            {
+              "type": "StateMachineLayer",
+              "id": "0:6",
+              "line": 8,
+              "name": "Motion",
+              "children": [
+                {
+                  "type": "AnyState",
+                  "id": "0:7",
+                  "line": 9,
+                  "flags": 0
+                },
+                {
+                  "type": "ExitState",
+                  "id": "0:8",
+                  "line": 10,
+                  "flags": 0
+                },
+                {
+                  "type": "EntryState",
+                  "id": "0:9",
+                  "line": 11,
+                  "flags": 0,
+                  "children": [
+                    {
+                      "type": "StateTransition",
+                      "id": "0:10",
+                      "line": 12,
+                      "stateToId": "0:11",
+                      "flags": 0,
+                      "duration": 0,
+                      "exitTime": 0,
+                      "interpolationType": 1,
+                      "randomWeight": 1,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "AnimationState",
+                  "id": "0:11",
+                  "line": 14,
+                  "animationId": "0:500",
+                  "speed": 1,
+                  "flags": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Node",
+          "id": "0:20",
+          "line": 17,
+          "x": 180,
+          "y": 207,
+          "computedLocalX": 0,
+          "computedLocalY": 0,
+          "computedWorldX": 0,
+          "computedWorldY": 0,
+          "computedRootX": 0,
+          "computedRootY": 0,
+          "computedWidth": 0,
+          "computedHeight": 0,
+          "rotation": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "opacity": 1,
+          "name": "Jev",
+          "children": [
+            {
+              "type": "Node",
+              "id": "0:21",
+              "line": 18,
+              "x": 0,
+              "y": 0,
+              "computedLocalX": 0,
+              "computedLocalY": 0,
+              "computedWorldX": 0,
+              "computedWorldY": 0,
+              "computedRootX": 0,
+              "computedRootY": 0,
+              "computedWidth": 0,
+              "computedHeight": 0,
+              "rotation": 0,
+              "scaleX": 1,
+              "scaleY": 1,
+              "opacity": 1,
+              "name": "BodyTransform",
+              "children": [
+                {
+                  "type": "Node",
+                  "id": "0:22",
+                  "line": 19,
+                  "x": 0,
+                  "y": -9,
+                  "computedLocalX": 0,
+                  "computedLocalY": 0,
+                  "computedWorldX": 0,
+                  "computedWorldY": 0,
+                  "computedRootX": 0,
+                  "computedRootY": 0,
+                  "computedWidth": 0,
+                  "computedHeight": 0,
+                  "rotation": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "opacity": 1,
+                  "name": "Eyes",
+                  "children": [
+                    {
+                      "type": "Node",
+                      "id": "0:23",
+                      "line": 20,
+                      "x": 0,
+                      "y": 0,
+                      "computedLocalX": 0,
+                      "computedLocalY": 0,
+                      "computedWorldX": 0,
+                      "computedWorldY": 0,
+                      "computedRootX": 0,
+                      "computedRootY": 0,
+                      "computedWidth": 0,
+                      "computedHeight": 0,
+                      "rotation": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "opacity": 1,
+                      "name": "Blink",
+                      "children": [
+                        {
+                          "type": "Shape",
+                          "id": "0:24",
+                          "line": 21,
+                          "length": 0,
+                          "blendModeValue": 3,
+                          "additiveAmount": 255,
+                          "drawableFlags": 0,
+                          "x": -11,
+                          "y": 0,
+                          "computedLocalX": 0,
+                          "computedLocalY": 0,
+                          "computedWorldX": 0,
+                          "computedWorldY": 0,
+                          "computedRootX": 0,
+                          "computedRootY": 0,
+                          "computedWidth": 0,
+                          "computedHeight": 0,
+                          "rotation": 0,
+                          "scaleX": 1,
+                          "scaleY": 1,
+                          "opacity": 1,
+                          "name": "LeftEye",
+                          "enums": {
+                            "blendModeValue": "srcOver"
+                          },
+                          "children": [
+                            {
+                              "type": "Ellipse",
+                              "id": "0:25",
+                              "line": 22,
+                              "width": 4.5,
+                              "height": 13,
+                              "originX": 0.5,
+                              "originY": 0.5,
+                              "pathFlags": 0,
+                              "isHole": false,
+                              "x": 0,
+                              "y": 0,
+                              "computedLocalX": 0,
+                              "computedLocalY": 0,
+                              "computedWorldX": 0,
+                              "computedWorldY": 0,
+                              "computedRootX": 0,
+                              "computedRootY": 0,
+                              "computedWidth": 0,
+                              "computedHeight": 0,
+                              "rotation": 0,
+                              "scaleX": 1,
+                              "scaleY": 1,
+                              "opacity": 1,
+                              "name": ""
+                            },
+                            {
+                              "type": "Fill",
+                              "id": "0:26",
+                              "line": 23,
+                              "fillRule": 0,
+                              "isVisible": true,
+                              "blendModeValue": 127,
+                              "additiveAmount": 255,
+                              "name": "",
+                              "enums": {
+                                "fillRule": "nonZero",
+                                "blendModeValue": "inherit"
+                              },
+                              "children": [
+                                {
+                                  "type": "SolidColor",
+                                  "id": "0:27",
+                                  "line": 24,
+                                  "colorValue": "FFF9F6FF",
+                                  "colorRed": 0,
+                                  "colorGreen": 0,
+                                  "colorBlue": 0,
+                                  "colorAlpha": 0,
+                                  "name": ""
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Shape",
+                          "id": "0:28",
+                          "line": 27,
+                          "length": 0,
+                          "blendModeValue": 3,
+                          "additiveAmount": 255,
+                          "drawableFlags": 0,
+                          "x": 11,
+                          "y": 0,
+                          "computedLocalX": 0,
+                          "computedLocalY": 0,
+                          "computedWorldX": 0,
+                          "computedWorldY": 0,
+                          "computedRootX": 0,
+                          "computedRootY": 0,
+                          "computedWidth": 0,
+                          "computedHeight": 0,
+                          "rotation": 0,
+                          "scaleX": 1,
+                          "scaleY": 1,
+                          "opacity": 1,
+                          "name": "RightEye",
+                          "enums": {
+                            "blendModeValue": "srcOver"
+                          },
+                          "children": [
+                            {
+                              "type": "Ellipse",
+                              "id": "0:29",
+                              "line": 28,
+                              "width": 4.5,
+                              "height": 13,
+                              "originX": 0.5,
+                              "originY": 0.5,
+                              "pathFlags": 0,
+                              "isHole": false,
+                              "x": 0,
+                              "y": 0,
+                              "computedLocalX": 0,
+                              "computedLocalY": 0,
+                              "computedWorldX": 0,
+                              "computedWorldY": 0,
+                              "computedRootX": 0,
+                              "computedRootY": 0,
+                              "computedWidth": 0,
+                              "computedHeight": 0,
+                              "rotation": 0,
+                              "scaleX": 1,
+                              "scaleY": 1,
+                              "opacity": 1,
+                              "name": ""
+                            },
+                            {
+                              "type": "Fill",
+                              "id": "0:30",
+                              "line": 29,
+                              "fillRule": 0,
+                              "isVisible": true,
+                              "blendModeValue": 127,
+                              "additiveAmount": 255,
+                              "name": "",
+                              "enums": {
+                                "fillRule": "nonZero",
+                                "blendModeValue": "inherit"
+                              },
+                              "children": [
+                                {
+                                  "type": "SolidColor",
+                                  "id": "0:31",
+                                  "line": 30,
+                                  "colorValue": "FFF9F6FF",
+                                  "colorRed": 0,
+                                  "colorGreen": 0,
+                                  "colorBlue": 0,
+                                  "colorAlpha": 0,
+                                  "name": ""
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Shape",
+                  "id": "0:32",
+                  "line": 35,
+                  "length": 0,
+                  "blendModeValue": 3,
+                  "additiveAmount": 255,
+                  "drawableFlags": 0,
+                  "x": 0,
+                  "y": 0,
+                  "computedLocalX": 0,
+                  "computedLocalY": 0,
+                  "computedWorldX": 0,
+                  "computedWorldY": 0,
+                  "computedRootX": 0,
+                  "computedRootY": 0,
+                  "computedWidth": 0,
+                  "computedHeight": 0,
+                  "rotation": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "opacity": 1,
+                  "name": "Body",
+                  "enums": {
+                    "blendModeValue": "srcOver"
+                  },
+                  "children": [
+                    {
+                      "type": "Rectangle",
+                      "id": "0:33",
+                      "line": 36,
+                      "linkCornerRadius": true,
+                      "cornerRadiusTL": 57,
+                      "cornerRadiusTR": 0,
+                      "cornerRadiusBL": 0,
+                      "cornerRadiusBR": 0,
+                      "width": 122,
+                      "height": 114,
+                      "originX": 0.5,
+                      "originY": 0.5,
+                      "pathFlags": 0,
+                      "isHole": false,
+                      "x": 0,
+                      "y": 0,
+                      "computedLocalX": 0,
+                      "computedLocalY": 0,
+                      "computedWorldX": 0,
+                      "computedWorldY": 0,
+                      "computedRootX": 0,
+                      "computedRootY": 0,
+                      "computedWidth": 0,
+                      "computedHeight": 0,
+                      "rotation": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "opacity": 1,
+                      "name": ""
+                    },
+                    {
+                      "type": "Fill",
+                      "id": "0:34",
+                      "line": 37,
+                      "fillRule": 0,
+                      "isVisible": true,
+                      "blendModeValue": 127,
+                      "additiveAmount": 255,
+                      "name": "",
+                      "enums": {
+                        "fillRule": "nonZero",
+                        "blendModeValue": "inherit"
+                      },
+                      "children": [
+                        {
+                          "type": "LinearGradient",
+                          "id": "0:35",
+                          "line": 38,
+                          "startX": 39,
+                          "startY": -44,
+                          "endX": -27,
+                          "endY": 48,
+                          "opacity": 1,
+                          "name": "",
+                          "children": [
+                            {
+                              "type": "GradientStop",
+                              "id": "0:36",
+                              "line": 39,
+                              "colorValue": "FF8550B8",
+                              "position": 0,
+                              "colorRed": 0,
+                              "colorGreen": 0,
+                              "colorBlue": 0,
+                              "colorAlpha": 0,
+                              "name": ""
+                            },
+                            {
+                              "type": "GradientStop",
+                              "id": "0:37",
+                              "line": 40,
+                              "colorValue": "FF332143",
+                              "position": 0.319999993,
+                              "colorRed": 0,
+                              "colorGreen": 0,
+                              "colorBlue": 0,
+                              "colorAlpha": 0,
+                              "name": ""
+                            },
+                            {
+                              "type": "GradientStop",
+                              "id": "0:38",
+                              "line": 41,
+                              "colorValue": "FF191520",
+                              "position": 1,
+                              "colorRed": 0,
+                              "colorGreen": 0,
+                              "colorBlue": 0,
+                              "colorAlpha": 0,
+                              "name": ""
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Shape",
+                  "id": "0:39",
+                  "line": 45,
+                  "length": 0,
+                  "blendModeValue": 3,
+                  "additiveAmount": 255,
+                  "drawableFlags": 0,
+                  "x": 0,
+                  "y": 0,
+                  "computedLocalX": 0,
+                  "computedLocalY": 0,
+                  "computedWorldX": 0,
+                  "computedWorldY": 0,
+                  "computedRootX": 0,
+                  "computedRootY": 0,
+                  "computedWidth": 0,
+                  "computedHeight": 0,
+                  "rotation": 0,
+                  "scaleX": 1,
+                  "scaleY": 1,
+                  "opacity": 1,
+                  "name": "VioletHalo",
+                  "enums": {
+                    "blendModeValue": "srcOver"
+                  },
+                  "children": [
+                    {
+                      "type": "Rectangle",
+                      "id": "0:40",
+                      "line": 46,
+                      "linkCornerRadius": true,
+                      "cornerRadiusTL": 70,
+                      "cornerRadiusTR": 0,
+                      "cornerRadiusBL": 0,
+                      "cornerRadiusBR": 0,
+                      "width": 148,
+                      "height": 140,
+                      "originX": 0.5,
+                      "originY": 0.5,
+                      "pathFlags": 0,
+                      "isHole": false,
+                      "x": 0,
+                      "y": 0,
+                      "computedLocalX": 0,
+                      "computedLocalY": 0,
+                      "computedWorldX": 0,
+                      "computedWorldY": 0,
+                      "computedRootX": 0,
+                      "computedRootY": 0,
+                      "computedWidth": 0,
+                      "computedHeight": 0,
+                      "rotation": 0,
+                      "scaleX": 1,
+                      "scaleY": 1,
+                      "opacity": 1,
+                      "name": ""
+                    },
+                    {
+                      "type": "Fill",
+                      "id": "0:41",
+                      "line": 47,
+                      "fillRule": 0,
+                      "isVisible": true,
+                      "blendModeValue": 127,
+                      "additiveAmount": 255,
+                      "name": "",
+                      "enums": {
+                        "fillRule": "nonZero",
+                        "blendModeValue": "inherit"
+                      },
+                      "children": [
+                        {
+                          "type": "RadialGradient",
+                          "id": "0:42",
+                          "line": 48,
+                          "startX": 0,
+                          "startY": 0,
+                          "endX": 74,
+                          "endY": 0,
+                          "opacity": 1,
+                          "name": "",
+                          "children": [
+                            {
+                              "type": "GradientStop",
+                              "id": "0:43",
+                              "line": 49,
+                              "colorValue": "606D329E",
+                              "position": 0,
+                              "colorRed": 0,
+                              "colorGreen": 0,
+                              "colorBlue": 0,
+                              "colorAlpha": 0,
+                              "name": ""
+                            },
+                            {
+                              "type": "GradientStop",
+                              "id": "0:44",
+                              "line": 50,
+                              "colorValue": "006D329E",
+                              "position": 1,
+                              "colorRed": 0,
+                              "colorGreen": 0,
+                              "colorBlue": 0,
+                              "colorAlpha": 0,
+                              "name": ""
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "LinearAnimation",
+          "id": "0:100",
+          "line": 56,
+          "fps": 60,
+          "duration": 45,
+          "speed": 1,
+          "loopValue": 0,
+          "workStart": 4294967295,
+          "workEnd": 4294967295,
+          "enableWorkArea": false,
+          "quantize": false,
+          "name": "happy_bounce",
+          "enums": {
+            "loopValue": "oneShot"
+          },
+          "children": [
+            {
+              "type": "KeyedObject",
+              "id": "0:201",
+              "line": 57,
+              "objectId": "0:20",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:202",
+                  "line": 58,
+                  "propertyKey": 13,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:203",
+                      "line": 59,
+                      "value": 180,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:204",
+                          "line": 60,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:401",
+                      "line": 62,
+                      "value": 180,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:205",
+                      "line": 63,
+                      "value": 180,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:206",
+                  "line": 65,
+                  "propertyKey": 14,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:207",
+                      "line": 66,
+                      "value": 207,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:208",
+                          "line": 67,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:209",
+                      "line": 69,
+                      "value": 207,
+                      "interpolationType": 2,
+                      "frame": 4,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:210",
+                          "line": 70,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:211",
+                      "line": 72,
+                      "value": 213,
+                      "interpolationType": 2,
+                      "frame": 9,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:212",
+                          "line": 73,
+                          "x1": 0.200000003,
+                          "y1": 0.649999976,
+                          "x2": 0.300000012,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:213",
+                      "line": 75,
+                      "value": 176,
+                      "interpolationType": 2,
+                      "frame": 14,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:214",
+                          "line": 76,
+                          "x1": 0.200000003,
+                          "y1": 0.649999976,
+                          "x2": 0.300000012,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:215",
+                      "line": 78,
+                      "value": 155,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:216",
+                          "line": 79,
+                          "x1": 0.550000012,
+                          "y1": 0,
+                          "x2": 0.800000012,
+                          "y2": 0.300000012
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:217",
+                      "line": 81,
+                      "value": 158,
+                      "interpolationType": 2,
+                      "frame": 25,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:218",
+                          "line": 82,
+                          "x1": 0.550000012,
+                          "y1": 0,
+                          "x2": 0.800000012,
+                          "y2": 0.300000012
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:219",
+                      "line": 84,
+                      "value": 211,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:220",
+                          "line": 85,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:221",
+                      "line": 87,
+                      "value": 203,
+                      "interpolationType": 2,
+                      "frame": 37,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:222",
+                          "line": 88,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:223",
+                      "line": 90,
+                      "value": 207.600006,
+                      "interpolationType": 2,
+                      "frame": 41,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:224",
+                          "line": 91,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:402",
+                      "line": 93,
+                      "value": 207,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:225",
+                      "line": 94,
+                      "value": 207,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:226",
+                  "line": 96,
+                  "propertyKey": 15,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:227",
+                      "line": 97,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:228",
+                          "line": 98,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:229",
+                      "line": 100,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 4,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:230",
+                          "line": 101,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:231",
+                      "line": 103,
+                      "value": 0.0250000004,
+                      "interpolationType": 2,
+                      "frame": 9,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:232",
+                          "line": 104,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:233",
+                      "line": 106,
+                      "value": -0.0350000001,
+                      "interpolationType": 2,
+                      "frame": 14,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:234",
+                          "line": 107,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:235",
+                      "line": 109,
+                      "value": -0.0250000004,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:236",
+                          "line": 110,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:237",
+                      "line": 112,
+                      "value": 0.0179999992,
+                      "interpolationType": 2,
+                      "frame": 25,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:238",
+                          "line": 113,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:239",
+                      "line": 115,
+                      "value": 0.0250000004,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:240",
+                          "line": 116,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:241",
+                      "line": 118,
+                      "value": -0.0120000001,
+                      "interpolationType": 2,
+                      "frame": 37,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:242",
+                          "line": 119,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:403",
+                      "line": 121,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:243",
+                      "line": 122,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:244",
+                  "line": 124,
+                  "propertyKey": 16,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:245",
+                      "line": 125,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:246",
+                          "line": 126,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:404",
+                      "line": 128,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:247",
+                      "line": 129,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:248",
+                  "line": 131,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:249",
+                      "line": 132,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:250",
+                          "line": 133,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:405",
+                      "line": 135,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:251",
+                      "line": 136,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "KeyedObject",
+              "id": "0:252",
+              "line": 139,
+              "objectId": "0:21",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:253",
+                  "line": 140,
+                  "propertyKey": 16,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:254",
+                      "line": 141,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:255",
+                          "line": 142,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:256",
+                      "line": 144,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 4,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:257",
+                          "line": 145,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:258",
+                      "line": 147,
+                      "value": 1.05999994,
+                      "interpolationType": 2,
+                      "frame": 9,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:259",
+                          "line": 148,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:260",
+                      "line": 150,
+                      "value": 0.949999988,
+                      "interpolationType": 2,
+                      "frame": 14,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:261",
+                          "line": 151,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:262",
+                      "line": 153,
+                      "value": 1.02499998,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:263",
+                          "line": 154,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:264",
+                      "line": 156,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 25,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:265",
+                          "line": 157,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:266",
+                      "line": 159,
+                      "value": 1.09000003,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:267",
+                          "line": 160,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:268",
+                      "line": 162,
+                      "value": 0.985000014,
+                      "interpolationType": 2,
+                      "frame": 37,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:269",
+                          "line": 163,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:270",
+                      "line": 165,
+                      "value": 1.00800002,
+                      "interpolationType": 2,
+                      "frame": 41,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:271",
+                          "line": 166,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:406",
+                      "line": 168,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:272",
+                      "line": 169,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:273",
+                  "line": 171,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:274",
+                      "line": 172,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:275",
+                          "line": 173,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:276",
+                      "line": 175,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 4,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:277",
+                          "line": 176,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:278",
+                      "line": 178,
+                      "value": 0.939999998,
+                      "interpolationType": 2,
+                      "frame": 9,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:279",
+                          "line": 179,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:280",
+                      "line": 181,
+                      "value": 1.09000003,
+                      "interpolationType": 2,
+                      "frame": 14,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:281",
+                          "line": 182,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:282",
+                      "line": 184,
+                      "value": 0.980000019,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:283",
+                          "line": 185,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:284",
+                      "line": 187,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 25,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:285",
+                          "line": 188,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:286",
+                      "line": 190,
+                      "value": 0.930000007,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:287",
+                          "line": 191,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:288",
+                      "line": 193,
+                      "value": 1.02499998,
+                      "interpolationType": 2,
+                      "frame": 37,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:289",
+                          "line": 194,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:290",
+                      "line": 196,
+                      "value": 0.994000018,
+                      "interpolationType": 2,
+                      "frame": 41,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:291",
+                          "line": 197,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:407",
+                      "line": 199,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:292",
+                      "line": 200,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "KeyedObject",
+              "id": "0:293",
+              "line": 203,
+              "objectId": "0:22",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:294",
+                  "line": 204,
+                  "propertyKey": 13,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:295",
+                      "line": 205,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:296",
+                          "line": 206,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:297",
+                      "line": 208,
+                      "value": 2.5,
+                      "interpolationType": 2,
+                      "frame": 3,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:298",
+                          "line": 209,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:299",
+                      "line": 211,
+                      "value": 2.5,
+                      "interpolationType": 2,
+                      "frame": 9,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:300",
+                          "line": 212,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:301",
+                      "line": 214,
+                      "value": 1.5,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:302",
+                          "line": 215,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:303",
+                      "line": 217,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:304",
+                          "line": 218,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:408",
+                      "line": 220,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:305",
+                      "line": 221,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:306",
+                  "line": 223,
+                  "propertyKey": 14,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:307",
+                      "line": 224,
+                      "value": -9,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:308",
+                          "line": 225,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:309",
+                      "line": 227,
+                      "value": -13,
+                      "interpolationType": 2,
+                      "frame": 3,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:310",
+                          "line": 228,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:311",
+                      "line": 230,
+                      "value": -13,
+                      "interpolationType": 2,
+                      "frame": 9,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:312",
+                          "line": 231,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:313",
+                      "line": 233,
+                      "value": -12,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:314",
+                          "line": 234,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:315",
+                      "line": 236,
+                      "value": -7,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:316",
+                          "line": 237,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:317",
+                      "line": 239,
+                      "value": -9.5,
+                      "interpolationType": 2,
+                      "frame": 37,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:318",
+                          "line": 240,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:409",
+                      "line": 242,
+                      "value": -9,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:319",
+                      "line": 243,
+                      "value": -9,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:320",
+                  "line": 245,
+                  "propertyKey": 16,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:321",
+                      "line": 246,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:322",
+                          "line": 247,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:323",
+                      "line": 249,
+                      "value": 1.08000004,
+                      "interpolationType": 2,
+                      "frame": 3,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:324",
+                          "line": 250,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:325",
+                      "line": 252,
+                      "value": 1.03999996,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:326",
+                          "line": 253,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:327",
+                      "line": 255,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:328",
+                          "line": 256,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:410",
+                      "line": 258,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:329",
+                      "line": 259,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:330",
+                  "line": 261,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:331",
+                      "line": 262,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:332",
+                          "line": 263,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:333",
+                      "line": 265,
+                      "value": 1.08000004,
+                      "interpolationType": 2,
+                      "frame": 3,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:334",
+                          "line": 266,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:335",
+                      "line": 268,
+                      "value": 1.03999996,
+                      "interpolationType": 2,
+                      "frame": 21,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:336",
+                          "line": 269,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:337",
+                      "line": 271,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 32,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:338",
+                          "line": 272,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:411",
+                      "line": 274,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:339",
+                      "line": 275,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "KeyedObject",
+              "id": "0:340",
+              "line": 278,
+              "objectId": "0:23",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:341",
+                  "line": 279,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:342",
+                      "line": 280,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:343",
+                          "line": 281,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:344",
+                      "line": 283,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 25,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:345",
+                          "line": 284,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:346",
+                      "line": 286,
+                      "value": 0.75,
+                      "interpolationType": 2,
+                      "frame": 30,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:347",
+                          "line": 287,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:348",
+                      "line": 289,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 33,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:349",
+                          "line": 290,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:412",
+                      "line": 292,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 43,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:350",
+                      "line": 293,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 45,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "LinearAnimation",
+          "id": "0:500",
+          "line": 297,
+          "fps": 60,
+          "duration": 48,
+          "speed": 1,
+          "loopValue": 0,
+          "workStart": 4294967295,
+          "workEnd": 4294967295,
+          "enableWorkArea": false,
+          "quantize": false,
+          "name": "curious_look",
+          "enums": {
+            "loopValue": "oneShot"
+          },
+          "children": [
+            {
+              "type": "KeyedObject",
+              "id": "0:601",
+              "line": 298,
+              "objectId": "0:20",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:602",
+                  "line": 299,
+                  "propertyKey": 13,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:603",
+                      "line": 300,
+                      "value": 180,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:604",
+                          "line": 301,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:605",
+                      "line": 303,
+                      "value": 180,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:606",
+                      "line": 304,
+                      "value": 180,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:607",
+                  "line": 306,
+                  "propertyKey": 14,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:608",
+                      "line": 307,
+                      "value": 207,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:609",
+                          "line": 308,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:610",
+                      "line": 310,
+                      "value": 207,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:611",
+                      "line": 311,
+                      "value": 207,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:612",
+                  "line": 313,
+                  "propertyKey": 15,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:613",
+                      "line": 314,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:614",
+                          "line": 315,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:615",
+                      "line": 317,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 6,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:616",
+                          "line": 318,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:617",
+                      "line": 320,
+                      "value": 0.0698131695,
+                      "interpolationType": 2,
+                      "frame": 18,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:618",
+                          "line": 321,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:619",
+                      "line": 323,
+                      "value": 0.0698131695,
+                      "interpolationType": 2,
+                      "frame": 30,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:620",
+                          "line": 324,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:621",
+                      "line": 326,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:622",
+                      "line": 327,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:623",
+                  "line": 329,
+                  "propertyKey": 16,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:624",
+                      "line": 330,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:625",
+                          "line": 331,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:626",
+                      "line": 333,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:627",
+                      "line": 334,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:628",
+                  "line": 336,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:629",
+                      "line": 337,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:630",
+                          "line": 338,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:631",
+                      "line": 340,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:632",
+                      "line": 341,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "KeyedObject",
+              "id": "0:633",
+              "line": 344,
+              "objectId": "0:21",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:634",
+                  "line": 345,
+                  "propertyKey": 16,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:635",
+                      "line": 346,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:636",
+                          "line": 347,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:637",
+                      "line": 349,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:638",
+                      "line": 350,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:639",
+                  "line": 352,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:640",
+                      "line": 353,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:641",
+                          "line": 354,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:642",
+                      "line": 356,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 6,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:643",
+                          "line": 357,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:644",
+                      "line": 359,
+                      "value": 1.07000005,
+                      "interpolationType": 2,
+                      "frame": 18,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:645",
+                          "line": 360,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:646",
+                      "line": 362,
+                      "value": 1.07000005,
+                      "interpolationType": 2,
+                      "frame": 30,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:647",
+                          "line": 363,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:648",
+                      "line": 365,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:649",
+                      "line": 366,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "KeyedObject",
+              "id": "0:650",
+              "line": 369,
+              "objectId": "0:22",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:651",
+                  "line": 370,
+                  "propertyKey": 13,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:652",
+                      "line": 371,
+                      "value": 0,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:653",
+                          "line": 372,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:654",
+                      "line": 374,
+                      "value": 7,
+                      "interpolationType": 2,
+                      "frame": 6,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:655",
+                          "line": 375,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:656",
+                      "line": 377,
+                      "value": 7,
+                      "interpolationType": 2,
+                      "frame": 30,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:657",
+                          "line": 378,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:658",
+                      "line": 380,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:659",
+                      "line": 381,
+                      "value": 0,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:660",
+                  "line": 383,
+                  "propertyKey": 14,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:661",
+                      "line": 384,
+                      "value": -9,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:662",
+                          "line": 385,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:663",
+                      "line": 387,
+                      "value": -9,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:664",
+                      "line": 388,
+                      "value": -9,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:665",
+                  "line": 390,
+                  "propertyKey": 16,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:666",
+                      "line": 391,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:667",
+                          "line": 392,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:668",
+                      "line": 394,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:669",
+                      "line": 395,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:670",
+                  "line": 397,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:671",
+                      "line": 398,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:672",
+                          "line": 399,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:673",
+                      "line": 401,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:674",
+                      "line": 402,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "KeyedObject",
+              "id": "0:675",
+              "line": 405,
+              "objectId": "0:23",
+              "children": [
+                {
+                  "type": "KeyedProperty",
+                  "id": "0:676",
+                  "line": 406,
+                  "propertyKey": 17,
+                  "children": [
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:677",
+                      "line": 407,
+                      "value": 1,
+                      "interpolationType": 2,
+                      "frame": 0,
+                      "enums": {
+                        "interpolationType": "cubic"
+                      },
+                      "children": [
+                        {
+                          "type": "CubicEaseInterpolator",
+                          "id": "0:678",
+                          "line": 408,
+                          "x1": 0.419999987,
+                          "y1": 0,
+                          "x2": 0.579999983,
+                          "y2": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:679",
+                      "line": 410,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 46,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    },
+                    {
+                      "type": "KeyFrameDouble",
+                      "id": "0:680",
+                      "line": 411,
+                      "value": 1,
+                      "interpolationType": 1,
+                      "frame": 48,
+                      "enums": {
+                        "interpolationType": "linear"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "roots": [
+    {
+      "type": "Backboard",
+      "line": 0
+    }
+  ]
+}

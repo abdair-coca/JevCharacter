@@ -1,0 +1,23 @@
+test_composed_scale_not_only_local_keys (test_validator.ValidatorTests.test_composed_scale_not_only_local_keys) ... ok
+test_cubic_overshoot_rejected (test_validator.ValidatorTests.test_cubic_overshoot_rejected) ... ok
+test_duplicate_frame (test_validator.ValidatorTests.test_duplicate_frame) ... ok
+test_duration_spec (test_validator.ValidatorTests.test_duration_spec) ... ok
+test_expanded_body_visibility_not_only_halo (test_validator.ValidatorTests.test_expanded_body_visibility_not_only_halo) ... ok
+test_eye_containment_even_with_legal_local_values (test_validator.ValidatorTests.test_eye_containment_even_with_legal_local_values) ... ok
+test_eye_scale_must_be_uniform (test_validator.ValidatorTests.test_eye_scale_must_be_uniform) ... ok
+test_final_pose_residue (test_validator.ValidatorTests.test_final_pose_residue) ... ok
+test_hold_must_already_be_neutral (test_validator.ValidatorTests.test_hold_must_already_be_neutral) ... ok
+test_illegal_local_scales_cannot_cancel (test_validator.ValidatorTests.test_illegal_local_scales_cannot_cancel) ... ok
+test_missing_required_track (test_validator.ValidatorTests.test_missing_required_track) ... ok
+test_nonfinite (test_validator.ValidatorTests.test_nonfinite) ... ok
+test_resolved_runtime_mismatch (test_validator.ValidatorTests.test_resolved_runtime_mismatch) ... ok
+test_scale_out_of_bounds (test_validator.ValidatorTests.test_scale_out_of_bounds) ... ok
+test_static_anatomy_changed (test_validator.ValidatorTests.test_static_anatomy_changed) ... ok
+test_unknown_track (test_validator.ValidatorTests.test_unknown_track) ... ok
+test_unsupported_easing (test_validator.ValidatorTests.test_unsupported_easing) ... ok
+test_valid_scene (test_validator.ValidatorTests.test_valid_scene) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.375s
+
+OK

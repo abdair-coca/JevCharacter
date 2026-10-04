@@ -1,0 +1,6 @@
+{
+  "eyeRange": {"x": 8, "y": 5},
+  "rotationDegrees": 2,
+  "tauMs": {"eyes": 70, "body": 140},
+  "snapTolerance": {"eyes": 0.002, "rotation": 0.00002}
+}

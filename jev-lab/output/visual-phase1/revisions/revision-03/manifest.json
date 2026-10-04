@@ -1,0 +1,16 @@
+{
+  "revision": 3,
+  "archivedOn": "2026-10-04",
+  "reason": "User approves anatomy and lights; requests only smooth spherical central shadow",
+  "files": {
+    "visual/phase1/proposal/visual.json": "627c95597a5ac53c86d63508a6eea86b592746eefa165ee7236b2ec130dffcda",
+    "visual/phase1/proposal/scene.rml": "e549825ee654ebe51c09fb308dbbc8b1e5e07257bd427bdd0c78447d7338c096",
+    "visual/phase1/comparison.json": "01cb36477391cd1267e39ca294bdc91e94889773dfb5a70508e65a5865848b7c",
+    "visual/phase1/README.md": "3a761b8285f4b18faf6ebfaa6880d8e71b2cbe2913da064ea909ce31e4cc36c0",
+    "validators/visual_phase1.py": "2466e0231e05e627abfc57e7b71e0ef6ce7859cb91ec63179ecae39b7af232f1",
+    "output/visual-phase1/comparison.png": "58098732a36bc117e0955f8e9b591acbd81fbc0e2791ab534a97bebcb703a30e",
+    "output/visual-phase1/proposal-neutral.png": "71bc5d4b5848cd38e2929bc2d064c59d5d3016af4f9c6644b647ed5738376097",
+    "output/visual-phase1/proposal-small.png": "441e9f029825b83421c73c4c92a5c0afe0d1dcc657237cda371fd30c933cb123",
+    "output/visual-phase1/validation-report.md": "339866aad12d4b1a9deea7327c93e5a29f3389476c414c6a2aef08197ffadd87"
+  }
+}

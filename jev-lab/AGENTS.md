@@ -1,0 +1,14 @@
+# Trabajo dentro de Mini JEV
+
+- Mantén todos los cambios dentro de `jev-lab`. Preserva la aplicación y sus `.riv` originales.
+- Para trabajar, consulta primero la fase activa en `../.dev/tasks.md`. Su alcance y autorización gobiernan la evolución del laboratorio.
+- La anatomía y las animaciones históricas conservan `JEV_BODY_CONTRACT.md` y `rive/character/body_contract.json` como autoridad. Antes de animarlas, lee `JEV_MOTION_RULES.md`.
+- La propuesta visual de fase 1 conserva autoridad separada en `visual/phase1/proposal/visual.json`; su revisión 04 es la base aceptada. Conserva cuerpo morado y dos ojos, sin boca ni extremidades.
+- Para geometría, ojos, transformaciones o iluminación de fase 2, consulta `visual/phase2/JEV_BODY_CONTRACT_V2.md` y `body_contract.v2.json` en esa carpeta. Genera únicamente su rig independiente con `validators/rig_phase2.py`; las fuentes y renders de fase 1 permanecen intactos.
+- Para autoría y control de fase 3, consulta `visual/phase3/README.md`. Define acciones en `visual/phase3/actions/*.json` y genera con `validators/author_phase3.py`; reutiliza el contrato v2 sin regenerar ni modificar fuentes de fases anteriores. Las restricciones de animaciones históricas siguientes gobiernan únicamente `rive/` y `specs/`.
+- Para personalidad y repertorio de fase 4, consulta `visual/phase4/README.md` y genera únicamente su proyecto con `validators/personality_phase4.py`. Conserva fuentes y evidencias de fases 1–3; compara el original en lectura con cámara fija y fondo negro, sin aplicar el recorte circular del neutral a sus animaciones. Las verificaciones distinguen continuidad medida y funcionamiento técnico de aceptación visual humana.
+- Para comparar, conserva las fuentes bajo `visual/phase1/reference-source/` y verifica `reference-manifest.json`. Escribe builds y capturas nuevas en `output/visual-phase1/`; preserva renders históricos. Sirve el original mediante la ruta allowlisted en lectura; su `.riv` queda fuera de snapshots, commits y publicación.
+- Para las animaciones históricas, escribe primero la intención en `specs/`. Las autorizadas son `happy_bounce` y `curious_look`; conserva sus límites y hold neutral final. La propuesta visual separada registra intención y medidas en `visual/phase1/proposal/visual.json`.
+- Consulta `rive docs` y `rive schema` para cualquier elemento o propiedad nueva. Usa RML real; el ensamblador Python es código propio.
+- Para animaciones nuevas, preserva `body_contract.json`, `body.rml` y las animaciones existentes. Modifica su fragmento RML y regenera con `python validators/build.py --animation <nombre>`. La selección persiste en `rive/preview.json`; `main.rml` es revisable.
+- Termina con los comandos de validación y renders del README. Comprueba `git diff` y archivos no rastreados: únicamente este laboratorio puede cambiar.

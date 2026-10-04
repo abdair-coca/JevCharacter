@@ -1,0 +1,68 @@
+{
+  "rawSize": [
+    1000,
+    750
+  ],
+  "artboardSize": [
+    1600,
+    1200
+  ],
+  "scale": 0.625,
+  "cornerRGBA": [
+    0,
+    0,
+    0,
+    255
+  ],
+  "horizontalEdges": [
+    [
+      [
+        374,
+        381
+      ],
+      [
+        375,
+        381
+      ]
+    ],
+    [
+      [
+        624,
+        381
+      ],
+      [
+        625,
+        381
+      ]
+    ]
+  ],
+  "verticalEdges": [
+    [
+      [
+        500,
+        255
+      ],
+      [
+        500,
+        256
+      ]
+    ],
+    [
+      [
+        500,
+        505
+      ],
+      [
+        500,
+        506
+      ]
+    ]
+  ],
+  "calibratedBody": {
+    "centerX": 800,
+    "centerY": 610,
+    "width": 400,
+    "height": 400
+  },
+  "method": "Mayor salto RGB en ventanas locales de los bordes de la esfera, filas y columnas centrales; no se usa bounding alpha del artboard opaco. Centro raster redondeado a800,610 con incertidumbre menor que un pixel raw."
+}

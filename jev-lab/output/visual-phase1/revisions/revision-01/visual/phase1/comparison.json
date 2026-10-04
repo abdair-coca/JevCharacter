@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "sizes": {
+    "normal": 140,
+    "small": 48
+  },
+  "backgrounds": {
+    "dark": "#15131e",
+    "light": "#f2eef8"
+  },
+  "viewport": {
+    "width": 300,
+    "height": 220
+  },
+  "versions": [
+    {
+      "id": "original",
+      "label": "Original",
+      "description": "Original · fondo negro separado en render",
+      "url": "/original.riv",
+      "artboard": "ScriptingLab",
+      "body": {
+        "centerX": 800,
+        "centerY": 610,
+        "width": 400,
+        "height": 400
+      },
+      "calibration": "Medición raw WebGL2 Base t=0: artboard1600×1200, PNG1000×750 (0.625), cuerpo x375..624/y256..505; ancho250px=400unidades; centro800,610 (±0.8unidades por raster); interior intacto, halo reconstruido sobre matte negro"
+    },
+    {
+      "id": "current",
+      "label": "Laboratorio actual",
+      "description": "Referencia preservada · fondo separado",
+      "url": "/current.riv",
+      "artboard": "MiniJev",
+      "body": {
+        "centerX": 180,
+        "centerY": 207,
+        "width": 122,
+        "height": 114
+      },
+      "calibration": "Contrato corporal histórico, pose importada sin animaciones"
+    },
+    {
+      "id": "proposal",
+      "label": "Propuesta neutral",
+      "description": "Nueva dirección · fase 1",
+      "url": "/proposal.riv",
+      "artboard": "JevNeutralProposal",
+      "body": {
+        "centerX": 180,
+        "centerY": 170,
+        "width": 122,
+        "height": 114
+      },
+      "calibration": "visual/phase1/proposal/visual.json"
+    }
+  ]
+}

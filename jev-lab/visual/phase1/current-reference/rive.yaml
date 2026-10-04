@@ -1,0 +1,4 @@
+name: current_reference
+main: MiniJev
+output:
+  dir: ../../../output/visual-phase1/build

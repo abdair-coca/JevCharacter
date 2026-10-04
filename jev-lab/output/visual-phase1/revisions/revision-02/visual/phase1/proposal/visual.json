@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "artboard": {"name": "JevNeutralProposal", "width": 360, "height": 340},
+  "revision": 2,
+  "body": {"geometry": "Ellipse", "width": 122, "height": 122, "centerX": 180, "centerY": 170},
+  "eyes": {"width": 9, "height": 11, "separation": 18, "offsetY": 0, "color": "FFFFFAFF"},
+  "lighting": [
+    {"name": "SoftReflection", "kind": "RadialGradient", "coordinates": {"startX": 32, "startY": -43, "endX": 94, "endY": -43}, "stops": [[0, "66FFE0FF"], [0.5, "26F4B0FF"], [1, "00F4B0FF"]]},
+    {"name": "VioletRim", "kind": "RadialGradient", "coordinates": {"startX": 0, "startY": 0, "endX": 61, "endY": 0}, "stops": [[0, "00B577FF"], [0.78, "00B577FF"], [0.96, "40B577FF"], [1, "A6D99AFF"]]},
+    {"name": "FrontShadow", "kind": "RadialGradient", "coordinates": {"startX": -16, "startY": 16, "endX": 49, "endY": 16}, "stops": [[0, "D96C3AA8"], [0.45, "B07642B8"], [0.7, "806E3AAC"], [0.93, "006E3AAC"], [1, "006E3AAC"]]},
+    {"name": "PurpleVolume", "kind": "RadialGradient", "coordinates": {"startX": 32, "startY": -43, "endX": 167, "endY": -43}, "stops": [[0, "FFE5BBFF"], [0.2, "FFF6A0FF"], [0.55, "FFA365F2"], [1, "FF6639AD"]]},
+    {"name": "PinkBacklight", "kind": "RadialGradient", "width": 188, "height": 188, "x": 14, "y": -13, "coordinates": {"startX": 0, "startY": 0, "endX": 94, "endY": 0}, "stops": [[0, "38EF63FF"], [0.45, "2AEF63FF"], [0.75, "12CD59FB"], [1, "00CD59FB"]]},
+    {"name": "VioletBacklight", "kind": "RadialGradient", "width": 202, "height": 202, "coordinates": {"startX": 0, "startY": 0, "endX": 101, "endY": 0}, "stops": [[0, "52A552F3"], [0.52, "42A552F3"], [0.8, "179747E4"], [1, "009747E4"]]}
+  ],
+  "intent": "Esfera tierna: ojos pequeños y redondos en el centro; luz violeta/rosa detrás y borde luminoso, reflejo suave y sombra frontal púrpura visible.",
+  "scope": "Neutral visual solamente; sin rig expresivo ni animaciones. Autoridad separada del contrato corporal histórico."
+}

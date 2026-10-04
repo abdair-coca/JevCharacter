@@ -1,0 +1,14 @@
+{
+  "current-reference-verify": "passed",
+  "current-reference-once": "passed",
+  "proposal-verify": "passed",
+  "proposal-once": "passed",
+  "runtime": {
+    "package": "@rive-app/webgl2",
+    "version": "2.42.2",
+    "riveJsSha256": "3374b6cf26ed9f94676724924818bc821d9b4789f3b6e4d71a6ac72cb7b5091d",
+    "wasmSha256": "8f1825e02e8aaecc50b5fcc6230ce5f8957d13c7352f9730d1e415d52f441afa"
+  },
+  "preservedFiles": 134,
+  "originalSha256": "98aa68170540d448deaed0db6fa57c11b062cebf9036dc1cfada4376254a8daf"
+}

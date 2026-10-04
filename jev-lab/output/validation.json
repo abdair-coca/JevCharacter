@@ -1,0 +1,13 @@
+{
+  "durationMs": 750.0,
+  "tracks": 12,
+  "samples": 363,
+  "maxima": {
+    "composedScale": 1.09,
+    "rotationDegrees": 2.0053522829578814,
+    "eyeDisplacement": 4.0
+  },
+  "neutralExact": true,
+  "status": "PASS",
+  "inspectMatchesSource": true
+}

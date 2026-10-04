@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "date": "2026-10-03",
+  "comparison": "SHA-256 against session-start working tree, including pre-existing user edits",
+  "baselineFilesChecked": 60,
+  "changedOrMissingOutsideLab": [],
+  "newFilesOutsideLab": [],
+  "originalRiveAssets": [
+    {
+      "path": "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\public\\rive\\character.riv",
+      "sha256": "4510A86E8D878062E4141CD5AD37618ABE3567EFD632CD8487CCDFC8480B3749",
+      "unchanged": true
+    },
+    {
+      "path": "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\public\\rive\\prove1.riv",
+      "sha256": "98AA68170540D448DEAED0DB6FA57C11B062CEBF9036DC1CFADA4376254A8DAF",
+      "unchanged": true
+    }
+  ],
+  "userChangesPreserved": true,
+  "gitReview": "git diff --stat, git ls-files --others --exclude-standard, git diff --no-index for new lab source files"
+}

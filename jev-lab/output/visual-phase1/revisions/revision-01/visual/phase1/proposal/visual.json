@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "artboard": {"name": "JevNeutralProposal", "width": 360, "height": 340},
+  "body": {"width": 122, "height": 114, "roundness": 49, "centerX": 180, "centerY": 170},
+  "eyes": {"width": 7, "height": 18, "separation": 29, "offsetY": -8, "color": "FFFFFAFF"},
+  "palette": {"light": "FFD5AEFF", "mid": "FF8B50CC", "shade": "FF5A2D8E", "dark": "FF342052"},
+  "scope": "Neutral visual solamente; sin rig expresivo ni animaciones. Autoridad separada del contrato corporal histórico."
+}

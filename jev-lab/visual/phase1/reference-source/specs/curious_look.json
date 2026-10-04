@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "curious_look",
+  "intent": "curiosity",
+  "duration": 0.8,
+  "intensity": 0.3,
+  "story": ["look_right", "delayed_lean_right", "gentle_vertical_stretch", "brief_hold", "smooth_return", "neutral"],
+  "constraints": {
+    "returnToNeutral": true,
+    "maxScale": 1.1,
+    "maxRotation": 6,
+    "durationMin": 0.7,
+    "durationMax": 0.9,
+    "bodyDelayMs": [80, 120],
+    "verticalStretch": [1.05, 1.10],
+    "holdMs": [100, 250],
+    "eyeScaleUnchanged": true,
+    "blinkUnchanged": true,
+    "direction": "right"
+  },
+  "direction": "Los ojos se desplazan suavemente a la derecha. El cuerpo responde unos 100 ms después con una pequeña inclinación y un estiramiento vertical del 7%; observa brevemente y regresa con calma a neutral."
+}

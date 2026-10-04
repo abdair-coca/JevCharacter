@@ -1,0 +1,16 @@
+✔ settings stay inside the existing anatomy contract (3.2675ms)
+✔ contain maps centered horizontal and vertical letterboxing (2.6226ms)
+✔ character center stays neutral after resize with no DPR input (0.743ms)
+✔ far cursor positions clamp exactly to eye and body bounds (0.5854ms)
+✔ exponential response agrees at 30, 60 and 144 fps (2.0603ms)
+✔ eye response leads body response without overshoot (0.3447ms)
+✔ pointer leave settles to exact neutral so scheduling can stop (0.6601ms)
+✔ invalid coordinates and elapsed time fail closed (0.5664ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 161.6511

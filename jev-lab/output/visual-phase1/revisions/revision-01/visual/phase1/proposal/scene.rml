@@ -1,0 +1,49 @@
+<Rive version="1" kind="fragment">
+  <Artboard id="0:1" name="JevNeutralProposal" width="360" height="340" originX="0" originY="0">
+    <Node id="0:2" name="NeutralBody" x="180" y="170">
+      <Shape id="0:3" name="LeftEye" x="-14.5" y="-8">
+        <Ellipse id="0:4" width="7" height="18" originX="0.5" originY="0.5" />
+        <Fill id="0:5">
+          <SolidColor id="0:6" colorValue="FFFFFAFF" />
+        </Fill>
+      </Shape>
+      <Shape id="0:7" name="RightEye" x="14.5" y="-8">
+        <Ellipse id="0:8" width="7" height="18" originX="0.5" originY="0.5" />
+        <Fill id="0:9">
+          <SolidColor id="0:10" colorValue="FFFFFAFF" />
+        </Fill>
+      </Shape>
+      <Shape id="0:11" name="SoftLight">
+        <Rectangle id="0:12" width="122" height="114" originX="0.5" originY="0.5" cornerRadiusTL="49" linkCornerRadius="true" />
+        <Fill id="0:13">
+          <RadialGradient id="0:14" startX="-23" startY="-36" endX="37" endY="8">
+            <GradientStop id="0:15" position="0" colorValue="38F3DEFF" />
+            <GradientStop id="0:16" position="0.48" colorValue="13DEB9FF" />
+            <GradientStop id="0:17" position="1" colorValue="00DEB9FF" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:18" name="PurpleVolume">
+        <Rectangle id="0:19" width="122" height="114" originX="0.5" originY="0.5" cornerRadiusTL="49" linkCornerRadius="true" />
+        <Fill id="0:20">
+          <RadialGradient id="0:21" startX="-27" startY="-33" endX="53" endY="40">
+            <GradientStop id="0:22" position="0" colorValue="FFD5AEFF" />
+            <GradientStop id="0:23" position="0.4" colorValue="FF8B50CC" />
+            <GradientStop id="0:24" position="0.76" colorValue="FF5A2D8E" />
+            <GradientStop id="0:25" position="1" colorValue="FF342052" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:26" name="VioletHalo">
+        <Ellipse id="0:27" width="152" height="144" originX="0.5" originY="0.5" />
+        <Fill id="0:28">
+          <RadialGradient id="0:29" startX="0" startY="0" endX="78" endY="0">
+            <GradientStop id="0:30" position="0" colorValue="22784BB5" />
+            <GradientStop id="0:31" position="0.7" colorValue="16784BB5" />
+            <GradientStop id="0:32" position="1" colorValue="00784BB5" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+    </Node>
+  </Artboard>
+</Rive>

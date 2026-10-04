@@ -1,0 +1,15 @@
+{
+  "revision": 1,
+  "archivedOn": "2026-10-04",
+  "reason": "User requested rounder cute sphere, centered round eyes, brighter backlighting",
+  "files": {
+    "visual/phase1/proposal/visual.json": "3488b5b013741090a803987c493e2eb50d354b8b36f121de7402151fa207c1d3",
+    "visual/phase1/proposal/scene.rml": "f5e67e3a149f2aaa1891e8799804f90d6ae4d98942613e058b71f2c266460608",
+    "visual/phase1/comparison.json": "5ac3010c374ec9198aa5cab64590794d2521a0ec056c4673433effbd71d32319",
+    "visual/phase1/README.md": "526466a06b5e8e4bad89ffb80dea34eb44373b01cbcea0574f60d27c384e4f7f",
+    "validators/visual_phase1.py": "b90c7b90437bb15e72215d7421c3ab5e9c2d1fa15e344fb3685aee6a3d2a8ba2",
+    "output/visual-phase1/comparison.png": "54b2bca8e242b79ba55c3ca75d95a2c52e4359adc64bc3e52c145c60eeb0a0a0",
+    "output/visual-phase1/proposal-neutral.png": "f7b27eb06ff5df4ea64d8480afea065bf2ab855c76aa25cee982afbd709f6355",
+    "output/visual-phase1/validation-report.md": "c754ef9e475e796fcf609a15b63a40eacfba7e2359b4478cc6030ec5169de9ee"
+  }
+}

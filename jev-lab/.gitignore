@@ -1,0 +1,16 @@
+output/tools/
+output/build/
+output/cache/
+**/__pycache__/
+output/visual-phase1/build/
+output/visual-phase1/browser/
+output/visual-phase2/build/
+output/visual-phase2/browser/
+output/visual-phase2/harness/
+output/visual-phase2/inspect.json
+output/visual-phase3/build/
+output/visual-phase3/browser/
+output/visual-phase3/harness/
+output/visual-phase4/build/
+output/visual-phase4/browser/
+output/visual-phase4/harness/

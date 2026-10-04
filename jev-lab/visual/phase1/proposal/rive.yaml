@@ -1,0 +1,4 @@
+name: jev_neutral_proposal
+main: JevNeutralProposal
+output:
+  dir: ../../../output/visual-phase1/build

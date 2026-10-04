@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "name": "happy_bounce",
+  "intent": "joy",
+  "duration": 0.75,
+  "intensity": 0.45,
+  "story": ["notice", "anticipation", "stretch", "jump", "controlled_overshoot", "land", "settle", "neutral"],
+  "constraints": {
+    "returnToNeutral": true,
+    "maxScale": 1.2,
+    "maxRotation": 8,
+    "durationMin": 0.6,
+    "durationMax": 0.85
+  },
+  "direction": "Los ojos miran un poco arriba antes de que el cuerpo responda. Un salto pequeño expresa alegría; el aterrizaje es suave y termina completamente quieto."
+}

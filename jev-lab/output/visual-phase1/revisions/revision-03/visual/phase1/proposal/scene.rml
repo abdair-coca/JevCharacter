@@ -1,0 +1,89 @@
+<Rive version="1" kind="fragment">
+  <Artboard id="0:1" name="JevNeutralProposal" width="360" height="340" originX="0" originY="0">
+    <Node id="0:2" name="NeutralBody" x="180" y="170">
+      <Shape id="0:3" name="LeftEye" x="-9.0" y="0">
+        <Ellipse id="0:4" width="9" height="11" originX="0.5" originY="0.5" />
+        <Fill id="0:5">
+          <SolidColor id="0:6" colorValue="FFFFFAFF" />
+        </Fill>
+      </Shape>
+      <Shape id="0:7" name="RightEye" x="9.0" y="0">
+        <Ellipse id="0:8" width="9" height="11" originX="0.5" originY="0.5" />
+        <Fill id="0:9">
+          <SolidColor id="0:10" colorValue="FFFFFAFF" />
+        </Fill>
+      </Shape>
+      <Shape id="0:11" name="UpperLeftShade" x="0" y="0">
+        <Ellipse id="0:12" width="122" height="122" originX="0.5" originY="0.5" />
+        <Fill id="0:13">
+          <RadialGradient id="0:14" startX="-18" startY="-34" endX="6" endY="-34">
+            <GradientStop id="0:15" position="0" colorValue="B0000000" />
+            <GradientStop id="0:16" position="0.4" colorValue="A0000000" />
+            <GradientStop id="0:17" position="0.7" colorValue="60000000" />
+            <GradientStop id="0:18" position="1" colorValue="00000000" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:19" name="VioletRim" x="0" y="0" blendModeValue="screen">
+        <Ellipse id="0:20" width="122" height="122" originX="0.5" originY="0.5" />
+        <Fill id="0:21">
+          <RadialGradient id="0:22" startX="0" startY="0" endX="61" endY="0">
+            <GradientStop id="0:23" position="0" colorValue="002C00BC" />
+            <GradientStop id="0:24" position="0.7" colorValue="002C00BC" />
+            <GradientStop id="0:25" position="0.87" colorValue="702C00BC" />
+            <GradientStop id="0:26" position="0.97" colorValue="AA2C00BC" />
+            <GradientStop id="0:27" position="1" colorValue="C04900DB" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:28" name="FrontShadow" x="0" y="0">
+        <Ellipse id="0:29" width="122" height="122" originX="0.5" originY="0.5" />
+        <Fill id="0:30">
+          <RadialGradient id="0:31" startX="-12" startY="17" endX="60" endY="17">
+            <GradientStop id="0:32" position="0" colorValue="FF000000" />
+            <GradientStop id="0:33" position="0.5" colorValue="FF000000" />
+            <GradientStop id="0:34" position="0.62" colorValue="E6000000" />
+            <GradientStop id="0:35" position="0.72" colorValue="70000000" />
+            <GradientStop id="0:36" position="0.86" colorValue="24000000" />
+            <GradientStop id="0:37" position="1" colorValue="00000000" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:38" name="PurpleVolume" x="0" y="0">
+        <Ellipse id="0:39" width="122" height="122" originX="0.5" originY="0.5" />
+        <Fill id="0:40">
+          <RadialGradient id="0:41" startX="42" startY="-37" endX="162" endY="-37">
+            <GradientStop id="0:42" position="0" colorValue="FFF400FF" />
+            <GradientStop id="0:43" position="0.12" colorValue="FFEF02FD" />
+            <GradientStop id="0:44" position="0.22" colorValue="FFC400FF" />
+            <GradientStop id="0:45" position="0.5" colorValue="FF5600B9" />
+            <GradientStop id="0:46" position="0.8" colorValue="FF2C0084" />
+            <GradientStop id="0:47" position="1" colorValue="FF0E0050" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:48" name="PinkBacklight" x="12" y="-13">
+        <Ellipse id="0:49" width="204" height="204" originX="0.5" originY="0.5" />
+        <Fill id="0:50">
+          <RadialGradient id="0:51" startX="0" startY="0" endX="102" endY="0">
+            <GradientStop id="0:52" position="0" colorValue="2A9700ED" />
+            <GradientStop id="0:53" position="0.45" colorValue="249700ED" />
+            <GradientStop id="0:54" position="0.75" colorValue="0B7900DF" />
+            <GradientStop id="0:55" position="1" colorValue="007900DF" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+      <Shape id="0:56" name="VioletBacklight" x="0" y="0">
+        <Ellipse id="0:57" width="242" height="242" originX="0.5" originY="0.5" />
+        <Fill id="0:58">
+          <RadialGradient id="0:59" startX="0" startY="0" endX="121" endY="0">
+            <GradientStop id="0:60" position="0" colorValue="707800DE" />
+            <GradientStop id="0:61" position="0.48" colorValue="627800DE" />
+            <GradientStop id="0:62" position="0.75" colorValue="226500D1" />
+            <GradientStop id="0:63" position="1" colorValue="006500D1" />
+          </RadialGradient>
+        </Fill>
+      </Shape>
+    </Node>
+  </Artboard>
+</Rive>
