@@ -1,0 +1,211 @@
+{
+  "status": "PASS",
+  "runtime": "2.42.2 actual installed WASM",
+  "generation": "9158312fca163a88ecf5",
+  "tests": [
+    "native envelope is Rive cubic, finite and flat at ends",
+    "all discovered native action variants animate finite nodes and finish neutral",
+    "same-time command replacements preserve exact native pose and latest pending only",
+    "1000 rapid orders retain one frozen outgoing owner and one latest pending order",
+    "sustained duration is active wall time independent speed plus bounded recovery",
+    "native loop endpoints and sampled velocities match every sustained variant",
+    "mid-entry and mid-cycle exits freeze native sampled pose without command jump",
+    "overshoot traverses finite durations, recovery and sequence with no time loss",
+    "invalid orders never mutate native pose, handles or schedule",
+    "ambient deterministic quiet occupancy and ownership release remain finite; stop clears scheduling",
+    "native ambient keeps numeric baseline, takeover/release continuous and amplitudes discreet",
+    "seeded ambient sparse and dense clocks match exact schedule occupancy and native final pose"
+  ],
+  "measurements": {
+    "envelope": [
+      1,
+      0.9999157786369324,
+      0.5,
+      0.00008428096771240234,
+      0
+    ],
+    "nativeVariants": {
+      "count": 18,
+      "cases": [
+        "curious_look:default",
+        "curious_look:left",
+        "happy_bounce:default",
+        "happy_bounce:gentle",
+        "hello:default",
+        "no:default",
+        "speech:default",
+        "speech:b",
+        "speech:c",
+        "speech:bc",
+        "think:default",
+        "transform_cloud:default",
+        "transform_flower:default",
+        "transform_ghost:default",
+        "transform_square:default",
+        "transform_star:default",
+        "transform_triangle:default",
+        "yes:default"
+      ],
+      "maxPerFrameMixedUnitNodeDisplacement": 3.7551422119140625
+    },
+    "sameTimeReplacementMaxJump": 0,
+    "duration": [
+      {
+        "speed": 0.1,
+        "activeMs": 715,
+        "totalMs": 865
+      },
+      {
+        "speed": 1,
+        "activeMs": 715,
+        "totalMs": 865
+      },
+      {
+        "speed": 4,
+        "activeMs": 715,
+        "totalMs": 865
+      }
+    ],
+    "loopSeams": [
+      {
+        "action": "speech",
+        "variant": "default",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.000091552734375,
+        "exitVelocityPerMs": 0.000091552734375
+      },
+      {
+        "action": "speech",
+        "variant": "b",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.00009469381620874628,
+        "exitVelocityPerMs": 0.00009465217590332031
+      },
+      {
+        "action": "speech",
+        "variant": "c",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.0001373291015625,
+        "exitVelocityPerMs": 0.0001373291015625
+      },
+      {
+        "action": "speech",
+        "variant": "bc",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.0000947117805480957,
+        "exitVelocityPerMs": 0.00009465217590332031
+      },
+      {
+        "action": "think",
+        "variant": "default",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0,
+        "exitVelocityPerMs": 0.000011920928955078125
+      }
+    ],
+    "exits": [
+      {
+        "action": "think",
+        "timeMs": 85,
+        "commandJump": 0
+      },
+      {
+        "action": "think",
+        "timeMs": 1100,
+        "commandJump": 0
+      },
+      {
+        "action": "speech",
+        "timeMs": 650,
+        "commandJump": 0
+      }
+    ],
+    "ambient": {
+      "schedule": [
+        {
+          "kind": "breath",
+          "startMs": 7077.4751883000135,
+          "endMs": 9877.475188300014
+        },
+        {
+          "kind": "blink",
+          "startMs": 9081.134699983522,
+          "endMs": 9231.134699983522
+        },
+        {
+          "kind": "breath",
+          "startMs": 16242.59854964912,
+          "endMs": 19042.59854964912
+        },
+        {
+          "kind": "blink",
+          "startMs": 19318.94734557718,
+          "endMs": 19468.94734557718
+        },
+        {
+          "kind": "blink",
+          "startMs": 25858.106637327,
+          "endMs": 26008.106637327
+        },
+        {
+          "kind": "breath",
+          "startMs": 26326.245746016502,
+          "endMs": 29126.245746016502
+        },
+        {
+          "kind": "blink",
+          "startMs": 34030.68231656216,
+          "endMs": 34180.68231656216
+        },
+        {
+          "kind": "breath",
+          "startMs": 35517.64844041318,
+          "endMs": 38317.64844041318
+        },
+        {
+          "kind": "blink",
+          "startMs": 41830.46671994962,
+          "endMs": 41980.46671994962
+        },
+        {
+          "kind": "breath",
+          "startMs": 45624.23376441002,
+          "endMs": 48424.23376441002
+        },
+        {
+          "kind": "blink",
+          "startMs": 50271.68775559403,
+          "endMs": 50421.68775559403
+        },
+        {
+          "kind": "breath",
+          "startMs": 54765.28052147478,
+          "endMs": 57565.28052147478
+        }
+      ],
+      "occupancy": {
+        "breath": 16800,
+        "blink": 900
+      },
+      "quietSampleFraction": 0.7077435470441299,
+      "maxNodeDifference": 1
+    },
+    "ambientBaseline": {
+      "breathPeakBodyY": 173.65,
+      "breathPeakScaleY": 1.038,
+      "releaseMaxPerMsMixedUnitNodeDisplacement": 0.06398236751556396
+    },
+    "cadenceIndependentAmbient": {
+      "horizonMs": 600000,
+      "denseTickMs": 100,
+      "sparseTicks": 1,
+      "exact": true,
+      "occupancy": {
+        "breath": 170800,
+        "blink": 9900
+      },
+      "retainedScheduleEvents": 32
+    }
+  },
+  "scope": "Finite numeric node samples; not analytical continuity or subjective superiority proof"
+}

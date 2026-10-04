@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "executive_summary": "Exact unchanged 13-case independent program passes against frozen chronological scheduler fix. Original cadence defect resolves: dense100ms and sparse600000ms ticks produce identical schedule, occupancy and actual native node pose.",
+  "validation": {
+    "command": "node jev-lab/output/visual-phase4/independent/validate_native.mjs",
+    "process_exit_code": 0,
+    "test_groups_passed": 13,
+    "test_groups_total": 13,
+    "actual_runtime_version": "2.42.2",
+    "compiled_generation": "9158312fca163a88ecf5",
+    "program_sha256": "c2426fd9fd99dbaec4304f6b905b941be7e2122df00bf3c4ecf9e6e4707d78bc",
+    "program_unchanged_from_before_fix": true,
+    "controller_sha256": "8b3150067b5b1b8160cb4f3212803c485414a521016df9473455a8b50a3c6476",
+    "source_stable_during_run": true,
+    "source_hashes_reference": "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/native-independent-validation.json",
+    "cadence_check": {
+      "horizon_ms": 600000,
+      "dense_period_ms": 100,
+      "sparse_frames": 1,
+      "schedule_exact_equal": true,
+      "occupancy_exact_equal": true,
+      "breath_occupancy_ms": 170800,
+      "blink_occupancy_ms": 9900,
+      "native_pose_max_delta": 0,
+      "quiet_sample_fraction": 0.702882852857857
+    }
+  },
+  "artifacts_absolute": [
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/validate_native.mjs",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/native-independent-validation.json",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/native-independent-validation.log",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/native-independent-exit.txt",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/cadence-defect-final-before-fix.json",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/cadence-defect-final-before-fix.log"
+  ],
+  "positive_evidence": [
+    "54 replacements preserve exact same-time native node pose (max delta0).",
+    "Latest pending order only;149.999ms replacements do not restart recovery; stale handle cancellation has no successor effect.",
+    "20 sustained variant/speed cases preserve explicit wallclock duration;100-item sequence retains frame overshoot.",
+    "Native sustained loop seams have exact position equality and bounded sampled directional velocity differences.",
+    "Numeric baseline recovery endpoint max node delta4.76837158203125e-7 over0.001ms; ambient-moving target release matches reference.",
+    "Direct native breath/blink samples compose on numeric baseline; owned channels suppress ambient changes.",
+    "enabled/seed toggles retain numeric baseline and gaze; invalid orders leave active native pose and schedule intact.",
+    "All18 intensity-zero variants preserve exact neutral; stop clears schedules and future pose activity.",
+    "1000 orders retain44 native instances; dispose deletes44/44 once, unsubscribes once and remains idempotent.",
+    "Read-only phase3 comparison: happy_bounce replacement at250ms gives BodyRoot.y jump6.126434326171875px in phase3; phase4 measured node jump0."
+  ],
+  "risks": [
+    "Finite native node samples do not certify all Bezier morph coordinates or full continuous parameter geometry.",
+    "C0 position measurements and loop finite differences do not prove arbitrary-command C1 continuity.",
+    "Visual personality and subjective superiority require human acceptance."
+  ],
+  "skill_resolution": {
+    "method": "paths-injected; previously loaded exact skills reused",
+    "loaded": [
+      "C:/Users/abdai/.codex/skills/caveman/SKILL.md",
+      "C:/Users/abdai/.agents/skills/codebase-design/SKILL.md"
+    ]
+  },
+  "memory_resolution": "unavailable; existing project artifacts used",
+  "scope": "Only independent output artifacts written; no implementation, test, earlier-phase, task, application or manifest changes."
+}

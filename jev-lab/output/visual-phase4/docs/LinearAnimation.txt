@@ -1,0 +1,28 @@
+LinearAnimation  (typeKey 31)
+extends LinearAnimationResolver > Animation > ArtboardProvider
+
+own properties:
+  fps                                uint         key 56      = 60
+      Frames per second used to quantize keyframe times to discrete values that match this rate.
+  duration                           uint         key 57      = 60
+      Duration expressed in number of frames.
+  speed                              double       key 58      = 1
+      Playback speed multiplier.
+  loopValue                          uint         key 59      = oneShot
+      Loop value option matches Loop enumeration.
+      accepts: oneShot, loop, pingPong
+  workStart                          uint         key 60      = -1
+      Start of the work area in frames.
+  workEnd                            uint         key 61      = -1
+      End of the work area in frames.
+  enableWorkArea                     bool         key 62      = false
+      Whether or not the work area is enabled.
+  quantize                           bool         key 376     = false
+      Whether frames are quantized to desired frame rate or floating based on runtime speed.
+
+inherited from Animation:
+  name                               String       key 55
+      Name of the animation.
+
+9 properties.  A = animatable, B = bindable, D = derived (computed, not authored -- bind to it, do not set it).
+Editor-only properties are hidden; --all shows them.

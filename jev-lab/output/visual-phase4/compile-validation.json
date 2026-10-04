@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "cli": "1.3.0",
+  "runtime": "2.42.2",
+  "generation": "9158312fca163a88ecf5",
+  "actions": 13,
+  "variants": 18,
+  "bytes": 1213891,
+  "logs": {
+    "verify": {
+      "command": [
+        "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+        "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\build\\9158312fca163a88ecf5\\project",
+        "--verify",
+        "--format=json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"command\": \"verify\", \"data\": {\"riv\": null, \"bytes\": 0, \"buildMs\": 46057.8, \"problems\": []}, \"errors\": [], \"warnings\": []}\n",
+      "stderr": "[15:02:15.853] rive  verified (0 bytes, 46057ms, 0 errors, 0 warnings)\n"
+    },
+    "once": {
+      "command": [
+        "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+        "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\build\\9158312fca163a88ecf5\\project",
+        "--once",
+        "--format=json"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"success\": true, \"command\": \"build\", \"data\": {\"riv\": \"C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/build/9158312fca163a88ecf5\\\\jev_personality_v4.riv\", \"bytes\": 1213891, \"buildMs\": 39758.2, \"problems\": []}, \"errors\": [], \"warnings\": []}\n",
+      "stderr": "[15:02:56.313] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/build/9158312fca163a88ecf5/jev_personality_v4.riv (1213891 bytes, 39758ms, 0 errors, 0 warnings)\n"
+    },
+    "inspect": {
+      "command": [
+        "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+        "inspect",
+        "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\build\\9158312fca163a88ecf5\\project",
+        "--summary"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"schema\": 1,\n  \"summary\": true,\n  \"problems\": [],\n  \"artboards\": [\n    {\"name\": \"JevRigV2\", \"objects\": 154279, \"types\": {\"AnimationState\": 37, \"AnyState\": 19, \"Artboard\": 1, \"CubicDetachedVertex\": 240, \"CubicEaseInterpolator\": 53088, \"Ellipse\": 4, \"EntryState\": 19, \"ExitState\": 19, \"Fill\": 7, \"GradientStop\": 27, \"KeyFrameDouble\": 76582, \"KeyedObject\": 3527, \"KeyedProperty\": 20556, \"LayoutComponentStyle\": 1, \"LinearAnimation\": 44, \"Node\": 12, \"PointsPath\": 4, \"RadialGradient\": 5, \"Shape\": 8, \"SolidColor\": 3, \"StateMachine\": 19, \"StateMachineLayer\": 19, \"StateTransition\": 37, \"Stroke\": 1}}\n  ],\n  \"roots\": {\"objects\": 1, \"types\": {\"Backboard\": 1}}\n}\n",
+      "stderr": ""
+    }
+  }
+}

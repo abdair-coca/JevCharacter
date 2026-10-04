@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "files": {
+    "README.md": "ff1dcff15a7db8556d815cdafd5599d6e67a39a2537daff86a92a0ea023f0e2e",
+    "api/decide.ts": "d92f5632dc5fc140054755a6fb7b7b9aa724932b5419c78158fe02b50e7372e5",
+    "package-lock.json": "87f31e110cdf90055372bdfde9b8c492370bf1b2f60b7ceb30cd43c1379d8e40",
+    "package.json": "482b5bef48a28d49254881bc7795015b6d855e1f16b934a07ef8109d41e7def3",
+    "src/App.css": "1e26dd06bf04c3165179502e25e33fbb864d05627f184438ae617a5ee7b5ba58",
+    "src/components/BrainHUD.tsx": "3cead78f4817f1b132116095f04c6c325aa8529d4496e25d9f6d9898dfd45b6c",
+    "src/creature/brain/brain.types.ts": "233521df59f5965bd1d3da277783f947c6915d55dbedf3ba4c52c9f0aa5ee692",
+    "src/creature/brain/decisionScheduler.ts": "6fcac534808cb6fe3a33b866f75cb5a8b3aa094baccc2c6b0365be0fdb62e4c1",
+    "src/creature/brain/fallbackBrain.ts": "13319d514a5b7aef45d2c0f23ee987cd489c2090f3ffee4da48500e728f8ac58",
+    "src/creature/rive/riveReactionAdapter.ts": "0ddfe0fb64bd83c6a08807318486a3076b9f7487cde1c8be714fd19ee0a65938",
+    "src/hooks/useCreatureBrain.ts": "3ece87099678378d5b43be72f5a55f3537310efa9f0b790f3cd8db8c5a436cb9",
+    "public/rive/prove1.riv": "98aa68170540d448deaed0db6fa57c11b062cebf9036dc1cfada4376254a8daf"
+  }
+}

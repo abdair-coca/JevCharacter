@@ -1,0 +1,768 @@
+{
+  "status": "FAIL",
+  "runtime": "@rive-app/webgl2 2.42.2 actual native WASM",
+  "generation": "9158312fca163a88ecf5",
+  "startedUtc": "2026-10-04T19:08:07.497Z",
+  "sourceHashes": {
+    "visual/phase4/web/controller.mjs": "8069c9ceb3bad240d414319d8544c8c5b7007160e5703b4b75406f1dfa43cbc8",
+    "visual/phase4/catalog.json": "9c66f97b35ad63d4bea494fce87579785cb55de15e527742605293af0f082cbc",
+    "visual/phase4/behavior.json": "441cb5b05c3f23c836d8a16e5966003cbee9306c361577cb984301f86af72639",
+    "validators/personality_phase4.py": "ecdcda93e624829b400576946326eef231feaf689fdd2c45eab13b001870f11e",
+    "visual/phase2/web/rig.mjs": "46597f9d8a5c29343fab8bade7554dc0b34056e60c0ac7642a61ec241c6cadd0",
+    "visual/phase2/body_contract.v2.json": "4671b41192387feffcc6d95a8830dfc0d9058d67a5b71a25d2ad0cbec2bcce61",
+    "output/visual-phase4/build/9158312fca163a88ecf5/jev_personality_v4.riv": "da4c062dbdaad41ed5fbc21bb957ba4be0ca34e4a954a42b24132b25806e60d9"
+  },
+  "tests": [
+    {
+      "name": "C0 replacements across every action and sustained-cycle phase",
+      "status": "PASS",
+      "measurements": {
+        "cases": 54,
+        "sameTimestampMaxNativeDelta": 0,
+        "perOneMsRecoveryMaxima": {
+          "BodyRoot.x": 0.043975830078125,
+          "BodyRoot.y": 0.138397216796875,
+          "BodyRoot.rotation": 0.001149296760559082,
+          "BodyRoot.scaleX": 0,
+          "BodyRoot.scaleY": 0,
+          "BodyDeform.x": 0,
+          "BodyDeform.y": 0,
+          "BodyDeform.rotation": 0,
+          "BodyDeform.scaleX": 0.0011324882507324219,
+          "BodyDeform.scaleY": 0.001601576805114746,
+          "Gaze.x": 0.13233816623687744,
+          "Gaze.y": 0.07170450687408447,
+          "Gaze.rotation": 0,
+          "Gaze.scaleX": 0,
+          "Gaze.scaleY": 0,
+          "leftTilt.x": 0,
+          "leftTilt.y": 0,
+          "leftTilt.rotation": 0,
+          "leftTilt.scaleX": 0,
+          "leftTilt.scaleY": 0,
+          "rightTilt.x": 0,
+          "rightTilt.y": 0,
+          "rightTilt.rotation": 0,
+          "rightTilt.scaleX": 0,
+          "rightTilt.scaleY": 0,
+          "leftOpen.x": 0,
+          "leftOpen.y": 0,
+          "leftOpen.rotation": 0,
+          "leftOpen.scaleX": 0,
+          "leftOpen.scaleY": 0.0024123191833496094,
+          "rightOpen.x": 0,
+          "rightOpen.y": 0,
+          "rightOpen.rotation": 0,
+          "rightOpen.scaleX": 0,
+          "rightOpen.scaleY": 0.002866506576538086,
+          "leftBlink.x": 0,
+          "leftBlink.y": 0,
+          "leftBlink.rotation": 0,
+          "leftBlink.scaleX": 0,
+          "leftBlink.scaleY": 0,
+          "rightBlink.x": 0,
+          "rightBlink.y": 0,
+          "rightBlink.rotation": 0,
+          "rightBlink.scaleX": 0,
+          "rightBlink.scaleY": 0
+        }
+      }
+    },
+    {
+      "name": "latest pending replacement cannot restart frozen recovery or inherit stale cancellation",
+      "status": "PASS",
+      "measurements": {
+        "replacements": 6,
+        "originalRecoveryEndMs": 813.5
+      }
+    },
+    {
+      "name": "wallclock duration, cycle loops, speed and late sequence frames",
+      "status": "PASS",
+      "measurements": {
+        "durations": [
+          {
+            "action": "think",
+            "variant": "default",
+            "speed": 0.1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "think",
+            "variant": "default",
+            "speed": 0.37,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "think",
+            "variant": "default",
+            "speed": 1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "think",
+            "variant": "default",
+            "speed": 4,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "default",
+            "speed": 0.1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "default",
+            "speed": 0.37,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "default",
+            "speed": 1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "default",
+            "speed": 4,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "b",
+            "speed": 0.1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "b",
+            "speed": 0.37,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "b",
+            "speed": 1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "b",
+            "speed": 4,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "c",
+            "speed": 0.1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "c",
+            "speed": 0.37,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "c",
+            "speed": 1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "c",
+            "speed": 4,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "bc",
+            "speed": 0.1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "bc",
+            "speed": 0.37,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "bc",
+            "speed": 1,
+            "totalMs": 1127.25
+          },
+          {
+            "action": "speech",
+            "variant": "bc",
+            "speed": 4,
+            "totalMs": 1127.25
+          }
+        ],
+        "maximumAcceptedSequenceItems": 100,
+        "overshootToMs": 15100
+      }
+    },
+    {
+      "name": "native loop seam positions and directional velocities",
+      "status": "PASS",
+      "measurements": [
+        {
+          "action": "speech",
+          "variant": "default",
+          "positionDelta": 0,
+          "finiteDifferenceVelocityMismatchPerMs": 0.00002384185791015625
+        },
+        {
+          "action": "speech",
+          "variant": "b",
+          "positionDelta": 0,
+          "finiteDifferenceVelocityMismatchPerMs": 0.00004747238017444033
+        },
+        {
+          "action": "speech",
+          "variant": "c",
+          "positionDelta": 0,
+          "finiteDifferenceVelocityMismatchPerMs": 0.0001220703125
+        },
+        {
+          "action": "speech",
+          "variant": "bc",
+          "positionDelta": 0,
+          "finiteDifferenceVelocityMismatchPerMs": 0.00004744529724121094
+        },
+        {
+          "action": "think",
+          "variant": "default",
+          "positionDelta": 0,
+          "finiteDifferenceVelocityMismatchPerMs": 0.00000286102294921875
+        }
+      ]
+    },
+    {
+      "name": "ambient enabled replacement and ownership release match moving numeric target",
+      "status": "PASS",
+      "measurements": [
+        {
+          "timeMs": 7100,
+          "commandDelta": 0,
+          "targetDelta": 0,
+          "endpointDelta": 2.384185791015625e-7
+        },
+        {
+          "timeMs": 8477.4751883,
+          "commandDelta": 0,
+          "targetDelta": 0,
+          "endpointDelta": 2.384185791015625e-7
+        },
+        {
+          "timeMs": 9120,
+          "commandDelta": 0,
+          "targetDelta": 0,
+          "endpointDelta": 2.384185791015625e-7
+        },
+        {
+          "timeMs": 9156.1347,
+          "commandDelta": 0,
+          "targetDelta": 0,
+          "endpointDelta": 2.384185791015625e-7
+        },
+        {
+          "timeMs": 9200,
+          "commandDelta": 0,
+          "targetDelta": 0,
+          "endpointDelta": 2.384185791015625e-7
+        }
+      ]
+    },
+    {
+      "name": "ten-minute ambient occupancy is quiet, deterministic and schedule log bounded",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Seeded ambient schedule differs between 100ms ticks and one 600000ms late tick\n    at file:///C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/validate_native.mjs:99:9\n    at check (file:///C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/validate_native.mjs:39:60)\n    at file:///C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/validate_native.mjs:95:7"
+    },
+    {
+      "name": "same-time replacement improves measured native node discontinuity against phase 3",
+      "status": "PASS",
+      "measurements": {
+        "timeMs": 250,
+        "phase3Delta": {
+          "max": 6.126434326171875,
+          "key": "BodyRoot.y"
+        },
+        "phase4Delta": {
+          "max": 0,
+          "key": null
+        },
+        "phase3CatalogHash": "cfefaf0e6047ff58386e560d0a52aa9ebe7061517ede693aa5594f706725f51c",
+        "phase3BinaryHash": "9dccb8362124de56c6e074155cafcfe00b0b9fc41aa21bbfd31a74d1b4c0ff9f",
+        "scope": "Mixed-unit native node maximum at same timestamp; finite C0 evidence only, no subjective superiority or C1 claim."
+      }
+    },
+    {
+      "name": "recovery toward nonneutral numeric baseline has no endpoint pop",
+      "status": "PASS",
+      "measurements": {
+        "actions": [
+          "hello",
+          "think",
+          "speech",
+          "transform_cloud",
+          "curious_look"
+        ],
+        "sameTimeMaximum": 0,
+        "endpointMaximum": 4.76837158203125e-7,
+        "endpointSampleDistanceMs": 0.001
+      }
+    },
+    {
+      "name": "ambient actual native samples add to numeric baseline; owned channels suppress live layers",
+      "status": "PASS",
+      "measurements": [
+        {
+          "kind": "breath",
+          "channel": "bodyY",
+          "timeMs": 8477.475188300014,
+          "nativeDelta": -0.350006103515625,
+          "baseline": 4,
+          "expected": 173.64999389648438,
+          "actual": 173.64999389648438
+        },
+        {
+          "kind": "breath",
+          "channel": "bodyScaleX",
+          "timeMs": 8477.475188300014,
+          "nativeDelta": 0.003999948501586914,
+          "baseline": 1.08,
+          "expected": 1.083999948501587,
+          "actual": 1.0839999914169312
+        },
+        {
+          "kind": "breath",
+          "channel": "bodyScaleY",
+          "timeMs": 8477.475188300014,
+          "nativeDelta": 0.008000016212463379,
+          "baseline": 0.93,
+          "expected": 0.9380000162124634,
+          "actual": 0.9380000233650208
+        },
+        {
+          "kind": "blink",
+          "channel": "blink",
+          "timeMs": 9156.134699983522,
+          "nativeDelta": -1,
+          "baseline": 0.75,
+          "expected": 0,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "name": "enabled and seed toggles preserve existing numeric baseline and gaze",
+      "status": "PASS",
+      "measurements": {
+        "toggleCommands": 4,
+        "numericBaselineAndGazeDelta": 0,
+        "numericReplacementSemanticsVerified": true
+      }
+    },
+    {
+      "name": "invalid options preserve good native order and schedule",
+      "status": "PASS",
+      "measurements": {
+        "rejectedOrders": 9
+      }
+    },
+    {
+      "name": "intensity zero variants remain exact neutral; stop and dispose clear future activity",
+      "status": "PASS",
+      "measurements": {
+        "variants": 18
+      }
+    },
+    {
+      "name": "1000 orders keep fixed native allocation; idempotent dispose deletes each exactly once",
+      "status": "PASS",
+      "measurements": {
+        "initial": {
+          "created": 44,
+          "deleted": 0,
+          "doubleDeletes": 0,
+          "releases": 0,
+          "subscribed": true
+        },
+        "end": {
+          "created": 44,
+          "deleted": 44,
+          "doubleDeletes": 0,
+          "releases": 1,
+          "subscribed": false
+        },
+        "orders": 1000
+      }
+    }
+  ],
+  "limitations": [
+    "Finite native node samples; no analytical geometry certification, pixel-quality judgment, or C1 claim.",
+    "Compiled morph geometry is exercised but node readbacks do not expose all Bézier vertex coordinates."
+  ],
+  "programSha256": "c2426fd9fd99dbaec4304f6b905b941be7e2122df00bf3c4ecf9e6e4707d78bc",
+  "wasmSha256": "8f1825e02e8aaecc50b5fcc6230ce5f8957d13c7352f9730d1e415d52f441afa",
+  "installedRuntimeVersion": "2.42.2",
+  "scheduleCadence": {
+    "horizonMs": 600000,
+    "samplePeriodMs": 100,
+    "quietSampleFraction": 0.702882852857857,
+    "maxScheduleEntries": 32,
+    "scheduledOccupancyMs": {
+      "breath": 170800,
+      "blink": 9900
+    },
+    "nativeQuietDelta": 0,
+    "fineSchedule": [
+      {
+        "kind": "breath",
+        "startMs": 446738.57151530683,
+        "endMs": 449538.57151530683
+      },
+      {
+        "kind": "blink",
+        "startMs": 452087.4366108328,
+        "endMs": 452237.4366108328
+      },
+      {
+        "kind": "breath",
+        "startMs": 458416.0561097786,
+        "endMs": 461216.0561097786
+      },
+      {
+        "kind": "blink",
+        "startMs": 462467.98533536494,
+        "endMs": 462617.98533536494
+      },
+      {
+        "kind": "breath",
+        "startMs": 468940.7290522009,
+        "endMs": 471740.7290522009
+      },
+      {
+        "kind": "blink",
+        "startMs": 473172.0608218573,
+        "endMs": 473322.0608218573
+      },
+      {
+        "kind": "breath",
+        "startMs": 480255.9459177777,
+        "endMs": 483055.9459177777
+      },
+      {
+        "kind": "blink",
+        "startMs": 484092.59153278545,
+        "endMs": 484242.59153278545
+      },
+      {
+        "kind": "breath",
+        "startMs": 490503.9936181158,
+        "endMs": 493303.9936181158
+      },
+      {
+        "kind": "blink",
+        "startMs": 491942.2764753923,
+        "endMs": 492092.2764753923
+      },
+      {
+        "kind": "breath",
+        "startMs": 499864.8898778483,
+        "endMs": 502664.8898778483
+      },
+      {
+        "kind": "blink",
+        "startMs": 503726.53208393604,
+        "endMs": 503876.53208393604
+      },
+      {
+        "kind": "breath",
+        "startMs": 508218.76822151244,
+        "endMs": 511018.76822151244
+      },
+      {
+        "kind": "blink",
+        "startMs": 511141.4860227145,
+        "endMs": 511291.4860227145
+      },
+      {
+        "kind": "breath",
+        "startMs": 516080.15169333667,
+        "endMs": 518880.15169333667
+      },
+      {
+        "kind": "blink",
+        "startMs": 522009.9787252955,
+        "endMs": 522159.9787252955
+      },
+      {
+        "kind": "breath",
+        "startMs": 526004.859938845,
+        "endMs": 528804.859938845
+      },
+      {
+        "kind": "blink",
+        "startMs": 532299.0754775703,
+        "endMs": 532449.0754775703
+      },
+      {
+        "kind": "breath",
+        "startMs": 535332.8919334337,
+        "endMs": 538132.8919334337
+      },
+      {
+        "kind": "blink",
+        "startMs": 538149.1885319352,
+        "endMs": 538299.1885319352
+      },
+      {
+        "kind": "breath",
+        "startMs": 545609.6305493265,
+        "endMs": 548409.6305493265
+      },
+      {
+        "kind": "blink",
+        "startMs": 547304.7476070933,
+        "endMs": 547454.7476070933
+      },
+      {
+        "kind": "breath",
+        "startMs": 554479.3753085658,
+        "endMs": 557279.3753085658
+      },
+      {
+        "kind": "blink",
+        "startMs": 555674.1256826557,
+        "endMs": 555824.1256826557
+      },
+      {
+        "kind": "breath",
+        "startMs": 565675.7760759443,
+        "endMs": 568475.7760759443
+      },
+      {
+        "kind": "blink",
+        "startMs": 565954.4127399102,
+        "endMs": 566104.4127399102
+      },
+      {
+        "kind": "breath",
+        "startMs": 575599.4631020352,
+        "endMs": 578399.4631020352
+      },
+      {
+        "kind": "blink",
+        "startMs": 576514.3205298111,
+        "endMs": 576664.3205298111
+      },
+      {
+        "kind": "breath",
+        "startMs": 584780.2977327257,
+        "endMs": 587580.2977327257
+      },
+      {
+        "kind": "blink",
+        "startMs": 586403.1840664335,
+        "endMs": 586553.1840664335
+      },
+      {
+        "kind": "breath",
+        "startMs": 593426.4532579109,
+        "endMs": 596226.4532579109
+      },
+      {
+        "kind": "blink",
+        "startMs": 598500.3878488205,
+        "endMs": 598650.3878488205
+      }
+    ],
+    "coarseSchedule": [
+      {
+        "kind": "blink",
+        "startMs": 317492.522173794,
+        "endMs": 317642.522173794
+      },
+      {
+        "kind": "blink",
+        "startMs": 327873.0708983261,
+        "endMs": 328023.0708983261
+      },
+      {
+        "kind": "blink",
+        "startMs": 337791.2485475652,
+        "endMs": 337941.2485475652
+      },
+      {
+        "kind": "blink",
+        "startMs": 348495.32403405756,
+        "endMs": 348645.32403405756
+      },
+      {
+        "kind": "blink",
+        "startMs": 359796.95354881696,
+        "endMs": 359946.95354881696
+      },
+      {
+        "kind": "blink",
+        "startMs": 370717.4842597451,
+        "endMs": 370867.4842597451
+      },
+      {
+        "kind": "blink",
+        "startMs": 380151.5677353367,
+        "endMs": 380301.5677353367
+      },
+      {
+        "kind": "blink",
+        "startMs": 388001.25267794356,
+        "endMs": 388151.25267794356
+      },
+      {
+        "kind": "blink",
+        "startMs": 395882.8211324755,
+        "endMs": 396032.8211324755
+      },
+      {
+        "kind": "blink",
+        "startMs": 407667.07674101926,
+        "endMs": 407817.07674101926
+      },
+      {
+        "kind": "blink",
+        "startMs": 413786.36384243146,
+        "endMs": 413936.36384243146
+      },
+      {
+        "kind": "blink",
+        "startMs": 421201.31778120995,
+        "endMs": 421351.31778120995
+      },
+      {
+        "kind": "blink",
+        "startMs": 426458.73885690235,
+        "endMs": 426608.73885690235
+      },
+      {
+        "kind": "blink",
+        "startMs": 437327.23155948333,
+        "endMs": 437477.23155948333
+      },
+      {
+        "kind": "blink",
+        "startMs": 446195.470989123,
+        "endMs": 446345.470989123
+      },
+      {
+        "kind": "blink",
+        "startMs": 456484.56774139777,
+        "endMs": 456634.56774139777
+      },
+      {
+        "kind": "blink",
+        "startMs": 464308.62373192795,
+        "endMs": 464458.62373192795
+      },
+      {
+        "kind": "blink",
+        "startMs": 470158.73678629287,
+        "endMs": 470308.73678629287
+      },
+      {
+        "kind": "blink",
+        "startMs": 479643.0293641053,
+        "endMs": 479793.0293641053
+      },
+      {
+        "kind": "blink",
+        "startMs": 488798.5884392634,
+        "endMs": 488948.5884392634
+      },
+      {
+        "kind": "blink",
+        "startMs": 495820.6417679321,
+        "endMs": 495970.6417679321
+      },
+      {
+        "kind": "blink",
+        "startMs": 504190.0198434945,
+        "endMs": 504340.0198434945
+      },
+      {
+        "kind": "blink",
+        "startMs": 515283.7211864069,
+        "endMs": 515433.7211864069
+      },
+      {
+        "kind": "blink",
+        "startMs": 525564.0082436614,
+        "endMs": 525714.0082436614
+      },
+      {
+        "kind": "blink",
+        "startMs": 534430.4605393205,
+        "endMs": 534580.4605393205
+      },
+      {
+        "kind": "blink",
+        "startMs": 544990.3683292214,
+        "endMs": 545140.3683292214
+      },
+      {
+        "kind": "blink",
+        "startMs": 552556.8289329298,
+        "endMs": 552706.8289329298
+      },
+      {
+        "kind": "blink",
+        "startMs": 562445.6924695522,
+        "endMs": 562595.6924695522
+      },
+      {
+        "kind": "blink",
+        "startMs": 569076.4646386262,
+        "endMs": 569226.4646386262
+      },
+      {
+        "kind": "blink",
+        "startMs": 581173.6684210133,
+        "endMs": 581323.6684210133
+      },
+      {
+        "kind": "blink",
+        "startMs": 592352.0220816135,
+        "endMs": 592502.0220816135
+      },
+      {
+        "kind": "blink",
+        "startMs": 598531.408539135,
+        "endMs": 598681.408539135
+      }
+    ],
+    "coarseOccupancyMs": {
+      "breath": 170800,
+      "blink": 10050
+    },
+    "nativeCadencePoseDelta": {
+      "max": 0,
+      "key": null
+    }
+  },
+  "finishedUtc": "2026-10-04T19:08:23.516Z",
+  "sourceHashesAfter": {
+    "visual/phase4/web/controller.mjs": "8069c9ceb3bad240d414319d8544c8c5b7007160e5703b4b75406f1dfa43cbc8",
+    "visual/phase4/catalog.json": "9c66f97b35ad63d4bea494fce87579785cb55de15e527742605293af0f082cbc",
+    "visual/phase4/behavior.json": "441cb5b05c3f23c836d8a16e5966003cbee9306c361577cb984301f86af72639",
+    "validators/personality_phase4.py": "ecdcda93e624829b400576946326eef231feaf689fdd2c45eab13b001870f11e",
+    "visual/phase2/web/rig.mjs": "46597f9d8a5c29343fab8bade7554dc0b34056e60c0ac7642a61ec241c6cadd0",
+    "visual/phase2/body_contract.v2.json": "4671b41192387feffcc6d95a8830dfc0d9058d67a5b71a25d2ad0cbec2bcce61",
+    "output/visual-phase4/build/9158312fca163a88ecf5/jev_personality_v4.riv": "da4c062dbdaad41ed5fbc21bb957ba4be0ca34e4a954a42b24132b25806e60d9"
+  },
+  "sourceStable": true
+}

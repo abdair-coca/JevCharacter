@@ -1,0 +1,400 @@
+{
+  "status": "PASS",
+  "runtime": "2.42.2 real local WASM",
+  "originalBinaryInspection": "Runtime discovery; CLI inspect does not support this binary",
+  "artboard": "ScriptingLab",
+  "viewModel": "ViewModel1",
+  "instance": "Instance",
+  "viewModelProperties": [
+    {
+      "name": "shapeAsymetry",
+      "type": "number"
+    },
+    {
+      "name": "shapeTaper",
+      "type": "number"
+    },
+    {
+      "name": "shapeBulge",
+      "type": "number"
+    },
+    {
+      "name": "shapeRoundness",
+      "type": "number"
+    },
+    {
+      "name": "shapePressed",
+      "type": "number"
+    },
+    {
+      "name": "shapeType",
+      "type": "number"
+    },
+    {
+      "name": "shapeHeight",
+      "type": "number"
+    },
+    {
+      "name": "shapeWidth",
+      "type": "number"
+    },
+    {
+      "name": "state",
+      "enumName": "characterState",
+      "type": "enumType"
+    },
+    {
+      "name": "trigState",
+      "type": "trigger"
+    },
+    {
+      "name": "xScaleboard",
+      "type": "number"
+    },
+    {
+      "name": "yScaleboard",
+      "type": "number"
+    },
+    {
+      "name": "xFollow",
+      "type": "number"
+    },
+    {
+      "name": "yFollow",
+      "type": "number"
+    },
+    {
+      "name": "followBoo",
+      "type": "boolean"
+    }
+  ],
+  "viewModelInstances": [
+    "Instance"
+  ],
+  "followBoo": false,
+  "bindings": [
+    "artboard",
+    "stateMachine"
+  ],
+  "animationCount": 22,
+  "inputCount": 0,
+  "enumValues": [
+    "think",
+    "yes",
+    "no",
+    "talkb",
+    "talkc",
+    "square",
+    "triangle",
+    "talkbc",
+    "idle",
+    "MorphState",
+    "Cloud",
+    "Talk",
+    "Flower",
+    "Ghost",
+    "Hello",
+    "Base"
+  ],
+  "clips": [
+    {
+      "name": "Idle",
+      "durationFrames": 540,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 180,
+      "workEnd": 360
+    },
+    {
+      "name": "TalkBC",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "Ghost",
+      "durationFrames": 120,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 0,
+      "workEnd": 60
+    },
+    {
+      "name": "Flower",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "S-Cloud",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "MorphTest",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "S-Triangle",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "S-Square",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "TalkC",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "TalkB",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 59,
+      "workEnd": 60
+    },
+    {
+      "name": "TalkA",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "No",
+      "durationFrames": 120,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 0,
+      "workEnd": 60
+    },
+    {
+      "name": "Yes",
+      "durationFrames": 120,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 0,
+      "workEnd": 60
+    },
+    {
+      "name": "Think",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Hello",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Base",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Bump",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "NoBuimp",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Follow Off",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Follow On",
+      "durationFrames": 60,
+      "fps": 60,
+      "loopValue": 0,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Blink",
+      "durationFrames": 180,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 4294967295,
+      "workEnd": 4294967295
+    },
+    {
+      "name": "Background",
+      "durationFrames": 540,
+      "fps": 60,
+      "loopValue": 1,
+      "workStart": 180,
+      "workEnd": 360
+    }
+  ],
+  "transitions": [
+    {
+      "selected": "Hello",
+      "readback": "Hello",
+      "transitions": [
+        "Bump",
+        "Hello"
+      ]
+    },
+    {
+      "selected": "think",
+      "readback": "think",
+      "transitions": [
+        "Bump",
+        "Think"
+      ]
+    },
+    {
+      "selected": "yes",
+      "readback": "yes",
+      "transitions": [
+        "Bump",
+        "Yes"
+      ]
+    },
+    {
+      "selected": "no",
+      "readback": "no",
+      "transitions": [
+        "Bump",
+        "No"
+      ]
+    },
+    {
+      "selected": "Talk",
+      "readback": "Talk",
+      "transitions": [
+        "Bump",
+        "TalkA"
+      ]
+    },
+    {
+      "selected": "talkb",
+      "readback": "talkb",
+      "transitions": [
+        "Bump",
+        "TalkB"
+      ]
+    },
+    {
+      "selected": "talkc",
+      "readback": "talkc",
+      "transitions": [
+        "Bump",
+        "TalkC"
+      ]
+    },
+    {
+      "selected": "talkbc",
+      "readback": "talkbc",
+      "transitions": [
+        "Bump",
+        "TalkBC"
+      ]
+    },
+    {
+      "selected": "MorphState",
+      "readback": "MorphState",
+      "transitions": [
+        "Bump",
+        "MorphTest"
+      ]
+    },
+    {
+      "selected": "square",
+      "readback": "square",
+      "transitions": [
+        "Bump",
+        "S-Square"
+      ]
+    },
+    {
+      "selected": "triangle",
+      "readback": "triangle",
+      "transitions": [
+        "Bump",
+        "S-Triangle"
+      ]
+    },
+    {
+      "selected": "Cloud",
+      "readback": "Cloud",
+      "transitions": [
+        "Bump",
+        "S-Cloud"
+      ]
+    },
+    {
+      "selected": "Flower",
+      "readback": "Flower",
+      "transitions": [
+        "Bump",
+        "Flower"
+      ]
+    },
+    {
+      "selected": "Ghost",
+      "readback": "Ghost",
+      "transitions": [
+        "Bump",
+        "Ghost"
+      ]
+    },
+    {
+      "selected": "Base",
+      "readback": "Base",
+      "transitions": [
+        "Bump",
+        "Base"
+      ]
+    }
+  ],
+  "scope": "VM readback and state-machine transitions verify native activation; visual morph recognition is browser evidence, MorphState-star correspondence unverified"
+}
