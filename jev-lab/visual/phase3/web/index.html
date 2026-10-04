@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JEV · Autoría fase 3</title><link rel="stylesheet" href="/style.css"></head>
+<body><main><header><p class="eyebrow">JEV LAB · FASE 3</p><h1>Una definición. Una acción.</h1><p>JSON semántico, curvas Rive y control desde código.</p></header>
+<section class="layout"><div class="stage"><canvas id="character" width="720" height="680" aria-label="JEV animado"></canvas><p id="playback">Cargando rig…</p></div>
+<div class="panel"><label>Acción<select id="action" disabled></select></label><label>Variante<select id="variant" disabled></select></label>
+<div class="parameters"><label>Intensidad (0–1)<input id="intensity" type="number" min="0" max="1" step=".05" value="1"></label><label>Velocidad (0.1–4)<input id="speed" type="number" min=".1" max="4" step=".1" value="1"></label></div>
+<div class="buttons"><button id="play" disabled>Reproducir</button><button id="sequence" disabled>Encadenar catálogo</button><button id="interrupt" disabled>Interrumpir con curiosidad</button><button id="stop" disabled>Stop · neutral completo</button><button id="look" disabled>Mirar izquierda</button><button id="ambient" disabled>Luz ambiental 0.8</button></div>
+<p id="intent"></p><p id="result" aria-live="polite"></p><p id="status" aria-live="polite">Compilando…</p><pre id="errors" role="status"></pre></div></section>
+<details><summary>Diagnóstico de reproducción</summary><pre id="diagnostics"></pre></details>
+<footer>Edita <code>visual/phase3/actions/*.json</code>. Cambios válidos se recompilan automáticamente; errores conservan el último preview válido. Reemplazar una acción pasa por neutral. Reposo ambiental aquí es estático.</footer></main>
+<script src="/rive.js"></script><script type="module" src="/app.mjs"></script></body></html>

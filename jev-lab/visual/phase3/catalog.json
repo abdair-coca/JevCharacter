@@ -1,0 +1,366 @@
+{
+  "schema": 1,
+  "fps": 60,
+  "artboard": "JevRigV2",
+  "contractSha256": "4671b41192387feffcc6d95a8830dfc0d9058d67a5b71a25d2ad0cbec2bcce61",
+  "parameterBounds": {
+    "intensity": [
+      0,
+      1
+    ],
+    "speed": [
+      0.1,
+      4
+    ]
+  },
+  "actions": {
+    "attention_pulse": {
+      "id": "attention_pulse",
+      "intent": "Atención breve: ojos arriba antes de una transformación suave a flor.",
+      "durationMs": 600,
+      "channels": [
+        "gazeY",
+        "morph"
+      ],
+      "source": "attention_pulse.json",
+      "sourceSha256": "71799c275f198aa4ccc2682fa065ddbfb7359d7a38c68e61caa7832fd43e7cc5",
+      "targetShape": "flower",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "bloom",
+          "timeMs": 250,
+          "pose": "bloom",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "observe",
+          "timeMs": 350,
+          "pose": "bloom",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 566.6666666666666,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 600,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_attention_pulse__default",
+          "machine": "Action_attention_pulse__default"
+        },
+        "full": {
+          "clip": "action_attention_pulse__full",
+          "machine": "Action_attention_pulse__full"
+        },
+        "soft": {
+          "clip": "action_attention_pulse__soft",
+          "machine": "Action_attention_pulse__soft"
+        }
+      }
+    },
+    "curious_look": {
+      "id": "curious_look",
+      "intent": "Curiosidad tranquila: mirada derecha, cuerpo responde 100 ms después, observa y vuelve.",
+      "durationMs": 800,
+      "channels": [
+        "gazeX",
+        "bodyRotation",
+        "bodyScaleY"
+      ],
+      "source": "curious_look.json",
+      "sourceSha256": "ec2ff7cbb6a330c9343441a94bb7d6c57f8ca71f6aae37bf01955e68cc2338fc",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "eyes_first",
+          "timeMs": 100,
+          "pose": "look",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "lean",
+          "timeMs": 300,
+          "pose": "observe",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hold",
+          "timeMs": 500,
+          "pose": "observe",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 766.6666666666666,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 800,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_curious_look__default",
+          "machine": "Action_curious_look__default"
+        },
+        "left": {
+          "clip": "action_curious_look__left",
+          "machine": "Action_curious_look__left"
+        }
+      }
+    },
+    "happy_bounce": {
+      "id": "happy_bounce",
+      "intent": "Alegría breve: mirada primero, anticipación, salto pequeño, aterrizaje suave y quietud.",
+      "durationMs": 750,
+      "channels": [
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen",
+        "bodyY",
+        "bodyRotation",
+        "bodyScaleX",
+        "bodyScaleY"
+      ],
+      "source": "happy_bounce.json",
+      "sourceSha256": "218ea875172ff0db01621897196d39b9a19d6836b22752858d406b4438b96088",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 50,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "body_wait",
+          "timeMs": 66.66666666666667,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "anticipation",
+          "timeMs": 150,
+          "pose": "anticipation",
+          "curve": [
+            0.42,
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "stretch",
+          "timeMs": 233.33333333333334,
+          "pose": "stretch",
+          "curve": [
+            0,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "apex",
+          "timeMs": 350,
+          "pose": "apex",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "controlled_fall",
+          "timeMs": 416.6666666666667,
+          "pose": "apex",
+          "curve": [
+            0.42,
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "fall",
+          "timeMs": 483.3333333333333,
+          "pose": "fall",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "landing",
+          "timeMs": 533.3333333333334,
+          "pose": "landing",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "settle",
+          "timeMs": 633.3333333333334,
+          "pose": "settle",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 716.6666666666666,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 750,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_happy_bounce__default",
+          "machine": "Action_happy_bounce__default"
+        },
+        "gentle": {
+          "clip": "action_happy_bounce__gentle",
+          "machine": "Action_happy_bounce__gentle"
+        }
+      }
+    }
+  },
+  "generation": "08aecb8f160cb11f2c0f"
+}

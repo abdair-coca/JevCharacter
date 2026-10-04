@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "files": {
+    "jev-lab/visual/phase2/body_contract.v2.json": "4671b41192387feffcc6d95a8830dfc0d9058d67a5b71a25d2ad0cbec2bcce61",
+    "jev-lab/visual/phase2/JEV_BODY_CONTRACT_V2.md": "fa4f43234a93286f3dabd39d5e1d6a634aaa910caae2e3e850eb0650498f785e",
+    "jev-lab/visual/phase2/README.md": "970f03234673c8be6a9e5a5a3e2815de766977d55a82e91ecb07a864b8fc47f1",
+    "jev-lab/visual/phase2/rive.yaml": "f079332611a35fda82fde66e7bd43cbdbeb134f38654ee4bc84acc760a6c8de1",
+    "jev-lab/visual/phase2/scene.rml": "c956627078bcb7bdec6eb6cc0316a3c60e08bb8debedf4a8a4e6ccbfa59f10b4",
+    "jev-lab/visual/phase2/web/app.mjs": "5bf82505870d694f1753464c1306359858c0bee5407d5f924c8124f0210a8bb8",
+    "jev-lab/visual/phase2/web/index.html": "c9e481d685acaae6a8d426cec0b9c6deebf375ab58997a7322e70fab07f3aef8",
+    "jev-lab/visual/phase2/web/rig.mjs": "46597f9d8a5c29343fab8bade7554dc0b34056e60c0ac7642a61ec241c6cadd0",
+    "jev-lab/visual/phase2/web/style.css": "8e1ce196784460b56df0ad2328f28062304cdb9996e3dfc1441e59c2d1fd6736",
+    "jev-lab/validators/rig_phase2.py": "7bd87d15a634e0a50e642a3977bebb7e96a8f00371c603b37e5ab1cd7652179e",
+    "jev-lab/tests/test_rig_phase2.py": "8f5495af0ce8bc42eefa14dd8b178cff35db14abb7f77191e373d2c9f15e4b17",
+    "jev-lab/tests/test_rig_phase2.mjs": "0dce64875448e599728d81e10aeaade23755d40acd6f51b64363b2cb2946ecbd"
+  }
+}

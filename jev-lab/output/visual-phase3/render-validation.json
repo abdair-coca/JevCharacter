@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "source": "Rive CLI 1.3.0 generated action machines",
+  "frames": 25,
+  "neutralRgbaEquality": true,
+  "neutralComparisons": 8,
+  "cases": [
+    "attention_pulse-default",
+    "attention_pulse-full",
+    "attention_pulse-soft",
+    "curious_look-default",
+    "curious_look-left",
+    "happy_bounce-default",
+    "happy_bounce-gentle",
+    "interruption"
+  ],
+  "interruptionScope": "CLI immediate machine transition at 200ms; public controller tested separately"
+}

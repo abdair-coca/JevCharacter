@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "cli": "1.3.0",
+  "runtime": "2.42.2",
+  "generation": "08aecb8f160cb11f2c0f",
+  "actions": [
+    "attention_pulse",
+    "curious_look",
+    "happy_bounce"
+  ],
+  "variants": 7,
+  "verify": {
+    "success": true,
+    "command": "verify",
+    "data": {
+      "riv": null,
+      "bytes": 0,
+      "buildMs": 39010.5,
+      "problems": []
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "once": {
+    "success": true,
+    "command": "build",
+    "data": {
+      "riv": "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase3/build/08aecb8f160cb11f2c0f\\jev_actions_v3.riv",
+      "bytes": 747995,
+      "buildMs": 21776.3,
+      "problems": []
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "inspection": {
+    "schema": 1,
+    "summary": true,
+    "problems": [],
+    "artboards": [
+      {
+        "name": "JevRigV2",
+        "objects": 95575,
+        "types": {
+          "AnimationState": 15,
+          "AnyState": 8,
+          "Artboard": 1,
+          "CubicDetachedVertex": 240,
+          "CubicEaseInterpolator": 26400,
+          "Ellipse": 4,
+          "EntryState": 8,
+          "ExitState": 8,
+          "Fill": 7,
+          "GradientStop": 27,
+          "KeyFrameDouble": 49894,
+          "KeyedObject": 2740,
+          "KeyedProperty": 16131,
+          "LayoutComponentStyle": 1,
+          "LinearAnimation": 28,
+          "Node": 11,
+          "PointsPath": 4,
+          "RadialGradient": 5,
+          "Shape": 8,
+          "SolidColor": 3,
+          "StateMachine": 8,
+          "StateMachineLayer": 8,
+          "StateTransition": 15,
+          "Stroke": 1
+        }
+      }
+    ],
+    "roots": {
+      "objects": 1,
+      "types": {
+        "Backboard": 1
+      }
+    }
+  },
+  "problems": []
+}

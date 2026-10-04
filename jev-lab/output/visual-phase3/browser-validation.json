@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "date": "2026-10-04",
+  "timezone": "America/La_Paz",
+  "validator": "Primary agent through CUA, actual WebGL2/WASM 2.42.2",
+  "preview": "http://localhost:4183/",
+  "finalGeneration": "08aecb8f160cb11f2c0f",
+  "checks": {
+    "realRigLoaded": true,
+    "fullAttentionFlowerVisible": true,
+    "nonOwnedGazeXAndLightPreserved": {"gazeX": -6, "light": 0.8},
+    "stopRestoresAll16SemanticValues": true,
+    "stopCanvasJpegBytesEqualInitialNeutral": true,
+    "zeroIntensityCanvasJpegEqualFreshNeutral": {
+      "equal": true,
+      "bytes": 4149,
+      "sampleElapsedMs": 26.28000000715256,
+      "speed": 0.1,
+      "action": "attention_pulse",
+      "variant": "full",
+      "scope": "One actual runtime sample, same fresh canvas clip; all timed behavior also covered by deterministic controller tests."
+    },
+    "sequenceInterrupted": {
+      "cancelledReason": "replaced",
+      "completedItems": 0,
+      "totalItems": 3,
+      "successor": "curious_look",
+      "successorCompletedItems": 1
+    },
+    "sequenceCompleted": {
+      "speed": 4,
+      "order": ["attention_pulse", "curious_look", "happy_bounce"],
+      "completedItems": 3,
+      "totalItems": 3,
+      "finalNeutral": true
+    },
+    "watchAuthoring": {
+      "temporarySource": "visual/phase3/actions/qa_authoring_demo.json",
+      "onlyNewActionDefinitionEdited": true,
+      "invalidSyntax": {"file": "qa_authoring_demo.json", "pointer": "/", "line": 1, "column": 15},
+      "previousGenerationRetained": "08aecb8f160cb11f2c0f",
+      "correctedDefinitionGeneration": "72e913cf5f18b14d9a81",
+      "discoveredActions": 4,
+      "generatedClip": "action_qa_authoring_demo__default",
+      "generatedMachine": "Action_qa_authoring_demo__default",
+      "newActionReproduced": true,
+      "newActionCompletedItems": 1,
+      "newActionFinalNeutral": true,
+      "secondInvalidEditRetainedFourActionPreviewWithoutReload": true,
+      "openingWithInvalidSourceLoadsLastValidGeneration": true,
+      "playbackWorksWithErrorPresent": true,
+      "temporarySourceRemoved": true,
+      "automaticRecoveryObservedWithoutPageReload": true,
+      "finalActions": ["attention_pulse", "curious_look", "happy_bounce"],
+      "finalRevision": 5,
+      "finalError": null
+    },
+    "consoleErrorsOrWarnings": [],
+    "finalNeutral": true
+  },
+  "parentVerification": {
+    "nodeTests": 37,
+    "compilerDeterministicCheck": "PASS",
+    "phase2GeometrySamples": 861,
+    "historicalBuildCheck": "PASS",
+    "historicalPreservedFiles": 134,
+    "phase2PreservedSha256Files": 12,
+    "realRiveCapturesInspected": 25,
+    "exactRgbaNeutralComparisons": 8
+  },
+  "scope": "Phase 3 only. Static ambient and immediate neutral replacement bridge; phase 4/5 remain pending. Human acceptance is separate from technical validation."
+}

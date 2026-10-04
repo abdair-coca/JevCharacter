@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "id": "attention_pulse",
+  "intent": "Atención breve: ojos arriba antes de una transformación suave a flor.",
+  "durationMs": 600,
+  "channels": [
+    "gazeY",
+    "morph"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeY": 0,
+      "morph": 0
+    },
+    "notice": {
+      "gazeY": -3,
+      "morph": 0
+    },
+    "bloom": {
+      "gazeY": -3,
+      "morph": 0.65
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "bloom",
+      "timeMs": 250,
+      "pose": "bloom",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "observe",
+      "timeMs": 350,
+      "pose": "bloom",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 566.6666666666666,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 600,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "targetShape": "flower",
+  "variants": {
+    "full": {
+      "bloom": {
+        "morph": 1
+      }
+    },
+    "soft": {
+      "bloom": {
+        "morph": 0.35,
+        "gazeY": -1.5
+      },
+      "notice": {
+        "gazeY": -1.5
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "selectedAnimation": "curious_look",
+  "inspectMatchesSource": true,
+  "animations": {
+    "happy_bounce": {
+      "durationMs": 750.0,
+      "tracks": 12,
+      "samples": 363,
+      "maxima": {
+        "composedScale": 1.09,
+        "rotationDegrees": 2.0053522829578814,
+        "eyeDisplacement": 4.0
+      },
+      "neutralExact": true
+    },
+    "curious_look": {
+      "durationMs": 800.0,
+      "tracks": 12,
+      "samples": 387,
+      "maxima": {
+        "composedScale": 1.07,
+        "rotationDegrees": 4.0,
+        "eyeDisplacement": 7.0
+      },
+      "neutralExact": true,
+      "curiosity": {
+        "eyeOnsetMs": 0.0,
+        "bodyOnsetMs": 100.0,
+        "bodyDelayMs": 100.0,
+        "verticalStretchPercent": 7.000000000000006,
+        "holdMs": 200.0,
+        "tiltDegrees": 4.0,
+        "direction": "right",
+        "eyeScaleUnchanged": true,
+        "blinkUnchanged": true
+      }
+    }
+  }
+}

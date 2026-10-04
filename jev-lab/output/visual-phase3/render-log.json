@@ -1,0 +1,152 @@
+[
+  {
+    "label": "neutral-initial",
+    "frame": 1,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-default-active",
+    "frame": 22,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-default-return",
+    "frame": 29,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-default-neutral",
+    "frame": 41,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-full-active",
+    "frame": 22,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-full-return",
+    "frame": 29,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-full-neutral",
+    "frame": 41,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-soft-active",
+    "frame": 22,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-soft-return",
+    "frame": 29,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "attention_pulse-soft-neutral",
+    "frame": 41,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "curious_look-default-active",
+    "frame": 19,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "curious_look-default-return",
+    "frame": 38,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "curious_look-default-neutral",
+    "frame": 53,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "curious_look-left-active",
+    "frame": 19,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "curious_look-left-return",
+    "frame": 38,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "curious_look-left-neutral",
+    "frame": 53,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "happy_bounce-default-active",
+    "frame": 26,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "happy_bounce-default-return",
+    "frame": 36,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "happy_bounce-default-neutral",
+    "frame": 50,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "happy_bounce-gentle-active",
+    "frame": 26,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "happy_bounce-gentle-return",
+    "frame": 36,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "happy_bounce-gentle-neutral",
+    "frame": 50,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "interruption-before",
+    "frame": 10,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "interruption-after",
+    "frame": 25,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  },
+  {
+    "label": "interruption-neutral",
+    "frame": 70,
+    "exit": 0,
+    "source": "Rive CLI actual state machine"
+  }
+]

@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "curious_look",
+  "intent": "Curiosidad tranquila: mirada derecha, cuerpo responde 100 ms después, observa y vuelve.",
+  "durationMs": 800,
+  "channels": [
+    "gazeX",
+    "bodyRotation",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "bodyRotation": 0,
+      "bodyScaleY": 1
+    },
+    "look": {
+      "gazeX": 7,
+      "bodyRotation": 0,
+      "bodyScaleY": 1
+    },
+    "observe": {
+      "gazeX": 7,
+      "bodyRotation": 0.06981317007977318,
+      "bodyScaleY": 1.07
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "eyes_first",
+      "timeMs": 100,
+      "pose": "look",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "lean",
+      "timeMs": 300,
+      "pose": "observe",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold",
+      "timeMs": 500,
+      "pose": "observe",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 766.6666666666666,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 800,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "variants": {
+    "left": {
+      "look": {
+        "gazeX": -7
+      },
+      "observe": {
+        "gazeX": -7,
+        "bodyRotation": -0.06981317007977318
+      }
+    }
+  }
+}

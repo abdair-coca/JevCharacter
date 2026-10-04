@@ -1,0 +1,4 @@
+name: jev_actions_v3
+main: JevRigV2
+output:
+  dir: ../../output/visual-phase3/build/manual

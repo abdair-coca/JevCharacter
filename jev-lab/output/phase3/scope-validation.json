@@ -1,0 +1,59 @@
+{
+  "phase": 3,
+  "status": "PASS",
+  "changed": [
+    "jev-lab/README.md",
+    "jev-lab/tests/test_action.mjs",
+    "jev-lab/validators/preview.py",
+    "jev-lab/web/action.mjs",
+    "jev-lab/web/app.mjs",
+    "jev-lab/web/index.html",
+    "jev-lab/web/style.css"
+  ],
+  "added": [
+    "jev-lab/output/phase3/build-check.txt",
+    "jev-lab/output/phase3/controller-action-tests.txt",
+    "jev-lab/output/phase3/diff-review.txt",
+    "jev-lab/output/phase3/final-browser.jpg",
+    "jev-lab/output/phase3/inspect.json",
+    "jev-lab/output/phase3/narrow-browser.jpg",
+    "jev-lab/output/phase3/python-tests.txt",
+    "jev-lab/output/phase3/validation-report.md",
+    "jev-lab/output/phase3/validation.json",
+    "jev-lab/output/phase3/verify.json"
+  ],
+  "outsideChanges": [],
+  "protectedSourcesUnchanged": true,
+  "previousEvidenceUnchanged": true,
+  "browser": {
+    "keyboardEnter": true,
+    "keyboardSpace": true,
+    "spaceScrollStable": true,
+    "tabFocusOrder": true,
+    "focusVisible": true,
+    "rapidClick": {
+      "accepted": 1,
+      "ignored": 1
+    },
+    "sizes": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "viewportOverrideReset": true,
+    "consoleErrors": [],
+    "hiddenEvent": "IAB leaves document.hidden false; conventional-browser manual check pending",
+    "suspensionUnitTests": "PASS",
+    "screenshot": "narrow-browser.jpg"
+  },
+  "userApproval": {
+    "phase1": "approved",
+    "phase2": "approved",
+    "phase3": "pending"
+  }
+}
