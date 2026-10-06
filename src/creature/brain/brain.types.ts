@@ -1,4 +1,15 @@
-export const REACTIONS = ["BASE", "HELLO", "GHOST", "FLOWER"] as const;
+export const REACTIONS = [
+  "BASE",
+  "HELLO",
+  "GHOST",
+  "FLOWER",
+  "CLOUD",
+  "YES",
+  "NO",
+  "STAR",
+  "SQUARE",
+  "TRIANGLE",
+] as const;
 
 export type Reaction = (typeof REACTIONS)[number];
 export type BinaryAnswer = "yes" | "no";
@@ -59,7 +70,7 @@ export type CreatureWorldState = {
   };
 };
 
-export type ReactionProbabilities = Record<Reaction, number>;
+export type ReactionProbabilities = Partial<Record<Reaction, number>>;
 
 export type BrainDecision = {
   action: DecisionAction;

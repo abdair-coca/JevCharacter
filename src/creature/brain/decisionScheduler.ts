@@ -104,8 +104,8 @@ function parseDecision(value: unknown): BrainDecision | null {
   if (
     REACTIONS.some(
       (reaction) =>
-        typeof probabilities[reaction] !== "number" ||
-        !Number.isFinite(probabilities[reaction]),
+        probabilities[reaction] !== undefined &&
+        (typeof probabilities[reaction] !== "number" || !Number.isFinite(probabilities[reaction])),
     )
   ) return null;
   if (action.kind === "reaction" && action.reaction !== candidate.reaction) return null;
@@ -116,10 +116,16 @@ function parseDecision(value: unknown): BrainDecision | null {
     reaction: candidate.reaction,
     reactionConfidence: Math.max(0, Math.min(1, candidate.reactionConfidence)),
     probabilities: {
-      BASE: Math.max(0, Math.min(1, probabilities.BASE as number)),
-      HELLO: Math.max(0, Math.min(1, probabilities.HELLO as number)),
-      GHOST: Math.max(0, Math.min(1, probabilities.GHOST as number)),
-      FLOWER: Math.max(0, Math.min(1, probabilities.FLOWER as number)),
+      BASE: Math.max(0, Math.min(1, probabilities.BASE ?? 0)),
+      HELLO: Math.max(0, Math.min(1, probabilities.HELLO ?? 0)),
+      GHOST: Math.max(0, Math.min(1, probabilities.GHOST ?? 0)),
+      FLOWER: Math.max(0, Math.min(1, probabilities.FLOWER ?? 0)),
+      CLOUD: Math.max(0, Math.min(1, probabilities.CLOUD ?? 0)),
+      YES: Math.max(0, Math.min(1, probabilities.YES ?? 0)),
+      NO: Math.max(0, Math.min(1, probabilities.NO ?? 0)),
+      STAR: Math.max(0, Math.min(1, probabilities.STAR ?? 0)),
+      SQUARE: Math.max(0, Math.min(1, probabilities.SQUARE ?? 0)),
+      TRIANGLE: Math.max(0, Math.min(1, probabilities.TRIANGLE ?? 0)),
     },
     intensity: Math.max(0, Math.min(2, candidate.intensity)),
     wantsAttention: Math.max(0, Math.min(1, candidate.wantsAttention)),
@@ -152,7 +158,7 @@ function cohereDecision(
     next = {
       ...decision,
       reaction: "BASE",
-      reactionConfidence: decision.probabilities.BASE,
+      reactionConfidence: decision.probabilities.BASE ?? 0,
       intensity: Math.min(1, decision.intensity),
     };
   }
@@ -162,12 +168,12 @@ function cohereDecision(
     history.slice(-2).every((entry) => entry.reaction === next.reaction);
   if (next.reaction !== "BASE" && repeated) {
     const alternative = REACTIONS.filter((reaction) => reaction !== next.reaction).sort(
-      (left, right) => next.probabilities[right] - next.probabilities[left],
-    )[0];
+      (left, right) => (next.probabilities[right] ?? 0) - (next.probabilities[left] ?? 0),
+    )[0] ?? "BASE";
     next = {
       ...next,
       reaction: alternative,
-      reactionConfidence: next.probabilities[alternative],
+      reactionConfidence: next.probabilities[alternative] ?? 0,
       intensity: alternative === "BASE" ? Math.min(0.8, next.intensity) : next.intensity,
     };
   }
@@ -179,7 +185,7 @@ function cohereDecision(
     next = {
       ...next,
       reaction: "BASE",
-      reactionConfidence: next.probabilities.BASE,
+      reactionConfidence: next.probabilities.BASE ?? 0,
       intensity: Math.min(0.7, next.intensity),
     };
   }

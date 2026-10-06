@@ -219,16 +219,22 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     const rawMorphForm = result.answers.morphForm.choice;
     const actionConfidence = result.answers.actionType.confidence;
     const reactionConfidence = result.answers.reaction.confidence;
-    const probabilities = result.answers.reaction.probabilities;
+    const probabilities = result.answers.reaction.probabilities as Record<string, unknown>;
     const intensity = result.answers.intensity.score;
     const wantsAttention = result.answers.wantsAttention.noul;
     if (!isReaction(rawReaction)) {
       return response.status(200).json({ unavailable: true });
     }
+
+    const normalizedProbabilities = REACTIONS.reduce((acc, reaction) => {
+      const value = probabilities[reaction];
+      acc[reaction] = isFiniteInRange(value, 0, 1) ? Number(value) : 0;
+      return acc;
+    }, {} as Record<string, number>);
+
     if (
       !isFiniteInRange(actionConfidence, 0, 1) ||
       !isFiniteInRange(reactionConfidence, 0, 1) ||
-      !REACTIONS.every((reaction) => isFiniteInRange(probabilities[reaction], 0, 1)) ||
       !isFiniteInRange(intensity, 0, 2) ||
       !isFiniteInRange(wantsAttention, 0, 1)
     ) {
@@ -263,12 +269,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       actionConfidence,
       reaction: rawReaction,
       reactionConfidence,
-      probabilities: {
-        BASE: probabilities.BASE,
-        HELLO: probabilities.HELLO,
-        GHOST: probabilities.GHOST,
-        FLOWER: probabilities.FLOWER,
-      },
+      probabilities: normalizedProbabilities as BrainDecision["probabilities"],
       intensity,
       wantsAttention,
       source: "jev",

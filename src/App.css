@@ -284,12 +284,8 @@
   bottom: calc(170px + env(safe-area-inset-bottom));
   width: min(620px, calc(100vw - 36px));
   padding: 13px 19px;
-  border: 1px solid rgba(181, 238, 202, 0.19);
   border-radius: 18px;
   color: rgba(242, 248, 244, 0.94);
-  background: linear-gradient(115deg, rgba(17, 25, 20, 0.88), rgba(9, 14, 11, 0.83));
-  box-shadow: 0 14px 48px rgba(0, 0, 0, 0.3), 0 0 30px rgba(91, 208, 140, 0.07);
-  backdrop-filter: blur(18px) saturate(125%);
   font: 400 15px/1.45 var(--font-display);
   text-align: center;
   overflow-wrap: anywhere;
@@ -306,7 +302,6 @@
   height: 1em;
   margin-left: 2px;
   vertical-align: -0.12em;
-  background: rgba(202, 245, 216, 0.9);
   animation: speech-caret 850ms steps(2, start) infinite;
 }
 

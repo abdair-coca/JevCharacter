@@ -11,6 +11,12 @@ const emptyProbabilities = (): ReactionProbabilities => ({
   HELLO: 0.08,
   GHOST: 0.08,
   FLOWER: 0.08,
+  CLOUD: 0.08,
+  YES: 0.08,
+  NO: 0.08,
+  STAR: 0.08,
+  SQUARE: 0.08,
+  TRIANGLE: 0.08,
 });
 
 const normalizeContext = (context: string) =>
@@ -80,7 +86,7 @@ export function fallbackBrain(
     }
   }
 
-  const confidence = probabilities[reaction];
+  const confidence = probabilities[reaction] ?? 0;
   const intensity = reaction === "GHOST" ? 1.35 : reaction === "BASE" ? 0.35 : 1.05;
   const wantsAttention = Math.max(
     0.08,

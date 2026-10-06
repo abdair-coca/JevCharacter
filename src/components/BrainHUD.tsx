@@ -61,14 +61,18 @@ export default function BrainHUD({ decision, status, personality }: Props) {
         </div>
         <div className="brain-hud__probabilities">
           {[...REACTIONS]
-            .sort((left, right) => decision.probabilities[right] - decision.probabilities[left])
-            .map((reaction) => (
-              <div className="brain-hud__probability" key={reaction}>
-                <span>{reaction}</span>
-                <i><b style={{ width: `${decision.probabilities[reaction] * 100}%` }} /></i>
-                <strong>{decision.probabilities[reaction].toFixed(2)}</strong>
-              </div>
-            ))}
+            .sort((left, right) => (decision.probabilities[right] ?? 0) - (decision.probabilities[left] ?? 0))
+            .slice(0, 4)
+            .map((reaction) => {
+              const probability = decision.probabilities[reaction] ?? 0;
+              return (
+                <div className="brain-hud__probability" key={reaction}>
+                  <span>{reaction}</span>
+                  <i><b style={{ width: `${probability * 100}%` }} /></i>
+                  <strong>{probability.toFixed(2)}</strong>
+                </div>
+              );
+            })}
         </div>
         <div className="brain-hud__readings">
           <span>INTENSITY <strong>{intensityLabel(decision.intensity)}</strong></span>
