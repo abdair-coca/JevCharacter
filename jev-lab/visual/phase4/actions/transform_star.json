@@ -1,101 +1,31 @@
 {
   "schema": 1,
   "id": "transform_star",
-  "intent": "Transformación a star: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
-  "durationMs": 1700,
-  "channels": [
-    "morph",
-    "gazeY",
-    "leftOpen",
-    "rightOpen"
-  ],
+  "intent": "Estrella completa: ojos arriba, contracción antes de desplegar las cinco puntas, overshoot corporal, hold reconocible y recuperación de la esfera.",
+  "durationMs": 2400,
+  "channels": ["morph", "gazeY", "leftOpen", "rightOpen", "bodyRotation", "bodyY", "bodyScaleX", "bodyScaleY"],
   "poses": {
-    "neutral": {
-      "morph": 0,
-      "gazeY": 0,
-      "leftOpen": 1,
-      "rightOpen": 1
-    },
-    "notice": {
-      "morph": 0,
-      "gazeY": -2,
-      "leftOpen": 1.1,
-      "rightOpen": 1.1
-    },
-    "shape": {
-      "morph": 1,
-      "gazeY": -1,
-      "leftOpen": 1.1,
-      "rightOpen": 1.1
-    }
+    "neutral": {"morph": 0, "gazeY": 0, "leftOpen": 1, "rightOpen": 1, "bodyRotation": 0, "bodyY": 0, "bodyScaleX": 1, "bodyScaleY": 1},
+    "notice": {"morph": 0, "gazeY": -5, "leftOpen": 1.3, "rightOpen": 1.3, "bodyRotation": 0, "bodyY": 0, "bodyScaleX": 1, "bodyScaleY": 1},
+    "anticipation": {"morph": 0, "gazeY": -3, "leftOpen": 0.65, "rightOpen": 0.65, "bodyRotation": -0.12, "bodyY": 5, "bodyScaleX": 1.08, "bodyScaleY": 0.84},
+    "unfold": {"morph": 0.55, "gazeY": -4, "leftOpen": 1.2, "rightOpen": 1.2, "bodyRotation": 0.05, "bodyY": -5, "bodyScaleX": 0.96, "bodyScaleY": 1.08},
+    "arrive": {"morph": 1, "gazeY": -2, "leftOpen": 1.3, "rightOpen": 1.3, "bodyRotation": 0.12, "bodyY": -8, "bodyScaleX": 1.12, "bodyScaleY": 1.12},
+    "shape": {"morph": 1, "gazeY": -1, "leftOpen": 1.2, "rightOpen": 1.2, "bodyRotation": 0, "bodyY": -2, "bodyScaleX": 1.04, "bodyScaleY": 1.04},
+    "fold": {"morph": 0.4, "gazeY": 2, "leftOpen": 0.8, "rightOpen": 0.8, "bodyRotation": -0.08, "bodyY": 4, "bodyScaleX": 1.08, "bodyScaleY": 0.9},
+    "settle": {"morph": 0, "gazeY": 0, "leftOpen": 1.1, "rightOpen": 1.1, "bodyRotation": 0.02, "bodyY": -2, "bodyScaleX": 0.97, "bodyScaleY": 1.04}
   },
   "phases": [
-    {
-      "name": "entry",
-      "timeMs": 0,
-      "pose": "neutral",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "notice",
-      "timeMs": 100,
-      "pose": "notice",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "arrive",
-      "timeMs": 450,
-      "pose": "shape",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "recognize",
-      "timeMs": 1200,
-      "pose": "shape",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "neutral_return",
-      "timeMs": 1666.6666666666667,
-      "pose": "neutral",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "neutral_hold",
-      "timeMs": 1700,
-      "pose": "neutral",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    }
+    {"name": "entry", "timeMs": 0, "pose": "neutral", "curve": [0.25, 0, 0.65, 1]},
+    {"name": "eyes_first", "timeMs": 133.33333333333334, "pose": "notice", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "anticipation", "timeMs": 300, "pose": "anticipation", "curve": [0.25, 0, 0.45, 1]},
+    {"name": "unfold", "timeMs": 466.6666666666667, "pose": "unfold", "curve": [0.25, 0, 0.65, 1]},
+    {"name": "arrive", "timeMs": 666.6666666666666, "pose": "arrive", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "hold_start", "timeMs": 900, "pose": "shape", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "recognize", "timeMs": 1666.6666666666667, "pose": "shape", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "fold", "timeMs": 1950, "pose": "fold", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "settle", "timeMs": 2183.3333333333335, "pose": "settle", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "neutral_return", "timeMs": 2366.6666666666665, "pose": "neutral", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "neutral_hold", "timeMs": 2400, "pose": "neutral", "curve": [0.42, 0, 0.58, 1]}
   ],
   "targetShape": "star",
   "originalState": "MorphState"

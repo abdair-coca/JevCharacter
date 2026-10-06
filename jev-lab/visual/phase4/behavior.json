@@ -4,17 +4,18 @@
   "takeoverMs": 150,
   "ambient": {
     "seed": 731,
-    "enabled": false,
+    "enabled": true,
     "breath": {
       "durationMs": 2800,
-      "pauseMs": [
-        5000,
-        9000
-      ],
+      "pauseMs": [0, 0],
       "channels": [
         "bodyScaleX",
         "bodyScaleY",
-        "bodyY"
+        "bodyY",
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
       ]
     },
     "blink": {
@@ -27,5 +28,9 @@
         "blink"
       ]
     }
+  },
+  "bump": {
+    "durationMs": 250,
+    "peakScale": 1.08
   }
 }

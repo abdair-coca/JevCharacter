@@ -24,7 +24,7 @@
         "bodyScaleY"
       ],
       "source": "curious_look.json",
-      "sourceSha256": "12ea85211bfbe08d652999c1e10895f8539423c193009f1b62217740e5d7da90",
+      "sourceSha256": "b9b6e9ddce0423489ca72a5af705e3ba301b05650871ca1a67b492ed9395f319",
       "targetShape": null,
       "phases": [
         {
@@ -121,7 +121,7 @@
         "bodyScaleY"
       ],
       "source": "happy_bounce.json",
-      "sourceSha256": "7283120c3b6e0063740c193492d1c18411aa6b64864c57c8ead510d2fbed796d",
+      "sourceSha256": "e9d8c23ec1cd5629f716f889c291e5eb4618e726acbe73783291268340784922",
       "targetShape": null,
       "phases": [
         {
@@ -281,7 +281,7 @@
         "bodyY"
       ],
       "source": "hello.json",
-      "sourceSha256": "14d52a3d3a9a1cb2bc97934b9b58552b53111ea94824c4277628eeec1981eed1",
+      "sourceSha256": "2cb01aaa17f4bb5af44c804aa1390602d5ac6b16653a3c1d061e198c8939568c",
       "targetShape": null,
       "phases": [
         {
@@ -505,7 +505,7 @@
         "bodyScaleY"
       ],
       "source": "speech.json",
-      "sourceSha256": "edec2ca6034e09814e4584d88b7c6547d5900eb1b971ce18b4374eb8d54974ec",
+      "sourceSha256": "0227b64a1616e68088b28320a69a1f40616e05d5e43cb5d40666c18592b99ef8",
       "targetShape": null,
       "phases": [
         {
@@ -637,35 +637,40 @@
           "machine": "Action_speech__bc"
         }
       },
+      "originalVariants": {
+        "default": "Talk",
+        "b": "talkb",
+        "c": "talkc",
+        "bc": "talkbc"
+      },
+      "originalState": "Talk",
       "behavior": {
         "kind": "sustained",
         "entryEndMs": 300,
         "cycleStartMs": 300,
         "cycleEndMs": 1100,
         "exitStartMs": 1400
-      },
-      "originalState": "Talk",
-      "originalVariants": {
-        "default": "Talk",
-        "b": "talkb",
-        "c": "talkc",
-        "bc": "talkbc"
       }
     },
     "think": {
       "id": "think",
-      "intent": "Pensamiento sostenido: ojos arriba primero; inclinación pequeña, quietud reconocible y ciclo lento.",
-      "durationMs": 2300,
+      "intent": "Pensamiento atento: mirada arriba antes de inclinarse; considera a la derecha, busca a la izquierda, contrasta y vuelve al mismo punto sin salto.",
+      "durationMs": 3400,
       "channels": [
         "gazeX",
         "gazeY",
         "leftOpen",
         "rightOpen",
+        "leftTilt",
+        "rightTilt",
         "bodyRotation",
+        "bodyX",
+        "bodyY",
+        "bodyScaleX",
         "bodyScaleY"
       ],
       "source": "think.json",
-      "sourceSha256": "c510edcdeafe17f39f1c1e81e319957aa57ebb0a8a8d03c4703798c7ae802887",
+      "sourceSha256": "60c2af493c12a2728764e29712fb7620a7ecf21908c490e97552de18b9d82e03",
       "targetShape": null,
       "phases": [
         {
@@ -673,15 +678,15 @@
           "timeMs": 0,
           "pose": "neutral",
           "curve": [
-            0.42,
+            0.25,
             0,
-            0.58,
+            0.65,
             1
           ]
         },
         {
-          "name": "notice",
-          "timeMs": 100,
+          "name": "eyes_first",
+          "timeMs": 133.33333333333334,
           "pose": "notice",
           "curve": [
             0.42,
@@ -692,7 +697,7 @@
         },
         {
           "name": "cycle_start",
-          "timeMs": 400,
+          "timeMs": 500,
           "pose": "ponder",
           "curve": [
             0.42,
@@ -703,8 +708,41 @@
         },
         {
           "name": "quiet_hold",
-          "timeMs": 900,
+          "timeMs": 850,
           "pose": "ponder",
+          "curve": [
+            0.25,
+            0,
+            0.65,
+            1
+          ]
+        },
+        {
+          "name": "search_eyes",
+          "timeMs": 1000,
+          "pose": "search_eyes",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "search",
+          "timeMs": 1300,
+          "pose": "search",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "search_hold",
+          "timeMs": 1600,
+          "pose": "search",
           "curve": [
             0.42,
             0,
@@ -714,7 +752,18 @@
         },
         {
           "name": "reflect",
-          "timeMs": 1200,
+          "timeMs": 1950,
+          "pose": "reflect",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "reflect_hold",
+          "timeMs": 2200,
           "pose": "reflect",
           "curve": [
             0.42,
@@ -725,7 +774,7 @@
         },
         {
           "name": "cycle_end",
-          "timeMs": 1600,
+          "timeMs": 2600,
           "pose": "ponder",
           "curve": [
             0.42,
@@ -736,7 +785,7 @@
         },
         {
           "name": "recognize",
-          "timeMs": 2000,
+          "timeMs": 2900,
           "pose": "ponder",
           "curve": [
             0.42,
@@ -746,8 +795,19 @@
           ]
         },
         {
+          "name": "settle",
+          "timeMs": 3166.6666666666665,
+          "pose": "settle",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
           "name": "neutral_return",
-          "timeMs": 2266.6666666666665,
+          "timeMs": 3366.6666666666665,
           "pose": "neutral",
           "curve": [
             0.42,
@@ -758,7 +818,7 @@
         },
         {
           "name": "neutral_hold",
-          "timeMs": 2300,
+          "timeMs": 3400,
           "pose": "neutral",
           "curve": [
             0.42,
@@ -774,14 +834,14 @@
           "machine": "Action_think__default"
         }
       },
+      "originalState": "think",
       "behavior": {
         "kind": "sustained",
-        "entryEndMs": 400,
-        "cycleStartMs": 400,
-        "cycleEndMs": 1600,
-        "exitStartMs": 2000
-      },
-      "originalState": "think"
+        "entryEndMs": 500,
+        "cycleStartMs": 500,
+        "cycleEndMs": 2600,
+        "exitStartMs": 2900
+      }
     },
     "transform_cloud": {
       "id": "transform_cloud",
@@ -1141,16 +1201,20 @@
     },
     "transform_star": {
       "id": "transform_star",
-      "intent": "Transformación a star: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
-      "durationMs": 1700,
+      "intent": "Estrella completa: ojos arriba, contracción antes de desplegar las cinco puntas, overshoot corporal, hold reconocible y recuperación de la esfera.",
+      "durationMs": 2400,
       "channels": [
         "morph",
         "gazeY",
         "leftOpen",
-        "rightOpen"
+        "rightOpen",
+        "bodyRotation",
+        "bodyY",
+        "bodyScaleX",
+        "bodyScaleY"
       ],
       "source": "transform_star.json",
-      "sourceSha256": "ce31d0f45757322edf9e9a7e9103057649bece5d8f830c9b4098dd33b1462015",
+      "sourceSha256": "7a447e40ef486842c59e6694770718bd97d8e74ede7bc8d5c84da033d6d893e5",
       "targetShape": "star",
       "phases": [
         {
@@ -1158,15 +1222,15 @@
           "timeMs": 0,
           "pose": "neutral",
           "curve": [
-            0.42,
+            0.25,
             0,
-            0.58,
+            0.65,
             1
           ]
         },
         {
-          "name": "notice",
-          "timeMs": 100,
+          "name": "eyes_first",
+          "timeMs": 133.33333333333334,
           "pose": "notice",
           "curve": [
             0.42,
@@ -1176,8 +1240,41 @@
           ]
         },
         {
+          "name": "anticipation",
+          "timeMs": 300,
+          "pose": "anticipation",
+          "curve": [
+            0.25,
+            0,
+            0.45,
+            1
+          ]
+        },
+        {
+          "name": "unfold",
+          "timeMs": 466.6666666666667,
+          "pose": "unfold",
+          "curve": [
+            0.25,
+            0,
+            0.65,
+            1
+          ]
+        },
+        {
           "name": "arrive",
-          "timeMs": 450,
+          "timeMs": 666.6666666666666,
+          "pose": "arrive",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hold_start",
+          "timeMs": 900,
           "pose": "shape",
           "curve": [
             0.42,
@@ -1188,7 +1285,7 @@
         },
         {
           "name": "recognize",
-          "timeMs": 1200,
+          "timeMs": 1666.6666666666667,
           "pose": "shape",
           "curve": [
             0.42,
@@ -1198,8 +1295,30 @@
           ]
         },
         {
+          "name": "fold",
+          "timeMs": 1950,
+          "pose": "fold",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "settle",
+          "timeMs": 2183.3333333333335,
+          "pose": "settle",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
           "name": "neutral_return",
-          "timeMs": 1666.6666666666667,
+          "timeMs": 2366.6666666666665,
           "pose": "neutral",
           "curve": [
             0.42,
@@ -1210,7 +1329,7 @@
         },
         {
           "name": "neutral_hold",
-          "timeMs": 1700,
+          "timeMs": 2400,
           "pose": "neutral",
           "curve": [
             0.42,
@@ -1319,15 +1438,18 @@
     },
     "yes": {
       "id": "yes",
-      "intent": "Afirmación legible: ojos bajan antes de dos asentimientos verticales, pausa y neutral.",
-      "durationMs": 1000,
+      "intent": "Sí decidido: mirada anticipa hacia abajo, dos asentimientos amplios con squash/stretch, confirmación sostenida y settle.",
+      "durationMs": 1400,
       "channels": [
         "gazeY",
+        "leftOpen",
+        "rightOpen",
         "bodyY",
+        "bodyScaleX",
         "bodyScaleY"
       ],
       "source": "yes.json",
-      "sourceSha256": "14e7b5fbc1fd0821694040d4ac190a8f737b57c56cbcb312eeb7c81e604ee89b",
+      "sourceSha256": "19b4aef01f344b7e4420bfb9f9e0812003e461d4e0facafef20f18a92a1ea72b",
       "targetShape": null,
       "phases": [
         {
@@ -1335,14 +1457,14 @@
           "timeMs": 0,
           "pose": "neutral",
           "curve": [
-            0.42,
+            0.25,
             0,
-            0.58,
+            0.65,
             1
           ]
         },
         {
-          "name": "notice",
+          "name": "eyes_first",
           "timeMs": 100,
           "pose": "notice",
           "curve": [
@@ -1353,31 +1475,53 @@
           ]
         },
         {
+          "name": "anticipation",
+          "timeMs": 250,
+          "pose": "anticipation",
+          "curve": [
+            0.25,
+            0,
+            0.45,
+            1
+          ]
+        },
+        {
           "name": "nod_one",
-          "timeMs": 266.6666666666667,
+          "timeMs": 400,
           "pose": "nod",
           "curve": [
             0.42,
             0,
             0.58,
+            1
+          ]
+        },
+        {
+          "name": "nod_hold",
+          "timeMs": 450,
+          "pose": "nod",
+          "curve": [
+            0.25,
+            0,
+            0.65,
             1
           ]
         },
         {
           "name": "rise_one",
-          "timeMs": 400,
+          "timeMs": 633.3333333333334,
           "pose": "rise",
           "curve": [
-            0.42,
+            0.25,
             0,
-            0.58,
+            0.45,
             1
           ]
         },
         {
           "name": "nod_two",
-          "timeMs": 550,
-          "pose": "nod",
+          "timeMs": 783.3333333333334,
+          "pose": "confirm",
           "curve": [
             0.42,
             0,
@@ -1387,8 +1531,8 @@
         },
         {
           "name": "hold",
-          "timeMs": 700,
-          "pose": "nod",
+          "timeMs": 983.3333333333334,
+          "pose": "confirm",
           "curve": [
             0.42,
             0,
@@ -1398,8 +1542,8 @@
         },
         {
           "name": "settle",
-          "timeMs": 850,
-          "pose": "rise",
+          "timeMs": 1183.3333333333333,
+          "pose": "settle",
           "curve": [
             0.42,
             0,
@@ -1409,7 +1553,7 @@
         },
         {
           "name": "neutral_return",
-          "timeMs": 966.6666666666666,
+          "timeMs": 1366.6666666666667,
           "pose": "neutral",
           "curve": [
             0.42,
@@ -1420,7 +1564,7 @@
         },
         {
           "name": "neutral_hold",
-          "timeMs": 1000,
+          "timeMs": 1400,
           "pose": "neutral",
           "curve": [
             0.42,
@@ -1445,17 +1589,21 @@
     "takeoverMs": 150,
     "ambient": {
       "seed": 731,
-      "enabled": false,
+      "enabled": true,
       "breath": {
         "durationMs": 2800,
         "pauseMs": [
-          5000,
-          9000
+          0,
+          0
         ],
         "channels": [
           "bodyScaleX",
           "bodyScaleY",
-          "bodyY"
+          "bodyY",
+          "gazeX",
+          "gazeY",
+          "leftOpen",
+          "rightOpen"
         ]
       },
       "blink": {
@@ -1468,6 +1616,10 @@
           "blink"
         ]
       }
+    },
+    "bump": {
+      "durationMs": 250,
+      "peakScale": 1.08
     }
   },
   "envelope": {
@@ -1479,11 +1631,20 @@
     "breath": {
       "bodyScaleX": "ambient_breath__bodyScaleX",
       "bodyScaleY": "ambient_breath__bodyScaleY",
-      "bodyY": "ambient_breath__bodyY"
+      "bodyY": "ambient_breath__bodyY",
+      "gazeX": "ambient_breath__gazeX",
+      "gazeY": "ambient_breath__gazeY",
+      "leftOpen": "ambient_breath__leftOpen",
+      "rightOpen": "ambient_breath__rightOpen"
     },
     "blink": {
       "blink": "ambient_blink__blink"
     }
   },
-  "generation": "9158312fca163a88ecf5"
+  "transitionBump": {
+    "clip": "transition_bump",
+    "node": "BumpTransform",
+    "durationMs": 250
+  },
+  "generation": "710ce87a06900ec688a4"
 }

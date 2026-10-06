@@ -1,157 +1,34 @@
 {
   "schema": 1,
   "id": "think",
-  "intent": "Pensamiento sostenido: ojos arriba primero; inclinación pequeña, quietud reconocible y ciclo lento.",
-  "durationMs": 2300,
-  "channels": [
-    "gazeX",
-    "gazeY",
-    "leftOpen",
-    "rightOpen",
-    "bodyRotation",
-    "bodyScaleY"
-  ],
+  "intent": "Pensamiento atento: mirada arriba antes de inclinarse; considera a la derecha, busca a la izquierda, contrasta y vuelve al mismo punto sin salto.",
+  "durationMs": 3400,
+  "channels": ["gazeX", "gazeY", "leftOpen", "rightOpen", "leftTilt", "rightTilt", "bodyRotation", "bodyX", "bodyY", "bodyScaleX", "bodyScaleY"],
   "poses": {
-    "neutral": {
-      "gazeX": 0,
-      "gazeY": 0,
-      "leftOpen": 1,
-      "rightOpen": 1,
-      "bodyRotation": 0,
-      "bodyScaleY": 1
-    },
-    "notice": {
-      "gazeX": 4,
-      "gazeY": -4,
-      "leftOpen": 0.8,
-      "rightOpen": 1.12,
-      "bodyRotation": 0,
-      "bodyScaleY": 1
-    },
-    "ponder": {
-      "gazeX": 4,
-      "gazeY": -4,
-      "leftOpen": 0.8,
-      "rightOpen": 1.12,
-      "bodyRotation": 0.07,
-      "bodyScaleY": 1.025
-    },
-    "reflect": {
-      "gazeX": 3,
-      "gazeY": -4,
-      "leftOpen": 0.9,
-      "rightOpen": 1.05,
-      "bodyRotation": 0.05,
-      "bodyScaleY": 1.02
-    }
+    "neutral": {"gazeX": 0, "gazeY": 0, "leftOpen": 1, "rightOpen": 1, "leftTilt": 0, "rightTilt": 0, "bodyRotation": 0, "bodyX": 0, "bodyY": 0, "bodyScaleX": 1, "bodyScaleY": 1},
+    "notice": {"gazeX": 6, "gazeY": -6, "leftOpen": 0.65, "rightOpen": 1.3, "leftTilt": 0.25, "rightTilt": -0.15, "bodyRotation": 0, "bodyX": 0, "bodyY": 0, "bodyScaleX": 1, "bodyScaleY": 1},
+    "ponder": {"gazeX": 6, "gazeY": -5, "leftOpen": 0.55, "rightOpen": 1.3, "leftTilt": 0.35, "rightTilt": -0.2, "bodyRotation": 0.18, "bodyX": 6, "bodyY": -4, "bodyScaleX": 0.86, "bodyScaleY": 1.12},
+    "search_eyes": {"gazeX": -7, "gazeY": -4, "leftOpen": 1.25, "rightOpen": 0.6, "leftTilt": -0.15, "rightTilt": 0.3, "bodyRotation": 0.18, "bodyX": 6, "bodyY": -4, "bodyScaleX": 0.86, "bodyScaleY": 1.12},
+    "search": {"gazeX": -7, "gazeY": -4, "leftOpen": 1.25, "rightOpen": 0.6, "leftTilt": -0.2, "rightTilt": 0.35, "bodyRotation": -0.18, "bodyX": -6, "bodyY": 3, "bodyScaleX": 1.12, "bodyScaleY": 0.88},
+    "reflect": {"gazeX": 1, "gazeY": -6, "leftOpen": 0.78, "rightOpen": 0.78, "leftTilt": 0.1, "rightTilt": -0.1, "bodyRotation": -0.04, "bodyX": -2, "bodyY": -5, "bodyScaleX": 0.94, "bodyScaleY": 1.08},
+    "settle": {"gazeX": 0, "gazeY": -1, "leftOpen": 1.1, "rightOpen": 1.1, "leftTilt": 0, "rightTilt": 0, "bodyRotation": 0.03, "bodyX": 1, "bodyY": 1, "bodyScaleX": 1.02, "bodyScaleY": 0.98}
   },
   "phases": [
-    {
-      "name": "entry",
-      "timeMs": 0,
-      "pose": "neutral",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "notice",
-      "timeMs": 100,
-      "pose": "notice",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "cycle_start",
-      "timeMs": 400,
-      "pose": "ponder",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "quiet_hold",
-      "timeMs": 900,
-      "pose": "ponder",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "reflect",
-      "timeMs": 1200,
-      "pose": "reflect",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "cycle_end",
-      "timeMs": 1600,
-      "pose": "ponder",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "recognize",
-      "timeMs": 2000,
-      "pose": "ponder",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "neutral_return",
-      "timeMs": 2266.6666666666665,
-      "pose": "neutral",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    },
-    {
-      "name": "neutral_hold",
-      "timeMs": 2300,
-      "pose": "neutral",
-      "curve": [
-        0.42,
-        0,
-        0.58,
-        1
-      ]
-    }
+    {"name": "entry", "timeMs": 0, "pose": "neutral", "curve": [0.25, 0, 0.65, 1]},
+    {"name": "eyes_first", "timeMs": 133.33333333333334, "pose": "notice", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "cycle_start", "timeMs": 500, "pose": "ponder", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "quiet_hold", "timeMs": 850, "pose": "ponder", "curve": [0.25, 0, 0.65, 1]},
+    {"name": "search_eyes", "timeMs": 1000, "pose": "search_eyes", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "search", "timeMs": 1300, "pose": "search", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "search_hold", "timeMs": 1600, "pose": "search", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "reflect", "timeMs": 1950, "pose": "reflect", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "reflect_hold", "timeMs": 2200, "pose": "reflect", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "cycle_end", "timeMs": 2600, "pose": "ponder", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "recognize", "timeMs": 2900, "pose": "ponder", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "settle", "timeMs": 3166.6666666666665, "pose": "settle", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "neutral_return", "timeMs": 3366.6666666666665, "pose": "neutral", "curve": [0.42, 0, 0.58, 1]},
+    {"name": "neutral_hold", "timeMs": 3400, "pose": "neutral", "curve": [0.42, 0, 0.58, 1]}
   ],
-  "behavior": {
-    "kind": "sustained",
-    "entryEndMs": 400,
-    "cycleStartMs": 400,
-    "cycleEndMs": 1600,
-    "exitStartMs": 2000
-  },
+  "behavior": {"kind": "sustained", "entryEndMs": 500, "cycleStartMs": 500, "cycleEndMs": 2600, "exitStartMs": 2900},
   "originalState": "think"
 }
