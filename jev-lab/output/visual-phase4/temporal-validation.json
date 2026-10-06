@@ -1,0 +1,623 @@
+{
+  "status": "PASS",
+  "sequences": [
+    {
+      "action": "yes",
+      "neutralRasterMaximumChannelDelta": 0,
+      "neutralRgbaExact": true,
+      "totalMs": 2050,
+      "cadenceMs": 66.66666666666667,
+      "frames": [
+        {
+          "timeMs": 0.0,
+          "render": "yes-timeline-000.png"
+        },
+        {
+          "timeMs": 66.66666666666667,
+          "render": "yes-timeline-004.png"
+        },
+        {
+          "timeMs": 133.33333333333334,
+          "render": "yes-timeline-008.png"
+        },
+        {
+          "timeMs": 200.0,
+          "render": "yes-timeline-012.png"
+        },
+        {
+          "timeMs": 266.6666666666667,
+          "render": "yes-timeline-016.png"
+        },
+        {
+          "timeMs": 333.33333333333337,
+          "render": "yes-timeline-020.png"
+        },
+        {
+          "timeMs": 400.0,
+          "render": "yes-timeline-024.png"
+        },
+        {
+          "timeMs": 466.6666666666667,
+          "render": "yes-timeline-028.png"
+        },
+        {
+          "timeMs": 533.3333333333334,
+          "render": "yes-timeline-032.png"
+        },
+        {
+          "timeMs": 600.0,
+          "render": "yes-timeline-036.png"
+        },
+        {
+          "timeMs": 666.6666666666667,
+          "render": "yes-timeline-040.png"
+        },
+        {
+          "timeMs": 733.3333333333334,
+          "render": "yes-timeline-044.png"
+        },
+        {
+          "timeMs": 800.0,
+          "render": "yes-timeline-048.png"
+        },
+        {
+          "timeMs": 866.6666666666667,
+          "render": "yes-timeline-052.png"
+        },
+        {
+          "timeMs": 933.3333333333334,
+          "render": "yes-timeline-056.png"
+        },
+        {
+          "timeMs": 1000.0,
+          "render": "yes-timeline-060.png"
+        },
+        {
+          "timeMs": 1066.6666666666667,
+          "render": "yes-timeline-064.png"
+        },
+        {
+          "timeMs": 1133.3333333333335,
+          "render": "yes-timeline-068.png"
+        },
+        {
+          "timeMs": 1200.0,
+          "render": "yes-timeline-072.png"
+        },
+        {
+          "timeMs": 1266.6666666666667,
+          "render": "yes-timeline-076.png"
+        },
+        {
+          "timeMs": 1333.3333333333335,
+          "render": "yes-timeline-080.png"
+        },
+        {
+          "timeMs": 1400.0,
+          "render": "yes-timeline-084.png"
+        },
+        {
+          "timeMs": 1466.6666666666667,
+          "render": "yes-timeline-088.png"
+        },
+        {
+          "timeMs": 1533.3333333333335,
+          "render": "yes-timeline-092.png"
+        },
+        {
+          "timeMs": 1600.0,
+          "render": "yes-timeline-096.png"
+        },
+        {
+          "timeMs": 1666.6666666666667,
+          "render": "yes-timeline-100.png"
+        },
+        {
+          "timeMs": 1733.3333333333335,
+          "render": "yes-timeline-104.png"
+        },
+        {
+          "timeMs": 1800.0,
+          "render": "yes-timeline-108.png"
+        },
+        {
+          "timeMs": 1866.6666666666667,
+          "render": "yes-timeline-112.png"
+        },
+        {
+          "timeMs": 1933.3333333333335,
+          "render": "yes-timeline-116.png"
+        },
+        {
+          "timeMs": 2000.0,
+          "render": "yes-timeline-120.png"
+        },
+        {
+          "timeMs": 2050.0,
+          "render": "yes-timeline-123.png"
+        },
+        {
+          "timeMs": 2250.0,
+          "render": "yes-timeline-135.png"
+        }
+      ],
+      "sizes": [
+        140,
+        48
+      ],
+      "scope": "Real Rive combined finite neutral-baseline timeline: entry bump, authored action, neutral settle/recovery, return bump. Replacement/live ambient use WASM controller tests."
+    },
+    {
+      "action": "think",
+      "neutralRasterMaximumChannelDelta": 0,
+      "neutralRgbaExact": true,
+      "totalMs": 4050,
+      "cadenceMs": 66.66666666666667,
+      "frames": [
+        {
+          "timeMs": 0.0,
+          "render": "think-timeline-000.png"
+        },
+        {
+          "timeMs": 66.66666666666667,
+          "render": "think-timeline-004.png"
+        },
+        {
+          "timeMs": 133.33333333333334,
+          "render": "think-timeline-008.png"
+        },
+        {
+          "timeMs": 200.0,
+          "render": "think-timeline-012.png"
+        },
+        {
+          "timeMs": 266.6666666666667,
+          "render": "think-timeline-016.png"
+        },
+        {
+          "timeMs": 333.33333333333337,
+          "render": "think-timeline-020.png"
+        },
+        {
+          "timeMs": 400.0,
+          "render": "think-timeline-024.png"
+        },
+        {
+          "timeMs": 466.6666666666667,
+          "render": "think-timeline-028.png"
+        },
+        {
+          "timeMs": 533.3333333333334,
+          "render": "think-timeline-032.png"
+        },
+        {
+          "timeMs": 600.0,
+          "render": "think-timeline-036.png"
+        },
+        {
+          "timeMs": 666.6666666666667,
+          "render": "think-timeline-040.png"
+        },
+        {
+          "timeMs": 733.3333333333334,
+          "render": "think-timeline-044.png"
+        },
+        {
+          "timeMs": 800.0,
+          "render": "think-timeline-048.png"
+        },
+        {
+          "timeMs": 866.6666666666667,
+          "render": "think-timeline-052.png"
+        },
+        {
+          "timeMs": 933.3333333333334,
+          "render": "think-timeline-056.png"
+        },
+        {
+          "timeMs": 1000.0,
+          "render": "think-timeline-060.png"
+        },
+        {
+          "timeMs": 1066.6666666666667,
+          "render": "think-timeline-064.png"
+        },
+        {
+          "timeMs": 1133.3333333333335,
+          "render": "think-timeline-068.png"
+        },
+        {
+          "timeMs": 1200.0,
+          "render": "think-timeline-072.png"
+        },
+        {
+          "timeMs": 1266.6666666666667,
+          "render": "think-timeline-076.png"
+        },
+        {
+          "timeMs": 1333.3333333333335,
+          "render": "think-timeline-080.png"
+        },
+        {
+          "timeMs": 1400.0,
+          "render": "think-timeline-084.png"
+        },
+        {
+          "timeMs": 1466.6666666666667,
+          "render": "think-timeline-088.png"
+        },
+        {
+          "timeMs": 1533.3333333333335,
+          "render": "think-timeline-092.png"
+        },
+        {
+          "timeMs": 1600.0,
+          "render": "think-timeline-096.png"
+        },
+        {
+          "timeMs": 1666.6666666666667,
+          "render": "think-timeline-100.png"
+        },
+        {
+          "timeMs": 1733.3333333333335,
+          "render": "think-timeline-104.png"
+        },
+        {
+          "timeMs": 1800.0,
+          "render": "think-timeline-108.png"
+        },
+        {
+          "timeMs": 1866.6666666666667,
+          "render": "think-timeline-112.png"
+        },
+        {
+          "timeMs": 1933.3333333333335,
+          "render": "think-timeline-116.png"
+        },
+        {
+          "timeMs": 2000.0,
+          "render": "think-timeline-120.png"
+        },
+        {
+          "timeMs": 2066.666666666667,
+          "render": "think-timeline-124.png"
+        },
+        {
+          "timeMs": 2133.3333333333335,
+          "render": "think-timeline-128.png"
+        },
+        {
+          "timeMs": 2200.0,
+          "render": "think-timeline-132.png"
+        },
+        {
+          "timeMs": 2266.666666666667,
+          "render": "think-timeline-136.png"
+        },
+        {
+          "timeMs": 2333.3333333333335,
+          "render": "think-timeline-140.png"
+        },
+        {
+          "timeMs": 2400.0,
+          "render": "think-timeline-144.png"
+        },
+        {
+          "timeMs": 2466.666666666667,
+          "render": "think-timeline-148.png"
+        },
+        {
+          "timeMs": 2533.3333333333335,
+          "render": "think-timeline-152.png"
+        },
+        {
+          "timeMs": 2600.0,
+          "render": "think-timeline-156.png"
+        },
+        {
+          "timeMs": 2666.666666666667,
+          "render": "think-timeline-160.png"
+        },
+        {
+          "timeMs": 2733.3333333333335,
+          "render": "think-timeline-164.png"
+        },
+        {
+          "timeMs": 2800.0,
+          "render": "think-timeline-168.png"
+        },
+        {
+          "timeMs": 2866.666666666667,
+          "render": "think-timeline-172.png"
+        },
+        {
+          "timeMs": 2933.3333333333335,
+          "render": "think-timeline-176.png"
+        },
+        {
+          "timeMs": 3000.0,
+          "render": "think-timeline-180.png"
+        },
+        {
+          "timeMs": 3066.666666666667,
+          "render": "think-timeline-184.png"
+        },
+        {
+          "timeMs": 3133.3333333333335,
+          "render": "think-timeline-188.png"
+        },
+        {
+          "timeMs": 3200.0,
+          "render": "think-timeline-192.png"
+        },
+        {
+          "timeMs": 3266.666666666667,
+          "render": "think-timeline-196.png"
+        },
+        {
+          "timeMs": 3333.3333333333335,
+          "render": "think-timeline-200.png"
+        },
+        {
+          "timeMs": 3400.0,
+          "render": "think-timeline-204.png"
+        },
+        {
+          "timeMs": 3466.666666666667,
+          "render": "think-timeline-208.png"
+        },
+        {
+          "timeMs": 3533.3333333333335,
+          "render": "think-timeline-212.png"
+        },
+        {
+          "timeMs": 3600.0,
+          "render": "think-timeline-216.png"
+        },
+        {
+          "timeMs": 3666.666666666667,
+          "render": "think-timeline-220.png"
+        },
+        {
+          "timeMs": 3733.3333333333335,
+          "render": "think-timeline-224.png"
+        },
+        {
+          "timeMs": 3800.0,
+          "render": "think-timeline-228.png"
+        },
+        {
+          "timeMs": 3866.666666666667,
+          "render": "think-timeline-232.png"
+        },
+        {
+          "timeMs": 3933.3333333333335,
+          "render": "think-timeline-236.png"
+        },
+        {
+          "timeMs": 4000.0,
+          "render": "think-timeline-240.png"
+        },
+        {
+          "timeMs": 4050.0,
+          "render": "think-timeline-243.png"
+        },
+        {
+          "timeMs": 4250.0,
+          "render": "think-timeline-255.png"
+        }
+      ],
+      "sizes": [
+        140,
+        48
+      ],
+      "scope": "Real Rive combined finite neutral-baseline timeline: entry bump, authored action, neutral settle/recovery, return bump. Replacement/live ambient use WASM controller tests."
+    },
+    {
+      "action": "transform_star",
+      "neutralRasterMaximumChannelDelta": 5,
+      "neutralRgbaExact": false,
+      "totalMs": 3050,
+      "cadenceMs": 66.66666666666667,
+      "frames": [
+        {
+          "timeMs": 0.0,
+          "render": "transform_star-timeline-000.png"
+        },
+        {
+          "timeMs": 66.66666666666667,
+          "render": "transform_star-timeline-004.png"
+        },
+        {
+          "timeMs": 133.33333333333334,
+          "render": "transform_star-timeline-008.png"
+        },
+        {
+          "timeMs": 200.0,
+          "render": "transform_star-timeline-012.png"
+        },
+        {
+          "timeMs": 266.6666666666667,
+          "render": "transform_star-timeline-016.png"
+        },
+        {
+          "timeMs": 333.33333333333337,
+          "render": "transform_star-timeline-020.png"
+        },
+        {
+          "timeMs": 400.0,
+          "render": "transform_star-timeline-024.png"
+        },
+        {
+          "timeMs": 466.6666666666667,
+          "render": "transform_star-timeline-028.png"
+        },
+        {
+          "timeMs": 533.3333333333334,
+          "render": "transform_star-timeline-032.png"
+        },
+        {
+          "timeMs": 600.0,
+          "render": "transform_star-timeline-036.png"
+        },
+        {
+          "timeMs": 666.6666666666667,
+          "render": "transform_star-timeline-040.png"
+        },
+        {
+          "timeMs": 733.3333333333334,
+          "render": "transform_star-timeline-044.png"
+        },
+        {
+          "timeMs": 800.0,
+          "render": "transform_star-timeline-048.png"
+        },
+        {
+          "timeMs": 866.6666666666667,
+          "render": "transform_star-timeline-052.png"
+        },
+        {
+          "timeMs": 933.3333333333334,
+          "render": "transform_star-timeline-056.png"
+        },
+        {
+          "timeMs": 1000.0,
+          "render": "transform_star-timeline-060.png"
+        },
+        {
+          "timeMs": 1066.6666666666667,
+          "render": "transform_star-timeline-064.png"
+        },
+        {
+          "timeMs": 1133.3333333333335,
+          "render": "transform_star-timeline-068.png"
+        },
+        {
+          "timeMs": 1200.0,
+          "render": "transform_star-timeline-072.png"
+        },
+        {
+          "timeMs": 1266.6666666666667,
+          "render": "transform_star-timeline-076.png"
+        },
+        {
+          "timeMs": 1333.3333333333335,
+          "render": "transform_star-timeline-080.png"
+        },
+        {
+          "timeMs": 1400.0,
+          "render": "transform_star-timeline-084.png"
+        },
+        {
+          "timeMs": 1466.6666666666667,
+          "render": "transform_star-timeline-088.png"
+        },
+        {
+          "timeMs": 1533.3333333333335,
+          "render": "transform_star-timeline-092.png"
+        },
+        {
+          "timeMs": 1600.0,
+          "render": "transform_star-timeline-096.png"
+        },
+        {
+          "timeMs": 1666.6666666666667,
+          "render": "transform_star-timeline-100.png"
+        },
+        {
+          "timeMs": 1733.3333333333335,
+          "render": "transform_star-timeline-104.png"
+        },
+        {
+          "timeMs": 1800.0,
+          "render": "transform_star-timeline-108.png"
+        },
+        {
+          "timeMs": 1866.6666666666667,
+          "render": "transform_star-timeline-112.png"
+        },
+        {
+          "timeMs": 1933.3333333333335,
+          "render": "transform_star-timeline-116.png"
+        },
+        {
+          "timeMs": 2000.0,
+          "render": "transform_star-timeline-120.png"
+        },
+        {
+          "timeMs": 2066.666666666667,
+          "render": "transform_star-timeline-124.png"
+        },
+        {
+          "timeMs": 2133.3333333333335,
+          "render": "transform_star-timeline-128.png"
+        },
+        {
+          "timeMs": 2200.0,
+          "render": "transform_star-timeline-132.png"
+        },
+        {
+          "timeMs": 2266.666666666667,
+          "render": "transform_star-timeline-136.png"
+        },
+        {
+          "timeMs": 2333.3333333333335,
+          "render": "transform_star-timeline-140.png"
+        },
+        {
+          "timeMs": 2400.0,
+          "render": "transform_star-timeline-144.png"
+        },
+        {
+          "timeMs": 2466.666666666667,
+          "render": "transform_star-timeline-148.png"
+        },
+        {
+          "timeMs": 2533.3333333333335,
+          "render": "transform_star-timeline-152.png"
+        },
+        {
+          "timeMs": 2600.0,
+          "render": "transform_star-timeline-156.png"
+        },
+        {
+          "timeMs": 2666.666666666667,
+          "render": "transform_star-timeline-160.png"
+        },
+        {
+          "timeMs": 2733.3333333333335,
+          "render": "transform_star-timeline-164.png"
+        },
+        {
+          "timeMs": 2800.0,
+          "render": "transform_star-timeline-168.png"
+        },
+        {
+          "timeMs": 2866.666666666667,
+          "render": "transform_star-timeline-172.png"
+        },
+        {
+          "timeMs": 2933.3333333333335,
+          "render": "transform_star-timeline-176.png"
+        },
+        {
+          "timeMs": 3000.0,
+          "render": "transform_star-timeline-180.png"
+        },
+        {
+          "timeMs": 3050.0,
+          "render": "transform_star-timeline-183.png"
+        },
+        {
+          "timeMs": 3250.0,
+          "render": "transform_star-timeline-195.png"
+        }
+      ],
+      "sizes": [
+        140,
+        48
+      ],
+      "scope": "Real Rive combined finite neutral-baseline timeline: entry bump, authored action, neutral settle/recovery, return bump. Replacement/live ambient use WASM controller tests."
+    }
+  ]
+}

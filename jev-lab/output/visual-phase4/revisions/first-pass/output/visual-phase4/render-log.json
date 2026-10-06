@@ -1,0 +1,702 @@
+[
+  {
+    "label": "neutral-initial",
+    "frame": 1,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\neutral",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\neutral-initial.png",
+      "--advance=1",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:17.573] rive  deferred replay: inline\n[18:30:18.017] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/neutral/build/proof.riv (51135 bytes, 442ms, 0 errors, 0 warnings)\n[18:30:18.032] rive  showing JevRigV2 [1/1]\n[18:30:18.034] rive  viewport 360x340 @1x\n[18:30:18.351] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\neutral-initial.png\n"
+  },
+  {
+    "label": "curious_look-default-active",
+    "frame": 34,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\curious_look-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-default-active.png",
+      "--advance=34",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:19.114] rive  deferred replay: inline\n[18:30:19.633] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/curious_look-default/build/proof.riv (51574 bytes, 517ms, 0 errors, 0 warnings)\n[18:30:19.646] rive  showing JevRigV2 [1/1]\n[18:30:19.647] rive  viewport 360x340 @1x\n[18:30:20.087] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-default-active.png\n"
+  },
+  {
+    "label": "curious_look-default-neutral",
+    "frame": 58,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\curious_look-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-default-neutral.png",
+      "--advance=58",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:20.473] rive  deferred replay: inline\n[18:30:21.048] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/curious_look-default/build/proof.riv (51574 bytes, 570ms, 0 errors, 0 warnings)\n[18:30:21.051] rive  showing JevRigV2 [1/1]\n[18:30:21.053] rive  viewport 360x340 @1x\n[18:30:21.532] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-default-neutral.png\n"
+  },
+  {
+    "label": "curious_look-left-active",
+    "frame": 34,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\curious_look-left",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-left-active.png",
+      "--advance=34",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:22.550] rive  deferred replay: inline\n[18:30:23.141] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/curious_look-left/build/proof.riv (51568 bytes, 588ms, 0 errors, 0 warnings)\n[18:30:23.146] rive  showing JevRigV2 [1/1]\n[18:30:23.146] rive  viewport 360x340 @1x\n[18:30:23.475] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-left-active.png\n"
+  },
+  {
+    "label": "curious_look-left-neutral",
+    "frame": 58,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\curious_look-left",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-left-neutral.png",
+      "--advance=58",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:23.772] rive  deferred replay: inline\n[18:30:24.253] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/curious_look-left/build/proof.riv (51568 bytes, 480ms, 0 errors, 0 warnings)\n[18:30:24.254] rive  showing JevRigV2 [1/1]\n[18:30:24.255] rive  viewport 360x340 @1x\n[18:30:24.590] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\curious_look-left-neutral.png\n"
+  },
+  {
+    "label": "happy_bounce-default-active",
+    "frame": 22,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\happy_bounce-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-default-active.png",
+      "--advance=22",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:25.387] rive  deferred replay: inline\n[18:30:25.992] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/happy_bounce-default/build/proof.riv (52937 bytes, 604ms, 0 errors, 0 warnings)\n[18:30:25.996] rive  showing JevRigV2 [1/1]\n[18:30:25.996] rive  viewport 360x340 @1x\n[18:30:26.307] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-default-active.png\n"
+  },
+  {
+    "label": "happy_bounce-default-neutral",
+    "frame": 55,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\happy_bounce-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-default-neutral.png",
+      "--advance=55",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:26.647] rive  deferred replay: inline\n[18:30:27.182] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/happy_bounce-default/build/proof.riv (52937 bytes, 534ms, 0 errors, 0 warnings)\n[18:30:27.183] rive  showing JevRigV2 [1/1]\n[18:30:27.183] rive  viewport 360x340 @1x\n[18:30:27.482] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-default-neutral.png\n"
+  },
+  {
+    "label": "happy_bounce-gentle-active",
+    "frame": 22,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\happy_bounce-gentle",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-gentle-active.png",
+      "--advance=22",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:28.174] rive  deferred replay: inline\n[18:30:28.756] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/happy_bounce-gentle/build/proof.riv (52935 bytes, 581ms, 0 errors, 0 warnings)\n[18:30:28.759] rive  showing JevRigV2 [1/1]\n[18:30:28.759] rive  viewport 360x340 @1x\n[18:30:29.172] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-gentle-active.png\n"
+  },
+  {
+    "label": "happy_bounce-gentle-neutral",
+    "frame": 55,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\happy_bounce-gentle",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-gentle-neutral.png",
+      "--advance=55",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:29.468] rive  deferred replay: inline\n[18:30:30.024] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/happy_bounce-gentle/build/proof.riv (52935 bytes, 555ms, 0 errors, 0 warnings)\n[18:30:30.025] rive  showing JevRigV2 [1/1]\n[18:30:30.026] rive  viewport 360x340 @1x\n[18:30:30.437] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\happy_bounce-gentle-neutral.png\n"
+  },
+  {
+    "label": "hello-default-active",
+    "frame": 25,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\hello-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\hello-default-active.png",
+      "--advance=25",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:31.341] rive  deferred replay: inline\n[18:30:31.934] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/hello-default/build/proof.riv (52449 bytes, 591ms, 0 errors, 0 warnings)\n[18:30:31.937] rive  showing JevRigV2 [1/1]\n[18:30:31.937] rive  viewport 360x340 @1x\n[18:30:32.248] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\hello-default-active.png\n"
+  },
+  {
+    "label": "hello-default-neutral",
+    "frame": 82,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\hello-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\hello-default-neutral.png",
+      "--advance=82",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:32.595] rive  deferred replay: inline\n[18:30:33.034] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/hello-default/build/proof.riv (52449 bytes, 437ms, 0 errors, 0 warnings)\n[18:30:33.037] rive  showing JevRigV2 [1/1]\n[18:30:33.038] rive  viewport 360x340 @1x\n[18:30:33.341] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\hello-default-neutral.png\n"
+  },
+  {
+    "label": "no-default-active",
+    "frame": 49,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\no-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\no-default-active.png",
+      "--advance=49",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:34.454] rive  deferred replay: inline\n[18:30:35.037] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/no-default/build/proof.riv (51555 bytes, 579ms, 0 errors, 0 warnings)\n[18:30:35.040] rive  showing JevRigV2 [1/1]\n[18:30:35.041] rive  viewport 360x340 @1x\n[18:30:35.371] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\no-default-active.png\n"
+  },
+  {
+    "label": "no-default-neutral",
+    "frame": 76,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\no-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\no-default-neutral.png",
+      "--advance=76",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:35.696] rive  deferred replay: inline\n[18:30:36.113] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/no-default/build/proof.riv (51555 bytes, 416ms, 0 errors, 0 warnings)\n[18:30:36.114] rive  showing JevRigV2 [1/1]\n[18:30:36.114] rive  viewport 360x340 @1x\n[18:30:36.367] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\no-default-neutral.png\n"
+  },
+  {
+    "label": "speech-default-active",
+    "frame": 31,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-default-active.png",
+      "--advance=31",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:37.300] rive  deferred replay: inline\n[18:30:38.027] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-default/build/proof.riv (52583 bytes, 726ms, 0 errors, 0 warnings)\n[18:30:38.031] rive  showing JevRigV2 [1/1]\n[18:30:38.031] rive  viewport 360x340 @1x\n[18:30:38.325] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-default-active.png\n"
+  },
+  {
+    "label": "speech-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:38.643] rive  deferred replay: inline\n[18:30:39.221] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-default/build/proof.riv (52583 bytes, 577ms, 0 errors, 0 warnings)\n[18:30:39.224] rive  showing JevRigV2 [1/1]\n[18:30:39.224] rive  viewport 360x340 @1x\n[18:30:39.625] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-default-neutral.png\n"
+  },
+  {
+    "label": "speech-b-active",
+    "frame": 31,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-b",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-b-active.png",
+      "--advance=31",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:40.590] rive  deferred replay: inline\n[18:30:41.205] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-b/build/proof.riv (52571 bytes, 611ms, 0 errors, 0 warnings)\n[18:30:41.209] rive  showing JevRigV2 [1/1]\n[18:30:41.209] rive  viewport 360x340 @1x\n[18:30:41.496] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-b-active.png\n"
+  },
+  {
+    "label": "speech-b-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-b",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-b-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:41.891] rive  deferred replay: inline\n[18:30:42.363] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-b/build/proof.riv (52571 bytes, 470ms, 0 errors, 0 warnings)\n[18:30:42.369] rive  showing JevRigV2 [1/1]\n[18:30:42.372] rive  viewport 360x340 @1x\n[18:30:42.692] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-b-neutral.png\n"
+  },
+  {
+    "label": "speech-c-active",
+    "frame": 31,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-c",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-c-active.png",
+      "--advance=31",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:43.656] rive  deferred replay: inline\n[18:30:44.142] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-c/build/proof.riv (52571 bytes, 485ms, 0 errors, 0 warnings)\n[18:30:44.147] rive  showing JevRigV2 [1/1]\n[18:30:44.148] rive  viewport 360x340 @1x\n[18:30:44.437] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-c-active.png\n"
+  },
+  {
+    "label": "speech-c-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-c",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-c-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:44.710] rive  deferred replay: inline\n[18:30:45.063] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-c/build/proof.riv (52571 bytes, 353ms, 0 errors, 0 warnings)\n[18:30:45.064] rive  showing JevRigV2 [1/1]\n[18:30:45.065] rive  viewport 360x340 @1x\n[18:30:45.350] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-c-neutral.png\n"
+  },
+  {
+    "label": "speech-bc-active",
+    "frame": 31,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-bc",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-bc-active.png",
+      "--advance=31",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:45.927] rive  deferred replay: inline\n[18:30:46.313] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-bc/build/proof.riv (52613 bytes, 383ms, 0 errors, 0 warnings)\n[18:30:46.315] rive  showing JevRigV2 [1/1]\n[18:30:46.315] rive  viewport 360x340 @1x\n[18:30:46.578] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-bc-active.png\n"
+  },
+  {
+    "label": "speech-bc-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\speech-bc",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-bc-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:46.922] rive  deferred replay: inline\n[18:30:47.346] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/speech-bc/build/proof.riv (52613 bytes, 423ms, 0 errors, 0 warnings)\n[18:30:47.347] rive  showing JevRigV2 [1/1]\n[18:30:47.348] rive  viewport 360x340 @1x\n[18:30:47.687] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\speech-bc-neutral.png\n"
+  },
+  {
+    "label": "think-default-active",
+    "frame": 55,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\think-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\think-default-active.png",
+      "--advance=55",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:48.849] rive  deferred replay: inline\n[18:30:49.412] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/think-default/build/proof.riv (52481 bytes, 561ms, 0 errors, 0 warnings)\n[18:30:49.413] rive  showing JevRigV2 [1/1]\n[18:30:49.413] rive  viewport 360x340 @1x\n[18:30:49.818] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\think-default-active.png\n"
+  },
+  {
+    "label": "think-default-neutral",
+    "frame": 148,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\think-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\think-default-neutral.png",
+      "--advance=148",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:50.280] rive  deferred replay: inline\n[18:30:50.960] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/think-default/build/proof.riv (52481 bytes, 679ms, 0 errors, 0 warnings)\n[18:30:50.961] rive  showing JevRigV2 [1/1]\n[18:30:50.962] rive  viewport 360x340 @1x\n[18:30:51.354] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\think-default-neutral.png\n"
+  },
+  {
+    "label": "transform_cloud-default-active",
+    "frame": 73,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_cloud-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_cloud-default-active.png",
+      "--advance=73",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:52.586] rive  deferred replay: inline\n[18:30:54.883] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_cloud-default/build/proof.riv (194712 bytes, 2294ms, 0 errors, 0 warnings)\n[18:30:54.887] rive  showing JevRigV2 [1/1]\n[18:30:54.893] rive  viewport 360x340 @1x\n[18:30:55.113] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_cloud-default-active.png\n"
+  },
+  {
+    "label": "transform_cloud-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_cloud-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_cloud-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:55.303] rive  deferred replay: inline\n[18:30:56.892] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_cloud-default/build/proof.riv (194712 bytes, 1588ms, 0 errors, 0 warnings)\n[18:30:56.899] rive  showing JevRigV2 [1/1]\n[18:30:56.926] rive  viewport 360x340 @1x\n[18:30:57.183] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_cloud-default-neutral.png\n"
+  },
+  {
+    "label": "transform_flower-default-active",
+    "frame": 73,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_flower-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_flower-default-active.png",
+      "--advance=73",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:30:57.744] rive  deferred replay: inline\n[18:30:59.696] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_flower-default/build/proof.riv (194714 bytes, 1950ms, 0 errors, 0 warnings)\n[18:30:59.717] rive  showing JevRigV2 [1/1]\n[18:30:59.725] rive  viewport 360x340 @1x\n[18:30:59.986] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_flower-default-active.png\n"
+  },
+  {
+    "label": "transform_flower-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_flower-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_flower-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:00.330] rive  deferred replay: inline\n[18:31:02.443] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_flower-default/build/proof.riv (194714 bytes, 2111ms, 0 errors, 0 warnings)\n[18:31:02.456] rive  showing JevRigV2 [1/1]\n[18:31:02.467] rive  viewport 360x340 @1x\n[18:31:02.764] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_flower-default-neutral.png\n"
+  },
+  {
+    "label": "transform_ghost-default-active",
+    "frame": 73,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_ghost-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_ghost-default-active.png",
+      "--advance=73",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:03.580] rive  deferred replay: inline\n[18:31:05.633] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_ghost-default/build/proof.riv (194672 bytes, 2052ms, 0 errors, 0 warnings)\n[18:31:05.638] rive  showing JevRigV2 [1/1]\n[18:31:05.645] rive  viewport 360x340 @1x\n[18:31:05.960] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_ghost-default-active.png\n"
+  },
+  {
+    "label": "transform_ghost-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_ghost-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_ghost-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:06.302] rive  deferred replay: inline\n[18:31:08.834] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_ghost-default/build/proof.riv (194672 bytes, 2528ms, 0 errors, 0 warnings)\n[18:31:08.840] rive  showing JevRigV2 [1/1]\n[18:31:08.852] rive  viewport 360x340 @1x\n[18:31:09.241] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_ghost-default-neutral.png\n"
+  },
+  {
+    "label": "transform_square-default-active",
+    "frame": 73,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_square-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_square-default-active.png",
+      "--advance=73",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:10.836] rive  deferred replay: inline\n[18:31:12.848] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_square-default/build/proof.riv (194674 bytes, 2006ms, 0 errors, 0 warnings)\n[18:31:12.855] rive  showing JevRigV2 [1/1]\n[18:31:12.866] rive  viewport 360x340 @1x\n[18:31:13.078] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_square-default-active.png\n"
+  },
+  {
+    "label": "transform_square-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_square-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_square-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:13.277] rive  deferred replay: inline\n[18:31:14.832] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_square-default/build/proof.riv (194674 bytes, 1553ms, 0 errors, 0 warnings)\n[18:31:14.836] rive  showing JevRigV2 [1/1]\n[18:31:14.845] rive  viewport 360x340 @1x\n[18:31:15.096] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_square-default-neutral.png\n"
+  },
+  {
+    "label": "transform_star-default-active",
+    "frame": 73,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_star-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_star-default-active.png",
+      "--advance=73",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:15.687] rive  deferred replay: inline\n[18:31:17.952] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_star-default/build/proof.riv (194710 bytes, 2264ms, 0 errors, 0 warnings)\n[18:31:17.975] rive  showing JevRigV2 [1/1]\n[18:31:18.007] rive  viewport 360x340 @1x\n[18:31:18.241] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_star-default-active.png\n"
+  },
+  {
+    "label": "transform_star-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_star-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_star-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:18.629] rive  deferred replay: inline\n[18:31:20.672] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_star-default/build/proof.riv (194710 bytes, 2032ms, 0 errors, 0 warnings)\n[18:31:20.676] rive  showing JevRigV2 [1/1]\n[18:31:20.692] rive  viewport 360x340 @1x\n[18:31:20.936] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_star-default-neutral.png\n"
+  },
+  {
+    "label": "transform_triangle-default-active",
+    "frame": 73,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_triangle-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_triangle-default-active.png",
+      "--advance=73",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:21.838] rive  deferred replay: inline\n[18:31:24.341] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_triangle-default/build/proof.riv (194718 bytes, 2502ms, 0 errors, 0 warnings)\n[18:31:24.345] rive  showing JevRigV2 [1/1]\n[18:31:24.357] rive  viewport 360x340 @1x\n[18:31:24.740] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_triangle-default-active.png\n"
+  },
+  {
+    "label": "transform_triangle-default-neutral",
+    "frame": 112,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transform_triangle-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_triangle-default-neutral.png",
+      "--advance=112",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:25.127] rive  deferred replay: inline\n[18:31:27.472] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transform_triangle-default/build/proof.riv (194718 bytes, 2343ms, 0 errors, 0 warnings)\n[18:31:27.478] rive  showing JevRigV2 [1/1]\n[18:31:27.486] rive  viewport 360x340 @1x\n[18:31:27.729] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transform_triangle-default-neutral.png\n"
+  },
+  {
+    "label": "yes-default-active",
+    "frame": 43,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\yes-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\yes-default-active.png",
+      "--advance=43",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:28.761] rive  deferred replay: inline\n[18:31:29.270] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/yes-default/build/proof.riv (51617 bytes, 507ms, 0 errors, 0 warnings)\n[18:31:29.271] rive  showing JevRigV2 [1/1]\n[18:31:29.272] rive  viewport 360x340 @1x\n[18:31:29.585] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\yes-default-active.png\n"
+  },
+  {
+    "label": "yes-default-neutral",
+    "frame": 70,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\yes-default",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\yes-default-neutral.png",
+      "--advance=70",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:29.909] rive  deferred replay: inline\n[18:31:30.339] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/yes-default/build/proof.riv (51617 bytes, 429ms, 0 errors, 0 warnings)\n[18:31:30.342] rive  showing JevRigV2 [1/1]\n[18:31:30.343] rive  viewport 360x340 @1x\n[18:31:30.627] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\yes-default-neutral.png\n"
+  },
+  {
+    "label": "breath-bodyScaleX-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-bodyScaleX",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-bodyScaleX-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:31.806] rive  deferred replay: inline\n[18:31:32.062] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-bodyScaleX/build/proof.riv (13201 bytes, 251ms, 0 errors, 0 warnings)\n[18:31:32.062] rive  showing JevRigV2 [1/1]\n[18:31:32.063] rive  viewport 360x340 @1x\n[18:31:32.471] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-bodyScaleX-active.png\n"
+  },
+  {
+    "label": "breath-bodyScaleY-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-bodyScaleY",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-bodyScaleY-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:33.116] rive  deferred replay: inline\n[18:31:33.215] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-bodyScaleY/build/proof.riv (13201 bytes, 97ms, 0 errors, 0 warnings)\n[18:31:33.216] rive  showing JevRigV2 [1/1]\n[18:31:33.216] rive  viewport 360x340 @1x\n[18:31:33.490] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-bodyScaleY-active.png\n"
+  },
+  {
+    "label": "breath-bodyY-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-bodyY",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-bodyY-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:34.129] rive  deferred replay: inline\n[18:31:34.196] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-bodyY/build/proof.riv (13196 bytes, 65ms, 0 errors, 0 warnings)\n[18:31:34.197] rive  showing JevRigV2 [1/1]\n[18:31:34.197] rive  viewport 360x340 @1x\n[18:31:34.492] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-bodyY-active.png\n"
+  },
+  {
+    "label": "breath-gazeX-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-gazeX",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-gazeX-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:35.181] rive  deferred replay: inline\n[18:31:35.258] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-gazeX/build/proof.riv (13186 bytes, 77ms, 0 errors, 0 warnings)\n[18:31:35.260] rive  showing JevRigV2 [1/1]\n[18:31:35.260] rive  viewport 360x340 @1x\n[18:31:35.474] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-gazeX-active.png\n"
+  },
+  {
+    "label": "breath-gazeY-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-gazeY",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-gazeY-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:36.128] rive  deferred replay: inline\n[18:31:36.207] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-gazeY/build/proof.riv (13186 bytes, 78ms, 0 errors, 0 warnings)\n[18:31:36.208] rive  showing JevRigV2 [1/1]\n[18:31:36.208] rive  viewport 360x340 @1x\n[18:31:36.454] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-gazeY-active.png\n"
+  },
+  {
+    "label": "breath-leftOpen-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-leftOpen",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-leftOpen-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:37.130] rive  deferred replay: inline\n[18:31:37.257] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-leftOpen/build/proof.riv (13199 bytes, 123ms, 0 errors, 0 warnings)\n[18:31:37.257] rive  showing JevRigV2 [1/1]\n[18:31:37.258] rive  viewport 360x340 @1x\n[18:31:37.683] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-leftOpen-active.png\n"
+  },
+  {
+    "label": "breath-rightOpen-active",
+    "frame": 85,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\breath-rightOpen",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-rightOpen-active.png",
+      "--advance=85",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:38.555] rive  deferred replay: inline\n[18:31:38.645] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/breath-rightOpen/build/proof.riv (13200 bytes, 89ms, 0 errors, 0 warnings)\n[18:31:38.646] rive  showing JevRigV2 [1/1]\n[18:31:38.646] rive  viewport 360x340 @1x\n[18:31:39.099] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\breath-rightOpen-active.png\n"
+  },
+  {
+    "label": "blink-blink-active",
+    "frame": 5,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\blink-blink",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\blink-blink-active.png",
+      "--advance=5",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:39.986] rive  deferred replay: inline\n[18:31:40.051] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/blink-blink/build/proof.riv (13227 bytes, 64ms, 0 errors, 0 warnings)\n[18:31:40.051] rive  showing JevRigV2 [1/1]\n[18:31:40.051] rive  viewport 360x340 @1x\n[18:31:40.341] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\blink-blink-active.png\n"
+  },
+  {
+    "label": "transition-bump-entry",
+    "frame": 5,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transition-bump",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transition-bump-entry.png",
+      "--advance=5",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:41.383] rive  deferred replay: inline\n[18:31:41.475] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transition-bump/build/proof.riv (13206 bytes, 90ms, 0 errors, 0 warnings)\n[18:31:41.475] rive  showing JevRigV2 [1/1]\n[18:31:41.475] rive  viewport 360x340 @1x\n[18:31:41.853] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transition-bump-entry.png\n"
+  },
+  {
+    "label": "transition-bump-return",
+    "frame": 19,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\transition-bump",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transition-bump-return.png",
+      "--advance=19",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:42.242] rive  deferred replay: inline\n[18:31:42.321] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/transition-bump/build/proof.riv (13206 bytes, 78ms, 0 errors, 0 warnings)\n[18:31:42.322] rive  showing JevRigV2 [1/1]\n[18:31:42.322] rive  viewport 360x340 @1x\n[18:31:42.665] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\transition-bump-return.png\n"
+  },
+  {
+    "label": "interruption-before",
+    "frame": 20,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\interruption",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\interruption-before.png",
+      "--advance=20",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:43.456] rive  deferred replay: inline\n[18:31:43.981] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/interruption/build/proof.riv (52454 bytes, 524ms, 0 errors, 0 warnings)\n[18:31:43.985] rive  showing JevRigV2 [1/1]\n[18:31:43.985] rive  viewport 360x340 @1x\n[18:31:44.273] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\interruption-before.png\n"
+  },
+  {
+    "label": "interruption-native-machine-blend",
+    "frame": 29,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\interruption",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\interruption-native-machine-blend.png",
+      "--advance=29",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:44.624] rive  deferred replay: inline\n[18:31:45.174] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/interruption/build/proof.riv (52454 bytes, 548ms, 0 errors, 0 warnings)\n[18:31:45.177] rive  showing JevRigV2 [1/1]\n[18:31:45.183] rive  viewport 360x340 @1x\n[18:31:45.570] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\interruption-native-machine-blend.png\n"
+  },
+  {
+    "label": "interruption-neutral",
+    "frame": 45,
+    "command": [
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\tools\\rive.exe",
+      "C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\harness\\interruption",
+      "--screenshot=C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\interruption-neutral.png",
+      "--advance=45",
+      "--fit=contain"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "[18:31:45.843] rive  deferred replay: inline\n[18:31:46.322] rive  built C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/harness/interruption/build/proof.riv (52454 bytes, 476ms, 0 errors, 0 warnings)\n[18:31:46.325] rive  showing JevRigV2 [1/1]\n[18:31:46.330] rive  viewport 360x340 @1x\n[18:31:46.669] rive  wrote C:\\Users\\abdai\\Desktop\\Tracker\\jevBot\\jev-lab\\output\\visual-phase4\\renders\\interruption-neutral.png\n"
+  }
+]

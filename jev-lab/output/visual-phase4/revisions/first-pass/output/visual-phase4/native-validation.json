@@ -1,0 +1,343 @@
+{
+  "status": "PASS",
+  "runtime": "2.42.2 actual installed WASM",
+  "generation": "9afee4d9fe0cfef668f8",
+  "tests": [
+    "native envelope is Rive cubic, finite and flat at ends",
+    "default idle continuously breathes, opens eyes slightly and drifts gaze",
+    "Rive bump scales the whole character entering and returning to idle",
+    "dispose resets an in-flight bump before releasing its rig",
+    "bump composition keeps accelerated prototype actions inside rig scale limits",
+    "all discovered native action variants animate finite nodes and finish neutral",
+    "same-time command replacements preserve exact native pose and latest pending only",
+    "replacement during a live bump preserves the current pose and bumps the successor",
+    "1000 rapid orders retain one frozen outgoing owner and one latest pending order",
+    "sustained duration is active wall time independent speed plus bounded recovery",
+    "native loop endpoints and sampled velocities match every sustained variant",
+    "mid-entry and mid-cycle exits freeze native sampled pose without command jump",
+    "overshoot traverses finite durations, recovery and sequence with no time loss",
+    "invalid orders never mutate native pose, handles or schedule",
+    "continuous ambient stays active while preserving deterministic scheduling and stop clears it",
+    "native ambient composes eye/body channels over a saved numeric baseline",
+    "seeded ambient sparse and dense clocks match exact schedule occupancy and native final pose"
+  ],
+  "measurements": {
+    "envelope": [
+      1,
+      0.9999157786369324,
+      0.5,
+      0.00008428096771240234,
+      0
+    ],
+    "continuousIdle": {
+      "peak": {
+        "scaleX": 1.034999966621399,
+        "scaleY": 1.0449999570846558,
+        "gazeX": -1,
+        "leftOpen": 1.059999942779541,
+        "rightOpen": 1.059999942779541
+      },
+      "breathCoverage": 1,
+      "blinkEvents": 6
+    },
+    "bump": {
+      "entryPeakScale": 1.034892201423645,
+      "returnPeakScale": 1.034892201423645,
+      "returnCompletesWithRecovery": true
+    },
+    "acceleratedComposition": [
+      {
+        "id": "happy_bounce",
+        "maxX": 1.0727753027574636,
+        "maxY": 1.056206340431629
+      },
+      {
+        "id": "curious_look",
+        "maxX": 1.0348169803619385,
+        "maxY": 1.1009202027160825
+      },
+      {
+        "id": "hello",
+        "maxX": 1.0623141776526097,
+        "maxY": 1.054907144160211
+      },
+      {
+        "id": "think",
+        "maxX": 1.034993290901184,
+        "maxY": 1.0896781850434252
+      },
+      {
+        "id": "speech",
+        "maxX": 1.034993290901184,
+        "maxY": 1.0880711111364292
+      }
+    ],
+    "nativeVariants": {
+      "count": 18,
+      "cases": [
+        "curious_look:default",
+        "curious_look:left",
+        "happy_bounce:default",
+        "happy_bounce:gentle",
+        "hello:default",
+        "no:default",
+        "speech:default",
+        "speech:b",
+        "speech:c",
+        "speech:bc",
+        "think:default",
+        "transform_cloud:default",
+        "transform_flower:default",
+        "transform_ghost:default",
+        "transform_square:default",
+        "transform_star:default",
+        "transform_triangle:default",
+        "yes:default"
+      ],
+      "maxPerFrameMixedUnitNodeDisplacement": 3.7551422119140625
+    },
+    "sameTimeReplacementMaxJump": 0,
+    "liveBumpReplacement": {
+      "successorBumpScale": 1.034892201423645,
+      "noCommandJump": true
+    },
+    "duration": [
+      {
+        "speed": 0.1,
+        "activeMs": 715,
+        "totalMs": 865
+      },
+      {
+        "speed": 1,
+        "activeMs": 715,
+        "totalMs": 865
+      },
+      {
+        "speed": 4,
+        "activeMs": 715,
+        "totalMs": 865
+      }
+    ],
+    "loopSeams": [
+      {
+        "action": "speech",
+        "variant": "default",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.00018310546875,
+        "exitVelocityPerMs": 0.00018310546875
+      },
+      {
+        "action": "speech",
+        "variant": "b",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.00018310546875,
+        "exitVelocityPerMs": 0.00018310546875
+      },
+      {
+        "action": "speech",
+        "variant": "c",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.000244140625,
+        "exitVelocityPerMs": 0.000244140625
+      },
+      {
+        "action": "speech",
+        "variant": "bc",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.0001373291015625,
+        "exitVelocityPerMs": 0.0001373291015625
+      },
+      {
+        "action": "think",
+        "variant": "default",
+        "seamMaxJump": 0,
+        "entryVelocityPerMs": 0.00018930435180664062,
+        "exitVelocityPerMs": 0.000011920928955078125
+      }
+    ],
+    "exits": [
+      {
+        "action": "think",
+        "timeMs": 85,
+        "commandJump": 0
+      },
+      {
+        "action": "think",
+        "timeMs": 1100,
+        "commandJump": 0
+      },
+      {
+        "action": "speech",
+        "timeMs": 650,
+        "commandJump": 0
+      }
+    ],
+    "ambient": {
+      "schedule": [
+        {
+          "kind": "breath",
+          "startMs": 0,
+          "endMs": 2800
+        },
+        {
+          "kind": "breath",
+          "startMs": 2800,
+          "endMs": 5600
+        },
+        {
+          "kind": "breath",
+          "startMs": 5600,
+          "endMs": 8400
+        },
+        {
+          "kind": "breath",
+          "startMs": 8400,
+          "endMs": 11200
+        },
+        {
+          "kind": "blink",
+          "startMs": 9081.134699983522,
+          "endMs": 9231.134699983522
+        },
+        {
+          "kind": "breath",
+          "startMs": 11200,
+          "endMs": 14000
+        },
+        {
+          "kind": "breath",
+          "startMs": 14000,
+          "endMs": 16800
+        },
+        {
+          "kind": "breath",
+          "startMs": 16800,
+          "endMs": 19600
+        },
+        {
+          "kind": "blink",
+          "startMs": 17253.710379218683,
+          "endMs": 17403.710379218683
+        },
+        {
+          "kind": "breath",
+          "startMs": 19600,
+          "endMs": 22400
+        },
+        {
+          "kind": "breath",
+          "startMs": 22400,
+          "endMs": 25200
+        },
+        {
+          "kind": "breath",
+          "startMs": 25200,
+          "endMs": 28000
+        },
+        {
+          "kind": "blink",
+          "startMs": 25694.931414863095,
+          "endMs": 25844.931414863095
+        },
+        {
+          "kind": "breath",
+          "startMs": 28000,
+          "endMs": 30800
+        },
+        {
+          "kind": "breath",
+          "startMs": 30800,
+          "endMs": 33600
+        },
+        {
+          "kind": "breath",
+          "startMs": 33600,
+          "endMs": 36400
+        },
+        {
+          "kind": "breath",
+          "startMs": 36400,
+          "endMs": 39200
+        },
+        {
+          "kind": "blink",
+          "startMs": 37239.794790325686,
+          "endMs": 37389.794790325686
+        },
+        {
+          "kind": "breath",
+          "startMs": 39200,
+          "endMs": 42000
+        },
+        {
+          "kind": "breath",
+          "startMs": 42000,
+          "endMs": 44800
+        },
+        {
+          "kind": "breath",
+          "startMs": 44800,
+          "endMs": 47600
+        },
+        {
+          "kind": "breath",
+          "startMs": 47600,
+          "endMs": 50400
+        },
+        {
+          "kind": "blink",
+          "startMs": 48559.52808577567,
+          "endMs": 48709.52808577567
+        },
+        {
+          "kind": "breath",
+          "startMs": 50400,
+          "endMs": 53200
+        },
+        {
+          "kind": "breath",
+          "startMs": 53200,
+          "endMs": 56000
+        },
+        {
+          "kind": "breath",
+          "startMs": 56000,
+          "endMs": 58800
+        },
+        {
+          "kind": "breath",
+          "startMs": 58800,
+          "endMs": 61600
+        },
+        {
+          "kind": "blink",
+          "startMs": 59520.58887062594,
+          "endMs": 59670.58887062594
+        }
+      ],
+      "occupancy": {
+        "breath": 61600,
+        "blink": 900
+      },
+      "breathCoverage": 1,
+      "maxNodeDifference": 1
+    },
+    "ambientBaseline": {
+      "breathPeakBodyY": 173.55,
+      "breathPeakScaleY": 1.075,
+      "releaseMaxPerMsMixedUnitNodeDisplacement": 0.08977150917053223
+    },
+    "cadenceIndependentAmbient": {
+      "horizonMs": 600000,
+      "denseTickMs": 100,
+      "sparseTicks": 1,
+      "exact": true,
+      "occupancy": {
+        "breath": 602000,
+        "blink": 10050
+      },
+      "retainedScheduleEvents": 32
+    }
+  },
+  "scope": "Finite numeric node samples; not analytical continuity or subjective superiority proof"
+}

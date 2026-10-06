@@ -1,47 +1,51 @@
-# Fase 4 — validación de implementación
+# Fase 1 de la revisión expresiva — esperando aceptación visual
 
-**PASS técnico:** 13 acciones, 18 variantes, seis transformaciones y reposo discreto con curvas Rive reales. CLI 1.3.0 y runtime/WASM 2.42.2 permanecen locales y fijados. Generación `9158312fca163a88ecf5`, binario 1.213.891 bytes. Aceptación visual y superioridad subjetiva quedan a cargo del desarrollador; fase 5 sigue pendiente.
+**Implementación y verificación técnica completas; aprobación visual pendiente.** Tres estados modelo: `yes`, `think`, `transform_star`, más idle continuo y bump separado. Generación actual **`710ce87a06900ec688a4`**. El plan sigue en fase 4 histórica; no se avanzó a fase 2 de la revisión ni a fase 5 histórica.
 
-## Comandos y resultados
+## Resultados reproducibles
 
-| Comando desde raíz | Resultado | Evidencia |
-|---|---|---|
-| `python jev-lab/validators/personality_phase4.py --prepare` | verify/once/inspect-summary PASS, sin problems/errors/warnings | `compile-validation.json`, `cli-verify.log`, `cli-once.log`, `cli-inspect.log` |
-| `python jev-lab/validators/personality_phase4.py --check` | PASS, 13 acciones; igualdad determinista scene/catalog | `generated-check.log` |
-| `python jev-lab/validators/personality_phase4.py --render` | 44 PNG reales, 18 variantes, seis formas; 19 neutrales RGBA exactos | `render-validation.json`, `render-log.json`, `contact-sheet.png`, `renders/` |
-| `python -m unittest discover -s jev-lab/tests` | **67 PASS**, 0 errores/fallos | `python-tests.log` |
-| `node --test jev-lab/tests/*.mjs` | **56 PASS**, 0 fallos/cancelled/skipped | `node-tests.log` |
-| `node --test jev-lab/tests/test_personality_native_phase4.mjs` | **12 PASS**, WASM real | `native-tests.log`, `native-validation.json` |
-| `node --test jev-lab/tests/test_original_phase4.mjs` | PASS; original real, 22 clips, 16 enums, 0 inputs, 15 activaciones | `original-runtime-validation.json` |
-| `python jev-lab/output/visual-phase4/preservation-check.py` | 58 archivos previos + 12 app/original + 134 históricos intactos | `writer-preservation-check.json` |
-| `node --check jev-lab/visual/phase4/web/controller.mjs` y `node --check jev-lab/visual/phase4/web/app.mjs` | PASS | Verificación terminal |
-| `git diff --check` | PASS; sólo avisos de normalización LF/CRLF sobre cambios previos de app | Verificación terminal |
+| Verificación | Resultado |
+|---|---|
+| `personality_phase4.py --prepare` | PASS; verify/compile/inspect CLI 1.3.0 sin problemas |
+| `personality_phase4.py --check` | PASS; catálogo y escena deterministas; mediciones temporales |
+| `personality_phase4.py --render` | PASS; 164 capturas Rive reales, GIFs y filmstrips a 140/48 px |
+| `python -m unittest discover -s jev-lab/tests` | **70/70 PASS** |
+| `node --test ./jev-lab/tests/*.mjs` | **67/67 PASS**; 20 grupos de personalidad/WASM real |
+| `git diff --check` | PASS; sólo avisos de conversión LF/CRLF del repositorio |
 
-La muestra activa de speech usa `beat_one` para mostrar realmente sus cuatro variantes. El log registra los comandos de captura finales. La escena de interrupción CLI usa blend nativo de máquina de 150 ms hacia neutral a 425 ms; no se presenta como implementación del recovery congelado del controlador.
+La primera ejecución global encontró fallo de CLI y luego `MemoryError` en una prueba previa de fase 3. La máquina tenía ~270 MB de RAM física libre. Tras liberar la sesión de captura, la misma suite completa pasó sin cambiar fuentes de fases anteriores. No se ocultó el fallo relajando validadores.
 
-## Comportamiento comprobado
+## Qué cambió
 
-- Los seis comandos validan toda orden antes de mutar. Handles conservan resultado, cancelación antigua no afecta al sucesor y secuencias procesan excedente entre duración/recuperación/siguiente ítem.
-- Think/speech tienen entrada/ciclo/salida semánticos; cada variante coincide en endpoints de todos sus canales. Duración explícita de 715 ms termina a 865 ms, incluyendo recuperación 150 ms, para speed 0.1/1/4. Default finito; secuencias rechazan bucles indefinidos.
-- Reemplazos al mismo timestamp: diferencia máxima nativa medida **0**. Cancelación mid-entry y mid-cycle: diferencia **0**. 1000 órdenes conservan máximo un outgoing y un pending; sólo entra la última. Instancias creadas se eliminan una vez, incluso ante fallo parcial o de suscripción.
-- Envelope Rive no visible x=1→0, curva cúbica y extremos planos; no existe solver cúbico paralelo en JavaScript. Native loop seams de think/speech coinciden en muestras y variantes; se guardan velocidades direccionales finitas.
-- Breath: 2.8 s, scaleX máximo1.004, scaleY máximo1.008, desplazamiento máximo0.35 px. Blink:150 ms. Seed731, primer minuto: seis breath/six blink; 70.77% de muestras cada50ms están exactamente quietas/neutrales. La ocupación reportada corresponde a clips programados; schedule contiene sus tiempos reales.
-- El scheduler procesa eventos en orden cronológico global. Prueba600000ms con ticks100ms frente a un único tick: schedule, occupancy, layers y pose final **exactamente iguales**. Esta regresión corrige el defecto detectado por validación independiente.
-- Base bodyY4/scaleY1.03 y gaze(-5,3) permanecen guardados al habilitar/cambiar seed. En apex breath real: BodyRoot.y173.65 y BodyDeform.scaleY1.038. Takeover/cancelación no producen salto de comando; máximo de liberación muestreada por1ms:0.06399 en propiedades de unidades mixtas. No se interpreta como distancia geométrica universal.
-- Stop cancela recovery/pending/actividad, aplica neutral completo y deja ticks posteriores neutrales, sin programación nueva. Dispose libera recursos y suscripción de forma idempotente.
+- `yes`: ojos anticipan, dos asentimientos; desplazamiento de -9 a +10 px, squash/stretch, segundo beat menor, hold y settle. Activa 1400 ms; total con transiciones 2050 ms a speed 1.
+- `think`: entrada de 500 ms, ciclo de atención de 2100 ms con holds y mirada adelantada al cuerpo; posiciones/giros/escalas contrastados, apertura e inclinación independientes. Activa finita 3400 ms; total 4050 ms.
+- `transform_star`: contracción, despliegue completo a morph 1, overshoot, hold estable de ~767 ms, fold y recuperación a esfera. Activa 2400 ms; total 3050 ms.
+- Bump previo de 250 ms, pico 8% a 100 ms. Clip y reloj activos empiezan después. Recuperación congelada de 150 ms y bump de retorno separado de 250 ms. Reemplazar conserva escala efectiva del bump saliente; sólo una recuperación y última orden pendiente.
+- Intensidad cero conserva idle/base sin tomar canales ni escalar el bump. Stop restaura neutral y lo congela; dispose cancela y libera recursos.
+- La respiración continua de 2.8 s y parpadeos seeded se conservan. La receta para derivar `no` y otras formas está en [la guía](../../visual/phase4/README.md).
 
-La validación independiente del agente principal registra **13 PASS** en `independent/native-independent-validation.json`, incluyendo reemplazos de todas las acciones, continuidad contra fase3,10 minutos de reposo y lifetime. La evidencia de navegador y comparación original es administrada por el agente principal en `browser-validation.json`.
+## Evidencia y mediciones
 
-## Preservación y límites
+1. **Original antes de autorar:** [`original-study.png`](original-study.png), enums reales yes/think/MorphState activados en WASM. Se inspeccionaron muestras 0–2600 ms: desplazamiento/deformación vertical, atención cíclica y estrella real respectivamente. Los paneles de 360×200 no certifican visibilidad completa: algunos overshoots exceden su viewport vertical.
+2. **Primera pasada preservada:** [`revisions/first-pass/manifest.json`](revisions/first-pass/manifest.json), 115 fuentes/evidencias con hashes comprobados por la suite. Sus tests verdes anteriores no certifican esta revisión. Los diffs revisados de las cuatro acciones fuera de alcance sólo eran experimentales; `happy_bounce`, `curious_look`, `hello` y `speech` se restauraron a sus definiciones anteriores. Las 13 acciones/18 variantes siguen funcionando.
+3. **Movimiento completo:** [`sequences/`](sequences/) contiene seis GIFs y seis filmstrips; [`temporal-validation.json`](temporal-validation.json) registra los frames. Son timelines CLI reales equivalentes al scheduling finito con base neutral/speed 1, sin ambientación viva ni interrupciones. Muestreo de 15 fps más neutral exacto al final y hold para reconocer retorno; no es certificación de todos los frames del controlador.
+4. **Geometría temporal:** [`motion-validation.json`](motion-validation.json), 435 muestras autoradas a 60 fps. Cada contorno cúbico muestreado se certifica: margen ocular mínimo **15.33 px** (mínimo requerido 4), extensión máxima de halo **145.52 px** (semialto disponible 170), cuerpo máximo **85.66 px**, escalas autoradas máximas **1.12**, estrella alcanza morph **1**. No hizo falta ampliar el rig.
+5. **Runtime real:** [`native-validation.json`](native-validation.json), WASM 2.42.2 y generación actual. Bump observado **1.080000043**; escala compuesta máxima **1.120000038** (float32). Seam de pensamiento: salto de pose **0**, velocidades muestreadas ~0/0.0000916 unidades por ms. Reemplazos al mismo instante: salto **0**. Matriz de lifecycle **144 casos** (3 estados × 3 velocidades × 4 etapas × 4 operaciones); intensidad cero se compara contra otro controlador con ambiente/base idénticos. 18 variantes completan y regresan al neutral numérico; retornos CLI RGBA exactos.
 
-Original SHA-256: `98aa68170540d448deaed0db6fa57c11b062cebf9036dc1cfada4376254a8daf`. No se modificaron fase1/2/3, aplicación dirty, paquetes ni original. El módulo adapta `author_phase3.generate(tempSource)` y usa source/output propios; no llama `compile_rig` ni el store de fase3 con defaults.
+**Limitación raster adicional:** los retornos RGBA exactos anteriores corresponden a las máquinas individuales. En la timeline CLI combinada, yes/think también recuperan RGBA exacto, pero estrella conserva una diferencia máxima de 5/255 en color (2 en R, 5 en B, 0 en G/alpha). Se reprodujo al volver a capturar el final y al aislar la transición de máquina; las claves iniciales/finales y los transformadores nativos coinciden, y la máscara ocular neutral permanece idéntica. La causa exacta en el renderer no se ha determinado. Se registra la diferencia, sin afirmar igualdad de píxeles en ese harness ni modificar límites de contención/contorno/escala. La revisión humana debe considerar esta limitación.
 
-El original se descubre mediante RuntimeLoader con WASM binario local: ViewModel1/Instance enlazado tanto al artboard como a State Machine1; followBoo=false, escritura enum, frame de preparación, trigger y avance real. CLI inspect no soporta ese binario. `MorphState` activa `MorphTest`; igualdad con estrella no se afirma sin evidencia visual. Flower y Ghost activan exactamente `Flower`/`Ghost`.
+## Revisión de código
 
-Comparador raw sobre negro, cuerpos neutrales140/48pxCSS, cámara fija; conserva Bump y timing originales. Preparación original introduce desfase inicial aproximado de un frame (unos17ms observados) respecto de propuesta. Ambos usan reloj de pared; no se afirma sincronía exacta de fase. Ese refinamiento queda para fase5.
+**Standards:** se corrigieron informes desactualizados y el reporte nativo distingue ejecución completa de filtros parciales (`PARTIAL`). `BumpTransform` es el adaptador ya existente exclusivamente en la escena de fase 4; las fuentes/jerarquía aprobadas de fase 2 permanecen intactas. El primer avance CLI activa la máquina, por eso las capturas usan `frame+1`, siguiendo el harness de fase 3.
 
-Muestras finitas de nodos/frames no prueban continuidad analítica completa ni C1 perfecta, y no prueban superioridad subjetiva. La liberación hacia base numérica usa envelope nativo; Stop es excepción explícita de neutral inmediato. Editor temporal, integración, despliegue y validación de input/resize/DPR de fase5 permanecen fuera de alcance.
+**Spec:** se refutó un supuesto de mezcla invertida: el envelope nativo va 1→0, por lo que la mezcla activa es 1 tras la entrada. Una regresión nueva exige movimiento visible de los tres prototipos en el controlador real. Los límites declarados de muestreo geométrico concuerdan con el plan; no se afirma lectura nativa de vértices ni certificación analítica de todo el continuo.
 
-## Uso y entrega
+## Revisión humana requerida
 
-Preview: `http://127.0.0.1:4184/`; [guía de autoría/interface](../../visual/phase4/README.md). Cambios JSON válidos recompilan y publican pareja inmutable; errores mantienen último preview válido. Comunicación, módulo y documentación siguieron skills caveman/codebase-design/cognitive-doc-design cargados por ruta. Memoria no disponible: autoridad en fuentes locales. Entrega ordinaria unmanaged; sin receipt-driven development, commits, despliegue ni nuevas dependencias.
+- [ ] Bump se percibe antes del gesto a 140 y 48 px.
+- [ ] `yes` se reconoce sin etiqueta.
+- [ ] `think` mantiene atención y el loop no presenta cortes.
+- [ ] Estrella alcanza cinco puntas y recupera la esfera con lectura clara.
+- [ ] El usuario confirma que los tres estados superan al original.
+
+Los tests verifican comportamiento técnico; **no otorgan superioridad visual**. No se certifica C1 perfecta en órdenes arbitrarias ni el continuo temporal/geométrico completo. La fase permanece esperando aprobación del usuario.

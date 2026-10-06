@@ -1,0 +1,1579 @@
+{
+  "schema": 2,
+  "fps": 60,
+  "artboard": "JevRigV2",
+  "contractSha256": "4671b41192387feffcc6d95a8830dfc0d9058d67a5b71a25d2ad0cbec2bcce61",
+  "parameterBounds": {
+    "intensity": [
+      0,
+      1
+    ],
+    "speed": [
+      0.1,
+      4
+    ]
+  },
+  "actions": {
+    "curious_look": {
+      "id": "curious_look",
+      "intent": "Curiosidad tranquila: mirada derecha, cuerpo responde 100 ms después, observa y vuelve.",
+      "durationMs": 800,
+      "channels": [
+        "gazeX",
+        "bodyRotation",
+        "bodyScaleY"
+      ],
+      "source": "curious_look.json",
+      "sourceSha256": "4309ade7cb4d83c2941e8fd7e72535887d20853e8b3d1b2dc5f671dd90ce2f3f",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "eyes_first",
+          "timeMs": 83.33333333333333,
+          "pose": "look",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hesitate",
+          "timeMs": 183.33333333333334,
+          "pose": "hesitate",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "lean",
+          "timeMs": 300,
+          "pose": "observe",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recheck",
+          "timeMs": 450,
+          "pose": "recheck",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hold",
+          "timeMs": 550,
+          "pose": "observe",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 766.6666666666666,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 800,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_curious_look__default",
+          "machine": "Action_curious_look__default"
+        },
+        "left": {
+          "clip": "action_curious_look__left",
+          "machine": "Action_curious_look__left"
+        }
+      },
+      "originalState": null
+    },
+    "happy_bounce": {
+      "id": "happy_bounce",
+      "intent": "Alegría breve: mirada primero, anticipación, salto pequeño, aterrizaje suave y quietud.",
+      "durationMs": 750,
+      "channels": [
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen",
+        "bodyY",
+        "bodyRotation",
+        "bodyScaleX",
+        "bodyScaleY"
+      ],
+      "source": "happy_bounce.json",
+      "sourceSha256": "5daf722dfd4d12417d4acbd048a48e94a1990a8b27345b29a01ec972d2ce44a9",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 50,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "body_wait",
+          "timeMs": 66.66666666666667,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "anticipation",
+          "timeMs": 150,
+          "pose": "anticipation",
+          "curve": [
+            0.42,
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "stretch",
+          "timeMs": 233.33333333333334,
+          "pose": "stretch",
+          "curve": [
+            0,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "apex",
+          "timeMs": 350,
+          "pose": "apex",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "controlled_fall",
+          "timeMs": 416.6666666666667,
+          "pose": "apex",
+          "curve": [
+            0.42,
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "name": "fall",
+          "timeMs": 483.3333333333333,
+          "pose": "fall",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "landing",
+          "timeMs": 533.3333333333334,
+          "pose": "landing",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recoil",
+          "timeMs": 583.3333333333334,
+          "pose": "recoil",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "settle",
+          "timeMs": 633.3333333333334,
+          "pose": "settle",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 716.6666666666666,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 750,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_happy_bounce__default",
+          "machine": "Action_happy_bounce__default"
+        },
+        "gentle": {
+          "clip": "action_happy_bounce__gentle",
+          "machine": "Action_happy_bounce__gentle"
+        }
+      },
+      "originalState": null
+    },
+    "hello": {
+      "id": "hello",
+      "intent": "Saludo atento: ojos se abren primero; dos inclinaciones suaves, hold y regreso.",
+      "durationMs": 1200,
+      "channels": [
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen",
+        "bodyRotation",
+        "bodyY",
+        "bodyScaleX",
+        "bodyScaleY"
+      ],
+      "source": "hello.json",
+      "sourceSha256": "65da25d291d38e852c9801e0da38f525b35c9366cc3630231df4bc5f1cf38089",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "lean",
+          "timeMs": 250,
+          "pose": "lean",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hold",
+          "timeMs": 400,
+          "pose": "lean",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "answer",
+          "timeMs": 550,
+          "pose": "answer",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "answer_hold",
+          "timeMs": 700,
+          "pose": "answer",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "lean_again",
+          "timeMs": 850,
+          "pose": "lean_again",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "settle",
+          "timeMs": 1000,
+          "pose": "settle",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1166.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1200,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_hello__default",
+          "machine": "Action_hello__default"
+        }
+      },
+      "originalState": "Hello"
+    },
+    "no": {
+      "id": "no",
+      "intent": "Negación legible: mirada lateral precede tres pequeños movimientos horizontales y hold.",
+      "durationMs": 1100,
+      "channels": [
+        "gazeX",
+        "bodyX",
+        "bodyRotation"
+      ],
+      "source": "no.json",
+      "sourceSha256": "4073b8183a5e3e4a0188d8e4d31e025f64558c43268c55ccc332e517df78e11d",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "left",
+          "timeMs": 250,
+          "pose": "left",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "right",
+          "timeMs": 450,
+          "pose": "right",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "left_again",
+          "timeMs": 650,
+          "pose": "left",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hold",
+          "timeMs": 800,
+          "pose": "left",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1066.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1100,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_no__default",
+          "machine": "Action_no__default"
+        }
+      },
+      "originalState": "no"
+    },
+    "speech": {
+      "id": "speech",
+      "intent": "Habla sin boca: ojos atentos preceden ritmo corporal pequeño; variantes A/B/C/BC con intención diferente.",
+      "durationMs": 1700,
+      "channels": [
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen",
+        "bodyRotation",
+        "bodyX",
+        "bodyY",
+        "bodyScaleX",
+        "bodyScaleY"
+      ],
+      "source": "speech.json",
+      "sourceSha256": "8d01eeecec7f4fd255f4b95ec6009087bbb0c693735cceebe3bca1f1d5a34d9d",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "cycle_start",
+          "timeMs": 300,
+          "pose": "speak",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "beat_one",
+          "timeMs": 500,
+          "pose": "beat",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "rest",
+          "timeMs": 700,
+          "pose": "speak",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "beat_two",
+          "timeMs": 900,
+          "pose": "beat",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "cycle_end",
+          "timeMs": 1100,
+          "pose": "speak",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1400,
+          "pose": "speak",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_speech__default",
+          "machine": "Action_speech__default"
+        },
+        "b": {
+          "clip": "action_speech__b",
+          "machine": "Action_speech__b"
+        },
+        "c": {
+          "clip": "action_speech__c",
+          "machine": "Action_speech__c"
+        },
+        "bc": {
+          "clip": "action_speech__bc",
+          "machine": "Action_speech__bc"
+        }
+      },
+      "originalVariants": {
+        "default": "Talk",
+        "b": "talkb",
+        "c": "talkc",
+        "bc": "talkbc"
+      },
+      "behavior": {
+        "kind": "sustained",
+        "entryEndMs": 300,
+        "cycleStartMs": 300,
+        "cycleEndMs": 1100,
+        "exitStartMs": 1400
+      },
+      "originalState": "Talk"
+    },
+    "think": {
+      "id": "think",
+      "intent": "Pensamiento sostenido: ojos arriba primero; inclinación pequeña, quietud reconocible y ciclo lento.",
+      "durationMs": 2300,
+      "channels": [
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen",
+        "bodyRotation",
+        "bodyY",
+        "bodyScaleX",
+        "bodyScaleY"
+      ],
+      "source": "think.json",
+      "sourceSha256": "2fa95ad621d10f7494bf6bfa8f5d3311384f779ee9a2800620136c801266e62d",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "cycle_start",
+          "timeMs": 400,
+          "pose": "ponder",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "search",
+          "timeMs": 700,
+          "pose": "search",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "quiet_hold",
+          "timeMs": 900,
+          "pose": "ponder",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "reflect",
+          "timeMs": 1200,
+          "pose": "reflect",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "cycle_end",
+          "timeMs": 1600,
+          "pose": "ponder",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 2000,
+          "pose": "ponder",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 2266.6666666666665,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 2300,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_think__default",
+          "machine": "Action_think__default"
+        }
+      },
+      "behavior": {
+        "kind": "sustained",
+        "entryEndMs": 400,
+        "cycleStartMs": 400,
+        "cycleEndMs": 1600,
+        "exitStartMs": 2000
+      },
+      "originalState": "think"
+    },
+    "transform_cloud": {
+      "id": "transform_cloud",
+      "intent": "Transformación a cloud: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+      "durationMs": 1700,
+      "channels": [
+        "morph",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ],
+      "source": "transform_cloud.json",
+      "sourceSha256": "5ad317e6366fd0c196655a75c995c870489574e572dbc98d21cd57e5baad009f",
+      "targetShape": "cloud",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "timeMs": 450,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1200,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_transform_cloud__default",
+          "machine": "Action_transform_cloud__default"
+        }
+      },
+      "originalState": "Cloud"
+    },
+    "transform_flower": {
+      "id": "transform_flower",
+      "intent": "Transformación a flower: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+      "durationMs": 1700,
+      "channels": [
+        "morph",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ],
+      "source": "transform_flower.json",
+      "sourceSha256": "ac228a0a51d87ba2d370e7c33e33fdd35efda310f79b6a9ba5983b3fe2514d18",
+      "targetShape": "flower",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "timeMs": 450,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1200,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_transform_flower__default",
+          "machine": "Action_transform_flower__default"
+        }
+      },
+      "originalState": "Flower"
+    },
+    "transform_ghost": {
+      "id": "transform_ghost",
+      "intent": "Transformación a ghost: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+      "durationMs": 1700,
+      "channels": [
+        "morph",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ],
+      "source": "transform_ghost.json",
+      "sourceSha256": "33c7dc5fbea44d5167f216147840d1f90a96726c283f35cce1568421e7374776",
+      "targetShape": "ghost",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "timeMs": 450,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1200,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_transform_ghost__default",
+          "machine": "Action_transform_ghost__default"
+        }
+      },
+      "originalState": "Ghost"
+    },
+    "transform_square": {
+      "id": "transform_square",
+      "intent": "Transformación a square: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+      "durationMs": 1700,
+      "channels": [
+        "morph",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ],
+      "source": "transform_square.json",
+      "sourceSha256": "3211f325491d71c050ed646a001db0a4a866137e3da1df0b6c1ec577cd6f9876",
+      "targetShape": "square",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "timeMs": 450,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1200,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_transform_square__default",
+          "machine": "Action_transform_square__default"
+        }
+      },
+      "originalState": "square"
+    },
+    "transform_star": {
+      "id": "transform_star",
+      "intent": "Transformación a star: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+      "durationMs": 1700,
+      "channels": [
+        "morph",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ],
+      "source": "transform_star.json",
+      "sourceSha256": "ce31d0f45757322edf9e9a7e9103057649bece5d8f830c9b4098dd33b1462015",
+      "targetShape": "star",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "timeMs": 450,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1200,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_transform_star__default",
+          "machine": "Action_transform_star__default"
+        }
+      },
+      "originalState": "MorphState"
+    },
+    "transform_triangle": {
+      "id": "transform_triangle",
+      "intent": "Transformación a triangle: ojos anticipan, un único destino certificado, hold largo y regreso a base.",
+      "durationMs": 1700,
+      "channels": [
+        "morph",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ],
+      "source": "transform_triangle.json",
+      "sourceSha256": "1a4f286f5107246ec399e611f00271b8b23a6966d046037e2ea36579bb6267d2",
+      "targetShape": "triangle",
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "timeMs": 450,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "recognize",
+          "timeMs": 1200,
+          "pose": "shape",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 1666.6666666666667,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1700,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_transform_triangle__default",
+          "machine": "Action_transform_triangle__default"
+        }
+      },
+      "originalState": "triangle"
+    },
+    "yes": {
+      "id": "yes",
+      "intent": "Afirmación legible: ojos bajan antes de dos asentimientos verticales, pausa y neutral.",
+      "durationMs": 1000,
+      "channels": [
+        "gazeY",
+        "bodyY",
+        "bodyScaleY"
+      ],
+      "source": "yes.json",
+      "sourceSha256": "14e7b5fbc1fd0821694040d4ac190a8f737b57c56cbcb312eeb7c81e604ee89b",
+      "targetShape": null,
+      "phases": [
+        {
+          "name": "entry",
+          "timeMs": 0,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "notice",
+          "timeMs": 100,
+          "pose": "notice",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "nod_one",
+          "timeMs": 266.6666666666667,
+          "pose": "nod",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "rise_one",
+          "timeMs": 400,
+          "pose": "rise",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "nod_two",
+          "timeMs": 550,
+          "pose": "nod",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "hold",
+          "timeMs": 700,
+          "pose": "nod",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "settle",
+          "timeMs": 850,
+          "pose": "rise",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_return",
+          "timeMs": 966.6666666666666,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        },
+        {
+          "name": "neutral_hold",
+          "timeMs": 1000,
+          "pose": "neutral",
+          "curve": [
+            0.42,
+            0,
+            0.58,
+            1
+          ]
+        }
+      ],
+      "variants": {
+        "default": {
+          "clip": "action_yes__default",
+          "machine": "Action_yes__default"
+        }
+      },
+      "originalState": "yes"
+    }
+  },
+  "behavior": {
+    "schema": 1,
+    "recoveryMs": 150,
+    "takeoverMs": 150,
+    "ambient": {
+      "seed": 731,
+      "enabled": true,
+      "breath": {
+        "durationMs": 2800,
+        "pauseMs": [
+          0,
+          0
+        ],
+        "channels": [
+          "bodyScaleX",
+          "bodyScaleY",
+          "bodyY",
+          "gazeX",
+          "gazeY",
+          "leftOpen",
+          "rightOpen"
+        ]
+      },
+      "blink": {
+        "durationMs": 150,
+        "pauseMs": [
+          5000,
+          12000
+        ],
+        "channels": [
+          "blink"
+        ]
+      }
+    },
+    "bump": {
+      "durationMs": 150,
+      "peakScale": 1.035
+    }
+  },
+  "envelope": {
+    "clip": "playback_envelope",
+    "node": "PlaybackEnvelope",
+    "durationMs": 150
+  },
+  "ambientClips": {
+    "breath": {
+      "bodyScaleX": "ambient_breath__bodyScaleX",
+      "bodyScaleY": "ambient_breath__bodyScaleY",
+      "bodyY": "ambient_breath__bodyY",
+      "gazeX": "ambient_breath__gazeX",
+      "gazeY": "ambient_breath__gazeY",
+      "leftOpen": "ambient_breath__leftOpen",
+      "rightOpen": "ambient_breath__rightOpen"
+    },
+    "blink": {
+      "blink": "ambient_blink__blink"
+    }
+  },
+  "transitionBump": {
+    "clip": "transition_bump",
+    "node": "BumpTransform",
+    "durationMs": 150
+  },
+  "generation": "9afee4d9fe0cfef668f8"
+}

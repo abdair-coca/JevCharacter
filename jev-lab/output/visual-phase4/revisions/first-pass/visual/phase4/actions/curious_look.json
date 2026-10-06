@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "id": "curious_look",
+  "intent": "Curiosidad tranquila: mirada derecha, cuerpo responde 100 ms después, observa y vuelve.",
+  "durationMs": 800,
+  "channels": [
+    "gazeX",
+    "bodyRotation",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "bodyRotation": 0,
+      "bodyScaleY": 1
+    },
+    "look": {
+      "gazeX": 7,
+      "bodyRotation": 0,
+      "bodyScaleY": 1
+    },
+    "hesitate": {
+      "gazeX": 5,
+      "bodyRotation": 0,
+      "bodyScaleY": 1.01
+    },
+    "observe": {
+      "gazeX": 7,
+      "bodyRotation": 0.12,
+      "bodyScaleY": 1.1
+    },
+    "recheck": {
+      "gazeX": 5,
+      "bodyRotation": 0.085,
+      "bodyScaleY": 1.065
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "eyes_first",
+      "timeMs": 83.33333333333333,
+      "pose": "look",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hesitate",
+      "timeMs": 183.33333333333334,
+      "pose": "hesitate",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "lean",
+      "timeMs": 300,
+      "pose": "observe",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "recheck",
+      "timeMs": 450,
+      "pose": "recheck",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold",
+      "timeMs": 550,
+      "pose": "observe",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 766.6666666666666,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 800,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "variants": {
+    "left": {
+      "look": {
+        "gazeX": -7
+      },
+      "hesitate": {
+        "gazeX": -5
+      },
+      "observe": {
+        "gazeX": -7,
+        "bodyRotation": -0.12
+      },
+      "recheck": {
+        "gazeX": -5,
+        "bodyRotation": -0.085
+      }
+    }
+  },
+  "originalState": null
+}

@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "id": "yes",
+  "intent": "Afirmación legible: ojos bajan antes de dos asentimientos verticales, pausa y neutral.",
+  "durationMs": 1000,
+  "channels": [
+    "gazeY",
+    "bodyY",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeY": 0,
+      "bodyY": 0,
+      "bodyScaleY": 1
+    },
+    "notice": {
+      "gazeY": 3,
+      "bodyY": 0,
+      "bodyScaleY": 1
+    },
+    "nod": {
+      "gazeY": 3,
+      "bodyY": 5,
+      "bodyScaleY": 0.96
+    },
+    "rise": {
+      "gazeY": 0,
+      "bodyY": -2,
+      "bodyScaleY": 1.02
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "nod_one",
+      "timeMs": 266.6666666666667,
+      "pose": "nod",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "rise_one",
+      "timeMs": 400,
+      "pose": "rise",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "nod_two",
+      "timeMs": 550,
+      "pose": "nod",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold",
+      "timeMs": 700,
+      "pose": "nod",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "settle",
+      "timeMs": 850,
+      "pose": "rise",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 966.6666666666666,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 1000,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "originalState": "yes"
+}

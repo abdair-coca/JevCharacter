@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "method": "Primary agent CUA browser UI, actual local WebGL2 runtime",
+  "url": "http://localhost:4184/",
+  "generation": "9158312fca163a88ecf5",
+  "sizesCssPx": [140, 48],
+  "original": {"raw": true, "fixedCamera": true, "blackBackground": true, "conventionalInputs": 0},
+  "checks": [
+    "Four real canvases loaded: original/proposal, normal/small.",
+    "Speech bc sustained beyond 60 seconds, native clip cycles; original readback talkbc, Bump/TalkBC.",
+    "Cancel handle through UI resolves cancelled/handle and returns proposal to neutral.",
+    "Ambient enabled with seed731, real schedule and channel ownership visible.",
+    "Final source reloaded: transform_star at speed0.1 visibly renders five-point star and two eyes at both sizes around7666ms; original MorphState/Bump/MorphTest renders its actual star.",
+    "Think duration1500ms at speed4 enters sustained mode and resolves completed/completed1/1; exact wallclock boundary verified separately by native tests.",
+    "Stop restores full neutral, clears owners, pending, ambient layers and schedules, and disables future ambient activity."
+  ],
+  "stopCanvasComparison": {
+    "sameBoundingBox": {"x": 97.20000457763672, "y": 207.8000030517578, "width": 526.4000244140625, "height": 300},
+    "initialJpegBytes": 5142,
+    "returnedJpegBytes": 5142,
+    "exactByteEquality": true
+  },
+  "limitations": [
+    "UI samples establish representative visual behavior; exhaustive18variants covered by CLI renders and native tests.",
+    "Original has native Bump and setup skew around one frame; no exact phase synchronization claimed.",
+    "CUA mouse dispatch intermittently failed; keyboard Enter activated controls and outcomes were verified.",
+    "Offscreen and subpixel-different crop attempts excluded from neutral equality.",
+    "Browser screenshots inspected in session; durable visual artifact is real CLI contact-sheet.png.",
+    "Visual personality and superiority require human acceptance; C1 continuity not claimed."
+  ]
+}

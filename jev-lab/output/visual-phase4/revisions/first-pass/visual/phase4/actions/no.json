@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "id": "no",
+  "intent": "Negación legible: mirada lateral precede tres pequeños movimientos horizontales y hold.",
+  "durationMs": 1100,
+  "channels": [
+    "gazeX",
+    "bodyX",
+    "bodyRotation"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "bodyX": 0,
+      "bodyRotation": 0
+    },
+    "notice": {
+      "gazeX": -4,
+      "bodyX": 0,
+      "bodyRotation": 0
+    },
+    "left": {
+      "gazeX": -4,
+      "bodyX": -4,
+      "bodyRotation": -0.065
+    },
+    "right": {
+      "gazeX": 4,
+      "bodyX": 4,
+      "bodyRotation": 0.065
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "left",
+      "timeMs": 250,
+      "pose": "left",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "right",
+      "timeMs": 450,
+      "pose": "right",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "left_again",
+      "timeMs": 650,
+      "pose": "left",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold",
+      "timeMs": 800,
+      "pose": "left",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 1066.6666666666667,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 1100,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "originalState": "no"
+}

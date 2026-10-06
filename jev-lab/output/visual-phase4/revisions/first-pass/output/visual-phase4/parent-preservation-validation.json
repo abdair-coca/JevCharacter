@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "manifest": "previous-phases-preservation.json",
+      "files": 58,
+      "changed": []
+    },
+    {
+      "manifest": "application-preservation.json",
+      "files": 12,
+      "changed": []
+    }
+  ],
+  "historicalFiles": 134
+}

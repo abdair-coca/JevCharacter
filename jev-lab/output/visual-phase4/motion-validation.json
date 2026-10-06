@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "cadenceMs": 16.666666666666668,
+  "bumpPeak": 1.08,
+  "bumpExtentAtNeutral": 130.68,
+  "actions": [
+    {
+      "action": "think",
+      "samples": 205,
+      "activeMs": 3400,
+      "totalMs": 4050,
+      "minimumEyeMargin": 36.207189902785956,
+      "maximumHaloExtent": 141.52,
+      "maximumBodyExtent": 76.70536288214248,
+      "maximumMorph": 0,
+      "maximumScaleX": 1.12,
+      "maximumScaleY": 1.12
+    },
+    {
+      "action": "transform_star",
+      "samples": 145,
+      "activeMs": 2400,
+      "totalMs": 3050,
+      "minimumEyeMargin": 15.332230877133878,
+      "maximumHaloExtent": 143.52,
+      "maximumBodyExtent": 85.6593901413931,
+      "maximumMorph": 1.0,
+      "maximumScaleX": 1.12,
+      "maximumScaleY": 1.12
+    },
+    {
+      "action": "yes",
+      "samples": 85,
+      "activeMs": 1400,
+      "totalMs": 2050,
+      "minimumEyeMargin": 42.2654378531477,
+      "maximumHaloExtent": 145.52,
+      "maximumBodyExtent": 80.70536288214248,
+      "maximumMorph": 0,
+      "maximumScaleX": 1.12,
+      "maximumScaleY": 1.12
+    }
+  ],
+  "scope": "Finite authored samples with continuous contour certificates at each sample; WASM verifies composed node scales separately. No analytical certification of all time or C1 on interruptions."
+}

@@ -1,0 +1,43 @@
+{
+  "status": "FAIL",
+  "executive_summary": "12/13 independent real-native test groups pass. Confirmed cadence-dependent ambient scheduling with identical seed and wall time. Writer notified; rerun same program after scheduler fix.",
+  "validation_command": "node jev-lab/output/visual-phase4/independent/validate_native.mjs",
+  "native_process_exit_code": 1,
+  "generation": "9158312fca163a88ecf5",
+  "controller_sha256_tested": "8069c9ceb3bad240d414319d8544c8c5b7007160e5703b4b75406f1dfa43cbc8",
+  "source_stable_during_run": true,
+  "source_hashes_reference": "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/cadence-defect-final-before-fix.json",
+  "artifacts_absolute": [
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/validate_native.mjs",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/cadence-defect-final-before-fix.json",
+    "C:/Users/abdai/Desktop/Tracker/jevBot/jev-lab/output/visual-phase4/independent/cadence-defect-final-before-fix.log"
+  ],
+  "confirmed_defect": {
+    "reproducer": "Two native controllers setAmbient({enabled:true,seed:731}); one receives ticks every100ms through600000ms, other receives one tick at600000ms. Schedule arrays differ, blink occupancy9900ms versus10050ms.",
+    "cause": "Shared seeded PRNG consumed by per-kind while loops, making draw order depend on frame cadence.",
+    "suggested_fix": "Consume pending ambient events chronologically, or use stable independent seeded streams per kind. Preserve actual native samples and sparse/dense equality assertion."
+  },
+  "positive_evidence": {
+    "same_timestamp_replacements": "54 cases, exact native node delta0",
+    "recovery_endpoint": "Max native node delta4.76837158203125e-7 across0.001ms",
+    "phase3_comparison": "happy_bounce replacement at250ms: phase3 BodyRoot.y jump6.126434326171875px; phase4 same-time node jump0",
+    "native_resources": "44 native instances allocated; count unchanged through1000orders; disposed44/44 exactly once; one unsubscribe",
+    "ambient_quiet_fraction": 0.702882852857857,
+    "duration_sequence": "20 sustained variant/speed cases use977.25ms active wall time plus150ms recovery;100-item late sequence completes at15100ms",
+    "baseline_toggle": "enabled/seed-only commands preserve numeric ambient and gaze; numeric replacement semantics verified"
+  },
+  "risks": [
+    "Node samples do not expose all native Bezier morph coordinates. No analytical parameter-continuum geometry certification.",
+    "Finite C0 position evidence and loop finite-difference velocities do not prove arbitrary-command C1 continuity.",
+    "Visual personality and superiority remain human acceptance tasks."
+  ],
+  "skill_resolution": {
+    "method": "paths-injected",
+    "loaded": [
+      "C:/Users/abdai/.codex/skills/caveman/SKILL.md",
+      "C:/Users/abdai/.agents/skills/codebase-design/SKILL.md"
+    ]
+  },
+  "memory_resolution": "unavailable; project context used",
+  "scope": "Wrote only output/visual-phase4/independent. No application, original, earlier-phase or writer-source changes. No children, commits, formal reviews or external messages."
+}

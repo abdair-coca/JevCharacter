@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "id": "hello",
+  "intent": "Saludo atento: ojos se abren primero; dos inclinaciones suaves, hold y regreso.",
+  "durationMs": 1200,
+  "channels": [
+    "gazeX",
+    "gazeY",
+    "leftOpen",
+    "rightOpen",
+    "bodyRotation",
+    "bodyY",
+    "bodyScaleX",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyRotation": 0,
+      "bodyY": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "notice": {
+      "gazeX": 1,
+      "gazeY": -2,
+      "leftOpen": 1.25,
+      "rightOpen": 1.25,
+      "bodyRotation": 0,
+      "bodyY": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "lean": {
+      "gazeX": 1,
+      "gazeY": -2,
+      "leftOpen": 1.25,
+      "rightOpen": 1.25,
+      "bodyRotation": 0.12,
+      "bodyY": -4,
+      "bodyScaleX": 1.04,
+      "bodyScaleY": 1.03
+    },
+    "answer": {
+      "gazeX": -1,
+      "gazeY": -1,
+      "leftOpen": 1.1,
+      "rightOpen": 1.1,
+      "bodyRotation": -0.1,
+      "bodyY": -1,
+      "bodyScaleX": 0.98,
+      "bodyScaleY": 1.04
+    },
+    "lean_again": {
+      "gazeX": 1,
+      "gazeY": -1,
+      "leftOpen": 1.2,
+      "rightOpen": 1.2,
+      "bodyRotation": 0.08,
+      "bodyY": -3,
+      "bodyScaleX": 1.02,
+      "bodyScaleY": 1.04
+    },
+    "settle": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 1.08,
+      "rightOpen": 1.08,
+      "bodyRotation": 0,
+      "bodyY": 1,
+      "bodyScaleX": 0.99,
+      "bodyScaleY": 1.01
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "lean",
+      "timeMs": 250,
+      "pose": "lean",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "hold",
+      "timeMs": 400,
+      "pose": "lean",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "answer",
+      "timeMs": 550,
+      "pose": "answer",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "answer_hold",
+      "timeMs": 700,
+      "pose": "answer",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "lean_again",
+      "timeMs": 850,
+      "pose": "lean_again",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "settle",
+      "timeMs": 1000,
+      "pose": "settle",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 1166.6666666666667,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 1200,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "originalState": "Hello"
+}

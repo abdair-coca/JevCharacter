@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "manifest": "previous-phases-preservation.json",
+      "files": 58,
+      "changed": []
+    },
+    {
+      "manifest": "application-preservation.json",
+      "files": 12,
+      "changed": []
+    }
+  ],
+  "historicalFiles": 134,
+  "originalSha256": "98aa68170540d448deaed0db6fa57c11b062cebf9036dc1cfada4376254a8daf"
+}

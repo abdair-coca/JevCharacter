@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "id": "speech",
+  "intent": "Habla sin boca: ojos atentos preceden ritmo corporal pequeño; variantes A/B/C/BC con intención diferente.",
+  "durationMs": 1700,
+  "channels": [
+    "gazeX",
+    "gazeY",
+    "leftOpen",
+    "rightOpen",
+    "bodyRotation",
+    "bodyX",
+    "bodyY",
+    "bodyScaleX",
+    "bodyScaleY"
+  ],
+  "poses": {
+    "neutral": {
+      "gazeX": 0,
+      "gazeY": 0,
+      "leftOpen": 1,
+      "rightOpen": 1,
+      "bodyRotation": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "notice": {
+      "gazeX": 0,
+      "gazeY": -1,
+      "leftOpen": 1.1,
+      "rightOpen": 1.1,
+      "bodyRotation": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1
+    },
+    "speak": {
+      "gazeX": 0,
+      "gazeY": -2,
+      "leftOpen": 1.12,
+      "rightOpen": 1.12,
+      "bodyRotation": 0,
+      "bodyX": 0,
+      "bodyY": 0,
+      "bodyScaleX": 1,
+      "bodyScaleY": 1.025
+    },
+    "beat": {
+      "gazeX": 1,
+      "gazeY": -3,
+      "leftOpen": 1.28,
+      "rightOpen": 0.82,
+      "bodyRotation": 0.12,
+      "bodyX": 3,
+      "bodyY": -4,
+      "bodyScaleX": 0.95,
+      "bodyScaleY": 1.08
+    }
+  },
+  "phases": [
+    {
+      "name": "entry",
+      "timeMs": 0,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "notice",
+      "timeMs": 100,
+      "pose": "notice",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "cycle_start",
+      "timeMs": 300,
+      "pose": "speak",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "beat_one",
+      "timeMs": 500,
+      "pose": "beat",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "rest",
+      "timeMs": 700,
+      "pose": "speak",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "beat_two",
+      "timeMs": 900,
+      "pose": "beat",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "cycle_end",
+      "timeMs": 1100,
+      "pose": "speak",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "recognize",
+      "timeMs": 1400,
+      "pose": "speak",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_return",
+      "timeMs": 1666.6666666666667,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    },
+    {
+      "name": "neutral_hold",
+      "timeMs": 1700,
+      "pose": "neutral",
+      "curve": [
+        0.42,
+        0,
+        0.58,
+        1
+      ]
+    }
+  ],
+  "variants": {
+    "b": {
+      "beat": {
+        "gazeX": -2,
+        "bodyRotation": -0.1,
+        "bodyX": -4,
+        "bodyY": -2,
+        "bodyScaleX": 1.05,
+        "bodyScaleY": 0.96,
+        "leftOpen": 0.85,
+        "rightOpen": 1.2
+      }
+    },
+    "c": {
+      "beat": {
+        "gazeX": 2,
+        "bodyRotation": 0.14,
+        "bodyX": 4,
+        "bodyY": -5,
+        "bodyScaleX": 0.93,
+        "bodyScaleY": 1.09,
+        "leftOpen": 1.25,
+        "rightOpen": 0.8
+      }
+    },
+    "bc": {
+      "beat": {
+        "gazeX": -1,
+        "bodyRotation": -0.075,
+        "bodyX": -2,
+        "bodyY": -3,
+        "bodyScaleX": 0.97,
+        "bodyScaleY": 1.06,
+        "leftOpen": 0.88,
+        "rightOpen": 1.22
+      },
+      "speak": {
+        "gazeX": 1,
+        "bodyRotation": 0.025
+      }
+    }
+  },
+  "behavior": {
+    "kind": "sustained",
+    "entryEndMs": 300,
+    "cycleStartMs": 300,
+    "cycleEndMs": 1100,
+    "exitStartMs": 1400
+  },
+  "originalState": "Talk",
+  "originalVariants": {
+    "default": "Talk",
+    "b": "talkb",
+    "c": "talkc",
+    "bc": "talkbc"
+  }
+}

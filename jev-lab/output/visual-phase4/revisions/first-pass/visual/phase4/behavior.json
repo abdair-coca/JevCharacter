@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "recoveryMs": 150,
+  "takeoverMs": 150,
+  "ambient": {
+    "seed": 731,
+    "enabled": true,
+    "breath": {
+      "durationMs": 2800,
+      "pauseMs": [0, 0],
+      "channels": [
+        "bodyScaleX",
+        "bodyScaleY",
+        "bodyY",
+        "gazeX",
+        "gazeY",
+        "leftOpen",
+        "rightOpen"
+      ]
+    },
+    "blink": {
+      "durationMs": 150,
+      "pauseMs": [
+        5000,
+        12000
+      ],
+      "channels": [
+        "blink"
+      ]
+    }
+  },
+  "bump": {
+    "durationMs": 150,
+    "peakScale": 1.035
+  }
+}
