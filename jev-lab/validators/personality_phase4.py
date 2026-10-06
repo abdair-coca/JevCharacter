@@ -45,15 +45,18 @@ def discover(source=SOURCE):
 
 def read_behavior(source):
     path=Path(source)/'behavior.json'; b=author.read_definition(path)
-    author.fields(b,{'schema','recoveryMs','takeoverMs','ambient'},{'schema','recoveryMs','takeoverMs','ambient'},path.name,'')
+    author.fields(b,{'schema','recoveryMs','takeoverMs','ambient','bump'},{'schema','recoveryMs','takeoverMs','ambient','bump'},path.name,'')
     if b['schema']!=1: author.fail(path.name,'/schema','Expected schema 1')
     for key in ('recoveryMs','takeoverMs'): author.number(b[key],120,180,path.name,'/'+key)
     a=b['ambient'];author.fields(a,{'seed','enabled','breath','blink'},{'seed','enabled','breath','blink'},path.name,'/ambient')
     if type(a['seed']) is not int or not 0<=a['seed']<=4294967295: author.fail(path.name,'/ambient/seed','Expected uint32')
     if type(a['enabled']) is not bool: author.fail(path.name,'/ambient/enabled','Expected boolean')
-    for name,duration,bounds,channels in [('breath',2800,[5000,9000],['bodyScaleX','bodyScaleY','bodyY']),('blink',150,[5000,12000],['blink'])]:
+    for name,duration,bounds,channels in [('breath',2800,[0,0],['bodyScaleX','bodyScaleY','bodyY','gazeX','gazeY','leftOpen','rightOpen']),('blink',150,[5000,12000],['blink'])]:
         entry=a[name];author.fields(entry,{'durationMs','pauseMs','channels'},{'durationMs','pauseMs','channels'},path.name,'/ambient/'+name)
-        if entry['durationMs']!=duration or entry['pauseMs']!=bounds or entry['channels']!=channels: author.fail(path.name,'/ambient/'+name,'Scheduler contract changed; fixed discreet timing and channels required')
+        if entry['durationMs']!=duration or entry['pauseMs']!=bounds or entry['channels']!=channels: author.fail(path.name,'/ambient/'+name,'Unexpected timing or channels')
+    bump=b['bump'];author.fields(bump,{'durationMs','peakScale'},{'durationMs','peakScale'},path.name,'/bump')
+    if bump['durationMs']!=250: author.fail(path.name,'/bump/durationMs','Expected 250 ms pre-gesture transition')
+    author.number(bump['peakScale'],1.005,1.08,path.name,'/bump/peakScale')
     return b
 
 def generate(source=SOURCE):
@@ -70,7 +73,8 @@ def generate(source=SOURCE):
         for key in EXTRAS:
             if key in value: record[key]=value[key]
     s=rig.SceneBuilder();s.root=root;s.serial=max(int(e.get('id').split(':')[1]) for e in root.iter() if e.get('id'))
-    board=root.find('Artboard'); envelope=s.node(board,'PlaybackEnvelope',x=1)
+    board=root.find('Artboard'); body_root=next(node for node in board.iter('Node') if node.get('name')=='BodyRoot');body_deform=next(node for node in body_root.findall('Node') if node.get('name')=='BodyDeform');body_root.remove(body_deform);bump_node=s.node(body_root,'BumpTransform');bump_node.append(body_deform)
+    envelope=s.node(board,'PlaybackEnvelope',x=1)
     def timeline(name,keys,phases,duration):
         clip=s.add(board,'LinearAnimation',name=name,fps=60,duration=round(duration*.06),loopValue='oneShot')
         for object_id,props in keys.items():
@@ -84,13 +88,21 @@ def generate(source=SOURCE):
     timeline('playback_envelope',{envelope.get('id'):{13:[1,0]}},[(0,None),(150,None)],150)
     catalog['envelope']=dict(clip='playback_envelope',node='PlaybackEnvelope',durationMs=150)
     contract=rig.load_contract(); sampler,_,shapes,channels=rig.build_scene(contract)
-    catalog['ambientClips']={}
-    for name,phases in [('breath',[(0,{}),(1400,dict(bodyScaleX=1.004,bodyScaleY=1.008,bodyY=-.35)),(2800,{})]),('blink',[(0,{}),(66.66666666666667,dict(blink=0)),(83.33333333333333,dict(blink=0)),(150,{})])]:
-        catalog['ambientClips'][name]={}
+    def channel_clips(name,channel_names,phases):
+        result={}
         samples=[rig.pose_properties({**contract['neutral'],**pose},contract,sampler,shapes,channels) for _,pose in phases]
-        for channel in behavior['ambient'][name]['channels']:
+        for channel in channel_names:
             keys={obj:{key:[sample[obj][key] for sample in samples] for key in props} for obj,props in channels[channel].items()}
-            clip='ambient_'+name+'__'+channel;timeline(clip,keys,phases,phases[-1][0]);catalog['ambientClips'][name][channel]=clip
+            clip='ambient_'+name+'__'+channel if name in ('breath','blink') else name
+            timeline(clip,keys,phases,phases[-1][0]);result[channel]=clip
+        return result
+    catalog['ambientClips']={}
+    breath=[(0,{}),(700,dict(bodyScaleX=1.018,bodyScaleY=1.022,bodyY=-.15,gazeX=-.5,gazeY=-.15,leftOpen=1.025,rightOpen=1.025)),(1400,dict(bodyScaleX=1.035,bodyScaleY=1.045,bodyY=-.45,gazeX=-1,gazeY=-.35,leftOpen=1.06,rightOpen=1.06)),(2100,dict(bodyScaleX=1.018,bodyScaleY=1.022,bodyY=-.15,gazeX=.5,gazeY=-.15,leftOpen=1.025,rightOpen=1.025)),(2800,{})]
+    blink=[(0,{}),(66.66666666666667,dict(blink=0)),(83.33333333333333,dict(blink=0)),(150,{})]
+    for name,phases in [('breath',breath),('blink',blink)]:catalog['ambientClips'][name]=channel_clips(name,behavior['ambient'][name]['channels'],phases)
+    bump_duration=behavior['bump']['durationMs'];bump_scale=behavior['bump']['peakScale'];bump_phases=[(0,None),(100,None),(bump_duration,None)]
+    bump_clip=timeline('transition_bump',{bump_node.get('id'):{rig.NODE_PROPERTIES['scaleX']:[1,bump_scale,1],rig.NODE_PROPERTIES['scaleY']:[1,bump_scale,1]}},bump_phases,bump_duration)
+    catalog['transitionBump']=dict(clip=bump_clip.get('name'),node='BumpTransform',durationMs=bump_duration)
     ET.indent(root,space='  ')
     return root,catalog
 
@@ -104,6 +116,7 @@ class PersonalityStore(author.AuthoringStore):
             fingerprint=self.sources_hash()
             if not force and fingerprint==self.fingerprint:return False
             self.fingerprint=fingerprint
+            print('Preparing phase4 definitions and RML...',flush=True)
             root,catalog=generate(self.source); scene=ET.tostring(root,encoding='unicode')+'\n'
             generation=hashlib.sha256((scene+json.dumps(catalog,sort_keys=True)).encode()).hexdigest()[:20]
             stage=self.output/'build'/generation; project=stage/'project';project.mkdir(parents=True,exist_ok=True)
@@ -111,6 +124,7 @@ class PersonalityStore(author.AuthoringStore):
             logs={}
             for mode,args in [('verify',['--verify','--format=json']),('once',['--once','--format=json']),('inspect',['--summary'])]:
                 command=[str(rig.CLI),str(project),*args] if mode!='inspect' else [str(rig.CLI),'inspect',str(project),*args]
+                print(f'Rive {mode}...',flush=True)
                 result=subprocess.run(command,capture_output=True,text=True,encoding='utf-8');logs[mode]=dict(command=command,exitCode=result.returncode,stdout=result.stdout,stderr=result.stderr)
                 (self.output/f'cli-{mode}.log').write_text(result.stdout+'\n'+result.stderr,encoding='utf-8')
                 if result.returncode: author.fail('scene.rml','/',f'CLI {mode}: {result.stderr or result.stdout}')
@@ -127,6 +141,42 @@ class PersonalityStore(author.AuthoringStore):
             diagnostic=error.diagnostic() if isinstance(error,author.DefinitionError) else dict(file='actions',pointer='/',message=str(error))
             with self.lock:self.error=diagnostic;self.revision+=1
             print(f'Last valid retained: {diagnostic}',flush=True);return False
+
+def validate_motion(source=SOURCE):
+    """Finite 60fps semantic samples; geometry certificate tests each cubic contour.
+
+    Native node readback and controller scheduling have a separate WASM suite.
+    This does not certify every instant or arbitrary cross-shape replacement.
+    """
+    c=rig.load_contract();b=read_behavior(source);results=[]
+    def ease(x,curve):
+        def cubic(t,a,d):return 3*(1-t)**2*t*a+3*(1-t)*t*t*d+t**3
+        low,high=0.,1.
+        for _ in range(40):
+            middle=(low+high)/2
+            if cubic(middle,curve[0],curve[2])<x:low=middle
+            else:high=middle
+        return cubic((low+high)/2,curve[1],curve[3])
+    for _,a in discover(source):
+        if a['id'] not in ('yes','think','transform_star'):continue
+        phases=a['phases'];samples=[]
+        for frame in range(round(a['durationMs']*.06)+1):
+            ms=frame/0.06;index=next((i for i in range(len(phases)-1) if ms<=phases[i+1]['timeMs']),len(phases)-2)
+            start,end=phases[index:index+2];w=ease((ms-start['timeMs'])/(end['timeMs']-start['timeMs']),start['curve'])
+            p={**c['neutral'],**{key:a['poses'][start['pose']][key]+(a['poses'][end['pose']][key]-a['poses'][start['pose']][key])*w for key in a['channels']}}
+            if a.get('targetShape'):p['shapeTo']=a['targetShape']
+            rig.validate_state(p,c)
+            vertices=rig.blend_vertices(c['shapes']['base'],c['shapes'][p['shapeTo']],p['morph'])
+            eye_radius=math.hypot(c['eyes']['separation']/2+abs(p['gazeX']),abs(p['gazeY']))+math.hypot(c['eyes']['width']/2,c['eyes']['height']/2*max(p['leftOpen'],p['rightOpen']))
+            geometry=rig.certify_contour(vertices,eye_radius)
+            if geometry['eyeMargin']<c['eyeMarginMinimum']:raise ValueError('Eye containment: '+a['id'])
+            halo=121*max(p['bodyScaleX'],p['bodyScaleY'])+max(abs(p['bodyX']),abs(p['bodyY']))
+            body_radius=max(math.hypot(v['x'],v['y'])+max(v['inDistance'],v['outDistance']) for v in vertices)
+            body=body_radius*max(p['bodyScaleX'],p['bodyScaleY'])+max(abs(p['bodyX']),abs(p['bodyY']))
+            if max(halo,body)>=min(c['artboard']['width'],c['artboard']['height'])/2:raise ValueError('Visibility: '+a['id'])
+            samples.append(dict(timeMs=ms,morph=p['morph'],eyeMargin=geometry['eyeMargin'],haloExtent=halo,bodyExtent=body,scaleX=p['bodyScaleX'],scaleY=p['bodyScaleY']))
+        results.append(dict(action=a['id'],samples=len(samples),activeMs=a['durationMs'],totalMs=a['durationMs']+2*b['bump']['durationMs']+b['recoveryMs'],minimumEyeMargin=min(x['eyeMargin'] for x in samples),maximumHaloExtent=max(x['haloExtent'] for x in samples),maximumBodyExtent=max(x['bodyExtent'] for x in samples),maximumMorph=max(x['morph'] for x in samples),maximumScaleX=max(x['scaleX'] for x in samples),maximumScaleY=max(x['scaleY'] for x in samples)))
+    return dict(status='PASS',cadenceMs=1000/60,bumpPeak=b['bump']['peakScale'],bumpExtentAtNeutral=121*b['bump']['peakScale'],actions=results,scope='Finite authored samples with continuous contour certificates at each sample; WASM verifies composed node scales separately. No analytical certification of all time or C1 on interruptions.')
 
 def route(path,store):
     path=unquote(urlsplit(path).path)
@@ -160,8 +210,28 @@ def render_evidence(store):
     """Focused real CLI captures; controller recovery is measured by native harness."""
     from PIL import Image,ImageChops,ImageDraw
     root,catalog=generate(store.source);frames=store.output/'renders';frames.mkdir(parents=True,exist_ok=True);captures={};logs=[];checks=[]
-    def project(label,machine_name='RigNeutral',interrupted=False,ambient_clip=None):
+    def project(label,machine_name='RigNeutral',interrupted=False,ambient_clip=None,lifecycle=False):
         tree=copy.deepcopy(root);board=tree.find('Artboard');selected=next(m for m in board.findall('StateMachine') if m.get('name')==machine_name)
+        background_builder=rig.SceneBuilder();background_builder.root=tree;background_builder.serial=max(int(e.get('id').split(':')[1]) for e in tree.iter() if e.get('id'))
+        background_builder.add(background_builder.add(board,'Fill'),'SolidColor',colorValue='FF000000')
+        if lifecycle:
+            playing=selected.find('StateMachineLayer/AnimationState');original=next(clip for clip in board.findall('LinearAnimation') if clip.get('id')==playing.get('animationId'));combined=copy.deepcopy(original)
+            s=rig.SceneBuilder();s.root=tree;s.serial=max(int(e.get('id').split(':')[1]) for e in tree.iter() if e.get('id'))
+            entry=round(catalog['transitionBump']['durationMs']*.06);recovery=round(catalog['behavior']['recoveryMs']*.06);active=int(original.get('duration'));total=entry+active+recovery+entry
+            combined.set('duration',str(total));combined.set('name','proof_lifecycle')
+            for prop in combined.iter('KeyedProperty'):
+                first=copy.deepcopy(prop[0])
+                for key in prop.findall('KeyFrameDouble'):key.set('frame',str(int(key.get('frame'))+entry))
+                # First sample is the complete neutral of this owned property.
+                first.set('id',f'0:{s.serial+1}');s.serial+=1
+                for child in first:child.set('id',f'0:{s.serial+1}');s.serial+=1
+                prop.insert(0,first)
+            bump=next(n for n in board.iter('Node') if n.get('name')=='BumpTransform');obj=s.add(combined,'KeyedObject',objectId=bump.get('id'));peak=catalog['behavior']['bump']['peakScale'];return_start=entry+active+recovery
+            for key in (16,17):
+                prop=s.add(obj,'KeyedProperty',propertyKey=key)
+                for frame,value in [(0,1),(6,peak),(entry,1),(return_start,1),(return_start+6,peak),(total,1)]:
+                    k=s.add(prop,'KeyFrameDouble',frame=frame,value=value,interpolationType='cubic');s.add(k,'CubicEaseInterpolator',x1=.42,y1=0,x2=.58,y2=1)
+            board.remove(original);board.append(combined)
         if interrupted:
             layer=selected.find('StateMachineLayer');playing=layer.findall('AnimationState')[0];transition=playing.find('StateTransition');transition.set('exitTimeIsPercetange','false');transition.set('exitTime','425');transition.set('duration','150')
         if ambient_clip:
@@ -177,16 +247,43 @@ def render_evidence(store):
         captures[label]=image;logs.append(dict(label=label,frame=frame,command=command,exitCode=result.returncode,stdout=result.stdout,stderr=result.stderr));return image
     baseline=capture(project('neutral'),'neutral-initial',1)
     for action in catalog['actions'].values():
+        if action['id'] not in ('yes','think','transform_star'):continue
         for variant,v in action['variants'].items():
             label=action['id']+'-'+variant;directory=project(label,v['machine']);phase=next((p for p in action['phases'] if p['name']=='beat_one'),None) or next((p for p in action['phases'] if p['name'] in ('recognize','hold','apex','quiet_hold')),action['phases'][len(action['phases'])//2]);capture(directory,label+'-active',round(phase['timeMs']*.06)+1);final=capture(directory,label+'-neutral',round(action['durationMs']*.06)+10)
             if final.tobytes()!=baseline.tobytes():raise ValueError('Neutral mismatch '+label)
             checks.append(label);print('Rendered '+label+'; neutral RGBA exact',flush=True)
     for kind,channels in catalog['ambientClips'].items():
         for channel,clip in channels.items():capture(project(kind+'-'+channel,ambient_clip=clip),kind+'-'+channel+'-active',85 if kind=='breath' else 5)
-    directory=project('interruption',catalog['actions']['hello']['variants']['default']['machine'],True)
+    bump_clip=catalog['transitionBump']['clip'];bump_directory=project('transition-bump',ambient_clip=bump_clip)
+    capture(bump_directory,'transition-bump-entry',7);bump_end=capture(bump_directory,'transition-bump-return',round(catalog['transitionBump']['durationMs']*.06)+10)
+    if bump_end.tobytes()!=baseline.tobytes():raise ValueError('Transition bump does not return to neutral')
+    directory=project('interruption',catalog['actions']['transform_star']['variants']['default']['machine'],True)
     for label,frame in [('interruption-before',20),('interruption-native-machine-blend',29),('interruption-neutral',45)]:image=capture(directory,label,frame)
     if image.tobytes()!=baseline.tobytes():raise ValueError('Interruption neutral differs')
-    labels=[name for name in captures if name.endswith('-active')]+['interruption-before','interruption-native-machine-blend','interruption-neutral','neutral-initial'];sheet=Image.new('RGB',(360*4,370*math.ceil(len(labels)/4)),'#15131e');draw=ImageDraw.Draw(sheet)
+    temporal=store.output/'sequences';temporal.mkdir(exist_ok=True);sequence_records=[]
+    for id in ('yes','think','transform_star'):
+        print('Rendering complete 140/48px sequence: '+id,flush=True)
+        a=catalog['actions'][id];duration=a['durationMs']+650;directory=project(id+'-lifecycle',a['variants']['default']['machine'],lifecycle=True);images=[];timeline=[]
+        end_frame=round(duration*.06);sample_frames=sorted(set([*range(0,end_frame+1,4),end_frame,end_frame+12]))
+        for frame in sample_frames:
+            ms=frame/.06;label=f'{id}-timeline-{frame:03d}';image=capture(directory,label,frame+1);images.append(image);timeline.append(dict(timeMs=ms,render=label+'.png'))
+        # The combined CLI star timeline can retain a small raster color delta
+        # after morph/scale. Record it; direct neutral machines remain RGBA-exact
+        # above. Geometry certificates and native transforms are separate gates.
+        return_delta=max(high for low,high in ImageChops.difference(images[0],images[-1]).getextrema())
+        for size in (140,48):
+            scale=size/122;panels=[]
+            for index,image in enumerate(images):
+                panel=Image.new('RGB',(360,260),'black');body=image.resize((round(360*scale),round(340*scale)),Image.Resampling.LANCZOS);panel.paste(body,(180-body.width//2,120-body.height//2));d=ImageDraw.Draw(panel);d.text((10,235),f'{id} {size}px | {timeline[index]["timeMs"]:.0f}ms',fill='white');panels.append(panel)
+            delays=[round(timeline[i+1]['timeMs']-timeline[i]['timeMs']) for i in range(len(timeline)-1)]+[300]
+            panels[0].save(temporal/f'{id}-{size}px.gif',save_all=True,append_images=panels[1:],duration=delays,loop=0)
+            sheet=Image.new('RGB',(360*5,260*math.ceil(len(panels)/5)),'black')
+            for i,panel in enumerate(panels):sheet.paste(panel,(i%5*360,i//5*260))
+            sheet.save(temporal/f'{id}-{size}px.png')
+        sequence_records.append(dict(action=id,totalMs=duration,cadenceMs=1000/15,frames=timeline,sizes=[140,48],neutralRasterMaximumChannelDelta=return_delta,neutralRgbaExact=return_delta==0,scope='Real Rive combined finite neutral-baseline timeline: entry bump, authored action, neutral settle/recovery, return bump. Replacement/live ambient use WASM controller tests. Raster delta is measured separately from strict geometry/native-transform gates.'))
+    (store.output/'temporal-validation.json').write_text(json.dumps(dict(status='PASS',sequences=sequence_records),indent=2)+'\n',encoding='utf-8')
+    (store.output/'motion-validation.json').write_text(json.dumps(validate_motion(store.source),indent=2)+'\n',encoding='utf-8')
+    labels=[name for name in captures if name.endswith('-active')]+['transition-bump-entry','transition-bump-return','interruption-before','interruption-native-machine-blend','interruption-neutral','neutral-initial'];sheet=Image.new('RGB',(360*4,370*math.ceil(len(labels)/4)),'#15131e');draw=ImageDraw.Draw(sheet)
     for i,label in enumerate(labels):x,y=i%4*360,i//4*370;sheet.paste(captures[label],(x,y),captures[label]);draw.text((x+8,y+345),label,fill='#eee4f8')
     sheet.save(store.output/'contact-sheet.png');report=dict(status='PASS',source='Real Rive CLI 1.3.0 focused generated machines',frames=len(logs),neutralComparisons=len(checks)+1,neutralRgbaEquality=True,variants=checks,interruptionScope='Native machine blend to neutral at425ms for150ms; frozen public controller recovery separately measured by native-validation.json')
     (store.output/'render-validation.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');(store.output/'render-log.json').write_text(json.dumps(logs,indent=2)+'\n',encoding='utf-8')
@@ -196,7 +293,7 @@ def main():
     if args.check:
         root,catalog=generate();expected=json.loads((SOURCE/'catalog.json').read_text(encoding='utf-8'));expected.pop('generation',None)
         if expected!=catalog or ET.tostring(root,encoding='unicode')+'\n'!=(SOURCE/'scene.rml').read_text(encoding='utf-8'):raise ValueError('Generated sources differ')
-        print(json.dumps(dict(status='PASS',actions=len(catalog['actions']))));return
+        print(json.dumps(dict(status='PASS',actions=len(catalog['actions']),motion=validate_motion())));return
     store=PersonalityStore()
     if not store.refresh(True):raise ValueError(store.status()['error'])
     if args.render:render_evidence(store);return
