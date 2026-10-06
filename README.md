@@ -4,9 +4,19 @@
 
 JEVLING is a digital creature that watches cursor, touch, activity, absence, and user-provided context. Jev turns that compact world state into structured behavior instead of chat text.
 
+## Rediseño y documentación
+
+El rediseño aprobado contempla Home, Features determinista y About, con la paleta del Jev actual, temas claro/oscuro y ES/EN. Las fases de implementación están pendientes; la documentación distingue el diseño objetivo del runtime existente.
+
+- [Plan y estado de las fases](.dev/TASK.md).
+- [Contrato de diseño y tokens](design.md).
+- [Instrucciones para agentes](AGENTS.md).
+- [Índice de arquitectura e interacción](docs/README.md).
+- [Historia y creador de JEV](docs/jev-story.md).
+
 ## Run locally
 
-Requires Node.js 20 or newer.
+Requires Node.js 20.19+, 22.12+, or 24+.
 
 ```bash
 npm install

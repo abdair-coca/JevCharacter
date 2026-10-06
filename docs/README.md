@@ -6,9 +6,19 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 
 ## Lectura rápida
 
+- [Instrucciones raíz para agentes](../AGENTS.md): qué documento consultar según el trabajo y cómo registrar evidencia.
+- [Plan activo de rediseño](../.dev/TASK.md): Home, Features determinista y About; cinco fases aprobadas, implementación pendiente.
+- [Contrato de diseño](../design.md): reglas visuales, tokens, ES/EN, temas, animación 2D, accesibilidad y verificación.
+- [Historia de JEV](jev-story.md): relato original del usuario y autoría para About.
 - [Arquitectura](architecture.md): runtime, responsabilidades de módulos, estado y camino de decisión.
 - [Interacción](interaction.md): pointer, entradas explícitas, disparadores de decisión y estados Rive.
 - [Modelo Rive prove1](rive-model.md): artboards, animaciones, ViewModels, nombres exactos y límites de la inspección.
+
+## Estado del rediseño
+
+El plan y sus cinco resúmenes de fase fueron aprobados el 2026-10-06. La nueva web conservará el Jev actual y utilizará su paleta, sin verde ni lima; tendrá Home, Features completamente determinista y About, temas claro/oscuro y ES/EN. El stack objetivo y los valores visuales iniciales se detallan en `design.md`; su documentación no implica que las dependencias estén instaladas ni que las vistas estén implementadas.
+
+El usuario declaró terminado JEV Lab y pidió reemplazar su plan activo, aclarando que no había registrado aprobación formal. El [plan anterior](../.dev/archive/jev-lab-plan-2026-10-06.md) conserva íntegro su estado histórico. Las instrucciones locales del laboratorio siguen en [jev-lab/AGENTS.md](../jev-lab/AGENTS.md).
 
 ## Contexto del proyecto
 
