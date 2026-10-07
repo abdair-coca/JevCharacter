@@ -4,13 +4,13 @@ La web debe entenderse viendo actuar a Jev: **claridad, impacto visual y muy poc
 
 ## Autoridad y estado
 
-- [Plan activo](.dev/TASK.md): fases, tareas, autorizaciones y evidencias de entrega.
+- [Spec](.dev/spec.md): requisitos de producto aprobados. [Plan](.dev/plan.md): secuencia y contratos por fase. [Task](.dev/task.md): progreso, evidencia, bloqueos y handoff actual.
 - Este documento: reglas compartidas y contrato de diseño. Las decisiones de producto están aprobadas; las tablas de valores iniciales son propuestas para validar con Home en fase 1.
-- `src/styles/tokens.css`: futura fuente ejecutable de valores de diseño, por crear en fase 1. Después de implementarla, actualizar este documento cuando cambie el contrato; consultar CSS para los valores efectivos.
+- `src/styles/tokens.css`: fuente ejecutable de valores de diseño, implementada en fase 1. Consultar CSS para los valores efectivos.
 - [Arquitectura actual](docs/architecture.md) e [interacción actual](docs/interaction.md): comportamiento existente, no una afirmación de que el rediseño ya funciona.
 - [Historia de JEV](docs/jev-story.md): relato aportado por el usuario, fuente editorial de About.
 
-La preparación documental no instala dependencias ni cambia el runtime. La revisión visual de Home validará colores, escala, espaciados y ritmo antes de extenderlos al resto del sitio.
+La Home revisada de fase 1 fue aceptada al autorizar el usuario continuar con la siguiente fase. Fase 2 conserva esa referencia visual y completa habla bilingüe, contexto y suspensión. El usuario definió la paleta exacta y aprobó el contraste del texto sobre controles destacados.
 
 ## Identidad y contenido
 
@@ -21,7 +21,7 @@ La preparación documental no instala dependencias ni cambia el runtime. La revi
 | Jev actual | Conservar apariencia y animaciones; el rediseño no integra el personaje de `jev-lab`. |
 | Poco texto | Un título y una frase de apoyo por capítulo; información adicional desplegable y disponible sin animación. |
 | Audiencia mixta | Lenguaje cotidiano primero; detalles técnicos opcionales. |
-| Impacto con propósito | La composición y las demostraciones crean el impacto. Evitar efectos continuos sin función de orientación o feedback. |
+| Impacto con propósito | La composición y las demostraciones crean el impacto. En input/HUD el usuario aprobó una respiración orgánica en reposo, vinculada al estado de Jev; pausarla fuera de vista y respetar movimiento reducido. |
 
 No inventar métricas, capacidades, fechas, retratos ni hitos. En About, presentar experimentación y visión futura con su contexto. La memoria actual se describe como personalidad local y contexto de sesión, no como memoria conversacional permanente o sincronizada.
 
@@ -43,7 +43,7 @@ Colores, tamaños, espaciados, radios, sombras, capas y parámetros visuales de 
 
 | Token | Función |
 |---|---|
-| `--jev-color-primary` | Color principal derivado de Jev; selección exacta pendiente de fase 1. |
+| `--jev-color-primary` | Morado indicado por el usuario; `#8B5CF6` oscuro / `#7C3AED` claro. |
 | `--jev-color-secondary` | Segundo acento solo si está justificado por la paleta visible de Jev. |
 | `--color-background` | Fondo de la vista. |
 | `--color-surface` / `--color-surface-raised` | Controles, HUD y contenido elevado. |
@@ -53,7 +53,7 @@ Colores, tamaños, espaciados, radios, sombras, capas y parámetros visuales de 
 | `--color-focus` | Foco visible, derivado de Jev y contrastado en ambos temas. |
 | `--color-status-active` / `--color-status-local` / `--color-status-error` | Estados distinguibles mediante etiqueta/icono además de color. |
 
-**Bases neutras iniciales propuestas**, en OKLCH acromático; se revisan en Home, no constituyen una paleta exacta ya aprobada:
+**Antecedente de bases neutras iniciales propuestas**, reemplazadas durante fase 1 por la paleta exacta indicada a continuación:
 
 | Rol | Claro | Oscuro |
 |---|---|---|
@@ -65,6 +65,26 @@ Colores, tamaños, espaciados, radios, sombras, capas y parámetros visuales de 
 | Borde | `oklch(0.88 0 0)` | `oklch(0.31 0 0)` |
 
 Los roles de acento, foco y estado se asignan tras revisar a Jev en pantalla y medir contraste. No rellenar colores pendientes con verde/lima, defaults del kit de UI o un violeta arbitrario presentado como color oficial.
+
+### Paleta indicada durante fase 1 — 2026-10-06
+
+| Rol | Oscuro | Claro |
+|---|---|---|
+| Fondo | `#050608` | `#F7F7FB` |
+| Fondo secundario | `#0B0D12` | `#FFFFFF` |
+| Superficie | `#11131A` | `#F0F0F7` |
+| Hover/elevación | `#191C26` | `#E8E8F2` |
+| Borde | `#292C38` | `#D8D9E5` |
+| Texto | `#F7F7FA` | `#111218` |
+| Secundario | `#9295A3` | `#666979` |
+| Tenue | `#555968` | `#9B9EAC` |
+| Primary purple | `#8B5CF6` | `#7C3AED` |
+| Purple brillante | `#A855F7` | `#9333EA` |
+| Magenta | `#D946EF` | `#C026D3` |
+| Pink accent | `#EC4899` | `#DB2777` |
+| Glow violeta | `#7C3AED` | `#A78BFA` |
+
+El usuario aprobó `#050608` sobre el botón morado en oscuro y `#FFFFFF` en claro para el contraste. Texto secundario cubre etiquetas legibles; el token tenue queda reservado para decoración. Foco/estado local usan primary; estado activo usa magenta; error usa pink, siempre acompañado de texto. La selección exacta procede del usuario, no de una extracción del asset. Encuadre, composición y sombras quedan sujetos a la revisión visual de la entrega.
 
 ### Escalas iniciales propuestas
 
@@ -108,6 +128,7 @@ Leer y convertir tokens al formato del motor mediante un adaptador tipado: CSS u
 
 - Vistas independientes: `/`, `/features`, `/about`. Navegación fija; enlaces directos, recargas y atrás/adelante correctos.
 - Tema inicial del sistema; elección manual persistida y aplicada antes del primer render visible para evitar destellos. Escuchar cambios del sistema cuando no existe override manual.
+- Revisión de Home: mostrar solo un botón claro/oscuro (sol/luna); sistema permanece como comportamiento inicial implícito. ES/EN usa dos botones visibles con indicador animado. Mantener nombres accesibles, `aria-pressed`, teclado y movimiento reducido.
 - Idioma inicial ES/EN del navegador, español como alternativa; recordar cambios manuales. Actualizar `html[lang]`, etiquetas, títulos y mensajes accesibles.
 - Persistir preferencias de presentación y la personalidad existente; contexto e intercambios de Home siguen en memoria de sesión. Si storage no está disponible, mantener la experiencia en memoria.
 - Cambiar tema/idioma conserva vista y progreso. No remontar el personaje por usar esas preferencias como `key`.
@@ -118,15 +139,23 @@ Leer y convertir tokens al formato del motor mediante un adaptador tipado: CSS u
 
 Jev, input evidente, respuesta breve y HUD compacto. El HUD muestra acción elegida y confianza; sus detalles incluyen probabilidades, intensidad, atención y personalidad con nombres traducidos. Los IDs del contrato de decisión/Rive no se traducen.
 
+Revisión visual solicitada: centrar el input debajo de Jev de forma independiente del HUD, que queda a la derecha. Al no caber ambos en la misma fila, HUD compacto arriba y a la derecha del input. La exportación actual es `prove2.riv`, aportada por el usuario para corregir el fondo; confirmó que funciona bien y pidió un aumento ligero, aplicado con escala `1.9` frente a `1.72`. Se mantiene un único canvas directo, contenedor cuadrado y máscara radial original, sin óvalo decorativo. La máscara atenúa bordes, no elimina el fondo interno del asset ni reconstruye alpha; no procesar píxeles por frame.
+
+Revisión de fase 2 (2026-10-07): Home es un escenario de una pantalla, sin scroll de página en escritorio/móvil. La zona de Jev cede altura al espacio disponible; abrir el HUD no cambia el flujo ni desplaza el input. El panel se superpone hacia arriba con origen inferior derecho. En móvil el resumen es una fila pequeña con acción, confianza, señal y chevron; las etiquetas completas se conservan accesibles. En viewport bajo, métricas en dos columnas, sin scroll interno del HUD. Este contrato es de Home; Features/About mantienen sus recorridos de scroll aprobados.
+
 Conservar sensores locales, touch, reacciones y acciones actuales. Cambiar preferencias no pierde contexto. Al navegar fuera de Home, guardar su estado en memoria y suspender sensores, scheduler, solicitudes y animación; al volver, reanudar sin ejecutar respuestas obsoletas.
 
 Enviar el idioma seleccionado a `/api/talk` como valor validado ES/EN. Aplicarlo a nuevas respuestas sin reescribir el texto original del usuario ni traducir retroactivamente el historial. Un cambio durante streaming cancela la generación obsoleta: no mezclar idiomas ni aceptar fragmentos de una petición cancelada. Definir y probar el estado de continuación antes de cerrar fase 2.
+
+Continuación confirmada en fase 2: al cambiar idioma durante habla, regenerar automáticamente para el mismo mensaje; ocultar Home cancela sin replay al volver. Home permanece montada en memoria pero inerte/suspendida en otras rutas. Volver desde Features/About no solicita una reacción de IA. «Borrar conversación» elimina también los intercambios completos y la caché que contenía contexto, conservando personalidad/preferencias/cuotas.
 
 Si falla el servicio de decisión, mantener reacciones locales y una etiqueta breve en el HUD. Si falla el habla, ofrecer un mensaje de estado localizado, no una frase simulada presentada como respuesta real de Jev.
 
 ### Features: determinismo
 
 Capítulos: Percibe, Reacciona, Decide, Responde, Habla, Se transforma, Se adapta y Sigue contigo. Escenario protagonista durante el scroll, con controles equivalentes por teclado para avanzar, retroceder y repetir.
+
+Dirección visual de fase 3 confirmada por el usuario: escenario libre, sin contenedor visible, tarjetas ni marco de demo. Explicaciones alternadas izquierda/derecha y Jev desplazándose por los espacios vacíos mediante scroll. GSAP gobierna la trayectoria del wrapper; Rive conserva la animación del personaje y Motion solo el texto/controles independientes. En móvil, espacio vertical entre relato y personaje más trayectoria horizontal acotada. Explicar decisión/confianza dentro del capítulo Decide; no mantener HUD ni rótulos de ejemplo superpuestos todo el tiempo. La transparencia editorial se conserva en la introducción y junto a los datos ilustrativos.
 
 **Invariante:** a igual capítulo, idioma y progreso lógico, corresponde la misma secuencia de eventos, acciones, texto y datos de ejemplo. No se exige igualdad de píxeles entre dispositivos o tasas de refresco.
 
@@ -169,6 +198,8 @@ Cada elemento tiene un único dueño de animación. GSAP puede gobernar el wrapp
 
 Usar `AnimatePresence` al montar/desmontar elementos y `variants` con `staggerChildren` para secuencias de UI. Las animaciones guían atención, refuerzan jerarquía o dan feedback. Evitar loops decorativos.
 
+Excepción visual aprobada para los controles de Home: presencia orgánica continua y suave en reposo, acentuada mientras el estado real es `deciding` y modulada por atención. Se limita a luz/señales secundarias mediante transform/opacity; el texto y los objetivos de interacción permanecen estables. Suspender fuera de viewport/pestaña y ofrecer una alternativa estática con movimiento reducido. Input y HUD mantienen los datos reales; las animaciones no simulan progreso ni confianza.
+
 Lenis conserva scroll nativo funcional, excluye zonas internas como diálogos y no añade un loop duplicado al ticker usado por GSAP. Destruir su instancia y retirar suscripciones al desmontar el gestor global.
 
 ### Movimiento reducido y limpieza
@@ -194,7 +225,7 @@ Los parámetros de física viven en una configuración de escena. Desmontar impl
 
 ## Verificación y evidencia
 
-Antes de cerrar una fase, ejecutar las comprobaciones aplicables y registrar sus resultados en el plan. Para el cambio exclusivamente documental, comprobar enlaces, alcance del diff y preservación del archivo histórico; las comprobaciones de aplicación que se ejecuten son evidencia de línea base, no de un rediseño implementado.
+Antes de cerrar una fase, ejecutar las comprobaciones aplicables y registrar sus resultados en `.dev/task.md`. Para el cambio exclusivamente documental, comprobar enlaces, alcance del diff y preservación del archivo histórico; las comprobaciones de aplicación que se ejecuten son evidencia de línea base, no de un rediseño implementado.
 
 ```powershell
 npm exec -- tsc --noEmit -p tsconfig.app.json
@@ -206,8 +237,8 @@ npm exec -- vitest run
 npm run build
 ```
 
-ESLint debe configurarse en fase 1. El script `lint` actual ejecuta Oxlint y no equivale a ESLint. No instalar herramientas implícitamente para simular una comprobación disponible; informar lo que falta y resolverlo en la fase que corresponda.
+ESLint está configurado en fase 1: `npm run lint` ejecuta `eslint . --max-warnings=0`. `lint:ox` conserva Oxlint. Los cuatro tsconfig habilitan strict explícitamente; el lint raíz excluye el laboratorio terminado y los artefactos de evidencia. No instalar herramientas implícitamente para simular una comprobación disponible; informar lo que falta y resolverlo en la fase que corresponda.
 
 Playwright debe abrir la aplicación, capturar móvil/escritorio, revisar errores de consola y probar las interacciones de la entrega. Matriz final: tres vistas, dos temas, dos idiomas, teclado y movimiento reducido. Medir rendimiento en condiciones registradas; diferenciar móvil físico de emulación y llamadas reales de pruebas simuladas. No afirmar cumplimiento de LCP/FPS ni disponibilidad del proveedor sin evidencia.
 
-**Cierre de fase:** tareas realizadas, comprobaciones registradas, limitaciones explícitas y entrega presentada al usuario. La fase siguiente comienza tras su revisión y autorización.
+**Cierre de fase:** tareas realizadas, comprobaciones registradas en `.dev/task.md`, limitaciones explícitas y entrega presentada al usuario. La fase siguiente comienza tras su revisión y autorización.
