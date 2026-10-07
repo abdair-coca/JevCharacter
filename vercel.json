@@ -1,5 +1,9 @@
 {
   "framework": "vite",
+  "rewrites": [
+    { "source": "/features", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" }
+  ],
   "functions": {
     "api/decide.ts": {
       "maxDuration": 10

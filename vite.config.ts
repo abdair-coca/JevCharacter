@@ -1,4 +1,6 @@
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import { fileURLToPath } from 'node:url'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 
@@ -134,6 +136,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [react(), localDevApi()],
+    resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+    plugins: [react(), tailwindcss(), localDevApi()],
   }
 })
