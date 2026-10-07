@@ -1,23 +1,28 @@
+@import "tailwindcss" source("./");
+@import "./styles/tokens.css";
+
 :root {
-  --font-display: "Avenir Next", "Segoe UI Variable Display", "Segoe UI", sans-serif;
-  --font-mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
-  font-family: var(--font-display);
-  color: #eff5f1;
-  background: #050706;
+  font-family: var(--font-body);
+  color: var(--color-foreground);
+  background: var(--color-background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 * { box-sizing: border-box; }
-
-html,
-body,
-#root { width: 100%; min-width: 320px; min-height: 100%; margin: 0; }
-
-html { background: #050706; }
-body { min-height: 100dvh; overflow: hidden; }
-button, input { font: inherit; }
-button { -webkit-tap-highlight-color: transparent; }
-::selection { color: #07100b; background: #a0ebbe; }
+html, body, #root { width: 100%; min-height: 100%; margin: 0; }
+#root { display: flow-root; }
+html { scroll-padding-top: calc(var(--size-header) + var(--space-6)); }
+body { min-height: 100dvh; }
+button, input, select { font: inherit; }
+button, a, select { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), select { cursor: pointer; }
+button:disabled { cursor: default; }
+button, a, input, select { touch-action: manipulation; }
+:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); }
+::selection { color: var(--color-accent-foreground); background: var(--color-accent); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; animation: none !important; }
+}

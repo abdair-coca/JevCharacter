@@ -1,209 +1,73 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
-
-import Character from "./components/Character";
-import AmbientStage from "./components/AmbientStage";
-import BrainHUD from "./components/BrainHUD";
-import ContextWhisper from "./components/ContextWhisper";
-import DebugPanel from "./components/DebugPanel";
-
-import type { CharacterController } from "./character/useCharacterController";
-import { useCreatureBrain } from "./hooks/useCreatureBrain";
-import { usePointerSensor } from "./creature/sensors/pointerSensor";
-
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { LazyMotion, MotionConfig } from "motion/react";
+import SiteHeader from "./components/SiteHeader";
+import HomePage from "./pages/HomePage";
+import { useRoute } from "./navigation/routes";
+import { preferencesStore, usePreferences } from "./stores/preferencesStore";
+import { useTranslation } from "./i18n/useTranslation";
 import "./App.css";
 
-type StageStyle = CSSProperties & {
-  "--intensity": number;
-  "--attention": number;
-};
-
-type SpeechCaptionProps = {
-  text: string;
-  complete: boolean;
-  generation: number;
-  onRevealed: (generation: number) => void;
-};
-
-function SpeechCaption({ text, complete, generation, onRevealed }: SpeechCaptionProps) {
-  const [visibleText, setVisibleText] = useState("");
-  const [revealed, setRevealed] = useState(false);
-  const targetRef = useRef(text);
-  const completeRef = useRef(complete);
-  const revealIndexRef = useRef(0);
-  targetRef.current = text;
-  completeRef.current = complete;
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      const characters = Array.from(targetRef.current);
-      if (revealIndexRef.current < characters.length) {
-        revealIndexRef.current += 1;
-        setVisibleText(characters.slice(0, revealIndexRef.current).join(""));
-        return;
-      }
-      if (completeRef.current) {
-        window.clearInterval(timer);
-        setRevealed(true);
-        onRevealed(generation);
-      }
-    }, 28);
-    return () => window.clearInterval(timer);
-  }, [generation, onRevealed]);
-
-  return (
-    <>
-      <div
-        className={`speech-caption ${revealed ? "speech-caption--complete" : ""}`}
-        aria-hidden="true"
-      >
-        <span className={!revealed ? "speech-caption__typing" : undefined}>{visibleText}</span>
-      </div>
-      {revealed && (
-        <div className="sr-only" role="status" aria-live="polite">{text}</div>
-      )}
-    </>
-  );
-}
+const PendingPage = lazy(() => import("./pages/PendingPage"));
+const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
+const loadMotionFeatures = () => import("./lib/motionFeatures").then((module) => module.default);
 
 export default function App() {
-  const stageRef = useRef<HTMLElement | null>(null);
-  const creatureShellRef = useRef<HTMLDivElement | null>(null);
-  const characterRef = useRef<CharacterController | null>(null);
-  const [debugActive, setDebugActive] = useState(false);
-  const [thoughtPulse, setThoughtPulse] = useState(0);
-  const wakePlayedRef = useRef(false);
-  const sensors = usePointerSensor(stageRef, creatureShellRef);
-  const brain = useCreatureBrain(sensors, characterRef);
+  const route = useRoute();
+  const theme = usePreferences((state) => state.theme);
+  const language = usePreferences((state) => state.language);
+  const t = useTranslation();
+  const previousRoute = useRef(route);
+  const [homeVisited, setHomeVisited] = useState(route === "/");
 
-  const handleStagePointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
-    const target = event.target;
-    if (target instanceof HTMLCanvasElement) {
-      const creature = creatureShellRef.current?.getBoundingClientRect();
-      const insideCreature = creature &&
-        event.clientX >= creature.left &&
-        event.clientX <= creature.right &&
-        event.clientY >= creature.top &&
-        event.clientY <= creature.bottom;
-      if (insideCreature) return;
-    }
-    if (
-      target instanceof HTMLElement &&
-      target.closest("button, input, textarea, select, a, [role='button']")
-    ) {
-      return;
-    }
-    void characterRef.current?.bump();
-  }, []);
+  useEffect(() => { if (route === "/") setHomeVisited(true); }, [route]);
 
-  const wakeCharacter = useCallback(() => {
-    if (wakePlayedRef.current) return;
-    wakePlayedRef.current = true;
-    void characterRef.current?.playFor("Hello", 1900);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.lang = language;
+    const styles = getComputedStyle(document.documentElement);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", styles.getPropertyValue("--neutral-background").trim());
+  }, [theme, language]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const sync = () => preferencesStore.getState().syncSystemTheme(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      const target = event.target;
-      if (
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        (target instanceof HTMLElement && target.isContentEditable)
-      ) {
-        return;
-      }
-      if (event.key.toLowerCase() === "d") setDebugActive((current) => !current);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+    document.title = `JEVLING — ${route === "/" ? `${t.title} ${t.titleAccent}` : route === "/features" ? t.features : route === "/about" ? t.about : t.notFound}`;
+  }, [route, t]);
 
-  const stageStyle: StageStyle = {
-    "--intensity": brain.decision.intensity,
-    "--attention": brain.decision.wantsAttention,
-  };
+  useEffect(() => {
+    // Focus once the lazy destination is mounted, without remounting Home.
+    if (previousRoute.current === route) return;
+    previousRoute.current = route;
+    let cancelled = false;
+    const focus = () => {
+      if (cancelled) return;
+      const heading = document.querySelector<HTMLElement>(`[data-page-route="${route}"]`);
+      if (heading) { heading.focus({ preventScroll: true }); window.scrollTo(0, 0); }
+      else frame = requestAnimationFrame(focus);
+    };
+    let frame = requestAnimationFrame(focus);
+    return () => { cancelled = true; cancelAnimationFrame(frame); };
+  }, [route]);
 
   return (
-    <main className="stage" ref={stageRef} style={stageStyle} onPointerDown={handleStagePointerDown}>
-      <AmbientStage
-        intensity={brain.decision.intensity}
-        wantsAttention={brain.decision.wantsAttention}
-      />
-
-      <header className="site-header">
-        <div className="brand-mark" aria-label="Jevling">
-          <span className="brand-mark__glyph" aria-hidden="true"><i /><i /></span>
-          <span>JEVLING</span>
-        </div>
-        <div className={`brain-link ${brain.status === "deciding" ? "brain-link--deciding" : ""}`}>
-          <span />
-          {brain.status === "deciding"
-            ? "DECIDING"
-            : brain.decision.source === "jev"
-              ? "JEV ONLINE"
-              : "LOCAL INSTINCT"}
-        </div>
-      </header>
-
-      <section className="intro-copy" aria-label="Jevling introduction">
-        <p>JEVLING</p>
-        <h1>Tiny creature. <em>Big decisions.</em></h1>
-      </section>
-
-      <section className="creature-zone" aria-label="Interactive digital creature">
-        <div
-          className={`creature-presence ${brain.decision.wantsAttention > 0.62 ? "creature-presence--seeking" : ""}`}
-          ref={creatureShellRef}
-        >
-          <div className="creature-presence__aura" aria-hidden="true" />
-          <div className="creature-presence__ring creature-presence__ring--one" aria-hidden="true" />
-          <div className="creature-presence__ring creature-presence__ring--two" aria-hidden="true" />
-          <div className="creature-presence__shadow" aria-hidden="true" />
-          <Character ref={characterRef} onReady={wakeCharacter} />
-        </div>
-      </section>
-
-      {thoughtPulse > 0 && (
-        <div key={thoughtPulse} className="thought-transfer" aria-hidden="true">
-          <i /><i /><i /><i /><i />
-        </div>
-      )}
-
-      {brain.speechCaption && (
-        <SpeechCaption
-          key={brain.speechCaption.generation}
-          text={brain.speechCaption.text}
-          complete={brain.speechCaption.complete}
-          generation={brain.speechCaption.generation}
-          onRevealed={brain.onSpeechCaptionRevealed}
-        />
-      )}
-
-      <div className="interaction-dock">
-        <ContextWhisper
-          context={brain.userContext}
-          onSubmit={brain.submitContext}
-          onClear={brain.clearContext}
-          onThought={() => setThoughtPulse((current) => current + 1)}
-        />
-      </div>
-
-      <BrainHUD
-        decision={brain.decision}
-        status={brain.status}
-        personality={brain.personality}
-      />
-
-      <DebugPanel
-        active={debugActive}
-        getSnapshot={sensors.getSnapshot}
-        personality={brain.personality}
-        decision={brain.decision}
-        latencyMs={brain.apiLatencyMs}
-        onState={brain.forceState}
-        onClose={() => setDebugActive(false)}
-      />
-
-      <span className="debug-hint" aria-hidden="true">D / DIAGNOSTICS</span>
-    </main>
+    <MotionConfig reducedMotion="user">
+      <LazyMotion features={loadMotionFeatures} strict>
+        <SiteHeader route={route} />
+        {(homeVisited || route === "/") && (
+          <div className="home-session" hidden={route !== "/"} inert={route !== "/"}>
+            <HomePage active={route === "/"} />
+          </div>
+        )}
+        <Suspense fallback={<main className="pending-page" aria-busy="true" />}>
+          {route === "/features" ? <FeaturesPage /> : route !== "/" && <PendingPage route={route} />}
+        </Suspense>
+      </LazyMotion>
+    </MotionConfig>
   );
 }
