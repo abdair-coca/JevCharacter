@@ -8,7 +8,7 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 - **Estado:** fase 3 implementada y verificada; pendiente revisión visual/funcional del usuario. Fase 2 aceptada con «ahora continua con la fase 3», incluida revisión del HUD/Home sin scroll. Teclado en dispositivo físico continúa pendiente como limitación de evidencia.
 - **Siguiente acción exacta:** presentar/recibir revisión de Features libre en `http://127.0.0.1:5173/features` con [capturas y resultados](evidence/phase-3/README.md). No comenzar About hasta aprobación.
 - **No iniciar fase 4 hasta:** revisión y aprobación de la entrega de fase 3.
-- **Estado actual del código:** la implementación y evidencias del otro modelo siguen en un árbol de trabajo con cambios sin commit. Preservarlos; no resetear, limpiar, stagear, commitear ni reemplazar fuentes como parte de esta migración SDD.
+- **Estado actual del código:** el 2026-10-07 el usuario autorizó a Luna a organizar el trabajo pendiente en microcommits; la implementación previa, documentación y evidencias ya están guardadas. Los PNG diagnósticos temporales se conservan sin commit. La restricción de no commitear durante la migración SDD queda como antecedente de aquella tarea.
 
 ## Migración SDD
 
@@ -228,6 +228,18 @@ El modelo anterior registró resultados en [`.dev/evidence/phase-1/`](evidence/p
 **Preferencia de ejecución del usuario:** pidió que el comando devolviera respuesta, al interrumpir la matriz larga. Ejecutar verificaciones de navegador en bloques cortos con avance y tiempos; no volver a lanzar una matriz monolítica como feedback principal. Se confirmó que un límite de 45 s cortaba un caso mientras seguía avanzando (16 checks/42 s), no un fallo de la app. El harness ahora tiene casos/bloques, deadline y cierre forzado únicamente de su navegador; los bloques finales tomaron aproximadamente 3–20 s. Los resultados de corridas canceladas/timeouts no se mezclan con el agregado final.
 
 **Límites:** Chromium 153, móvil/touch/visibilidad/reduced motion emulados; no móvil físico/Safari/iOS ni LCP/FPS. APIs solo con fixture de Home. Offline probado después de cargar recursos. Cero errores inesperados; 120 avisos WebGL ReadPixels de captura y dos errores esperados del asset 404. [Evidencia final](evidence/phase-3/README.md). About continúa provisional y la fase 4 no comenzó.
+
+### Corrección acotada — Jev sin máscara radial, 2026-10-07
+
+**Solicitud:** retirar únicamente el óvalo de desvanecimiento que recorta acciones amplias, porque `prove2.riv` ya tiene fondo transparente. El usuario también autorizó lanzar a Luna para microcommitear el proyecto.
+
+**Delta:** `src/App.css` deja de aplicar `mask-image` / `-webkit-mask-image` a `.character-rive`; se elimina solo el token del gradiente sin consumidores en `src/styles/tokens.css`. Escala `1.9`, asset, dimensiones, proporción de Home, composición, sensores y controlador conservados. Se actualizan únicamente las menciones del contrato vigente en spec/design/interacción; las evidencias históricas siguen intactas.
+
+**Verificación:** reproducción previa mediante estilos computados confirmó el gradiente elíptico. Playwright posterior pasó Home/Features en 1440×900 y 390×844 con ambos temas: máscaras `none`, escala `1.9`, sin overflow horizontal. Home ejercitó Ghost/Flower reales desde Diagnóstico. Geometría Jev/input idéntica antes/después en escritorio; retorno de Features y movimiento reducido también comprobados. Ocho capturas y detalles en [unmasked-jev](evidence/unmasked-jev/README.md). Consola sin errores. `npm run build` PASS (`tsc -b` + Vite), `git diff --check` PASS con avisos LF/CRLF. Por el delta solo CSS no se repitieron Vitest/ESLint/typecheck de tests; no se afirma una nueva matriz completa de fase 3.
+
+**Microcommits:** Luna guardó el trabajo previo en nueve commits lógicos (tooling, shell, sesión Home/API, Features, asset, guías/evidencia, integración Jev, contrato SDD y rename del task). La retirada de máscara y su registro se guardan después en un fix independiente. No hubo push ni cambios del código previo durante esta organización.
+
+**Estado:** corrección verificada; pendiente revisión visual del usuario. Fase 3 continúa pendiente de aprobación y About no comenzó. Emulación de Chromium, sin móvil físico/Safari ni benchmark.
 
 ## Estado de fases restantes
 

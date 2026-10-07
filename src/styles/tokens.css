@@ -44,7 +44,6 @@
   /* Direct-render integration; user requested ~10% more size after testing prove2. */
   --character-canvas-scale: 1.9;
   --character-mask-span: 0.86;
-  --character-mask: radial-gradient(ellipse 46% 43% at 50% 50%, #000 0 58%, transparent 100%);
   /* Fixed presentation holds, separate from Home's real decision scheduler. */
   --showcase-prepare: 360ms; --showcase-ready-timeout: 45000ms;
   --showcase-observe: 1800ms; --showcase-reaction: 2400ms; --showcase-think: 1000ms;
