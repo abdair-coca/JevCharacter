@@ -199,6 +199,9 @@ export class DecisionScheduler {
   private readonly options: SchedulerOptions;
   private timer: number | null = null;
   private activeRequest: AbortController | null = null;
+  private requestTimeout: number | null = null;
+  private suspended = false;
+  private started = false;
   private activeFingerprint = "";
   private lastDecisionAt = 0;
   private requestTimes: number[] = [];
@@ -212,14 +215,24 @@ export class DecisionScheduler {
 
   start() {
     if (this.timer !== null) return;
-    const initial = this.options.getFrame().sensors;
-    this.returnedVersion = initial.eventVersions.returned;
+    this.suspended = false;
+    if (!this.started) {
+      this.returnedVersion = this.options.getFrame().sensors.eventVersions.returned;
+      this.started = true;
+    }
     this.timer = window.setInterval(() => this.tick(), BRAIN_CONFIG.schedulerPollMs);
   }
 
   stop() {
+    this.suspended = true;
     if (this.timer !== null) window.clearInterval(this.timer);
     this.timer = null;
+    this.cancelPending();
+  }
+
+  cancelPending() {
+    if (this.requestTimeout !== null) window.clearTimeout(this.requestTimeout);
+    this.requestTimeout = null;
     this.activeRequest?.abort();
     this.activeRequest = null;
     this.activeFingerprint = "";
@@ -229,14 +242,24 @@ export class DecisionScheduler {
     void this.decide("context", true);
   }
 
+  clearConversation() {
+    this.cancelPending();
+    // Cache keys contain context text. Clear them too, without resetting quota.
+    this.cache.clear();
+  }
+
   private tick() {
-    if (document.visibilityState !== "visible") return;
+    if (this.suspended || document.visibilityState !== "visible") return;
     const sensors = this.options.getFrame().sensors;
     const now = performance.now();
     const cooledDown = now - this.lastDecisionAt >= BRAIN_CONFIG.decisionCooldownMs;
     if (this.activeRequest) return;
 
     if (sensors.eventVersions.returned !== this.returnedVersion) {
+      if (!sensors.returnedAfterAbsence) {
+        this.returnedVersion = sensors.eventVersions.returned;
+        return;
+      }
       if (cooledDown) {
         this.returnedVersion = sensors.eventVersions.returned;
         void this.decide("return");
@@ -252,16 +275,14 @@ export class DecisionScheduler {
   }
 
   private async decide(reason: DecisionReason, replaceActive = false) {
-    if (document.visibilityState !== "visible") return;
+    if (this.suspended || document.visibilityState !== "visible") return;
     const frame = this.options.getFrame();
     const stateFingerprint = fingerprint(frame.state);
 
     if (this.activeRequest) {
       if (!replaceActive) return;
       if (this.activeFingerprint === stateFingerprint) return;
-      this.activeRequest.abort();
-      this.activeRequest = null;
-      this.activeFingerprint = "";
+      this.cancelPending();
     }
 
     const now = performance.now();
@@ -283,6 +304,7 @@ export class DecisionScheduler {
 
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), BRAIN_CONFIG.requestTimeoutMs);
+    this.requestTimeout = timeout;
     const startedAt = performance.now();
     this.activeRequest = controller;
     this.activeFingerprint = stateFingerprint;
@@ -299,6 +321,7 @@ export class DecisionScheduler {
       if (!response.ok) throw new Error(`Decision endpoint returned ${response.status}`);
       const payload: unknown = await response.json();
       if (this.activeRequest !== controller) return;
+      if (controller.signal.aborted) throw new Error("Decision request timed out");
       if (isUnavailableResponse(payload)) {
         const fallback = fallbackBrain(frame.state, reason);
         this.finishDecision(
@@ -334,6 +357,7 @@ export class DecisionScheduler {
       );
     } finally {
       window.clearTimeout(timeout);
+      if (this.requestTimeout === timeout) this.requestTimeout = null;
       if (this.activeRequest === controller) {
         this.activeRequest = null;
         this.activeFingerprint = "";

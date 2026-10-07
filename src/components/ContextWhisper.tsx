@@ -1,100 +1,77 @@
-import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-
+import { useState, type FormEvent } from "react";
+import { AnimatePresence, m } from "motion/react";
 import { BRAIN_CONFIG } from "../creature/brain/brainConfig";
+import type { BrainStatus } from "../creature/brain/brain.types";
+import { useTranslation } from "../i18n/useTranslation";
+import { useFeedbackScale, useOrganicMotion, useUiMotion } from "../lib/motionTokens";
+import OrganicLight from "./OrganicLight";
+import { Button } from "./ui/button";
 
 type Props = {
   context: string;
   onSubmit: (context: string) => void;
   onClear: () => void;
-  onThought: () => void;
+  status?: BrainStatus;
+  attention?: number;
 };
 
-const PLACEHOLDERS = [
-  "I'm your creator.",
-  "I just came back after a long day.",
-  "I'm trying to scare you.",
-  "You haven't seen me in weeks.",
-  "I'm your friend.",
-  "Today I'm really happy.",
-];
-
-export default function ContextWhisper({ context, onSubmit, onClear, onThought }: Props) {
+export default function ContextWhisper({ context, onSubmit, onClear, status = "observing", attention = 0 }: Props) {
+  const t = useTranslation();
   const [value, setValue] = useState("");
-  const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const [received, setReceived] = useState(false);
-  const receivedTimer = useRef<number | null>(null);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setPlaceholderIndex((current) => (current + 1) % PLACEHOLDERS.length);
-    }, 4800);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  useEffect(
-    () => () => {
-      if (receivedTimer.current !== null) window.clearTimeout(receivedTimer.current);
-    },
-    [],
-  );
+  const [sent, setSent] = useState(false);
+  const [submission, setSubmission] = useState(0);
+  const [focused, setFocused] = useState(false);
+  const transition = useUiMotion();
+  const motion = useOrganicMotion();
+  const feedbackScale = useFeedbackScale();
+  const hasText = Boolean(value.trim());
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const next = value.trim();
     if (!next) return;
     onSubmit(next);
-    onThought();
     setValue("");
-    setReceived(true);
-    if (receivedTimer.current !== null) window.clearTimeout(receivedTimer.current);
-    receivedTimer.current = window.setTimeout(() => setReceived(false), 1300);
-  };
-
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Escape") event.currentTarget.blur();
+    setSent(true);
+    setSubmission((current) => current + 1);
   };
 
   return (
-    <div className="whisper-wrap">
-      <form className={`whisper ${received ? "whisper--received" : ""}`} onSubmit={submit}>
-        <span className="whisper__sigil" aria-hidden="true">✦</span>
-        <label className="sr-only" htmlFor="creature-context">Give the creature context</label>
-        <input
-          id="creature-context"
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          onKeyDown={onKeyDown}
-          maxLength={BRAIN_CONFIG.contextMaxLength}
-          placeholder={`Give it context…  ${PLACEHOLDERS[placeholderIndex]}`}
-          autoComplete="off"
-          spellCheck="true"
-        />
-        {value.length > BRAIN_CONFIG.contextMaxLength - 45 && (
-          <span className="whisper__count" aria-live="polite">
-            {BRAIN_CONFIG.contextMaxLength - value.length}
-          </span>
-        )}
-        <button
-          className="whisper__send"
-          type="submit"
-          disabled={!value.trim()}
-          aria-label="Send context to the creature"
-        >
-          <svg viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M4 10h11M11 6l4 4-4 4" />
-          </svg>
-        </button>
-        <span className="whisper__pulse" aria-hidden="true" />
-      </form>
-      <div className="whisper__meta">
-        <span>What it knows changes how it behaves.</span>
-        {context && (
-          <button type="button" onClick={onClear} aria-label="Clear stored context">
-            <span className="memory-dot" aria-hidden="true" />
-            Context held · clear
-          </button>
-        )}
+    <div className="whisper-wrap" data-focused={focused} data-filled={hasText} data-activity={status}>
+      <div className="whisper-shell">
+        <OrganicLight status={status} attention={attention} emphasized={focused || hasText} />
+        <form className="whisper" onSubmit={submit}>
+          <m.span className="whisper__presence" aria-hidden="true" initial={false}
+            animate={{ scale: focused && !motion.reduced ? feedbackScale : 1 }} transition={motion.spring}><i /><i /></m.span>
+          <div className="whisper__field">
+            <div className="whisper__label-row">
+              <label htmlFor="creature-context">{t.input}</label>
+              {status === "deciding" && <span className="whisper__thinking">{t.deciding}</span>}
+            </div>
+            <input id="creature-context" value={value}
+              onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+              onChange={(event) => { setValue(event.target.value); setSent(false); }}
+              onKeyDown={(event) => { if (event.key === "Escape") event.currentTarget.blur(); }}
+              maxLength={BRAIN_CONFIG.contextMaxLength} placeholder={t.placeholder} autoComplete="off" aria-describedby="context-help" />
+          </div>
+          <m.div className="whisper__send-wrap" whileTap={{ scale: motion.reduced ? 1 : motion.pressScale }} transition={motion.spring}>
+            <Button className="whisper__send" type="submit" size="icon" disabled={!hasText} aria-label={t.send}>
+              <AnimatePresence mode="wait" initial={false}>
+                <m.span key={sent ? "received" : "send"} initial={{ opacity: 0, scale: motion.reduced ? 1 : motion.revealScale }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={transition}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">{sent ? <path d="m6 12 4 4 8-8" /> : <path d="M6 17 17 6M6 6h11v11" />}</svg>
+                </m.span>
+              </AnimatePresence>
+            </Button>
+          </m.div>
+          {submission > 0 && !motion.reduced && <m.span key={submission} className="whisper__pulse" aria-hidden="true" initial={{ opacity: 1, scale: 1 }} animate={{ opacity: 0, scale: feedbackScale }} transition={transition} />}
+        </form>
       </div>
+      <div className="whisper__meta">
+        <span id="context-help">{t.inputHelp}</span>
+        {context && <button type="button" onClick={() => { setSent(false); onClear(); }} aria-label={t.clear}>{t.contextHeld} · <span>{t.clear}</span></button>}
+        {value.length > BRAIN_CONFIG.contextMaxLength - 45 && <span className="whisper__count" aria-live="polite">{value.length}/{BRAIN_CONFIG.contextMaxLength}</span>}
+      </div>
+      <span className="sr-only" role="status">{sent ? t.received : ""}</span>
     </div>
   );
 }

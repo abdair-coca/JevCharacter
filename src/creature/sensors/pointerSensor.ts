@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 
 import { BRAIN_CONFIG } from "../brain/brainConfig";
 import type { PointerKind, SensorSnapshot } from "../brain/brain.types";
@@ -44,6 +44,8 @@ const getPointerKind = (value: string): PointerKind => {
 export function usePointerSensor(
   stageRef: RefObject<HTMLElement | null>,
   creatureRef: RefObject<HTMLElement | null>,
+  active = true,
+  trackAbsence = true,
 ): SensorController {
   const stateRef = useRef<SensorState>({
     x: 0,
@@ -73,10 +75,17 @@ export function usePointerSensor(
     animationFrame: null,
   });
 
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
+  useLayoutEffect(() => {
     const state = stateRef.current;
+    // Internal route changes are suspension, not a user-return signal. A real
+    // tab/window absence is recorded only while Home is the selected route.
+    if (!trackAbsence) {
+      state.absenceStartedAt = null;
+      state.absenceSeconds = 0;
+      state.returnedUntil = 0;
+    }
+    const stage = stageRef.current;
+    if (!stage || !active) return;
     const mountedAt = performance.now();
     if (state.sessionStart === 0) state.sessionStart = mountedAt;
     if (state.lastInteractionAt === 0) state.lastInteractionAt = mountedAt;
@@ -182,6 +191,9 @@ export function usePointerSensor(
       state.inside = false;
     };
 
+    // Resuming keeps session measurements but records a real absence once.
+    finishAbsence();
+
     stage.addEventListener("pointermove", onPointerMove, { passive: true });
     stage.addEventListener("pointerdown", onPointerDown, { passive: true });
     stage.addEventListener("pointerup", onPointerUp, { passive: true });
@@ -193,6 +205,10 @@ export function usePointerSensor(
     window.addEventListener("focus", finishAbsence);
 
     return () => {
+      startAbsence();
+      state.inside = false;
+      state.speed = 0;
+      state.lastMoveAt = 0;
       stage.removeEventListener("pointermove", onPointerMove);
       stage.removeEventListener("pointerdown", onPointerDown);
       stage.removeEventListener("pointerup", onPointerUp);
@@ -203,8 +219,9 @@ export function usePointerSensor(
       window.removeEventListener("blur", startAbsence);
       window.removeEventListener("focus", finishAbsence);
       if (state.animationFrame !== null) window.cancelAnimationFrame(state.animationFrame);
+      state.animationFrame = null;
     };
-  }, [creatureRef, stageRef]);
+  }, [active, creatureRef, stageRef, trackAbsence]);
 
   const getSnapshot = useCallback((): SensorSnapshot => {
     const state = stateRef.current;

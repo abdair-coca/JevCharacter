@@ -1,10 +1,12 @@
 import {
   appendFirstSentence,
   finishFirstSentence,
+  isSpeechLanguage,
   SPEECH_HISTORY_LIMIT,
   SPEECH_MAX_CHARS,
   SPEECH_MESSAGE_MAX_CHARS,
   type SpeechExchange,
+  type SpeechLanguage,
 } from "../src/creature/brain/speechProtocol";
 
 type ApiRequest = {
@@ -27,7 +29,7 @@ type ApiResponse = {
   writableEnded?: boolean;
 };
 
-type TalkBody = { message: string; history: SpeechExchange[] };
+type TalkBody = { message: string; language: SpeechLanguage; history: SpeechExchange[] };
 type RateBucket = { startedAt: number; count: number };
 
 const rateBuckets = new Map<string, RateBucket>();
@@ -41,17 +43,18 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 function isExchange(value: unknown): value is SpeechExchange {
   return isRecord(value) &&
     Object.keys(value).length === 2 &&
-    typeof value.user === "string" && value.user.length <= SPEECH_MESSAGE_MAX_CHARS &&
-    typeof value.assistant === "string" && [...value.assistant].length <= SPEECH_MAX_CHARS;
+    typeof value.user === "string" && Boolean(value.user.trim()) && value.user.length <= SPEECH_MESSAGE_MAX_CHARS &&
+    typeof value.assistant === "string" && Boolean(value.assistant.trim()) && [...value.assistant].length <= SPEECH_MAX_CHARS;
 }
 
 function parseBody(value: unknown): TalkBody | null {
-  if (!isRecord(value) || Object.keys(value).length !== 2) return null;
+  if (!isRecord(value) || Object.keys(value).length !== 3) return null;
+  if (!isSpeechLanguage(value.language)) return null;
   if (typeof value.message !== "string" || !value.message.trim()) return null;
   if (value.message.length > SPEECH_MESSAGE_MAX_CHARS) return null;
   if (!Array.isArray(value.history) || value.history.length > SPEECH_HISTORY_LIMIT) return null;
   if (!value.history.every(isExchange)) return null;
-  return { message: value.message.trim(), history: value.history };
+  return { message: value.message.trim(), language: value.language, history: value.history };
 }
 
 function clientKey(request: ApiRequest) {
@@ -70,7 +73,7 @@ function isRateLimited(key: string) {
     if (rateBuckets.size > 1000) rateBuckets.clear();
   }
   const bucket = rateBuckets.get(key);
-  if (!bucket) {
+  if (!bucket || now - bucket.startedAt >= RATE_WINDOW_MS) {
     rateBuckets.set(key, { startedAt: now, count: 1 });
     return false;
   }
@@ -94,7 +97,7 @@ function upstreamMessages(body: TalkBody) {
   return [
     {
       role: "system",
-      content: "Eres Jev, compañero tranquilo. Responde al último mensaje en su idioma (español por defecto). Una frase, máximo 120 caracteres Unicode; sin prefacios ni listas. Historial solo para continuidad.",
+      content: `Eres Jev, compañero tranquilo. Responde exclusivamente en ${body.language === "es" ? "español (Spanish)" : "inglés (English)"}, aunque el mensaje o el historial estén en otro idioma. Una frase, máximo 120 caracteres Unicode; sin prefacios ni listas. Historial solo para continuidad.`,
     },
     ...body.history.flatMap((exchange) => [
       { role: "user", content: exchange.user },
@@ -170,6 +173,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     response.flushHeaders?.();
 
     const reader = upstream.body.getReader();
+    const cancelReader = () => { void reader.cancel().catch(() => undefined); };
+    abortController.signal.addEventListener("abort", cancelReader, { once: true });
     const decoder = new TextDecoder();
     let buffer = "";
     let dataLines: string[] = [];
@@ -226,7 +231,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         }
       }
     } finally {
-      if (!upstreamComplete && !upstreamEnded) void reader.cancel().catch(() => undefined);
+      abortController.signal.removeEventListener("abort", cancelReader);
+      void reader.cancel().catch(() => undefined);
       reader.releaseLock();
     }
 

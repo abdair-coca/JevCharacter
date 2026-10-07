@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { CHARACTER_STATES, type CharacterState } from "../character/useCharacterController";
 import { type BrainDecision, type Personality, type SensorSnapshot } from "../creature/brain/brain.types";
+import { useTranslation } from "../i18n/useTranslation";
 
 type Props = {
   active: boolean;
@@ -22,6 +23,7 @@ export default function DebugPanel({
   onState,
   onClose,
 }: Props) {
+  const t = useTranslation();
   const [snapshot, setSnapshot] = useState<SensorSnapshot | null>(null);
 
   useEffect(() => {
@@ -33,27 +35,27 @@ export default function DebugPanel({
   if (!active || !snapshot) return null;
 
   return (
-    <aside className="debug-panel" aria-label="Jevling debug mode">
+    <aside className="debug-panel" aria-label={t.diagnostics}>
       <div className="debug-panel__head">
-        <span>DEBUG / LIVE SIGNAL</span>
-        <button type="button" onClick={onClose} aria-label="Close debug mode">×</button>
+        <span>{t.debugSignal}</span>
+        <button type="button" onClick={onClose} aria-label={t.close}>×</button>
       </div>
       <dl>
-        <div><dt>distance</dt><dd>{snapshot.cursorDistance}px</dd></div>
-        <div><dt>speed</dt><dd>{snapshot.cursorSpeed}px/s</dd></div>
-        <div><dt>near</dt><dd>{String(snapshot.cursorNearCreature)}</dd></div>
-        <div><dt>idle</dt><dd>{snapshot.idleSeconds.toFixed(1)}s</dd></div>
-        <div><dt>clicks</dt><dd>{snapshot.recentClicks}</dd></div>
-        <div><dt>absence</dt><dd>{snapshot.absenceSeconds.toFixed(1)}s</dd></div>
-        <div><dt>energy</dt><dd>{personality.energy.toFixed(1)}</dd></div>
-        <div><dt>trust</dt><dd>{personality.trust.toFixed(1)}</dd></div>
-        <div><dt>curiosity</dt><dd>{personality.curiosity.toFixed(1)}</dd></div>
-        <div><dt>action</dt><dd>{decision.action.kind}</dd></div>
-        <div><dt>action confidence</dt><dd>{decision.actionConfidence.toFixed(2)}</dd></div>
-        <div><dt>reaction</dt><dd>{decision.reaction}</dd></div>
-        <div><dt>reaction confidence</dt><dd>{decision.reactionConfidence.toFixed(2)}</dd></div>
-        <div><dt>source</dt><dd>{decision.source}</dd></div>
-        <div><dt>latency</dt><dd>{latencyMs}ms</dd></div>
+        <div><dt>{t.distance}</dt><dd>{snapshot.cursorDistance}px</dd></div>
+        <div><dt>{t.speed}</dt><dd>{snapshot.cursorSpeed}px/s</dd></div>
+        <div><dt>{t.near}</dt><dd>{snapshot.cursorNearCreature ? t.YES : t.NO}</dd></div>
+        <div><dt>{t.idle}</dt><dd>{snapshot.idleSeconds.toFixed(1)}s</dd></div>
+        <div><dt>{t.clicks}</dt><dd>{snapshot.recentClicks}</dd></div>
+        <div><dt>{t.absence}</dt><dd>{snapshot.absenceSeconds.toFixed(1)}s</dd></div>
+        <div><dt>{t.energy}</dt><dd>{personality.energy.toFixed(1)}</dd></div>
+        <div><dt>{t.trust}</dt><dd>{personality.trust.toFixed(1)}</dd></div>
+        <div><dt>{t.curiosity}</dt><dd>{personality.curiosity.toFixed(1)}</dd></div>
+        <div><dt>{t.decision}</dt><dd>{decision.action.kind}</dd></div>
+        <div><dt>{t.confidence}</dt><dd>{decision.actionConfidence.toFixed(2)}</dd></div>
+        <div><dt>{t.reaction}</dt><dd>{decision.reaction}</dd></div>
+        <div><dt>{t.reactionConfidence}</dt><dd>{decision.reactionConfidence.toFixed(2)}</dd></div>
+        <div><dt>{t.source}</dt><dd>{decision.source === "jev" ? t.online : t.local}</dd></div>
+        <div><dt>{t.latency}</dt><dd>{latencyMs}ms</dd></div>
       </dl>
       <div className="debug-panel__actions">
         {CHARACTER_STATES.map((state) => (

@@ -104,4 +104,52 @@ describe("DecisionScheduler", () => {
     expect(onDecision.mock.calls[0][0].source).toBe("fallback");
   });
 
+  it("suspends deadlines and ignores a response that arrives after stop", async () => {
+    vi.useFakeTimers();
+    let resolveResponse: (response: Response) => void = () => {};
+    const fetchMock = vi.fn().mockImplementationOnce(() => new Promise<Response>(resolve => { resolveResponse = resolve; }));
+    vi.stubGlobal("fetch", fetchMock);
+    const { scheduler, onDecision } = createScheduler();
+    scheduler.start();
+    scheduler.requestContextDecision();
+    expect(vi.getTimerCount()).toBe(2);
+    scheduler.stop();
+    expect(vi.getTimerCount()).toBe(0);
+    scheduler.requestContextDecision();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    resolveResponse(jsonResponse(decision({ kind: "talk", state: "Talk" })));
+    await vi.advanceTimersByTimeAsync(10000);
+    expect(onDecision).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("keeps its rate budget across stop/start instead of resetting the session", async () => {
+    const fetchMock = vi.fn().mockImplementation(() => Promise.resolve(jsonResponse(decision())));
+    vi.stubGlobal("fetch", fetchMock);
+    const { scheduler, currentFrame, onDecision } = createScheduler();
+    for (let index = 0; index < 7; index++) {
+      scheduler.stop();
+      scheduler.start();
+      currentFrame.value = schedulerFrame(`resume-${index}`);
+      scheduler.requestContextDecision();
+      await waitFor(() => expect(onDecision).toHaveBeenCalledTimes(index + 1));
+    }
+    scheduler.stop();
+    expect(fetchMock).toHaveBeenCalledTimes(6);
+    expect(onDecision.mock.calls[6][0].source).toBe("fallback");
+  });
+
+  it("clears context-bearing cached decisions when the conversation is cleared", async () => {
+    const fetchMock = vi.fn().mockImplementation(() => Promise.resolve(jsonResponse(decision())));
+    vi.stubGlobal("fetch", fetchMock);
+    const { scheduler, onDecision } = createScheduler(schedulerFrame("private context"));
+    scheduler.requestContextDecision();
+    await waitFor(() => expect(onDecision).toHaveBeenCalledTimes(1));
+    scheduler.clearConversation();
+    scheduler.requestContextDecision();
+    await waitFor(() => expect(onDecision).toHaveBeenCalledTimes(2));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    scheduler.stop();
+  });
+
 });

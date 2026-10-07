@@ -70,4 +70,45 @@ describe("usePointerSensor", () => {
     scheduler.stop();
     unmount();
   });
+
+  it("detaches input listeners and pending paint while paused, then records one return", () => {
+    const now = vi.spyOn(performance, "now").mockReturnValue(5000);
+    const raf = vi.fn().mockReturnValue(7);
+    const cancel = vi.fn();
+    vi.stubGlobal("requestAnimationFrame", raf);
+    vi.stubGlobal("cancelAnimationFrame", cancel);
+    const stage = document.createElement("main");
+    const creature = document.createElement("div");
+    stage.getBoundingClientRect = () => new DOMRect(0, 0, 100, 100);
+    creature.getBoundingClientRect = () => new DOMRect(40, 40, 20, 20);
+    const stageRef = { current: stage };
+    const creatureRef = { current: creature };
+    const { result, rerender, unmount } = renderHook(({ active }) => usePointerSensor(stageRef, creatureRef, active), { initialProps: { active: true } });
+    stage.dispatchEvent(pointerEvent("pointermove", { clientX: 80, clientY: 30 }));
+    stage.dispatchEvent(pointerEvent("pointerdown"));
+    const interactions = result.current.getSnapshot().interactionCount;
+    rerender({ active: false });
+    expect(cancel).toHaveBeenCalledWith(7);
+    stage.dispatchEvent(pointerEvent("pointermove", { clientX: 10, clientY: 10 }));
+    stage.dispatchEvent(pointerEvent("pointerdown"));
+    expect(result.current.getSnapshot()).toMatchObject({ pointerDown: false, mouseInsideStage: false, cursorPosition: { x: 0.8, y: 0.3 }, interactionCount: interactions });
+    now.mockReturnValue(8000);
+    rerender({ active: true });
+    expect(result.current.getSnapshot()).toMatchObject({ returnedAfterAbsence: true, absenceSeconds: 3, sessionSeconds: 3, eventVersions: { returned: 1 } });
+    stage.dispatchEvent(pointerEvent("pointermove", { clientX: 10, clientY: 10 }));
+    expect(raf).toHaveBeenCalledTimes(2);
+    unmount();
+  });
+
+  it("does not turn internal route navigation into a return-from-absence event", () => {
+    const now = vi.spyOn(performance, "now").mockReturnValue(5000);
+    const stageRef = { current: document.createElement("main") };
+    const creatureRef = { current: document.createElement("div") };
+    const { result, rerender, unmount } = renderHook(({ active, homeSelected }) => usePointerSensor(stageRef, creatureRef, active, homeSelected), { initialProps: { active: true, homeSelected: true } });
+    rerender({ active: false, homeSelected: false });
+    now.mockReturnValue(15000);
+    rerender({ active: true, homeSelected: true });
+    expect(result.current.getSnapshot()).toMatchObject({ returnedAfterAbsence: false, absenceSeconds: 0, eventVersions: { returned: 0 } });
+    unmount();
+  });
 });

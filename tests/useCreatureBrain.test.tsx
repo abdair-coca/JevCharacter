@@ -7,6 +7,7 @@ import type { CharacterController } from "../src/character/useCharacterControlle
 import { useCreatureBrain } from "../src/hooks/useCreatureBrain";
 import type { SensorController } from "../src/creature/sensors/pointerSensor";
 import { decision, jsonResponse, sensorSnapshot } from "./helpers";
+import type { SpeechLanguage } from "../src/creature/brain/speechProtocol";
 
 afterEach(cleanup);
 
@@ -46,7 +47,57 @@ function mountBrain(fetchMock: ReturnType<typeof vi.fn>) {
 }
 
 describe("useCreatureBrain talk flow", () => {
-  it("replaces partial Groq text with the fallback when the SSE stream errors", async () => {
+  it("uses the latest language if it changes while the decision is still pending", async () => {
+    let resolveDecision: (response: Response) => void = () => {};
+    const fetchMock = vi.fn((url: RequestInfo | URL) => {
+      if (String(url) === "/api/decide") return new Promise<Response>(resolve => { resolveDecision = resolve; });
+      return Promise.resolve(new Response('event: delta\ndata: {"text":"Hello."}\n\nevent: done\ndata: {}\n\n'));
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const characterRef = { current: createCharacter() };
+    const sensors = createSensors();
+    const initialProps: { language: SpeechLanguage } = { language: "es" };
+    const { result, rerender, unmount } = renderHook(({ language }) => useCreatureBrain(sensors, characterRef, { language }), { initialProps });
+    act(() => result.current.submitContext("Un mensaje en español"));
+    rerender({ language: "en" });
+    await act(async () => resolveDecision(jsonResponse(decision({ kind: "talk", state: "Talk" }))));
+    await waitFor(() => expect(result.current.speechCaption?.text).toBe("Hello."));
+    expect(fetchMock).toHaveBeenCalledWith("/api/talk", expect.objectContaining({ body: expect.stringContaining('"language":"en"') }));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    unmount();
+  });
+
+  it("suspends all brain timers, rejects hidden submissions, and retains context on resume", async () => {
+    vi.useFakeTimers();
+    let resolveOld: (response: Response) => void = () => {};
+    const fetchMock = vi.fn().mockImplementationOnce(() => new Promise<Response>(resolve => { resolveOld = resolve; }));
+    vi.stubGlobal("fetch", fetchMock);
+    const character = createCharacter();
+    const sensors = createSensors();
+    const characterRef = { current: character };
+    const { result, rerender, unmount } = renderHook(({ active }) => useCreatureBrain(sensors, characterRef, { active, language: "en" }), { initialProps: { active: true } });
+    act(() => result.current.submitContext("Keep this in memory"));
+    rerender({ active: false });
+    // jsdom enqueues a 0ms storage event when suspension saves personality.
+    await act(async () => vi.advanceTimersByTimeAsync(0));
+    expect(vi.getTimerCount()).toBe(0);
+    const personality = result.current.personality;
+    act(() => result.current.submitContext("Hidden context"));
+    await act(async () => { resolveOld(jsonResponse(decision({ kind: "talk", state: "Talk" }))); await vi.advanceTimersByTimeAsync(10000); });
+    expect(result.current.userContext).toBe("Keep this in memory");
+    expect(result.current.personality).toBe(personality);
+    expect(result.current.speechCaption).toBeNull();
+    expect(result.current.speechNotice).toBeNull();
+    expect(result.current.decisionInterrupted).toBe(true);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    rerender({ active: true });
+    expect(result.current.userContext).toBe("Keep this in memory");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("clears partial Groq text and exposes a status instead of an invented reply", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       if (String(input) === "/api/decide") {
         return jsonResponse(decision({ kind: "talk", state: "talkb" }));
@@ -64,9 +115,10 @@ describe("useCreatureBrain talk flow", () => {
     act(() => result.current.submitContext("Explícame esto"));
 
     await waitFor(() => {
-      expect(result.current.speechCaption?.text).toBe("No pude responder ahora. Inténtalo de nuevo.");
+      expect(result.current.speechNotice).toBe("unavailable");
     });
     expect(character.think).toHaveBeenCalledOnce();
+    expect(result.current.speechCaption).toBeNull();
     expect(character.talk).toHaveBeenCalledWith("talkb");
     expect(character.idle).toHaveBeenCalled();
     expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual(["/api/decide", "/api/talk"]);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 import type { CharacterController, CharacterState } from "../character/useCharacterController";
 import { BRAIN_CONFIG } from "../creature/brain/brainConfig";
@@ -21,9 +21,9 @@ import {
   loadPersonality,
   savePersonality,
 } from "../creature/personality/personalityStorage";
-import { streamSpeechReply } from "../creature/brain/speechClient";
 import { MORPH_FORMS, mentionedMorphForms, requestedMorphForm } from "../creature/brain/morphIntent";
-import { SPEECH_HISTORY_LIMIT, type SpeechExchange } from "../creature/brain/speechProtocol";
+import type { SpeechLanguage } from "../creature/brain/speechProtocol";
+import { useSpeechSession, type SpeechCaption, type SpeechNotice } from "./useSpeechSession";
 import { executeDecisionAction } from "../creature/rive/riveReactionAdapter";
 import type { SensorController } from "../creature/sensors/pointerSensor";
 
@@ -56,7 +56,9 @@ type CreatureBrain = {
   status: BrainStatus;
   personality: Personality;
   userContext: string;
-  speechCaption: { text: string; complete: boolean; generation: number } | null;
+  speechCaption: SpeechCaption | null;
+  speechNotice: SpeechNotice;
+  decisionInterrupted: boolean;
   onSpeechCaptionRevealed: (generation: number) => void;
   history: ReactionHistoryEntry[];
   apiLatencyMs: number;
@@ -68,12 +70,16 @@ type CreatureBrain = {
 export function useCreatureBrain(
   sensors: SensorController,
   characterRef: RefObject<CharacterController | null>,
+  { active = true, language = "es" }: { active?: boolean; language?: SpeechLanguage } = {},
 ): CreatureBrain {
   const [decision, setDecision] = useState(INITIAL_DECISION);
   const [status, setStatus] = useState<BrainStatus>("observing");
   const [personality, setPersonality] = useState(loadPersonality);
   const [userContext, setUserContext] = useState("");
-  const [speechCaption, setSpeechCaption] = useState<CreatureBrain["speechCaption"]>(null);
+  const speech = useSpeechSession(characterRef, language, active);
+  const { start: startSpeech, cancel: cancelSpeech } = speech;
+  const [decisionInterrupted, setDecisionInterrupted] = useState(false);
+  const activeRef = useRef(active);
   const [history, setHistory] = useState<ReactionHistoryEntry[]>([]);
   const [apiLatencyMs, setApiLatencyMs] = useState(0);
   const schedulerRef = useRef<DecisionScheduler | null>(null);
@@ -84,31 +90,19 @@ export function useCreatureBrain(
   const lastReactionAtRef = useRef(0);
   const contextEventRef = useRef(0);
   const thinkingShownRef = useRef(false);
-  const speechHistoryRef = useRef<SpeechExchange[]>([]);
-  const speechAbortRef = useRef<AbortController | null>(null);
-  const speechGenerationRef = useRef(0);
-  const speechFadeTimerRef = useRef<number | null>(null);
   const consumedEventRef = useRef({ clickBurst: 0, returned: 0, context: 0 });
 
-  const cancelSpeech = useCallback(() => {
-    speechGenerationRef.current += 1;
-    speechAbortRef.current?.abort();
-    speechAbortRef.current = null;
-    if (speechFadeTimerRef.current !== null) {
-      window.clearTimeout(speechFadeTimerRef.current);
-      speechFadeTimerRef.current = null;
+  useLayoutEffect(() => {
+    activeRef.current = active;
+    if (active) schedulerRef.current?.start();
+    else {
+      if (thinkingShownRef.current) setDecisionInterrupted(true);
+      schedulerRef.current?.stop();
+      thinkingShownRef.current = false;
+      setStatus("observing");
+      characterRef.current?.stop();
     }
-    setSpeechCaption(null);
-  }, []);
-
-  const onSpeechCaptionRevealed = useCallback((generation: number) => {
-    if (generation !== speechGenerationRef.current) return;
-    if (speechFadeTimerRef.current !== null) window.clearTimeout(speechFadeTimerRef.current);
-    speechFadeTimerRef.current = window.setTimeout(() => {
-      setSpeechCaption((current) => current?.generation === generation ? null : current);
-      speechFadeTimerRef.current = null;
-    }, 5000);
-  }, []);
+  }, [active, characterRef]);
 
   useEffect(() => {
     try {
@@ -143,6 +137,7 @@ export function useCreatureBrain(
     lastReactionAtRef.current = performance.now() - BRAIN_CONFIG.strongReactionCooldownMs;
 
     const updateStatus = (nextStatus: BrainStatus) => {
+      if (!activeRef.current) return;
       setStatus(nextStatus);
       if (nextStatus === "deciding" && !thinkingShownRef.current) {
         thinkingShownRef.current = true;
@@ -154,6 +149,7 @@ export function useCreatureBrain(
       getFrame,
       onStatus: updateStatus,
       onDecision: (nextDecision, latencyMs, reason) => {
+        if (!activeRef.current || document.visibilityState !== "visible") return;
         const previousDecision = decisionRef.current;
         const reactionChanged = previousDecision.reaction !== nextDecision.reaction;
         const actionChanged = JSON.stringify(previousDecision.action) !== JSON.stringify(nextDecision.action);
@@ -191,49 +187,7 @@ export function useCreatureBrain(
         ].slice(-5));
 
         if (reason === "context" && decisionToApply.action.kind === "talk" && contextRef.current.trim()) {
-          const message = contextRef.current.slice(0, BRAIN_CONFIG.contextMaxLength);
-          const generation = speechGenerationRef.current;
-          const controller = new AbortController();
-          const talkState = decisionToApply.action.state;
-          speechAbortRef.current?.abort();
-          speechAbortRef.current = controller;
-          setSpeechCaption({ text: "", complete: false, generation });
-          let talkStarted = false;
-
-          void streamSpeechReply({
-            message,
-            history: speechHistoryRef.current.slice(-SPEECH_HISTORY_LIMIT),
-            signal: controller.signal,
-            onText: (text) => {
-              if (controller.signal.aborted || generation !== speechGenerationRef.current) return;
-              if (!talkStarted) {
-                talkStarted = true;
-                void characterRef.current?.talk(talkState);
-              }
-              setSpeechCaption((current) => current?.generation === generation
-                ? { ...current, text }
-                : { text, complete: false, generation });
-            },
-          }).then((text) => {
-            if (controller.signal.aborted || generation !== speechGenerationRef.current) return;
-            speechHistoryRef.current = [
-              ...speechHistoryRef.current,
-              { user: message, assistant: text },
-            ].slice(-SPEECH_HISTORY_LIMIT);
-            setSpeechCaption((current) => current?.generation === generation
-              ? { ...current, text, complete: true }
-              : { text, complete: true, generation });
-          }).catch(() => {
-            if (controller.signal.aborted || generation !== speechGenerationRef.current) return;
-            setSpeechCaption({
-              text: "No pude responder ahora. Inténtalo de nuevo.",
-              complete: true,
-              generation,
-            });
-            void characterRef.current?.idle();
-          }).finally(() => {
-            if (speechAbortRef.current === controller) speechAbortRef.current = null;
-          });
+          startSpeech(contextRef.current, decisionToApply.action.state);
         } else if (reason === "context" && decisionToApply.action.kind === "talk") {
           void characterRef.current?.idle();
         } else if (reason === "context" || reactionChanged || actionChanged || wasThinking) {
@@ -243,18 +197,17 @@ export function useCreatureBrain(
       },
     });
     schedulerRef.current = scheduler;
-    scheduler.start();
+    if (activeRef.current) scheduler.start();
+    else scheduler.stop();
 
     return () => {
       scheduler.stop();
       schedulerRef.current = null;
-      speechGenerationRef.current += 1;
-      speechAbortRef.current?.abort();
-      if (speechFadeTimerRef.current !== null) window.clearTimeout(speechFadeTimerRef.current);
     };
-  }, [cancelSpeech, characterRef, getFrame]);
+  }, [cancelSpeech, characterRef, getFrame, startSpeech]);
 
   useEffect(() => {
+    if (!active) return;
     let ticks = 0;
     const timer = window.setInterval(() => {
       const snapshot = sensors.getSnapshot();
@@ -279,11 +232,14 @@ export function useCreatureBrain(
       window.clearInterval(timer);
       savePersonality(personalityRef.current);
     };
-  }, [sensors]);
+  }, [active, sensors]);
 
   const submitContext = (context: string) => {
-    const safeContext = context.slice(0, BRAIN_CONFIG.contextMaxLength);
+    if (!activeRef.current || document.visibilityState !== "visible") return;
+    const safeContext = context.trim().slice(0, BRAIN_CONFIG.contextMaxLength);
+    if (!safeContext) return;
     cancelSpeech();
+    setDecisionInterrupted(false);
     if (!thinkingShownRef.current) {
       thinkingShownRef.current = true;
       void characterRef.current?.think();
@@ -296,7 +252,11 @@ export function useCreatureBrain(
   };
 
   const clearContext = useCallback(() => {
-    cancelSpeech();
+    if (!activeRef.current || document.visibilityState !== "visible") return;
+    cancelSpeech(true);
+    schedulerRef.current?.clearConversation();
+    thinkingShownRef.current = false;
+    setDecisionInterrupted(false);
     contextRef.current = "";
     setUserContext("");
     sensors.markContextInteraction();
@@ -304,7 +264,12 @@ export function useCreatureBrain(
   }, [cancelSpeech, sensors]);
 
   const forceState = (state: CharacterState) => {
+    if (!activeRef.current || document.visibilityState !== "visible") return;
+    schedulerRef.current?.cancelPending();
+    setStatus("observing");
+    thinkingShownRef.current = false;
     cancelSpeech();
+    setDecisionInterrupted(false);
     if (state === "Cloud") {
       void characterRef.current?.cloud();
       return;
@@ -349,11 +314,13 @@ export function useCreatureBrain(
 
   return {
     decision,
-    status,
+    status: status === "deciding" || speech.status === "waiting" ? "deciding" : "observing",
     personality,
     userContext,
-    speechCaption,
-    onSpeechCaptionRevealed,
+    speechCaption: speech.caption,
+    speechNotice: speech.notice,
+    decisionInterrupted,
+    onSpeechCaptionRevealed: speech.onCaptionRevealed,
     history,
     apiLatencyMs,
     submitContext,
