@@ -1,0 +1,116 @@
+:root {
+  /* Primitives. Palette supplied by the user on 2026-10-06. */
+  --space-0: 0; --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+  --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem;
+  --space-16: 4rem; --space-24: 6rem;
+  --font-display: "Avenir Next", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+  --font-body: var(--font-display);
+  --font-mono: "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+  --text-caption: 0.75rem; --text-small: 0.875rem; --text-body: 1rem;
+  --text-lead: clamp(1.125rem, 2vw, 1.5rem);
+  --text-title: clamp(2rem, 4.5vw, 4.5rem);
+  --line-body: 1.5; --line-title: 1.05; --line-compact: 1.2;
+  --weight-body: 400; --weight-label: 600; --weight-title: 650;
+  --tracking-title: -0.045em; --tracking-label: 0.08em;
+  --radius-sm: 0.75rem; --radius-md: 1.125rem; --radius-lg: 1.75rem; --radius-pill: 9999px;
+  --border-thin: 1px; --focus-width: 2px; --focus-offset: 3px;
+  --size-content: 72rem; --size-input: 35rem; --size-header: 4.5rem;
+  --size-target: 3rem; --size-character: clamp(22rem, 46vw, 38rem);
+  --size-stage-min: 13rem; --size-stage-max: 28rem; --size-hud: 22rem;
+  --size-hud-compact: 13rem; --size-hud-panel: 22rem;
+  --size-home-chrome: 22rem;
+  --size-signal: 0.375rem; --size-icon: 1.25rem; --size-brand: 1.75rem;
+  --size-meter: 0.25rem; --size-input-height: 4rem;
+  --layer-stage: 0; --layer-content: 10; --layer-nav: 20; --layer-popover: 30; --layer-dialog: 40;
+  --duration-fast: 160ms; --duration-ui: 280ms; --duration-reveal: 480ms;
+  --duration-scene: 720ms; --duration-stagger: 60ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-distance-sm: 0.375rem; --motion-distance-md: 1rem; --motion-scale-press: 0.98;
+  --opacity-disabled: 0.45;
+  --pointer-glow-size: 22rem; --pointer-glow-opacity: 0.04;
+  --motion-scale-feedback: 1.04;
+  --motion-theme-turn: 90; --motion-theme-scale: 0.5;
+  /* Organic Home controls: motion resolves once, then follows real attention/status. */
+  --duration-breathe: 4800ms; --duration-consider: 1600ms;
+  --motion-breathe-scale: 1.08; --motion-reveal-scale: 0.96;
+  --motion-soft-turn: 8; --motion-press-deep: 0.92;
+  --motion-spring-stiffness: 340; --motion-spring-damping: 26;
+  --opacity-aura-low: 0.22; --opacity-aura-high: 0.52;
+  --radius-organic: 2rem 1.5rem 2rem 1.5rem;
+  --size-composer: 5.75rem; --size-presence: 2.25rem; --size-send: 3.25rem;
+  --size-eye: 0.1875rem; --size-hud-eye: 0.25rem;
+  --size-hud-toggle: 1.75rem; --text-reading: 1.5rem;
+  --control-halo-blur: 1.125rem; --control-aura-inset: -0.5rem;
+  /* Direct-render integration; user requested ~10% more size after testing prove2. */
+  --character-canvas-scale: 1.9;
+  --character-mask-span: 0.86;
+  --character-mask: radial-gradient(ellipse 46% 43% at 50% 50%, #000 0 58%, transparent 100%);
+  /* Fixed presentation holds, separate from Home's real decision scheduler. */
+  --showcase-prepare: 360ms; --showcase-ready-timeout: 45000ms;
+  --showcase-observe: 1800ms; --showcase-reaction: 2400ms; --showcase-think: 1000ms;
+  --showcase-answer: 2400ms; --showcase-talk: 3000ms; --showcase-morph: 5600ms;
+}
+
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --neutral-background: #F7F7FB; --neutral-secondary: #FFFFFF;
+  --neutral-surface: #F0F0F7; --neutral-hover: #E8E8F2; --neutral-border: #D8D9E5;
+  --neutral-text: #111218; --neutral-muted: #666979; --neutral-faint: #9B9EAC;
+  --jev-color-primary: #7C3AED; --jev-color-secondary: #C026D3;
+  --jev-purple-bright: #9333EA; --jev-pink: #DB2777; --jev-glow: #A78BFA;
+  --accent-on-color: #FFFFFF;
+  --shadow-control: 0 0.5rem 2rem rgb(17 18 24 / 0.04);
+  --shadow-elevated: 0 1rem 3rem rgb(17 18 24 / 0.1);
+  --control-glass: color-mix(in srgb, var(--neutral-secondary) 94%, var(--jev-glow));
+  --shadow-organic: 0 1rem 2.5rem -1.25rem color-mix(in srgb, var(--jev-color-primary) 24%, transparent), inset 0 1px 0 var(--neutral-secondary);
+  --shadow-seed: inset 0 1px 1px color-mix(in srgb, var(--neutral-secondary) 55%, transparent), 0 0.375rem 1.25rem -0.375rem color-mix(in srgb, var(--jev-color-primary) 50%, transparent);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --neutral-background: #050608; --neutral-secondary: #0B0D12;
+  --neutral-surface: #11131A; --neutral-hover: #191C26; --neutral-border: #292C38;
+  --neutral-text: #F7F7FA; --neutral-muted: #9295A3; --neutral-faint: #555968;
+  --jev-color-primary: #8B5CF6; --jev-color-secondary: #D946EF;
+  --jev-purple-bright: #A855F7; --jev-pink: #EC4899; --jev-glow: #7C3AED;
+  /* User approved dark-on-purple for AA contrast on 2026-10-06. */
+  --accent-on-color: #050608;
+  --shadow-control: 0 0.5rem 2rem rgb(0 0 0 / 0.2);
+  --shadow-elevated: 0 1rem 3rem rgb(0 0 0 / 0.4);
+  --control-glass: color-mix(in srgb, var(--neutral-surface) 94%, var(--jev-color-primary));
+  --shadow-organic: 0 1rem 3rem -1rem rgb(0 0 0 / 0.5), inset 0 1px 0 color-mix(in srgb, var(--neutral-text) 8%, transparent);
+  --shadow-seed: inset 0 1px 1px color-mix(in srgb, var(--neutral-text) 30%, transparent), 0 0.375rem 1.5rem -0.375rem color-mix(in srgb, var(--jev-color-primary) 50%, transparent);
+}
+
+:root {
+  --color-background: var(--neutral-background);
+  --color-background-secondary: var(--neutral-secondary);
+  --color-surface: var(--neutral-surface); --color-surface-raised: var(--neutral-hover);
+  --color-foreground: var(--neutral-text); --color-muted: var(--neutral-muted);
+  --color-faint: var(--neutral-faint); --color-border: var(--neutral-border);
+  --color-accent: var(--jev-color-primary); --color-accent-foreground: var(--accent-on-color);
+  --color-focus: var(--jev-color-primary);
+  --color-control-edge: color-mix(in srgb, var(--color-accent) 76%, var(--color-border));
+  --color-status-active: var(--jev-color-secondary); --color-status-local: var(--jev-color-primary);
+  --color-status-error: var(--jev-pink);
+  /* shadcn roles point to the same semantic palette. */
+  --background: var(--color-background); --foreground: var(--color-foreground);
+  --card: var(--color-surface); --card-foreground: var(--color-foreground);
+  --primary: var(--color-accent); --primary-foreground: var(--color-accent-foreground);
+  --secondary: var(--color-surface-raised); --secondary-foreground: var(--color-foreground);
+  --muted: var(--color-surface); --muted-foreground: var(--color-muted);
+  --accent: var(--color-surface-raised); --accent-foreground: var(--color-foreground);
+  --border: var(--color-border); --input: var(--color-border); --ring: var(--color-focus);
+  --destructive: var(--color-status-error); --radius: var(--radius-sm);
+}
+
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground);
+  --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card); --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border); --color-ring: var(--ring);
+  --font-sans: var(--font-body);
+  /* Native CSS queries below use these same boundaries: 40rem and 64rem. */
+  --breakpoint-sm: 40rem; --breakpoint-lg: 64rem;
+}

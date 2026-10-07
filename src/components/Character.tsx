@@ -3,7 +3,9 @@ import {
   memo,
   useEffect,
   useImperativeHandle,
+  useRef,
 } from "react";
+import { useReducedMotionPreference } from "../hooks/useReducedMotionPreference";
 
 import {
   useRive,
@@ -26,16 +28,24 @@ const STATE_MACHINE = "State Machine 1";
 
 type Props = {
   onReady?: () => void;
+  onError?: () => void;
+  active?: boolean;
+  presentation?: boolean;
+  staticPose?: boolean;
 };
 
 const Character = forwardRef<CharacterController, Props>(
-  function Character({ onReady }, ref) {
+  function Character({ onReady, onError, active = true, presentation = false, staticPose = false }, ref) {
+    const motionPreference = useReducedMotionPreference();
+    const reducedMotion = motionPreference || staticPose;
+    const wasSuspended = useRef(false);
     const { rive, RiveComponent } = useRive({
-      src: "/rive/prove1.riv",
+      src: "/rive/prove2.riv",
       stateMachine: STATE_MACHINE,
-      autoplay: true,
+      autoplay: active && !reducedMotion,
       autoBind: true,
-      shouldDisableRiveListeners: false,
+      shouldDisableRiveListeners: presentation,
+      onLoadError: onError,
 
       layout: new Layout({
         fit: Fit.Contain,
@@ -53,7 +63,7 @@ const Character = forwardRef<CharacterController, Props>(
         rive,
       });
 
-    const { setValue: setState } =
+    const { value: stateValue, setValue: setState } =
       useViewModelInstanceEnum(
         "state",
         viewModelInstance
@@ -68,11 +78,14 @@ const Character = forwardRef<CharacterController, Props>(
     const { value: shapeTypeValue, setValue: setShapeType } =
       useViewModelInstanceNumber("shapeType", viewModelInstance);
 
+    const ready = Boolean(rive && viewModelInstance && typeof stateValue === "string");
+
     const character =
       useCharacterController(
         setState,
         triggerState,
         shapeTypeValue === null ? undefined : setShapeType,
+        active && ready,
       );
 
     useImperativeHandle(
@@ -82,12 +95,34 @@ const Character = forwardRef<CharacterController, Props>(
     );
 
     useEffect(() => {
-      if (rive) onReady?.();
-    }, [onReady, rive]);
+      if (ready && active && (presentation || !reducedMotion)) onReady?.();
+    }, [active, onReady, presentation, ready, reducedMotion]);
+
+    useEffect(() => {
+      if (!rive) return;
+      if (!active) {
+        wasSuspended.current = true;
+        rive.pause();
+        rive.stopRendering();
+        return;
+      }
+      if (wasSuspended.current && ready) {
+        wasSuspended.current = false;
+        void character.idle();
+      }
+      rive.resizeDrawingSurfaceToCanvas();
+      rive.startRendering();
+      if (reducedMotion) rive.pause();
+      else rive.play();
+    }, [active, character, ready, reducedMotion, rive]);
 
     return (
       <div
         className="character-rive"
+        data-ready={ready}
+        data-state={stateValue ?? undefined}
+        data-active={active}
+        data-presentation={presentation}
         aria-hidden="true"
       >
         <RiveComponent />
