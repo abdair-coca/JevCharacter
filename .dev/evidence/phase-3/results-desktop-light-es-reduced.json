@@ -1,0 +1,25 @@
+{
+  "case": "desktop-light-es",
+  "part": "reduced",
+  "date": "2026-10-07T20:50:49.475Z",
+  "conditions": "Chromium production preview; real Rive binding/render; provider fixture only for Home; mobile/visibility/reduced-motion emulated",
+  "checks": [
+    "desktop-light-es: eight chapters, no Home initialized",
+    "desktop-light-es: reduced motion removes pinning",
+    "desktop-light-es: no API calls from Features",
+    "no unexpected application/console errors"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x5a840040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x5a840040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x5a840040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x5a840040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "screenshots": [
+    "desktop-light-es-reduced.png"
+  ],
+  "measurements": [],
+  "browser": "153.0.8010.12"
+}

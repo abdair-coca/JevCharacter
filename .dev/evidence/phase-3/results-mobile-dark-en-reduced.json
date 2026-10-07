@@ -1,0 +1,63 @@
+{
+  "case": "mobile-dark-en",
+  "part": "reduced",
+  "date": "2026-10-07T20:51:30.889Z",
+  "conditions": "Chromium production preview; real Rive binding/render; provider fixture only for Home; mobile/visibility/reduced-motion emulated",
+  "checks": [
+    "mobile-dark-en: eight chapters, no Home initialized",
+    "mobile-dark-en: reduced motion removes pinning",
+    "mobile-dark-en reflow: no horizontal overflow",
+    "mobile-dark-en reflow: free scene without boxes/cards",
+    "mobile-dark-en reflow: presentation cannot receive real pointer events",
+    "mobile-dark-en: no API calls from Features",
+    "no unexpected application/console errors"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x3d7c0040be00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3d7c0040be00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3d7c0040be00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3d7c0040be00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "screenshots": [
+    "mobile-dark-en-reduced.png",
+    "mobile-dark-en-reflow.png"
+  ],
+  "measurements": [
+    {
+      "label": "mobile-dark-en reflow",
+      "width": 320,
+      "height": 568,
+      "scrollWidth": 320,
+      "chapter": "perceives",
+      "step": "0",
+      "phase": "static",
+      "flight": {
+        "x": 16,
+        "y": 81.1875,
+        "width": 288,
+        "height": 288,
+        "top": 81.1875,
+        "right": 304,
+        "bottom": 369.1875,
+        "left": 16
+      },
+      "copy": {
+        "x": 16,
+        "y": 385.1875,
+        "width": 288,
+        "height": 328.59375,
+        "top": 385.1875,
+        "right": 304,
+        "bottom": 713.78125,
+        "left": 16
+      },
+      "stageBackground": "rgba(0, 0, 0, 0)",
+      "stageBorder": "0px",
+      "cardBorder": "0px",
+      "pointerEvents": "none"
+    }
+  ],
+  "browser": "153.0.8010.12"
+}

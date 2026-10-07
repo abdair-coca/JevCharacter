@@ -1,0 +1,16 @@
+{
+  "light": {
+    "text": 17.49,
+    "secondaryText": 5.09,
+    "secondaryOnSurface": 4.79,
+    "buttonText": 5.7,
+    "focus": 5.33
+  },
+  "dark": {
+    "text": 18.96,
+    "secondaryText": 6.81,
+    "secondaryOnSurface": 6.23,
+    "buttonText": 4.79,
+    "focus": 4.79
+  }
+}

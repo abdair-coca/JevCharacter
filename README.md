@@ -6,9 +6,9 @@ JEVLING is a digital creature that watches cursor, touch, activity, absence, and
 
 ## Rediseño y documentación
 
-El rediseño aprobado contempla Home, Features determinista y About, con la paleta del Jev actual, temas claro/oscuro y ES/EN. Las fases de implementación están pendientes; la documentación distingue el diseño objetivo del runtime existente.
+Home de referencia y su entrega funcional fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN: Jev se desplaza libremente entre explicaciones alternadas, sin IA ni cambios en la sesión de Home. Decisión y confianza tienen su propio capítulo. La entrega de fase 3 espera revisión; `/about` sigue provisional hasta fase 4.
 
-- [Plan y estado de las fases](.dev/TASK.md).
+- [Spec de producto](.dev/spec.md), [plan por fases](.dev/plan.md) y [tarea/handoff activo](.dev/task.md).
 - [Contrato de diseño y tokens](design.md).
 - [Instrucciones para agentes](AGENTS.md).
 - [Índice de arquitectura e interacción](docs/README.md).
@@ -24,6 +24,8 @@ npm run dev
 ```
 
 Vite reads `TYPESAFE_API_KEY`, `JEV_MODEL`, `GROQ_API_KEY`, and optional `GROQ_MODEL` from the root `.env` on the server only, then runs the real `api/decide.ts` and `api/talk.ts` handlers locally. Groq is called only after Jev selects a contextual talk action; credentials are never exposed to the browser bundle.
+
+Use `npm run dev` to try real API-backed interaction locally. `npm run preview` serves the production frontend only; the automated browser harness supplies its own local HTTP/SSE fixtures for API tests.
 
 To use Vercel's local function runtime instead, link the project and run:
 
@@ -60,9 +62,13 @@ JEVLING separates behavior from generated conversation. Jev selects one validate
 
 ```bash
 npm run typecheck
+npm run typecheck:tests
 npm run lint
+npm test
 npm run build
 ```
+
+`lint` ejecuta ESLint sin advertencias; `lint:ox` conserva el verificador previo. TypeScript strict está habilitado en los cuatro proyectos. Tailwind v4 consume `src/styles/tokens.css`; el Button de shadcn/ui, Motion y Zustand cubren controles, feedback y preferencias. Features carga XState, GSAP/ScrollTrigger y Lenis de forma diferida; no se descargan desde Home. Estado en [task.md](.dev/task.md); evidencia de [fase 1](.dev/evidence/phase-1/README.md), [fase 2](.dev/evidence/phase-2/README.md) y [fase 3 con comandos cortos](.dev/evidence/phase-3/README.md).
 
 ## Deploy to Vercel
 

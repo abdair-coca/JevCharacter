@@ -1,0 +1,37 @@
+{
+  "case": "isolation",
+  "part": "all",
+  "date": "2026-10-07T21:14:57.888Z",
+  "conditions": "Chromium production preview; real Rive binding/render; provider fixture only for Home; mobile/visibility/reduced-motion emulated",
+  "checks": [
+    "Features never mutates Home personality",
+    "Home remains hidden and suspended",
+    "return keeps Home draft and same canvas",
+    "return keeps context without an AI request",
+    "presentation tears down pinning and global Lenis",
+    "back/forward crosses implemented Features and persistent Home",
+    "asset failure leaves readable chapters and retry",
+    "retry recovers real Rive binding",
+    "no unexpected application/console errors"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x25340040ca00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x25340040ca00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x25340040ca00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x25340040ca00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x3dd40040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3dd40040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3dd40040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3dd40040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to fetch the Rive file: HTTP 404"
+  ],
+  "screenshots": [
+    "asset-error.png"
+  ],
+  "measurements": [],
+  "browser": "153.0.8010.12"
+}

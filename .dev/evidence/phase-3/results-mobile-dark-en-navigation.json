@@ -1,0 +1,25 @@
+{
+  "case": "mobile-dark-en",
+  "part": "navigation",
+  "date": "2026-10-07T21:14:45.421Z",
+  "conditions": "Chromium production preview; real Rive binding/render; provider fixture only for Home; mobile/visibility/reduced-motion emulated",
+  "checks": [
+    "mobile-dark-en: eight chapters, no Home initialized",
+    "mobile-dark-en: last chapter disables next",
+    "mobile-dark-en: keyboard previous selects chapter",
+    "mobile-dark-en: direct reload preserves route content",
+    "mobile-dark-en: no API calls from Features",
+    "no unexpected application/console errors"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x1fc0040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x1fc0040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x1fc0040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x1fc0040a600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "screenshots": [],
+  "measurements": [],
+  "browser": "153.0.8010.12"
+}

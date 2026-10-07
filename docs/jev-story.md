@@ -34,4 +34,4 @@ La visión es convertirlo en una nueva forma de interactuar con software: un peq
 
 ## Uso en About
 
-El recorrido aprobado tiene cinco escenas: la pregunta, el experimento, de animación a personaje, su creador y la visión. El contrato de composición, accesibilidad e idiomas está en [design.md](../design.md); las tareas de implementación, en el [plan activo](../.dev/TASK.md).
+El recorrido aprobado tiene cinco escenas: la pregunta, el experimento, de animación a personaje, su creador y la visión. El contrato de composición, accesibilidad e idiomas está en [design.md](../design.md); el alcance en [spec.md](../.dev/spec.md), las fases en [plan.md](../.dev/plan.md) y el avance en [task.md](../.dev/task.md).

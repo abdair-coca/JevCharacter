@@ -1,0 +1,138 @@
+{
+  "case": "desktop-dark-en",
+  "part": "layout",
+  "date": "2026-10-07T20:38:10.825Z",
+  "conditions": "Chromium production preview; real Rive binding/render; provider fixture only for Home; mobile/visibility/reduced-motion emulated",
+  "checks": [
+    "desktop-dark-en: eight chapters, no Home initialized",
+    "desktop-dark-en first: no horizontal overflow",
+    "desktop-dark-en first: free scene without boxes/cards",
+    "desktop-dark-en first: presentation cannot receive real pointer events",
+    "desktop-dark-en second: no horizontal overflow",
+    "desktop-dark-en second: free scene without boxes/cards",
+    "desktop-dark-en second: presentation cannot receive real pointer events",
+    "desktop-dark-en: Jev travels right-to-left",
+    "desktop-dark-en: explanations alternate left/right",
+    "desktop-dark-en: confidence explained contextually",
+    "desktop-dark-en decision: no horizontal overflow",
+    "desktop-dark-en decision: free scene without boxes/cards",
+    "desktop-dark-en decision: presentation cannot receive real pointer events",
+    "desktop-dark-en: no API calls from Features",
+    "no unexpected application/console errors"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x4d2c0040b200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4d2c0040b200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4d2c0040b200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4d2c0040b200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "screenshots": [
+    "desktop-dark-en-perceives.png",
+    "desktop-dark-en-reacts.png",
+    "desktop-dark-en-decides.png"
+  ],
+  "measurements": [
+    {
+      "label": "desktop-dark-en first",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "chapter": "perceives",
+      "step": "1",
+      "phase": "playing",
+      "flight": {
+        "x": 688,
+        "y": 151.0625,
+        "width": 640,
+        "height": 640,
+        "top": 151.0625,
+        "right": 1328,
+        "bottom": 791.0625,
+        "left": 688
+      },
+      "copy": {
+        "x": 144,
+        "y": 317.046875,
+        "width": 432,
+        "height": 309.03125,
+        "top": 317.046875,
+        "right": 576,
+        "bottom": 626.078125,
+        "left": 144
+      },
+      "stageBackground": "rgba(0, 0, 0, 0)",
+      "stageBorder": "0px",
+      "cardBorder": "0px",
+      "pointerEvents": "none"
+    },
+    {
+      "label": "desktop-dark-en second",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "chapter": "reacts",
+      "step": "0",
+      "phase": "playing",
+      "flight": {
+        "x": 112,
+        "y": 151.0625,
+        "width": 640,
+        "height": 640,
+        "top": 151.0625,
+        "right": 752,
+        "bottom": 791.0625,
+        "left": 112
+      },
+      "copy": {
+        "x": 864,
+        "y": 317.046875,
+        "width": 432,
+        "height": 309.03125,
+        "top": 317.046875,
+        "right": 1296,
+        "bottom": 626.078125,
+        "left": 864
+      },
+      "stageBackground": "rgba(0, 0, 0, 0)",
+      "stageBorder": "0px",
+      "cardBorder": "0px",
+      "pointerEvents": "none"
+    },
+    {
+      "label": "desktop-dark-en decision",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "chapter": "decides",
+      "step": "1",
+      "phase": "playing",
+      "flight": {
+        "x": 688,
+        "y": 151.0625,
+        "width": 640,
+        "height": 640,
+        "top": 151.0625,
+        "right": 1328,
+        "bottom": 791.0625,
+        "left": 688
+      },
+      "copy": {
+        "x": 144,
+        "y": 221.046875,
+        "width": 432,
+        "height": 501.03125,
+        "top": 221.046875,
+        "right": 576,
+        "bottom": 722.078125,
+        "left": 144
+      },
+      "stageBackground": "rgba(0, 0, 0, 0)",
+      "stageBorder": "0px",
+      "cardBorder": "0px",
+      "pointerEvents": "none"
+    }
+  ],
+  "browser": "153.0.8010.12"
+}
