@@ -12,6 +12,7 @@
     "typecheck": "tsc -b",
     "typecheck:tests": "tsc -p tsconfig.tests.json --noEmit",
     "build": "tsc -b && vite build",
+    "build:frontend": "tsc -b && vite build --mode frontend && node scripts/prepare-vercel-frontend.mjs",
     "lint": "eslint . --max-warnings=0",
     "lint:ox": "oxlint",
     "preview": "vite preview"

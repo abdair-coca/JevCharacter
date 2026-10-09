@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 
 export default tseslint.config(
   // The completed lab and its generated evidence have their own toolchain.
-  { ignores: ["dist/**", "node_modules/**", "jev-lab/**", ".dev/evidence/**"] },
+  { ignores: ["dist/**", ".vercel/**", "node_modules/**", "jev-lab/**", ".dev/evidence/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   { rules: { "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }] } },
