@@ -17,6 +17,20 @@ beforeEach(() => { mocks.triggers.getAll.mockReturnValue([]); Object.definePrope
 afterEach(() => { leases.splice(0).forEach(lease => lease.release()); });
 
 describe("shared presentation scroll", () => {
+  it("smooths user navigation and falls back to native scroll without a live ticker", () => {
+    const native = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    const lease = acquire();
+    lease.scrollTo(800, 1.2);
+    expect(mocks.lenis.scrollTo).toHaveBeenCalledWith(800, expect.objectContaining({ immediate: false, duration: 1.2, force: true }));
+    lease.setActive(false);
+    lease.scrollTo(1200, 1.2);
+    expect(native).toHaveBeenCalledWith({ top: 1200, behavior: "smooth" });
+    lease.release();
+    native.mockClear();
+    lease.scrollTo(1500, 1.2);
+    expect(native).not.toHaveBeenCalled();
+    native.mockRestore();
+  });
   it("uses one Lenis/ticker across owners and destroys only after the last release", () => {
     const first = acquire(); const second = acquire();
     expect(mocks.create).toHaveBeenCalledOnce();
@@ -25,7 +39,7 @@ describe("shared presentation scroll", () => {
     first.release(); first.release();
     expect(mocks.lenis.destroy).not.toHaveBeenCalled();
     second.scrollTo(100);
-    expect(mocks.lenis.scrollTo).toHaveBeenCalledWith(100, { immediate: true, force: true });
+    expect(mocks.lenis.scrollTo).toHaveBeenCalledWith(100, expect.objectContaining({ immediate: true, duration: 0, force: true }));
     second.release();
     expect(mocks.lenis.destroy).toHaveBeenCalledOnce();
     expect(mocks.ticker.remove).toHaveBeenCalled();

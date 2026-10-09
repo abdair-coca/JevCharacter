@@ -14,7 +14,6 @@ export type DemoStep = {
   action: DemoAction;
   duration: Exclude<keyof ShowcaseTimings, "prepare" | "ready">;
   caption: Localized;
-  cursor?: { x: number; y: number };
 };
 type Chapter = {
   id: string; title: Localized; description: Localized; scenario: Localized;
@@ -28,11 +27,11 @@ export const CHAPTERS = [
   {
     id: "perceives", title: text("Percibe", "Perceives"),
     description: text("Un pequeño movimiento. Toda su atención.", "A small movement. All its attention."),
-    scenario: text("Un cursor recorre el escenario.", "A cursor moves across the scene."),
-    explanation: text("Recorrido de cursor ilustrativo, no un sensor. El seguimiento interactivo del personaje se prueba en Inicio.", "Illustrative cursor path, not a sensor. Try the character's interactive tracking on Home."),
+    scenario: text("Una escena de atención al movimiento.", "A scene illustrating attention to movement."),
+    explanation: text("Escena ilustrativa de atención, sin sensores reales. El seguimiento interactivo del personaje se prueba en Inicio.", "Illustrative attention scene, without real sensors. Try the character's interactive tracking on Home."),
     steps: [
-      { action: state("Base"), duration: "observe", caption: text("El cursor de ejemplo se acerca.", "The example cursor approaches."), cursor: { x: 0.25, y: 0.45 } },
-      { action: state("Base"), duration: "observe", caption: text("La escena representa atención al movimiento.", "The scene illustrates attention to movement."), cursor: { x: 0.75, y: 0.55 } },
+      { action: state("Base"), duration: "observe", caption: text("Jev permanece atento.", "Jev stays attentive.") },
+      { action: state("Base"), duration: "observe", caption: text("La escena representa atención al movimiento.", "The scene illustrates attention to movement.") },
     ],
   },
   {
@@ -114,7 +113,7 @@ export function chapterAt(index: number): Chapter { return CHAPTERS[Math.max(0, 
 export const showcaseCopy = {
   es: {
     eyebrow: "CONOCE A JEV", title: "Más que una cara.", accent: "Una forma de estar.",
-    intro: "Ocho pequeñas escenas. Mira lo que Jev puede hacer.", example: "Demostración · datos de ejemplo",
+    intro: "Pequeñas demostraciones de lo que Jev puede hacer.", example: "Demostración · datos de ejemplo",
     offline: "Guion fijo. Sin IA ni cambios en tu sesión.", previous: "Anterior", next: "Siguiente", replay: "Repetir escena",
     chapters: "Capítulos de capacidades", play: "Ver escena", detail: "Cómo funciona", progress: "Progreso de capítulos",
     loading: "Preparando a Jev…", preparing: "Preparando escena…", playing: "Reproduciendo", complete: "Escena completa",
@@ -130,7 +129,7 @@ export const showcaseCopy = {
   },
   en: {
     eyebrow: "MEET JEV", title: "More than a face.", accent: "A way of being.",
-    intro: "Eight little scenes. See what Jev can do.", example: "Demonstration · example data",
+    intro: "A glimpse of what Jev can do. Shown through demos.", example: "Demonstration · example data",
     offline: "Fixed script. No AI or changes to your session.", previous: "Previous", next: "Next", replay: "Replay scene",
     chapters: "Feature chapters", play: "View scene", detail: "How it works", progress: "Chapter progress",
     loading: "Getting Jev ready…", preparing: "Preparing scene…", playing: "Playing", complete: "Scene complete",

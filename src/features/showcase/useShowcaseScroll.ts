@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { acquirePresentationScroll, enablePresentationEngine, releaseIdlePresentationEngine, setPresentationVisibility } from "../presentation/scrollRuntime";
+import { cssDurationSeconds } from "../../lib/motionTokens";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -12,7 +13,6 @@ export function useShowcaseScroll(root: RefObject<HTMLElement | null>, stage: Re
   const select = useRef(onChapter);
   const locked = useRef(false);
   const unlockFrame = useRef<number | null>(null);
-  const pinned = useRef(false);
   const preference = useRef(preferenceKey);
   const anchors = useRef<number[]>([]);
   useEffect(() => { select.current = onChapter; }, [onChapter]);
@@ -36,20 +36,20 @@ export function useShowcaseScroll(root: RefObject<HTMLElement | null>, stage: Re
       };
     });
     if (!reduced) media.add("(prefers-reduced-motion: no-preference) and (height > 35rem)", () => {
-      pinned.current = true;
       const pin = ScrollTrigger.create({ trigger: scene, start: () => `top top+=${offset()}`, endTrigger: element.querySelector(".showcase-workspace"), end: "bottom bottom", pin: true, pinSpacing: false, invalidateOnRefresh: true });
       // GSAP owns the free-flight wrapper; Rive owns the creature, Motion its caption.
       const flight = element.querySelector<HTMLElement>(".showcase-flight")!;
       const distance = () => scene.clientWidth * Number.parseFloat(getComputedStyle(element).getPropertyValue("--showcase-travel"));
+      const lift = () => scene.clientHeight * Number.parseFloat(getComputedStyle(element).getPropertyValue("--showcase-lift"));
       gsap.set(flight, { xPercent: -50, yPercent: -50 });
-      const travel = gsap.timeline({ scrollTrigger: { trigger: cards[0], start: () => `top top+=${offset()}`, endTrigger: cards[cards.length - 1], end: () => `top top+=${offset()}`, scrub: true, invalidateOnRefresh: true } });
+      const travel = gsap.timeline({ scrollTrigger: { trigger: cards[0], start: () => `top top+=${offset()}`, endTrigger: cards[cards.length - 1], end: () => `top top+=${offset()}`, scrub: cssDurationSeconds(getComputedStyle(element).getPropertyValue("--showcase-follow")), invalidateOnRefresh: true } });
       cards.slice(1).forEach((card, step) => {
         const index = step + 1;
-        const destination = { x: () => (index % 2 === 0 ? 1 : -1) * distance(), y: 0, duration: card.offsetTop - cards[index - 1].offsetTop, ease: "none" };
-        if (index === 1) travel.fromTo(flight, { x: () => distance(), y: 0 }, destination);
+        const destination = { x: () => (index % 2 === 0 ? 1 : -1) * distance(), y: () => (index % 2 === 0 ? -1 : 1) * lift(), rotation: () => (index % 2 === 0 ? -1 : 1) * Number.parseFloat(getComputedStyle(element).getPropertyValue("--showcase-bank")), duration: card.offsetTop - cards[index - 1].offsetTop, ease: "sine.inOut" };
+        if (index === 1) travel.fromTo(flight, { x: () => distance(), y: () => -lift(), rotation: 0 }, destination);
         else travel.to(flight, destination);
       });
-      return () => { pin.kill(); pinned.current = false; };
+      return () => { pin.kill(); };
     });
     ScrollTrigger.refresh();
     anchors.current = cards.map(card => card.getBoundingClientRect().top + window.scrollY);
@@ -85,15 +85,12 @@ export function useShowcaseScroll(root: RefObject<HTMLElement | null>, stage: Re
   }, [preferenceKey, selected, root]);
 
   return useCallback((index: number) => {
-    const target = pinned.current ? root.current?.querySelector<HTMLElement>(`[data-chapter-card="${index}"]`) : stage.current;
+    const target = root.current?.querySelector<HTMLElement>(`[data-chapter-card="${index}"]`);
     if (!target) return;
-    locked.current = true;
-    if (unlockFrame.current !== null) cancelAnimationFrame(unlockFrame.current);
     const offset = document.querySelector(".site-header")!.getBoundingClientRect().bottom + Number.parseFloat(getComputedStyle(root.current!).getPropertyValue("--showcase-pin-gap"));
     const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
-    if (scroll.current) scroll.current.scrollTo(top);
-    else window.scrollTo({ top, behavior: "instant" });
-    ScrollTrigger.update();
-    unlockFrame.current = requestAnimationFrame(() => { locked.current = false; unlockFrame.current = null; });
-  }, [root, stage]);
+    const duration = reduced ? 0 : cssDurationSeconds(getComputedStyle(root.current!).getPropertyValue("--showcase-jump"));
+    if (scroll.current) scroll.current.scrollTo(top, duration);
+    else window.scrollTo({ top, behavior: reduced ? "instant" : "smooth" });
+  }, [root, reduced]);
 }

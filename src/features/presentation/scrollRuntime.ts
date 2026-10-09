@@ -49,7 +49,16 @@ export function acquirePresentationScroll(lerp: number) {
   value.clients.set(id, document.visibilityState !== "hidden");
   sync(value);
   return {
-    scrollTo: (top: number) => { if (!released) value.lenis.scrollTo(top, { immediate: true, force: true }); },
+    // Geometry restoration stays immediate; user actions opt into a duration.
+    // Native smooth scrolling also works while the stage's ticker is asleep.
+    scrollTo: (top: number, duration = 0) => {
+      if (released) return;
+      if (duration > 0 && !value.ticking) window.scrollTo({ top, behavior: "smooth" });
+      else value.lenis.scrollTo(top, {
+        immediate: duration === 0, duration, force: true,
+        easing: (progress: number) => (1 - Math.cos(Math.PI * progress)) / 2,
+      });
+    },
     setActive: (active: boolean) => { if (!released) { value.clients.set(id, active); sync(value); } },
     release: () => {
       if (released) return;
