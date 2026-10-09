@@ -1,0 +1,92 @@
+{
+  "case": "desktop-light-es",
+  "block": "finale",
+  "date": "2026-10-09T01:29:12.992Z",
+  "fingerprint": "b8792e3af188b8c53625f7bdb3ceb2687610775f004148ce7f19328d8261cf9b",
+  "sources": [
+    "src/pages/AboutPage.tsx",
+    "src/features/story/catalog.ts",
+    "src/features/story/story.css",
+    "src/features/story/useStoryScroll.ts",
+    "src/features/story/ParticleVortex.tsx",
+    "src/features/story/particleGeometry.ts",
+    "public/story/bob.jpeg",
+    "public/story/curiousTiti.webp",
+    "public/story/housingML.svg",
+    ".dev/evidence/phase-4/verify-particles.mjs"
+  ],
+  "checks": [
+    "five readable project scenes",
+    "About does not initialize Home or call an API",
+    "native optional details available",
+    "star: dark cinematic stage in light theme",
+    "star: no horizontal overflow",
+    "star: copy clears fixed header",
+    "star: particles match chapter",
+    "star holds before revealing Jev",
+    "keyboard action opens star and reveals Jev",
+    "reverse navigation reforms star",
+    "theme switch retains dark stage and same particle canvas",
+    "language switch preserves chapter and star progress",
+    "preferences retain particle and Rive canvases",
+    "keyboard/touch navigation has visible 44px targets",
+    "canvas DPR capped at two",
+    "adaptive density stays within device budget",
+    "complete story makes zero API requests",
+    "no unexpected browser errors",
+    "case completes within deadline"
+  ],
+  "screenshots": [
+    "particles-desktop-light-es-star.png",
+    "particles-desktop-light-es-reveal.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "measurements": [
+    {
+      "label": "star",
+      "root": {
+        "storySelected": "vision",
+        "static": "false",
+        "reading": "false",
+        "storyStatus": "ready",
+        "particleError": "false",
+        "storyProgress": "4.000"
+      },
+      "canvas": {
+        "running": "true",
+        "count": "11000",
+        "phase": "4",
+        "reveal": "0.000",
+        "prepared": "true",
+        "drawMs": "8.00"
+      },
+      "width": 1440,
+      "scrollWidth": 1440,
+      "background": "#050608",
+      "copyTop": 185,
+      "headerBottom": 73,
+      "reveal": 0,
+      "canvasWidth": 704,
+      "flightWidth": 704,
+      "imageBottom": 782.6800000000001,
+      "navTop": 835
+    },
+    {
+      "timing": {
+        "medianMs": 16.700000000000728,
+        "p95Ms": 33.400000000001455,
+        "particleDrawMs": "5.53"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    }
+  ],
+  "browser": "153.0.8010.12",
+  "elapsedSeconds": 24.873
+}

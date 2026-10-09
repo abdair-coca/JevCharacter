@@ -1,0 +1,187 @@
+{
+  "case": "desktop-light-es",
+  "block": "images",
+  "date": "2026-10-09T01:28:21.595Z",
+  "fingerprint": "b8792e3af188b8c53625f7bdb3ceb2687610775f004148ce7f19328d8261cf9b",
+  "sources": [
+    "src/pages/AboutPage.tsx",
+    "src/features/story/catalog.ts",
+    "src/features/story/story.css",
+    "src/features/story/useStoryScroll.ts",
+    "src/features/story/ParticleVortex.tsx",
+    "src/features/story/particleGeometry.ts",
+    "public/story/bob.jpeg",
+    "public/story/curiousTiti.webp",
+    "public/story/housingML.svg",
+    ".dev/evidence/phase-4/verify-particles.mjs"
+  ],
+  "checks": [
+    "five readable project scenes",
+    "About does not initialize Home or call an API",
+    "native optional details available",
+    "intro: dark cinematic stage in light theme",
+    "intro: no horizontal overflow",
+    "intro: copy clears fixed header",
+    "intro: particles match chapter",
+    "bob: dark cinematic stage in light theme",
+    "bob: no horizontal overflow",
+    "bob: copy clears fixed header",
+    "bob: particles match chapter",
+    "titi: dark cinematic stage in light theme",
+    "titi: no horizontal overflow",
+    "titi: copy clears fixed header",
+    "titi: particles match chapter",
+    "learning: dark cinematic stage in light theme",
+    "learning: no horizontal overflow",
+    "learning: copy clears fixed header",
+    "learning: particles match chapter",
+    "keyboard/touch navigation has visible 44px targets",
+    "canvas DPR capped at two",
+    "adaptive density stays within device budget",
+    "complete story makes zero API requests",
+    "no unexpected browser errors",
+    "case completes within deadline"
+  ],
+  "screenshots": [
+    "particles-desktop-light-es-intro.png",
+    "particles-desktop-light-es-bob.png",
+    "particles-desktop-light-es-titi.png",
+    "particles-desktop-light-es-learning.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "measurements": [
+    {
+      "label": "intro",
+      "root": {
+        "storySelected": "creator",
+        "static": "false",
+        "reading": "false",
+        "storyStatus": "ready",
+        "particleError": "false",
+        "storyProgress": "0.001"
+      },
+      "canvas": {
+        "running": "true",
+        "count": "11000",
+        "phase": "0",
+        "reveal": "0.000",
+        "prepared": "true",
+        "drawMs": "7.06"
+      },
+      "width": 1440,
+      "scrollWidth": 1440,
+      "background": "#050608",
+      "copyTop": 184,
+      "headerBottom": 73,
+      "reveal": 0,
+      "canvasWidth": 704,
+      "flightWidth": 704,
+      "imageBottom": 782.6800000000001,
+      "navTop": 835
+    },
+    {
+      "label": "bob",
+      "root": {
+        "storySelected": "bob",
+        "static": "false",
+        "reading": "false",
+        "storyStatus": "ready",
+        "particleError": "false",
+        "storyProgress": "1.000"
+      },
+      "canvas": {
+        "running": "true",
+        "count": "11000",
+        "phase": "1",
+        "reveal": "0.000",
+        "prepared": "true",
+        "drawMs": "7.18"
+      },
+      "width": 1440,
+      "scrollWidth": 1440,
+      "background": "#050608",
+      "copyTop": 185,
+      "headerBottom": 73,
+      "reveal": 0,
+      "canvasWidth": 704,
+      "flightWidth": 704,
+      "imageBottom": 782.6800000000001,
+      "navTop": 835
+    },
+    {
+      "label": "titi",
+      "root": {
+        "storySelected": "titi",
+        "static": "false",
+        "reading": "false",
+        "storyStatus": "ready",
+        "particleError": "false",
+        "storyProgress": "2.000"
+      },
+      "canvas": {
+        "running": "true",
+        "count": "11000",
+        "phase": "2",
+        "reveal": "0.000",
+        "prepared": "true",
+        "drawMs": "7.18"
+      },
+      "width": 1440,
+      "scrollWidth": 1440,
+      "background": "#050608",
+      "copyTop": 185,
+      "headerBottom": 73,
+      "reveal": 0,
+      "canvasWidth": 704,
+      "flightWidth": 704,
+      "imageBottom": 782.6800000000001,
+      "navTop": 835
+    },
+    {
+      "label": "learning",
+      "root": {
+        "storySelected": "learning",
+        "static": "false",
+        "reading": "false",
+        "storyStatus": "ready",
+        "particleError": "false",
+        "storyProgress": "3.000"
+      },
+      "canvas": {
+        "running": "true",
+        "count": "9020",
+        "phase": "3",
+        "reveal": "0.000",
+        "prepared": "true",
+        "drawMs": "11.18"
+      },
+      "width": 1440,
+      "scrollWidth": 1440,
+      "background": "#050608",
+      "copyTop": 185,
+      "headerBottom": 73,
+      "reveal": 0,
+      "canvasWidth": 704,
+      "flightWidth": 704,
+      "imageBottom": 782.6800000000001,
+      "navTop": 835
+    },
+    {
+      "timing": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 33.399999999999636,
+        "particleDrawMs": "5.08"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    }
+  ],
+  "browser": "153.0.8010.12",
+  "elapsedSeconds": 11.786
+}

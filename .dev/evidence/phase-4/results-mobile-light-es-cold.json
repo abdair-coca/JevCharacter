@@ -1,0 +1,57 @@
+{
+  "case": "mobile-light-es",
+  "part": "cold",
+  "date": "2026-10-08T14:44:19.866Z",
+  "sourceFingerprint": "588e0cc07add773880325590e00e1e14542f1c19dd21d90860d32358c2434cc7",
+  "sources": [
+    "package.json",
+    "package-lock.json",
+    "src/App.tsx",
+    "src/App.css",
+    "src/styles/tokens.css",
+    "src/pages/AboutPage.tsx",
+    "src/components/Character.tsx",
+    "src/character/useCharacterController.ts",
+    "src/components/SiteHeader.tsx",
+    "src/components/ui/button.tsx",
+    "src/navigation/routes.ts",
+    "src/hooks/usePageVisibility.ts",
+    "src/hooks/useReducedMotionPreference.ts",
+    "src/lib/motionTokens.ts",
+    "src/stores/preferencesStore.ts",
+    "src/features/story/catalog.ts",
+    "src/features/story/useStoryScroll.ts",
+    "src/features/story/story.css",
+    "src/features/presentation/scrollRuntime.ts",
+    "src/features/presentation/useStageVisibility.ts",
+    "docs/jev-story.md",
+    ".dev/evidence/phase-4/verify.mjs",
+    ".dev/evidence/phase-4/aggregate.mjs"
+  ],
+  "checks": [
+    "five readable narrative scenes",
+    "direct About does not initialize Home",
+    "five native optional details",
+    "cold reduced entry has no pinning",
+    "authored Base is ready after invisible initialization",
+    "static pose remains visually identical without motion",
+    "static return preserves the same pose without warmup replay",
+    "navigation touch targets are visible and at least 44px",
+    "About makes no API calls, including initial load",
+    "no unexpected application errors"
+  ],
+  "screenshots": [
+    "mobile-light-es-cold.png"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x2fbc0040b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2fbc0040b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2fbc0040b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2fbc0040b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "measurements": [],
+  "conditions": "Production Chromium; desktop/mobile, touch, reduced motion and visibility emulated; Home API fixture only",
+  "browser": "153.0.8010.12"
+}

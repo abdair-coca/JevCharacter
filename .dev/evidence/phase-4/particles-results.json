@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-09T01:40:31.722Z",
+  "fingerprint": "b8792e3af188b8c53625f7bdb3ceb2687610775f004148ce7f19328d8261cf9b",
+  "reports": [
+    "particles-desktop-light-es-images.json",
+    "particles-desktop-light-es-finale.json",
+    "particles-desktop-dark-en-images.json",
+    "particles-desktop-dark-en-finale.json",
+    "particles-mobile-light-es-images.json",
+    "particles-mobile-light-es-finale.json",
+    "particles-mobile-dark-en-images.json",
+    "particles-mobile-dark-en-finale.json",
+    "particles-reduced-checks.json",
+    "particles-fallback-checks.json",
+    "particles-lifecycle-checks.json"
+  ],
+  "checks": 219,
+  "screenshots": [
+    "particles-desktop-light-es-intro.png",
+    "particles-desktop-light-es-bob.png",
+    "particles-desktop-light-es-titi.png",
+    "particles-desktop-light-es-learning.png",
+    "particles-desktop-light-es-star.png",
+    "particles-desktop-light-es-reveal.png",
+    "particles-desktop-dark-en-intro.png",
+    "particles-desktop-dark-en-bob.png",
+    "particles-desktop-dark-en-titi.png",
+    "particles-desktop-dark-en-learning.png",
+    "particles-desktop-dark-en-star.png",
+    "particles-desktop-dark-en-reveal.png",
+    "particles-mobile-light-es-intro.png",
+    "particles-mobile-light-es-bob.png",
+    "particles-mobile-light-es-titi.png",
+    "particles-mobile-light-es-learning.png",
+    "particles-mobile-light-es-star.png",
+    "particles-mobile-light-es-reveal.png",
+    "particles-mobile-dark-en-intro.png",
+    "particles-mobile-dark-en-bob.png",
+    "particles-mobile-dark-en-titi.png",
+    "particles-mobile-dark-en-learning.png",
+    "particles-mobile-dark-en-star.png",
+    "particles-mobile-dark-en-reveal.png",
+    "particles-reduced-static.png",
+    "particles-fallback-static.png"
+  ],
+  "errors": [],
+  "expectedErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "warnings": [
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x580c01e8a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x3b0c01f3e400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x693c01cc6400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x693c01cc6400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x693c01cc6400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x693c01cc6400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x448401f45800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x448401f45800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x448401f45800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x448401f45800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x5364036b0000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x5364036b0000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x5364036b0000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x5364036b0000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x315403468000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x315403468000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x315403468000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x315403468000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x51bc01e70c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x51bc01e70c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x51bc01e70c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x51bc01e70c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x651402429800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x651402429800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x651402429800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x651402429800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x47fc01f09800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x47fc01f09800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x47fc01f09800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x47fc01f09800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x59e402070800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x59e402070800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x59e402070800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  ],
+  "timings": [
+    {
+      "case": "desktop-light-es",
+      "block": "images",
+      "timing": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 33.399999999999636,
+        "particleDrawMs": "5.08"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "desktop-light-es",
+      "block": "finale",
+      "timing": {
+        "medianMs": 16.700000000000728,
+        "p95Ms": 33.400000000001455,
+        "particleDrawMs": "5.53"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "desktop-dark-en",
+      "block": "images",
+      "timing": {
+        "medianMs": 16.700000000000728,
+        "p95Ms": 33.399999999999636,
+        "particleDrawMs": "5.20"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "desktop-dark-en",
+      "block": "finale",
+      "timing": {
+        "medianMs": 16.700000000000728,
+        "p95Ms": 33.400000000001455,
+        "particleDrawMs": "6.60"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "mobile-light-es",
+      "block": "images",
+      "timing": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 33.399999999999636,
+        "particleDrawMs": "3.21"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "mobile-light-es",
+      "block": "finale",
+      "timing": {
+        "medianMs": 33.29999999999927,
+        "p95Ms": 33.400000000001455,
+        "particleDrawMs": "3.76"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "mobile-dark-en",
+      "block": "images",
+      "timing": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 33.399999999999636,
+        "particleDrawMs": "3.21"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    },
+    {
+      "case": "mobile-dark-en",
+      "block": "finale",
+      "timing": {
+        "medianMs": 16.700000000000728,
+        "p95Ms": 33.30000000000291,
+        "particleDrawMs": "3.05"
+      },
+      "conditions": "Chromium desktop host; mobile viewport/DPR/touch emulated; RAF pacing and canvas draw cost, not mobile hardware or LCP"
+    }
+  ],
+  "conditions": "Chromium 153 production preview, desktop Windows host; viewport, touch, visibility, DPR and reduced motion emulated. No physical mobile, Safari, LCP or real AI calls."
+}

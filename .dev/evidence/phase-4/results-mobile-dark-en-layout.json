@@ -1,0 +1,317 @@
+{
+  "case": "mobile-dark-en",
+  "part": "layout",
+  "date": "2026-10-08T15:19:50.000Z",
+  "sourceFingerprint": "588e0cc07add773880325590e00e1e14542f1c19dd21d90860d32358c2434cc7",
+  "sources": [
+    "package.json",
+    "package-lock.json",
+    "src/App.tsx",
+    "src/App.css",
+    "src/styles/tokens.css",
+    "src/pages/AboutPage.tsx",
+    "src/components/Character.tsx",
+    "src/character/useCharacterController.ts",
+    "src/components/SiteHeader.tsx",
+    "src/components/ui/button.tsx",
+    "src/navigation/routes.ts",
+    "src/hooks/usePageVisibility.ts",
+    "src/hooks/useReducedMotionPreference.ts",
+    "src/lib/motionTokens.ts",
+    "src/stores/preferencesStore.ts",
+    "src/features/story/catalog.ts",
+    "src/features/story/useStoryScroll.ts",
+    "src/features/story/story.css",
+    "src/features/presentation/scrollRuntime.ts",
+    "src/features/presentation/useStageVisibility.ts",
+    "docs/jev-story.md",
+    ".dev/evidence/phase-4/verify.mjs",
+    ".dev/evidence/phase-4/aggregate.mjs"
+  ],
+  "checks": [
+    "five readable narrative scenes",
+    "direct About does not initialize Home",
+    "five native optional details",
+    "navigation touch targets are visible and at least 44px",
+    "mobile-dark-en question: no horizontal overflow",
+    "mobile-dark-en question: scene starts below fixed header",
+    "opening chat-box metaphor is visible",
+    "mobile-dark-en experiment: no horizontal overflow",
+    "mobile-dark-en experiment: scene starts below fixed header",
+    "creature escapes to the opposite side",
+    "chat box releases the creature",
+    "mobile-dark-en evolution: no horizontal overflow",
+    "mobile-dark-en evolution: scene starts below fixed header",
+    "perception/behavior/body metaphor is visible",
+    "mobile-dark-en creator: no horizontal overflow",
+    "mobile-dark-en creator: scene starts below fixed header",
+    "original creator attribution",
+    "creator biography localized without an invented portrait",
+    "mobile-dark-en vision: no horizontal overflow",
+    "mobile-dark-en vision: scene starts below fixed header",
+    "future vision explicitly identified",
+    "original closing and language metadata",
+    "About makes no API calls, including initial load",
+    "no unexpected application errors"
+  ],
+  "screenshots": [
+    "mobile-dark-en-question.png",
+    "mobile-dark-en-experiment.png",
+    "mobile-dark-en-evolution.png",
+    "mobile-dark-en-creator.png",
+    "mobile-dark-en-vision.png",
+    "mobile-dark-en-closing.png"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x98c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x98c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x98c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x98c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "measurements": [
+    {
+      "label": "mobile-dark-en question",
+      "selected": "question",
+      "width": 390,
+      "scrollWidth": 390,
+      "flight": {
+        "x": 28.57830810546875,
+        "y": 456.796875,
+        "width": 390,
+        "height": 390,
+        "top": 456.796875,
+        "right": 418.57830810546875,
+        "bottom": 846.796875,
+        "left": 28.57830810546875
+      },
+      "copy": {
+        "x": 16,
+        "y": 168,
+        "width": 358,
+        "height": 267.1875,
+        "top": 168,
+        "right": 374,
+        "bottom": 435.1875,
+        "left": 16
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 121,
+        "top": 0,
+        "right": 390,
+        "bottom": 121,
+        "left": 0
+      },
+      "navigation": {
+        "x": 0,
+        "y": 780,
+        "width": 390,
+        "height": 64,
+        "top": 780,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "chatOpacity": "0.9989",
+      "layersOpacity": "0"
+    },
+    {
+      "label": "mobile-dark-en experiment",
+      "selected": "experiment",
+      "width": 390,
+      "scrollWidth": 390,
+      "flight": {
+        "x": -28.639999389648438,
+        "y": 456.796875,
+        "width": 390,
+        "height": 390,
+        "top": 456.796875,
+        "right": 361.36000061035156,
+        "bottom": 846.796875,
+        "left": -28.639999389648438
+      },
+      "copy": {
+        "x": 16,
+        "y": 169.390625,
+        "width": 358,
+        "height": 251.1875,
+        "top": 169.390625,
+        "right": 374,
+        "bottom": 420.578125,
+        "left": 16
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 121,
+        "top": 0,
+        "right": 390,
+        "bottom": 121,
+        "left": 0
+      },
+      "navigation": {
+        "x": 0,
+        "y": 780,
+        "width": 390,
+        "height": 64,
+        "top": 780,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "chatOpacity": "0",
+      "layersOpacity": "0"
+    },
+    {
+      "label": "mobile-dark-en evolution",
+      "selected": "evolution",
+      "width": 390,
+      "scrollWidth": 390,
+      "flight": {
+        "x": 28.639999389648438,
+        "y": 456.796875,
+        "width": 390,
+        "height": 390,
+        "top": 456.796875,
+        "right": 418.63999938964844,
+        "bottom": 846.796875,
+        "left": 28.639999389648438
+      },
+      "copy": {
+        "x": 16,
+        "y": 168.78125,
+        "width": 358,
+        "height": 309.1875,
+        "top": 168.78125,
+        "right": 374,
+        "bottom": 477.96875,
+        "left": 16
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 121,
+        "top": 0,
+        "right": 390,
+        "bottom": 121,
+        "left": 0
+      },
+      "navigation": {
+        "x": 0,
+        "y": 780,
+        "width": 390,
+        "height": 64,
+        "top": 780,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "chatOpacity": "0",
+      "layersOpacity": "1"
+    },
+    {
+      "label": "mobile-dark-en creator",
+      "selected": "creator",
+      "width": 390,
+      "scrollWidth": 390,
+      "flight": {
+        "x": -28.639999389648438,
+        "y": 456.796875,
+        "width": 390,
+        "height": 390,
+        "top": 456.796875,
+        "right": 361.36000061035156,
+        "bottom": 846.796875,
+        "left": -28.639999389648438
+      },
+      "copy": {
+        "x": 16,
+        "y": 169.171875,
+        "width": 358,
+        "height": 301.59375,
+        "top": 169.171875,
+        "right": 374,
+        "bottom": 470.765625,
+        "left": 16
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 121,
+        "top": 0,
+        "right": 390,
+        "bottom": 121,
+        "left": 0
+      },
+      "navigation": {
+        "x": 0,
+        "y": 780,
+        "width": 390,
+        "height": 64,
+        "top": 780,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "chatOpacity": "0",
+      "layersOpacity": "0"
+    },
+    {
+      "label": "mobile-dark-en vision",
+      "selected": "vision",
+      "width": 390,
+      "scrollWidth": 390,
+      "flight": {
+        "x": 28.639999389648438,
+        "y": 456.796875,
+        "width": 390,
+        "height": 390,
+        "top": 456.796875,
+        "right": 418.63999938964844,
+        "bottom": 846.796875,
+        "left": 28.639999389648438
+      },
+      "copy": {
+        "x": 16,
+        "y": 168.5625,
+        "width": 358,
+        "height": 288.1875,
+        "top": 168.5625,
+        "right": 374,
+        "bottom": 456.75,
+        "left": 16
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 121,
+        "top": 0,
+        "right": 390,
+        "bottom": 121,
+        "left": 0
+      },
+      "navigation": {
+        "x": 0,
+        "y": 780,
+        "width": 390,
+        "height": 64,
+        "top": 780,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "chatOpacity": "0",
+      "layersOpacity": "0"
+    }
+  ],
+  "conditions": "Production Chromium; desktop/mobile, touch, reduced motion and visibility emulated; Home API fixture only",
+  "browser": "153.0.8010.12"
+}

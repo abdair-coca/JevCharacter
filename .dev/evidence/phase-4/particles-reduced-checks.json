@@ -1,0 +1,44 @@
+{
+  "case": "reduced",
+  "block": "checks",
+  "date": "2026-10-09T01:38:47.166Z",
+  "fingerprint": "b8792e3af188b8c53625f7bdb3ceb2687610775f004148ce7f19328d8261cf9b",
+  "sources": [
+    "src/pages/AboutPage.tsx",
+    "src/features/story/catalog.ts",
+    "src/features/story/story.css",
+    "src/features/story/useStoryScroll.ts",
+    "src/features/story/ParticleVortex.tsx",
+    "src/features/story/particleGeometry.ts",
+    "public/story/bob.jpeg",
+    "public/story/curiousTiti.webp",
+    "public/story/housingML.svg",
+    ".dev/evidence/phase-4/verify-particles.mjs"
+  ],
+  "checks": [
+    "five readable project scenes",
+    "About does not initialize Home or call an API",
+    "native optional details available",
+    "linear fallback has no pinning",
+    "static particles have no ticker loop",
+    "original project images accompany linear text",
+    "reduced particles remain visually identical",
+    "320px reflow has no horizontal overflow",
+    "no unexpected browser errors",
+    "case completes within deadline"
+  ],
+  "screenshots": [
+    "particles-reduced-static.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4c3c01e06400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "measurements": [],
+  "browser": "153.0.8010.12",
+  "elapsedSeconds": 11.054
+}

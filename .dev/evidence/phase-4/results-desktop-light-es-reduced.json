@@ -1,0 +1,158 @@
+{
+  "case": "desktop-light-es",
+  "part": "reduced",
+  "date": "2026-10-08T15:25:36.954Z",
+  "sourceFingerprint": "588e0cc07add773880325590e00e1e14542f1c19dd21d90860d32358c2434cc7",
+  "sources": [
+    "package.json",
+    "package-lock.json",
+    "src/App.tsx",
+    "src/App.css",
+    "src/styles/tokens.css",
+    "src/pages/AboutPage.tsx",
+    "src/components/Character.tsx",
+    "src/character/useCharacterController.ts",
+    "src/components/SiteHeader.tsx",
+    "src/components/ui/button.tsx",
+    "src/navigation/routes.ts",
+    "src/hooks/usePageVisibility.ts",
+    "src/hooks/useReducedMotionPreference.ts",
+    "src/lib/motionTokens.ts",
+    "src/stores/preferencesStore.ts",
+    "src/features/story/catalog.ts",
+    "src/features/story/useStoryScroll.ts",
+    "src/features/story/story.css",
+    "src/features/presentation/scrollRuntime.ts",
+    "src/features/presentation/useStageVisibility.ts",
+    "docs/jev-story.md",
+    ".dev/evidence/phase-4/verify.mjs",
+    ".dev/evidence/phase-4/aggregate.mjs"
+  ],
+  "checks": [
+    "five readable narrative scenes",
+    "direct About does not initialize Home",
+    "five native optional details",
+    "reduced motion removes pinning",
+    "reduced motion releases smooth scrolling",
+    "desktop-light-es reduced: no horizontal overflow",
+    "desktop-light-es reduced: scene starts below fixed header",
+    "desktop-light-es reflow: no horizontal overflow",
+    "desktop-light-es reflow: scene starts below fixed header",
+    "navigation touch targets are visible and at least 44px",
+    "static keyboard/direct controls reach every scene",
+    "About makes no API calls, including initial load",
+    "no unexpected application errors"
+  ],
+  "screenshots": [
+    "desktop-light-es-reduced.png",
+    "desktop-light-es-reflow.png"
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x14c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x14c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x14c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x14c00406a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "expectedResourceErrors": [],
+  "measurements": [
+    {
+      "label": "desktop-light-es reduced",
+      "selected": "creator",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "flight": {
+        "x": 480,
+        "y": -1890,
+        "width": 480,
+        "height": 480,
+        "top": -1890,
+        "right": 960,
+        "bottom": -1410,
+        "left": 480
+      },
+      "copy": {
+        "x": 784,
+        "y": 137.28125,
+        "width": 512,
+        "height": 445.1875,
+        "top": 137.28125,
+        "right": 1296,
+        "bottom": 582.46875,
+        "left": 784
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 73,
+        "top": 0,
+        "right": 1440,
+        "bottom": 73,
+        "left": 0
+      },
+      "navigation": {
+        "x": 440,
+        "y": 836,
+        "width": 560,
+        "height": 64,
+        "top": 836,
+        "right": 1000,
+        "bottom": 900,
+        "left": 440
+      },
+      "chatOpacity": "1",
+      "layersOpacity": "0"
+    },
+    {
+      "label": "desktop-light-es reflow",
+      "selected": "evolution",
+      "width": 1024,
+      "scrollWidth": 1024,
+      "flight": {
+        "x": 272,
+        "y": -1155,
+        "width": 480,
+        "height": 480,
+        "top": -1155,
+        "right": 752,
+        "bottom": -675,
+        "left": 272
+      },
+      "copy": {
+        "x": 16,
+        "y": 137.109375,
+        "width": 512,
+        "height": 329.21875,
+        "top": 137.109375,
+        "right": 528,
+        "bottom": 466.328125,
+        "left": 16
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 73,
+        "top": 0,
+        "right": 1024,
+        "bottom": 73,
+        "left": 0
+      },
+      "navigation": {
+        "x": 232,
+        "y": 356,
+        "width": 560,
+        "height": 64,
+        "top": 356,
+        "right": 792,
+        "bottom": 420,
+        "left": 232
+      },
+      "chatOpacity": "1",
+      "layersOpacity": "0"
+    }
+  ],
+  "conditions": "Production Chromium; desktop/mobile, touch, reduced motion and visibility emulated; Home API fixture only",
+  "browser": "153.0.8010.12"
+}
