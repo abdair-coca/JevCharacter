@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" width="100% " height="100%">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090E17"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .title { font-family: system-ui, -apple-system, sans-serif; font-weight: 800; font-size: 52px; fill: #ffffff; }
+    .title-light { font-weight: 300; fill: #94A3B8; }
+    .subtitle { font-family: system-ui, -apple-system, sans-serif; font-weight: 400; font-size: 22px; fill: #94A3B8; }
+    .badge-text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; font-weight: 600; }
+    .chart-title { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: #CBD5E1; }
+    .metric-value { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 20px; font-weight: 700; fill: #10B981; }
+    .metric-label { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: #64748B; text-transform: uppercase; letter-spacing: 0.5px; }
+  </style>
+
+  <rect width="1000" height="300" fill="url(#bg-gradient)"/>
+  <rect width="1000" height="300" fill="url(#grid)"/>
+
+  <circle cx="850" cy="150" r="200" fill="#10B981" opacity="0.05" filter="blur(40px)"/>
+  <circle cx="150" cy="50" r="150" fill="#38BDF8" opacity="0.05" filter="blur(40px)"/>
+
+  <text x="80" y="130" class="title">ml<tspan class="title-light">/housing</tspan></text>
+
+  <text x="80" y="175" class="subtitle">Playground Interactivo de Machine Learning</text>
+
+  <g transform="translate(80, 210)">
+    <rect x="0" y="0" width="85" height="28" rx="6" fill="rgba(56, 189, 248, 0.1)" stroke="rgba(56, 189, 248, 0.3)"/>
+    <text x="42.5" y="18" class="badge-text" fill="#38BDF8" text-anchor="middle">Python</text>
+
+    <rect x="95" y="0" width="125" height="28" rx="6" fill="rgba(245, 158, 11, 0.1)" stroke="rgba(245, 158, 11, 0.3)"/>
+    <text x="157.5" y="18" class="badge-text" fill="#F59E0B" text-anchor="middle">scikit-learn</text>
+
+    <rect x="230" y="0" width="80" height="28" rx="6" fill="rgba(236, 72, 153, 0.1)" stroke="rgba(236, 72, 153, 0.3)"/>
+    <text x="270" y="18" class="badge-text" fill="#EC4899" text-anchor="middle">Pandas</text>
+  </g>
+
+  <g transform="translate(580, 35)">
+    <rect x="0" y="0" width="360" height="230" rx="12" fill="#0F172A" stroke="#1E293B" stroke-width="2" />
+    <rect x="0" y="0" width="360" height="230" rx="12" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+
+    <rect x="0" y="0" width="360" height="35" rx="12" fill="#1E293B" opacity="0.5"/>
+    <circle cx="20" cy="17" r="4" fill="#EF4444" opacity="0.8"/>
+    <circle cx="34" cy="17" r="4" fill="#F59E0B" opacity="0.8"/>
+    <circle cx="48" cy="17" r="4" fill="#10B981" opacity="0.8"/>
+    <text x="180" y="22" class="chart-title" text-anchor="middle">Reales vs Predicciones</text>
+
+    <path d="M 40 50 L 40 200 L 320 200" fill="none" stroke="#334155" stroke-width="1"/>
+
+    <path d="M 40 162.5 L 320 162.5 M 40 125 L 320 125 M 40 87.5 L 320 87.5" fill="none" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 4"/>
+    <path d="M 110 50 L 110 200 M 180 50 L 180 200 M 250 50 L 250 200" fill="none" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 4"/>
+
+    <circle cx="60" cy="180" r="3.5" fill="#38BDF8" opacity="0.7"/>
+    <circle cx="75" cy="170" r="4" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="85" cy="185" r="3" fill="#38BDF8" opacity="0.6"/>
+    <circle cx="95" cy="160" r="4.5" fill="#38BDF8" opacity="0.8"/>
+    <circle cx="110" cy="150" r="3.5" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="125" cy="165" r="5" fill="#38BDF8" opacity="0.7"/>
+    <circle cx="130" cy="140" r="3" fill="#38BDF8" opacity="0.8"/>
+    <circle cx="145" cy="130" r="4" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="155" cy="145" r="3.5" fill="#38BDF8" opacity="0.6"/>
+    <circle cx="170" cy="120" r="4.5" fill="#38BDF8" opacity="0.8"/>
+    <circle cx="185" cy="110" r="3" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="200" cy="125" r="4" fill="#38BDF8" opacity="0.7"/>
+    <circle cx="215" cy="95" r="3.5" fill="#38BDF8" opacity="0.8"/>
+    <circle cx="230" cy="105" r="4.5" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="245" cy="85" r="3" fill="#38BDF8" opacity="0.6"/>
+    <circle cx="260" cy="75" r="4" fill="#38BDF8" opacity="0.8"/>
+    <circle cx="280" cy="65" r="3.5" fill="#38BDF8" opacity="0.9"/>
+    <circle cx="295" cy="80" r="4.5" fill="#38BDF8" opacity="0.7"/>
+
+    <circle cx="120" cy="90" r="3.5" fill="#38BDF8" opacity="0.5"/>
+    <circle cx="180" cy="160" r="4" fill="#38BDF8" opacity="0.6"/>
+    <circle cx="250" cy="140" r="3" fill="#38BDF8" opacity="0.5"/>
+    <circle cx="290" cy="130" r="4" fill="#38BDF8" opacity="0.6"/>
+
+    <line x1="50" y1="190" x2="310" y2="60" stroke="#10B981" stroke-width="2.5" stroke-dasharray="6 4" filter="url(#glow)"/>
+
+    <g transform="translate(185, 140)">
+      <rect x="0" y="0" width="125" height="45" rx="6" fill="#090E17" stroke="#1E293B" stroke-width="1.5" opacity="0.9"/>
+      <text x="12" y="16" class="metric-label">MSE</text>
+      <text x="12" y="34" class="metric-value">$543M</text>
+    </g>
+    <g transform="translate(255, 75)">
+       <rect x="0" y="0" width="70" height="45" rx="6" fill="#090E17" stroke="#1E293B" stroke-width="1.5" opacity="0.9"/>
+       <text x="12" y="16" class="metric-label">R²</text>
+       <text x="12" y="34" class="metric-value">0.18</text>
+    </g>
+  </g>
+
+  <g transform="translate(540, 210)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="#1E293B" stroke="#334155" opacity="0.8"/>
+    <rect x="15" y="15" width="30" height="6" rx="3" fill="#EC4899" />
+    <rect x="50" y="15" width="60" height="6" rx="3" fill="#F8FAFC" />
+    <rect x="15" y="30" width="45" height="6" rx="3" fill="#38BDF8" />
+    <rect x="65" y="30" width="20" height="6" rx="3" fill="#10B981" />
+  </g>
+
+</svg>

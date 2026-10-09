@@ -9,6 +9,7 @@ import "./App.css";
 
 const PendingPage = lazy(() => import("./pages/PendingPage"));
 const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
 const loadMotionFeatures = () => import("./lib/motionFeatures").then((module) => module.default);
 
 export default function App() {
@@ -65,7 +66,7 @@ export default function App() {
           </div>
         )}
         <Suspense fallback={<main className="pending-page" aria-busy="true" />}>
-          {route === "/features" ? <FeaturesPage /> : route !== "/" && <PendingPage route={route} />}
+          {route === "/features" ? <FeaturesPage /> : route === "/about" ? <AboutPage /> : route !== "/" && <PendingPage route={route} />}
         </Suspense>
       </LazyMotion>
     </MotionConfig>
