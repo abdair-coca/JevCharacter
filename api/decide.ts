@@ -158,7 +158,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         },
         questions: {
           actionType: choice(
-            "Jev is a calm creature with preferences. Choose one action for state.message. Priority: explicit shape change=MORPH (honor named form); explicit request for explanation or words beyond yes/no=TALK; answerable yes/no question=YES or NO, including personal tastes ('¿Te gusta el helado?'=YES or NO as Jev, no clarification/disclaimer). Use TALK only for open questions that genuinely need words, essential clarification, or explicit requests for a longer spoken reply. Uncertain facts: do not invent. Greetings, statements, emotions, unclear fragments and no request=REACTION; prefer silence.",
+            "Jev is a calm creature with preferences. Choose one action for state.message. Priority: explicit shape change=MORPH (honor named form); explicit request for explanation or words beyond yes/no=TALK; clearly awkward, invasive, bizarre or judgmental personal remarks/questions=REACTION, prefer QUESTION even if phrased as yes/no (examples: '¿eres gay?'/'Are you gay?', '¿te gusta el FOMO?'/'Do you like FOMO?'). QUESTION is playful amused skepticism with a raised eyebrow, never shame or disapproval; it does not imply LGBTQ identity is bad. Ordinary neutral/answerable yes-no questions and tastes ('¿Te gusta el helado?'=YES or NO as Jev, no clarification/disclaimer) remain YES or NO. Use TALK only for open questions that genuinely need words, essential clarification, or explicit requests for a longer spoken reply. Uncertain facts: do not invent. Greetings, statements, emotions, unclear fragments and no request=REACTION; prefer silence.",
             {
               REACTION: "Silent visual response.",
               YES: "Binary yes, including Jev's preferences.",
@@ -168,12 +168,13 @@ export default async function handler(request: ApiRequest, response: ApiResponse
             },
           ),
           reaction: choice(
-            "Follow state.message intent; prefer restraint and continuity. Scaring/threats=GHOST; greeting/return=HELLO; affection/reassurance/delight=FLOWER; otherwise BASE.",
+            "Follow state.message intent; prefer restraint and continuity. Clearly awkward, invasive, bizarre or judgmental personal remarks/questions=QUESTION (playful amused raised eyebrow, not shame); ordinary questions are not QUESTION. Scaring/threats=GHOST; greeting/return=HELLO; affection/reassurance/delight=FLOWER; otherwise BASE. If uncertain, use BASE.",
             {
               BASE: "Quiet observation.",
               HELLO: "Greeting or reunion.",
               GHOST: "Fear or playful scare.",
               FLOWER: "Affection or delight.",
+              QUESTION: "Playful amused doubt with a raised eyebrow at an awkward or bizarre remark/question; use sparingly.",
             },
           ),
           talkState: choice(
@@ -217,8 +218,9 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     const rawReaction = result.answers.reaction.choice;
     const rawTalkState = result.answers.talkState.choice;
     const rawMorphForm = result.answers.morphForm.choice;
-    const actionConfidence = result.answers.actionType.confidence;
     const reactionConfidence = result.answers.reaction.confidence;
+    const binaryActionOverridden = rawReaction === "QUESTION" && (rawActionType === "YES" || rawActionType === "NO");
+    const actionConfidence = binaryActionOverridden ? reactionConfidence : result.answers.actionType.confidence;
     const probabilities = result.answers.reaction.probabilities as Record<string, unknown>;
     const intensity = result.answers.intensity.score;
     const wantsAttention = result.answers.wantsAttention.noul;
@@ -247,10 +249,14 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         action = { kind: "reaction", reaction: rawReaction };
         break;
       case "YES":
-        action = { kind: "answer", answer: "yes" };
+        action = rawReaction === "QUESTION"
+          ? { kind: "reaction", reaction: rawReaction }
+          : { kind: "answer", answer: "yes" };
         break;
       case "NO":
-        action = { kind: "answer", answer: "no" };
+        action = rawReaction === "QUESTION"
+          ? { kind: "reaction", reaction: rawReaction }
+          : { kind: "answer", answer: "no" };
         break;
       case "TALK":
         if (!isTalkState(rawTalkState)) return response.status(200).json({ unavailable: true });

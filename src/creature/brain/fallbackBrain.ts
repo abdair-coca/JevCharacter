@@ -11,6 +11,7 @@ const emptyProbabilities = (): ReactionProbabilities => ({
   HELLO: 0.08,
   GHOST: 0.08,
   FLOWER: 0.08,
+  QUESTION: 0,
   CLOUD: 0.08,
   YES: 0.08,
   NO: 0.08,

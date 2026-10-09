@@ -39,6 +39,7 @@ const INITIAL_DECISION: BrainDecision = {
     HELLO: 0.1,
     GHOST: 0.06,
     FLOWER: 0.08,
+    QUESTION: 0,
     CLOUD: 0,
     YES: 0,
     NO: 0,
@@ -296,6 +297,7 @@ export function useCreatureBrain(
       Hello: "HELLO",
       Ghost: "GHOST",
       Flower: "FLOWER",
+      question: "QUESTION",
     };
     const reaction = reactionByState[state];
     if (!reaction) return;

@@ -66,7 +66,7 @@ export function decision(
     actionConfidence: 0.9,
     reaction,
     reactionConfidence: 0.9,
-    probabilities: { BASE: 0.8, HELLO: 0.1, GHOST: 0.05, FLOWER: 0.05 },
+    probabilities: { BASE: 0.8, HELLO: 0.1, GHOST: 0.05, FLOWER: 0.05, QUESTION: 0 },
     intensity: 0.4,
     wantsAttention: 0.3,
     source: "jev",

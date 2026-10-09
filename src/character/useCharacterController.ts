@@ -2,7 +2,7 @@ import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { BRAIN_CONFIG } from "../creature/brain/brainConfig";
 import type { BinaryAnswer, MorphForm, TalkState } from "../creature/brain/brain.types";
 
-export const CHARACTER_STATES = ["Base", "Hello", "Ghost", "Flower", "Talk", "Cloud", "yes", "no", "talkb", "talkc", "talkbc"] as const;
+export const CHARACTER_STATES = ["Base", "Hello", "Ghost", "Flower", "question", "Talk", "Cloud", "yes", "no", "talkb", "talkc", "talkbc"] as const;
 export type CharacterState = (typeof CHARACTER_STATES)[number];
 type SetState = ((value: string) => void) | undefined;
 type SetNumber = ((value: number) => void) | undefined;

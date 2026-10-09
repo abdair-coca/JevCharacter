@@ -25,4 +25,5 @@ export const REACTION_DURATIONS: Record<string, number> = {
   HELLO: 2100,
   GHOST: 1750,
   FLOWER: 2300,
+  QUESTION: 2000,
 };

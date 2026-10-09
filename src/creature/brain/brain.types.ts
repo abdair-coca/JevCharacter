@@ -3,6 +3,7 @@ export const REACTIONS = [
   "HELLO",
   "GHOST",
   "FLOWER",
+  "QUESTION",
   "CLOUD",
   "YES",
   "NO",

@@ -120,6 +120,7 @@ function parseDecision(value: unknown): BrainDecision | null {
       HELLO: Math.max(0, Math.min(1, probabilities.HELLO ?? 0)),
       GHOST: Math.max(0, Math.min(1, probabilities.GHOST ?? 0)),
       FLOWER: Math.max(0, Math.min(1, probabilities.FLOWER ?? 0)),
+      QUESTION: Math.max(0, Math.min(1, probabilities.QUESTION ?? 0)),
       CLOUD: Math.max(0, Math.min(1, probabilities.CLOUD ?? 0)),
       YES: Math.max(0, Math.min(1, probabilities.YES ?? 0)),
       NO: Math.max(0, Math.min(1, probabilities.NO ?? 0)),
@@ -152,9 +153,9 @@ function cohereDecision(
   history: ReactionHistoryEntry[],
 ) {
   let next = decision;
-  const dramatic = decision.reaction === "GHOST";
+  const needsClearIntent = decision.reaction === "GHOST" || decision.reaction === "QUESTION";
 
-  if (dramatic && decision.reactionConfidence < BRAIN_CONFIG.lowConfidenceThreshold) {
+  if (needsClearIntent && decision.reactionConfidence < BRAIN_CONFIG.lowConfidenceThreshold) {
     next = {
       ...decision,
       reaction: "BASE",
@@ -296,7 +297,8 @@ export class DecisionScheduler {
       return;
     }
 
-    if (!this.withinRateLimit()) {
+    // Static deployments use local instinct directly, without probing an API.
+    if (import.meta.env.MODE === "frontend" || !this.withinRateLimit()) {
       const fallback = fallbackBrain(frame.state, reason);
       this.finishDecision(fallback, frame.state, 0, reason);
       return;

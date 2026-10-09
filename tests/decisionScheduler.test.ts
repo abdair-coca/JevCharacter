@@ -25,10 +25,29 @@ describe("DecisionScheduler", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllEnvs();
+  });
+
+  it("uses local decisions without network requests in the frontend build", () => {
+    vi.stubEnv("MODE", "frontend");
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const { scheduler, currentFrame, onDecision, onStatus } = createScheduler(schedulerFrame("hola"));
+
+    scheduler.requestContextDecision();
+    expect(onDecision).toHaveBeenCalledWith(expect.objectContaining({ source: "fallback", action: { kind: "reaction", reaction: "HELLO" } }), 0, "context");
+    currentFrame.value = schedulerFrame("explícame algo");
+    scheduler.requestContextDecision();
+    expect(onDecision.mock.calls[1][0].action.kind).toBe("reaction");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(onStatus).not.toHaveBeenCalledWith("deciding");
+    expect(onStatus).toHaveBeenLastCalledWith("observing");
+    scheduler.stop();
   });
 
   it.each([
     { kind: "reaction", reaction: "FLOWER" },
+    { kind: "reaction", reaction: "QUESTION" },
     { kind: "answer", answer: "yes" },
     { kind: "talk", state: "talkb" },
     { kind: "morph", form: "triangle" },
@@ -55,6 +74,20 @@ describe("DecisionScheduler", () => {
     await waitFor(() => expect(onDecision).toHaveBeenCalledTimes(1));
     expect(onDecision.mock.calls[0][0].source).toBe("fallback");
     expect(onStatus).toHaveBeenLastCalledWith("observing");
+  });
+
+  it("uses the playful QUESTION reaction only when its confidence clears the threshold", async () => {
+    const response = decision({ kind: "reaction", reaction: "QUESTION" });
+    response.reactionConfidence = 0.3;
+    response.probabilities = { ...response.probabilities, QUESTION: 0.3, BASE: 0.7 };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(response)));
+    const { scheduler, onDecision } = createScheduler();
+
+    scheduler.requestContextDecision();
+
+    await waitFor(() => expect(onDecision).toHaveBeenCalledTimes(1));
+    expect(onDecision.mock.calls[0][0].reaction).toBe("BASE");
+    expect(onDecision.mock.calls[0][0].action).toEqual({ kind: "reaction", reaction: "BASE" });
   });
 
   it("enforces the per-minute request limit after six Jev calls", async () => {

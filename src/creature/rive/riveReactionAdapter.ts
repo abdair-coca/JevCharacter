@@ -1,12 +1,13 @@
-import type { CharacterController } from "../../character/useCharacterController";
+import type { CharacterController, CharacterState } from "../../character/useCharacterController";
 import { REACTION_DURATIONS } from "../brain/brainConfig";
 import type { BrainDecision, Reaction } from "../brain/brain.types";
 
-const STATE_BY_REACTION: Partial<Record<Reaction, string>> = {
+const STATE_BY_REACTION: Partial<Record<Reaction, CharacterState>> = {
   BASE: "Base",
   HELLO: "Hello",
   GHOST: "Ghost",
   FLOWER: "Flower",
+  QUESTION: "question",
   CLOUD: "Cloud",
 };
 
@@ -30,7 +31,7 @@ export async function reactWithRive(
   const state = STATE_BY_REACTION[reaction as keyof typeof STATE_BY_REACTION];
   if (!state) return;
 
-  await character.playFor(state as Parameters<CharacterController["playFor"]>[0], REACTION_DURATIONS[reaction as keyof typeof REACTION_DURATIONS]);
+  await character.playFor(state, REACTION_DURATIONS[reaction as keyof typeof REACTION_DURATIONS]);
 }
 
 export async function executeDecisionAction(
