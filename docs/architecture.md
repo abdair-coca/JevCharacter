@@ -8,7 +8,7 @@ La aplicación separa percepción local, decisión conductual y presentación. L
 
 ### Shell, preferencias y sesión
 
-- `/` es Home; `/features` y `/about` cargan `FeaturesPage` y `AboutPage` de forma diferida. `PendingPage` se conserva para rutas desconocidas. `vercel.json` incluye rewrites exactos para esas dos rutas, separados de `/api/*`; todavía no hay evidencia de despliegue remoto.
+- `/` es Home; `/features` y `/about` cargan `FeaturesPage` y `AboutPage` de forma diferida. `PendingPage` se conserva para rutas desconocidas. `vercel.json` incluye rewrites exactos para esas dos rutas, separados de `/api/*`. La publicación frontend estática en Vercel comprobó las tres rutas directas; [evidencia remota](../.dev/evidence/deployment/README.md).
 - `public/preferences-init.js` aplica tema, idioma y `theme-color` en el head antes de React. `preferencesStore` consume ese estado inicial y usa Zustand para cambios de UI. Se guardan solo `jevling.theme` y `jevling.language`; storage bloqueado conserva cambios en memoria. El modo sistema sigue `prefers-color-scheme`; la elección manual tiene prioridad.
 - `src/i18n/messages.ts` comparte claves tipadas ES/EN. Se traducen interfaz, HUD y diagnóstico, sin traducir IDs Rive/API. Cambiar preferencias no remonta el personaje ni borra el input.
 - `Character` y las funciones de animación DOM de Motion se cargan en chunks separados. El asset sigue siendo el existente. Rive pausa por movimiento reducido y visibilidad de pestaña; Motion usa los tokens mediante un adaptador que acepta `ms` y `s`, incluso tras minificación.

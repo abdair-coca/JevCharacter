@@ -74,6 +74,8 @@ npm run build
 
 ### Frontend only (current publication)
 
+Published at **[jev-bot-sigma.vercel.app](https://jev-bot-sigma.vercel.app)**. [Deployment checks and screenshots](.dev/evidence/deployment/README.md).
+
 Home uses local reactions; Features, Story and the UATF form work without APIs. AI-generated speech is unavailable in this build. No provider keys are needed.
 
 ```bash
