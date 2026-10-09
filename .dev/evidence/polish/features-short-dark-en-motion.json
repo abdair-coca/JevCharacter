@@ -1,0 +1,23 @@
+{
+  "id": "features-short-dark-en-motion",
+  "viewport": {
+    "width": 390,
+    "height": 420
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Eight semantic chapters",
+    "Slideshow UI and details removed",
+    "Static descriptions for all chapters",
+    "Features does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "features-short-dark-en-motion-static.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T15:13:45.016Z"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "story-desktop-light-es-motion",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Five semantic story sections",
+    "Story slideshow and details removed",
+    "Pointer deforms the shape",
+    "Shape returns after pointer leaves",
+    "Reveal traverses intermediate progress",
+    "Reveal finishes through scroll",
+    "Reverse scroll reforms the star",
+    "Particles pause offscreen",
+    "Particles resume on return",
+    "Story does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "story-desktop-light-es-motion-bob.png",
+    "story-desktop-light-es-motion-pointer.png",
+    "story-desktop-light-es-motion-star.png",
+    "story-desktop-light-es-motion-revealed.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:39:28.509Z"
+}

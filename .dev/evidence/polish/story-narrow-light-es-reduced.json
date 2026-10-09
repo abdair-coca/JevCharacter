@@ -1,0 +1,26 @@
+{
+  "id": "story-narrow-light-es-reduced",
+  "viewport": {
+    "width": 320,
+    "height": 568
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Five semantic story sections",
+    "Story slideshow and details removed",
+    "Static images are available",
+    "Particles paused",
+    "Static Jev prepares when its final section is visible",
+    "Story does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "story-narrow-light-es-reduced-static.png",
+    "story-narrow-light-es-reduced-static-jev.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T15:12:06.903Z"
+}

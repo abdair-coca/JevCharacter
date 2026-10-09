@@ -1,0 +1,26 @@
+{
+  "id": "story-short-dark-en-motion",
+  "viewport": {
+    "width": 390,
+    "height": 420
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Five semantic story sections",
+    "Story slideshow and details removed",
+    "Static images are available",
+    "Particles paused",
+    "Static Jev prepares when its final section is visible",
+    "Story does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "story-short-dark-en-motion-static.png",
+    "story-short-dark-en-motion-static-jev.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T15:14:06.764Z"
+}

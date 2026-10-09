@@ -1,0 +1,32 @@
+{
+  "id": "features-mobile-dark-en-motion",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Eight semantic chapters",
+    "Slideshow UI and details removed",
+    "Mobile creature above the text",
+    "Flight settles after scrolling stops",
+    "View scene does not jump instantly",
+    "View scene arrives at its anchor",
+    "View scene remains keyboard-focusable",
+    "Scroll selects Decide",
+    "Chapter 4 stays within width",
+    "Chapter 5 stays within width",
+    "Chapter 7 stays within width",
+    "Features does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "features-mobile-dark-en-motion-perceives.png",
+    "features-mobile-dark-en-motion-decides.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:34:46.181Z"
+}

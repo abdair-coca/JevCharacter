@@ -1,0 +1,30 @@
+{
+  "id": "story-mobile-dark-en-motion",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Five semantic story sections",
+    "Story slideshow and details removed",
+    "Mobile particles above the text",
+    "Reveal traverses intermediate progress",
+    "Reveal finishes through scroll",
+    "Reverse scroll reforms the star",
+    "Particles pause offscreen",
+    "Particles resume on return",
+    "Story does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "story-mobile-dark-en-motion-bob.png",
+    "story-mobile-dark-en-motion-star.png",
+    "story-mobile-dark-en-motion-revealed.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:39:19.813Z"
+}

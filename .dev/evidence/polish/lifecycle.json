@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "Story scroll engine active on visit 1",
+    "Live reduced motion pauses particles",
+    "Home retains its canvas",
+    "Home retains the draft",
+    "No stale pin wrappers in Home",
+    "Story scroll engine active on visit 2",
+    "Live reduced motion pauses particles",
+    "Home retains its canvas",
+    "Home retains the draft",
+    "No stale pin wrappers in Home",
+    "Navigation makes no API calls",
+    "No application errors"
+  ],
+  "errors": [],
+  "requests": 0,
+  "date": "2026-10-09T15:16:19.245Z"
+}

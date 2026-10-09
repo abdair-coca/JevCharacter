@@ -1,0 +1,32 @@
+{
+  "id": "story-desktop-dark-en-motion",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Five semantic story sections",
+    "Story slideshow and details removed",
+    "Pointer deforms the shape",
+    "Shape returns after pointer leaves",
+    "Reveal traverses intermediate progress",
+    "Reveal finishes through scroll",
+    "Reverse scroll reforms the star",
+    "Particles pause offscreen",
+    "Particles resume on return",
+    "Story does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "story-desktop-dark-en-motion-bob.png",
+    "story-desktop-dark-en-motion-pointer.png",
+    "story-desktop-dark-en-motion-star.png",
+    "story-desktop-dark-en-motion-revealed.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:42:27.026Z"
+}

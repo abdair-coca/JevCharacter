@@ -1,0 +1,27 @@
+{
+  "id": "home-mobile-dark-en-motion",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Single-screen Home",
+    "No decorative miniatures or helper copy",
+    "Compact input",
+    "Compact HUD",
+    "HUD opens above the summary within viewport",
+    "Input stays in place",
+    "Input is labelled and usable",
+    "No application errors"
+  ],
+  "shots": [
+    "home-mobile-dark-en-motion-rest.png",
+    "home-mobile-dark-en-motion-hud.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:33:58.024Z"
+}

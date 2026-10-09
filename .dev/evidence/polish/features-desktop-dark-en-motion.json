@@ -1,0 +1,31 @@
+{
+  "id": "features-desktop-dark-en-motion",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Eight semantic chapters",
+    "Slideshow UI and details removed",
+    "Flight settles after scrolling stops",
+    "View scene does not jump instantly",
+    "View scene arrives at its anchor",
+    "View scene remains keyboard-focusable",
+    "Scroll selects Decide",
+    "Chapter 4 stays within width",
+    "Chapter 5 stays within width",
+    "Chapter 7 stays within width",
+    "Features does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "features-desktop-dark-en-motion-perceives.png",
+    "features-desktop-dark-en-motion-decides.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:41:32.881Z"
+}

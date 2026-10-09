@@ -1,0 +1,27 @@
+{
+  "id": "home-desktop-light-es-motion",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Single-screen Home",
+    "No decorative miniatures or helper copy",
+    "Compact input",
+    "Compact HUD",
+    "HUD opens above the summary within viewport",
+    "Input stays in place",
+    "Input is labelled and usable",
+    "No application errors"
+  ],
+  "shots": [
+    "home-desktop-light-es-motion-rest.png",
+    "home-desktop-light-es-motion-hud.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T02:34:06.203Z"
+}

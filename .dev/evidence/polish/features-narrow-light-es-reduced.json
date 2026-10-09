@@ -1,0 +1,23 @@
+{
+  "id": "features-narrow-light-es-reduced",
+  "viewport": {
+    "width": 320,
+    "height": 568
+  },
+  "checks": [
+    "Requested theme and language applied",
+    "No horizontal overflow",
+    "One Rive canvas",
+    "Eight semantic chapters",
+    "Slideshow UI and details removed",
+    "Static descriptions for all chapters",
+    "Features does not call APIs",
+    "No application errors"
+  ],
+  "shots": [
+    "features-narrow-light-es-reduced-static.png"
+  ],
+  "errors": [],
+  "apiCalls": 0,
+  "date": "2026-10-09T15:10:24.708Z"
+}
