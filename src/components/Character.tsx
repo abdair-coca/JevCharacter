@@ -3,9 +3,12 @@ import {
   memo,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
+  useState,
 } from "react";
 import { useReducedMotionPreference } from "../hooks/useReducedMotionPreference";
+import { cssDurationSeconds } from "../lib/motionTokens";
 
 import {
   useRive,
@@ -39,6 +42,11 @@ const Character = forwardRef<CharacterController, Props>(
     const motionPreference = useReducedMotionPreference();
     const reducedMotion = motionPreference || staticPose;
     const wasSuspended = useRef(false);
+    const preparedPose = useRef(false);
+    const canvasHost = useRef<HTMLDivElement | null>(null);
+    const [staticPrepared, setStaticPrepared] = useState(false);
+    // Keep immutable layout stable across unrelated React updates while paused.
+    const layout = useMemo(() => new Layout({ fit: Fit.Contain, alignment: Alignment.Center }), []);
     const { rive, RiveComponent } = useRive({
       src: "/rive/prove2.riv",
       stateMachine: STATE_MACHINE,
@@ -47,10 +55,7 @@ const Character = forwardRef<CharacterController, Props>(
       shouldDisableRiveListeners: presentation,
       onLoadError: onError,
 
-      layout: new Layout({
-        fit: Fit.Contain,
-        alignment: Alignment.Center,
-      }),
+      layout,
     });
 
     const viewModel = useViewModel(rive, {
@@ -79,13 +84,14 @@ const Character = forwardRef<CharacterController, Props>(
       useViewModelInstanceNumber("shapeType", viewModelInstance);
 
     const ready = Boolean(rive && viewModelInstance && typeof stateValue === "string");
+    const resetShape = shapeTypeValue === null ? undefined : setShapeType;
 
     const character =
       useCharacterController(
         setState,
         triggerState,
-        shapeTypeValue === null ? undefined : setShapeType,
-        active && ready,
+         resetShape,
+         active && ready && !(presentation && reducedMotion),
       );
 
     useImperativeHandle(
@@ -95,8 +101,8 @@ const Character = forwardRef<CharacterController, Props>(
     );
 
     useEffect(() => {
-      if (ready && active && (presentation || !reducedMotion)) onReady?.();
-    }, [active, onReady, presentation, ready, reducedMotion]);
+      if (ready && active && (!reducedMotion || (presentation && staticPrepared))) onReady?.();
+    }, [active, onReady, presentation, ready, reducedMotion, staticPrepared]);
 
     useEffect(() => {
       if (!rive) return;
@@ -106,23 +112,70 @@ const Character = forwardRef<CharacterController, Props>(
         rive.stopRendering();
         return;
       }
+      if (!presentation || !reducedMotion) preparedPose.current = false;
+      if (presentation && reducedMotion && ready && wasSuspended.current && preparedPose.current) {
+        wasSuspended.current = false;
+        rive.pause();
+        rive.stopRendering();
+        return;
+      }
       if (wasSuspended.current && ready) {
         wasSuspended.current = false;
         void character.idle();
       }
       rive.resizeDrawingSurfaceToCanvas();
+      if (presentation && reducedMotion && ready) {
+        let cancelled = false;
+        let frame: number | null = null;
+        let timer: number | null = null;
+        const freeze = () => { rive.pause(); rive.stopRendering(); };
+        // The deferred runtime needs initialization before it can freeze Base.
+        // Warm only this invisible presentation for a bounded tokenized period;
+        // show the authored pose after stopping, never visible reduced-motion
+        // playback, pixel processing or a change to Home's defaults.
+        void Promise.resolve().then(() => {
+          if (cancelled) return;
+          preparedPose.current = false;
+          // Hide synchronously before starting the runtime, including a live
+          // preference change when React has not committed the state update yet.
+          canvasHost.current?.setAttribute("data-static-preparing", "true");
+          setStaticPrepared(false);
+          rive.play(STATE_MACHINE);
+          resetShape?.(0);
+          setState?.("Base");
+          const duration = cssDurationSeconds(getComputedStyle(document.documentElement).getPropertyValue("--presentation-pose-warmup")) * 1000;
+          frame = requestAnimationFrame(() => {
+            frame = null;
+            if (cancelled) return;
+            try {
+              triggerState?.();
+              rive.startRendering();
+              timer = window.setTimeout(() => {
+                timer = null;
+                if (cancelled) return;
+                freeze();
+                preparedPose.current = true;
+                setStaticPrepared(true);
+              }, duration);
+            } catch { freeze(); onError?.(); }
+          });
+        }).catch(() => { if (!cancelled) { freeze(); onError?.(); } });
+        return () => { cancelled = true; if (frame !== null) cancelAnimationFrame(frame); if (timer !== null) window.clearTimeout(timer); freeze(); };
+      }
       rive.startRendering();
       if (reducedMotion) rive.pause();
       else rive.play();
-    }, [active, character, ready, reducedMotion, rive]);
+    }, [active, character, onError, presentation, ready, reducedMotion, resetShape, rive, setState, triggerState]);
 
     return (
       <div
+        ref={canvasHost}
         className="character-rive"
         data-ready={ready}
         data-state={stateValue ?? undefined}
         data-active={active}
         data-presentation={presentation}
+        data-static-preparing={presentation && reducedMotion && !staticPrepared}
         aria-hidden="true"
       >
         <RiveComponent />

@@ -19,6 +19,8 @@
   --size-stage-min: 13rem; --size-stage-max: 28rem; --size-hud: 22rem;
   --size-hud-compact: 13rem; --size-hud-panel: 22rem;
   --size-home-chrome: 22rem;
+  --home-character-size: 54rem; --home-character-scale: 2.1;
+  --home-title-size: clamp(1.125rem, 2vw, 1.75rem); --home-input-size: 29rem;
   --size-signal: 0.375rem; --size-icon: 1.25rem; --size-brand: 1.75rem;
   --size-meter: 0.25rem; --size-input-height: 4rem;
   --layer-stage: 0; --layer-content: 10; --layer-nav: 20; --layer-popover: 30; --layer-dialog: 40;
@@ -37,7 +39,7 @@
   --motion-spring-stiffness: 340; --motion-spring-damping: 26;
   --opacity-aura-low: 0.22; --opacity-aura-high: 0.52;
   --radius-organic: 2rem 1.5rem 2rem 1.5rem;
-  --size-composer: 5.75rem; --size-presence: 2.25rem; --size-send: 3.25rem;
+  --size-composer: 3.5rem; --size-presence: 2.25rem; --size-send: 2.75rem;
   --size-eye: 0.1875rem; --size-hud-eye: 0.25rem;
   --size-hud-toggle: 1.75rem; --text-reading: 1.5rem;
   --control-halo-blur: 1.125rem; --control-aura-inset: -0.5rem;
@@ -45,7 +47,9 @@
   --character-canvas-scale: 1.9;
   --character-mask-span: 0.86;
   /* Fixed presentation holds, separate from Home's real decision scheduler. */
-  --showcase-prepare: 360ms; --showcase-ready-timeout: 45000ms;
+  --presentation-ready-timeout: 45000ms;
+  --presentation-pose-warmup: 3000ms;
+  --showcase-prepare: 360ms; --showcase-ready-timeout: var(--presentation-ready-timeout);
   --showcase-observe: 1800ms; --showcase-reaction: 2400ms; --showcase-think: 1000ms;
   --showcase-answer: 2400ms; --showcase-talk: 3000ms; --showcase-morph: 5600ms;
 }
