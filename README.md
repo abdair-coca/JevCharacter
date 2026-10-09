@@ -6,7 +6,7 @@ JEVLING is a digital creature that watches cursor, touch, activity, absence, and
 
 ## Rediseño y documentación
 
-Home de referencia y su entrega funcional fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN: Jev se desplaza libremente entre explicaciones alternadas, sin IA ni cambios en la sesión de Home. Decisión y confianza tienen su propio capítulo. La entrega de fase 3 espera revisión; `/about` sigue provisional hasta fase 4.
+Home y Features fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN, sin IA ni cambios en la sesión de Home. `/about` presenta el recorrido de Abdair Coca: Bob, TitiEdu, machine learning y JEV/visión futura, con partículas 2D y lectura lineal adaptada a móvil/movimiento reducido. En Inicio, «quiero inscribirme» abre la demo local UATF. Las entregas de About y UATF esperan revisión visual.
 
 - [Spec de producto](.dev/spec.md), [plan por fases](.dev/plan.md) y [tarea/handoff activo](.dev/task.md).
 - [Contrato de diseño y tokens](design.md).
@@ -68,9 +68,23 @@ npm test
 npm run build
 ```
 
-`lint` ejecuta ESLint sin advertencias; `lint:ox` conserva el verificador previo. TypeScript strict está habilitado en los cuatro proyectos. Tailwind v4 consume `src/styles/tokens.css`; el Button de shadcn/ui, Motion y Zustand cubren controles, feedback y preferencias. Features carga XState, GSAP/ScrollTrigger y Lenis de forma diferida; no se descargan desde Home. Estado en [task.md](.dev/task.md); evidencia de [fase 1](.dev/evidence/phase-1/README.md), [fase 2](.dev/evidence/phase-2/README.md) y [fase 3 con comandos cortos](.dev/evidence/phase-3/README.md).
+`lint` ejecuta ESLint sin advertencias; `lint:ox` conserva el verificador previo. TypeScript strict está habilitado en los cuatro proyectos. Tailwind v4 consume `src/styles/tokens.css`; el Button de shadcn/ui, Motion y Zustand cubren controles, feedback y preferencias. Features carga XState de forma diferida; Features/About comparten GSAP/ScrollTrigger y un manager global Lenis, que Home no descarga inicialmente. Estado en [task.md](.dev/task.md); evidencia de [fase 1](.dev/evidence/phase-1/README.md), [fase 2](.dev/evidence/phase-2/README.md), [fase 3](.dev/evidence/phase-3/README.md) y [fase 4 con comandos cortos](.dev/evidence/phase-4/README.md).
 
 ## Deploy to Vercel
+
+### Frontend only (current publication)
+
+Home uses local reactions; Features, Story and the UATF form work without APIs. AI-generated speech is unavailable in this build. No provider keys are needed.
+
+```bash
+vercel link --project jev-bot
+npm run build:frontend
+vercel deploy --prebuilt --prod
+```
+
+`build:frontend` selects Vite's `frontend` mode and generates `.vercel/output` with static files and direct-route support for `/features` and `/about`. The prebuilt deployment uploads only that artifact, without `api/*` or serverless functions. Use `--prebuilt` for this publication; a regular root deployment uses the optional API configuration below.
+
+### Optional API-backed deployment
 
 1. Import this repository into Vercel.
 2. Add `TYPESAFE_API_KEY` and `GROQ_API_KEY` under Project Settings → Environment Variables.

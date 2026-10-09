@@ -7,7 +7,7 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 ## Lectura rápida
 
 - [Instrucciones raíz para agentes](../AGENTS.md): qué documento consultar según el trabajo y cómo registrar evidencia.
-- [Spec de producto](../.dev/spec.md), [plan por fases](../.dev/plan.md) y [tarea/handoff activo](../.dev/task.md): fases 1–2 aceptadas; fase 3 implementada/verificada y pendiente de revisión visual/funcional.
+- [Spec de producto](../.dev/spec.md), [plan por fases](../.dev/plan.md) y [tarea/handoff activo](../.dev/task.md): fases 1–3 aceptadas; About es la fase 4 activa y espera revisión visual/funcional al entregarse.
 - [Contrato de diseño](../design.md): reglas visuales, tokens, ES/EN, temas, animación 2D, accesibilidad y verificación.
 - [Historia de JEV](jev-story.md): relato original del usuario y autoría para About.
 - [Arquitectura](architecture.md): runtime, responsabilidades de módulos, estado y camino de decisión.
@@ -16,7 +16,7 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 
 ## Estado del rediseño
 
-El spec y las cinco fases aprobadas se mantienen en `.dev/spec.md` y `.dev/plan.md`; `.dev/task.md` registra el handoff. Fases 1–2 fueron aceptadas al autorizar avanzar: Home conserva habla bilingüe, cancelación/regeneración y sesión en memoria suspendida al ocultarse. Features presenta ocho escenas deterministas, texto alternado y Jev libre en los espacios vacíos; [evidencia de fase 3](../.dev/evidence/phase-3/README.md). About sigue provisional hasta aprobación de Features.
+El spec y las cinco fases aprobadas se mantienen en `.dev/spec.md` y `.dev/plan.md`; `.dev/task.md` registra el handoff. Fases 1–3 fueron aceptadas al autorizar avanzar. Home conserva sesión en memoria suspendida al ocultarse; el habla bilingüe requiere el backend opcional y la publicación frontend usa reacciones locales. Features presenta ocho escenas deterministas; [evidencia de fase 3](../.dev/evidence/phase-3/README.md). About narra el recorrido de Abdair Coca con partículas 2D; [evidencia inicial de fase 4](../.dev/evidence/phase-4/README.md) y [pulido vigente](../.dev/evidence/polish/README.md). Inicio incorpora la [demo local UATF](../.dev/evidence/enrollment/README.md). La integración final espera aprobación de About.
 
 El usuario declaró terminado JEV Lab y pidió reemplazar su plan activo, aclarando que no había registrado aprobación formal. El [plan anterior](../.dev/archive/jev-lab-plan-2026-10-06.md) conserva íntegro su estado histórico. Las instrucciones locales del laboratorio siguen en [jev-lab/AGENTS.md](../jev-lab/AGENTS.md).
 

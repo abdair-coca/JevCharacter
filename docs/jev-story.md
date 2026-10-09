@@ -34,4 +34,11 @@ La visión es convertirlo en una nueva forma de interactuar con software: un peq
 
 ## Uso en About
 
-El recorrido aprobado tiene cinco escenas: la pregunta, el experimento, de animación a personaje, su creador y la visión. El contrato de composición, accesibilidad e idiomas está en [design.md](../design.md); el alcance en [spec.md](../.dev/spec.md), las fases en [plan.md](../.dev/plan.md) y el avance en [task.md](../.dev/task.md).
+El relato original anterior se conserva. Ampliación aportada/aprobada por Abdair el 2026-10-08:
+
+- **Bob:** primer gran proyecto. Robot de cartón impulsado por IA; reconoce personas, mueve su cabeza y sigue caras, habla, expresa emociones mediante sus ojos y tiene memoria persistente. El usuario describe también sentimientos en Bob; la adaptación lo expresa como comportamiento emocional del robot.
+- **TitiEdu:** plataforma que usó para enseñar programación orientada a objetos a sus estudiantes. Actualmente un sistema completo con IA, RAG y simulador integrado de juegos HTML/CSS/JavaScript para aprender jugando.
+- **machine-learning-App:** plataforma para aprender algoritmos de machine learning con Pyodide y ejecutar código dentro de la app. Recurso representativo aportado: `housingML.svg`.
+- **JEV:** cierre del recorrido de experimentación; mantener la separación de comportamiento actual y visión futura del relato original.
+
+El nuevo recorrido aprobado tiene cinco escenas: Abdair, Bob, TitiEdu, machine learning y JEV/visión. Bob es el primer gran proyecto; el orden de las dos plataformas es editorial y no afirma cronología ni causalidad. Recursos originales: `public/story/bob.jpeg`, `curiousTiti.webp`, `housingML.svg`. El contrato de composición, accesibilidad e idiomas está en [design.md](../design.md); el alcance en [spec.md](../.dev/spec.md), las fases en [plan.md](../.dev/plan.md) y el avance en [task.md](../.dev/task.md).

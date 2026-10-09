@@ -4,27 +4,47 @@ En Home hay dos caminos distintos: respuesta pointer local, inmediata, y decisi�
 
 ## Home — interfaz y sesión
 
+La publicación frontend usa decisiones/reacciones locales desde el primer envío, sin requests `/api/*`. No genera respuestas de habla IA. Features, About, diagnóstico y la demo UATF siguen disponibles; el flujo remoto descrito abajo corresponde al build ordinario con backend opcional.
+
 Home muestra título breve, Jev, input y HUD compacto. El HUD presenta acción/confianza y origen de decisión; su botón monta/desmonta probabilidades, intensidad, atención y personalidad. Los nombres se traducen; los identificadores del contrato permanecen en el detalle. El texto del input tiene límite de 280 caracteres, ignora blanco y da feedback de envío.
 
-Input/HUD tienen superficies orgánicas y un halo con respiración tenue: 4,8 s en reposo y 1,6 s durante una decisión real, modulado por atención. El foco realza la señal del input sin mover su campo ni el botón; el envío tiene feedback y el HUD despliega sus métricas con layout/secuencia de Motion. La decoración se pausa fuera de viewport/pestaña y con movimiento reducido; los cambios de esa preferencia se aplican en vivo. Sin IntersectionObserver queda estática. Ninguna animación representa progreso ni confianza simulados.
+Input/HUD tienen superficies discretas sin logos ni halo animado. El input ocupa una sola línea; su etiqueta permanece accesible. No se muestran textos promocionales ni rótulos de contexto de sesión; «Borrar conversación» sigue disponible cuando hay contexto. El envío tiene feedback y el HUD conserva acción/confianza, origen accesible y métricas reales desplegables. El título es secundario respecto a Jev.
 
-La cabecera fija permite navegar a Features y a About (todavía provisional), alternar claro/oscuro con un botón sol/luna y seleccionar ES/EN con indicador animado. El tema del sistema se detecta inicialmente, sin una tercera opción visible; el primer cambio manual queda persistido. Cambiar preferencias conserva el personaje, borrador y HUD desplegado. Atrás/adelante y navegación explícita transfieren el foco al título; la carga inicial no lo mueve. El enlace de salto al contenido precede a los controles. Home ocupa la altura dinámica disponible sin scroll de página; Jev cede espacio en viewport bajo. Los detalles del HUD se superponen hacia arriba sin desplazar el input y se cierran al pulsar de nuevo o con Escape. Las otras rutas conservan scroll nativo.
+La cabecera fija permite navegar a Features y a About, alternar claro/oscuro con un botón sol/luna y seleccionar ES/EN con indicador animado. El tema del sistema se detecta inicialmente, sin una tercera opción visible; el primer cambio manual queda persistido. Cambiar preferencias conserva el personaje, borrador y HUD desplegado. Atrás/adelante y navegación explícita transfieren el foco al título; la carga inicial no lo mueve. El enlace de salto al contenido precede a los controles. Home ocupa la altura dinámica disponible sin scroll de página; Jev cede espacio en viewport bajo. Los detalles del HUD se superponen hacia arriba sin desplazar el input y se cierran al pulsar de nuevo o con Escape. Las otras rutas conservan scroll nativo.
 
-El input está centrado debajo de Jev independientemente del HUD lateral. En ancho estrecho, el HUD compacto pasa arriba a la derecha. El personaje usa la nueva exportación `prove2.riv` aportada por el usuario, un único canvas directo sin máscara CSS radial y escala `1.9`. La máscara se retiró a petición del usuario porque la exportación ya es transparente y el desvanecimiento ovalado recortaba acciones amplias. La composición no procesa píxeles por frame; se conserva el halo propio del personaje.
+El input está centrado debajo de Jev independientemente del HUD lateral. En ancho estrecho, el HUD compacto pasa arriba a la derecha. El personaje usa `prove2.riv`, un único canvas directo sin máscara CSS radial. Home aprovecha el alto libre y usa escala local `2.1`; Features/About mantienen `1.9`. La composición no procesa píxeles por frame; se conserva el halo propio del personaje.
 
 El idioma elegido se envía al habla como `language: "es" | "en"` y se valida en ambos lados. Home permanece montada al navegar: conserva contexto, borrador, HUD e historial completo limitado; queda oculta e inerte y suspende sensores, scheduler, timers, solicitudes y Rive. Al volver reanuda sin solicitar IA por la navegación ni reproducir una respuesta vieja. Con movimiento reducido Rive queda pausado y los controles DOM siguen utilizables.
 
 ## Mouse, touch y actividad
 
+### Inicio: demo de inscripción UATF
+
+«Quiero inscribirme», «quiero registrarme», «quiero estudiar informática» o «me interesa la carrera» abren una experiencia local, con equivalentes en inglés. Mayúsculas, tildes y puntuación se normalizan; se excluyen negaciones y destinos explícitos ajenos a la carrera. Los otros mensajes continúan por el flujo conversacional existente.
+
+Jev descubre el formulario «Ingeniería Informática · UATF» con una transición de layout y partículas transitorias. Nombre completo y celular están disponibles juntos. El nombre es obligatorio (máximo 120 caracteres); celular acepta ocho dígitos y `+591` opcional, tolerando espacios/guiones. Confirmar con errores conserva lo escrito, muestra mensajes asociados y enfoca el primer campo inválido. Confirmar correctamente elimina los valores, reproduce Flower cuando el personaje está listo y muestra «Datos completados» con la indicación de demo sin envío.
+
+Cerrar, Escape, «Volver a Jev» o salir de Inicio descartan el formulario; reabrir comienza vacío. Tema/idioma y suspensión de pestaña conservan los campos mientras sigue abierto. Cerrar recupera el mismo Jev, composición y controles de Home, con foco en el input. La actividad de cerebro/sensores queda suspendida durante la inscripción para cancelar respuestas anteriores y evitar un retorno artificial que consulte IA.
+
+En móvil Jev está encima y se compacta al enfocar un campo; el formulario permite scroll interno en altura reducida y respeta el viewport visual del teclado. Con movimiento reducido no hay desplazamiento coreografiado ni partículas. Un fallo de Rive no bloquea el formulario ni su confirmación. Es una demostración visual: no registra una inscripción institucional, no envía los datos y no usa persistencia. [Capturas y checks](../.dev/evidence/enrollment/README.md).
+
 ### Features: scroll y guion fijo
 
-Ocho capítulos: Percibe, Reacciona, Decide, Responde, Habla, Se transforma, Se adapta y Sigue contigo. El texto alterna izquierda/derecha y Jev atraviesa el espacio contrario; no hay marco ni HUD persistente. En móvil, el relato se separa verticalmente del personaje y el selector numérico se despliega desde el contador del capítulo.
+Ocho capítulos: Percibe, Reacciona, Decide, Responde, Habla, Se transforma, Se adapta y Sigue contigo. El texto alterna izquierda/derecha y Jev atraviesa el espacio contrario con inercia, deriva vertical e inclinación suave. En móvil, el personaje está en la zona superior y el texto debajo. No hay marco, HUD persistente, numeración ni barra de presentación.
 
-Anterior/siguiente/repetir y selección directa funcionan con teclado y touch. Cada cambio o repetición cancela la secuencia anterior y parte de Base. El scroll selecciona capítulo sin mover el foco. Las preferencias conservan capítulo/paso/canvas. Fuera de viewport/pestaña se suspenden reproducción/Rive; se vuelve desde paso cero del capítulo actual. Salir de la ruta destruye la presentación, conservando Home.
+El scroll nativo, teclado y touch recorren el contenido. «Ver escena» desplaza suavemente hacia el capítulo; pulsarlo en el capítulo actual vuelve a ejecutar su demostración. El scroll selecciona capítulo sin mover el foco y cada cambio cancela la secuencia anterior. Las preferencias conservan capítulo/paso/canvas. Fuera de viewport/pestaña se suspenden reproducción/Rive. Salir de la ruta destruye la presentación, conservando Home.
 
-Decide explica acción, confianza, intensidad y atención con un ejemplo fijo. La puntuación de confianza no garantiza corrección ni es la confianza de personalidad. Habla usa una frase escrita predefinida sin audio; el cursor de Percibe es una ilustración, no un sensor real. Las reacciones locales, ausencia y personalidad también son datos de ejemplo. Nada consulta `/api/*` ni modifica contexto/persona de Home.
+Decide explica acción, confianza, intensidad y atención con un ejemplo fijo. La puntuación de confianza no garantiza corrección ni es la confianza de personalidad. Habla usa una frase escrita predefinida sin audio; Percibe representa atención mediante una escena fija, sin cursor decorativo ni sensor real. Las reacciones locales, ausencia y personalidad también son datos de ejemplo. Nada consulta `/api/*` ni modifica contexto/persona de Home.
 
 Con movimiento reducido, sin observer o viewport muy bajo, el contenido sigue lineal y sin pinning; el modo estático añade una lista de pasos por capítulo. Si Rive no carga, el texto/controles siguen disponibles y hay reintento. [Matriz de evidencia](../.dev/evidence/phase-3/README.md).
+
+### About: historia y visión
+
+Cinco escenas ES/EN presentan el recorrido de Abdair Coca: presentación, Bob (primer gran proyecto), TitiEdu, machine-learning-App y JEV. Las imágenes aportadas se forman con partículas, con tramos estables para reconocerlas y transiciones espirales reversibles. El escenario es oscuro cinematográfico en ambos temas, con parallax suave de mouse y profundidad aparente 2D. La memoria persistente corresponde a Bob; en JEV se distinguen capacidades actuales y visión futura. El cierre conserva “Tiny creature. Big decisions.” en su idioma original.
+
+El scroll recorre la historia sin numeración, botones anterior/siguiente ni desplegables de texto adicional. En la última escena se forma una estrella de cinco puntas de partículas; al continuar se abre y revela a Jev. «Revelar a Jev» recorre suavemente ese mismo scroll con teclado/touch. Volver al inicio reforma la estrella. El cursor de mouse/pen aparta y retuerce partículas cercanas; al retirarlo recuperan su forma. Cambiar idioma/tema conserva escena y canvases. En móvil, ilustración arriba y relato debajo.
+
+Pestaña oculta y escenario fuera de vista pausan las partículas; Rive también se pausa entre proyectos una vez preparado. Salir de About libera canvas/ticker/pinning/Lenis y conserva Home. Con reduced motion, sin observer, viewport bajo o preparación fallida de imágenes: lectura lineal, recursos estáticos y Jev al final, sin parallax ni ticker de partículas. Fallo de imagen tiene aviso localizado; fallo de Rive conserva lectura y reintento independiente. About no consulta `/api/*`. [Evidencia de esta revisión](../.dev/evidence/phase-4/particles-README.md).
 
 ### Home: percepción real
 
@@ -57,9 +77,9 @@ Cada decisión contextual ejecuta una sola acción tipada. Las decisiones de ret
 
 ## Estados Rive de Home
 
-El adaptador traduce reacciones estructuradas a estados ordinarios: `BASE` a `Base`, `HELLO` a `Hello`, `GHOST` a `Ghost` y `FLOWER` a `Flower`. Controlador cambia enum y dispara trigger; reacciones transitorias vuelven a `Base` según temporización del código.
+El adaptador traduce reacciones estructuradas a estados ordinarios: `BASE` a `Base`, `HELLO` a `Hello`, `GHOST` a `Ghost`, `FLOWER` a `Flower` y `QUESTION` a `question`. Controlador cambia enum y dispara trigger; reacciones transitorias vuelven a `Base` según temporización del código. `QUESTION` expresa duda divertida y escéptica, con la ceja levantada; la decisión remota la reserva para comentarios raros/juzgables o preguntas personales incómodas. Preguntas neutras siguen el camino normal y el servicio local no activa este estado.
 
-- `Base`: reposo/observación; `Hello`, `Ghost` y `Flower`: reacciones conductuales ordinarias.
+- `Base`: reposo/observación; `Hello`, `Ghost`, `Flower` y `question`: reacciones conductuales ordinarias.
 - `think`: se activa al enviar contexto y permanece durante Jev y la espera de Groq; el primer texto recibido puede reemplazarlo por la animación hablada. Otra acción seleccionada lo reemplaza.
 - `Cloud`: disponible en el panel de diagnóstico para pruebas manuales; no se usa como espera normal.
 - `yes`/`no`: animaciones visuales para respuestas binarias claras.

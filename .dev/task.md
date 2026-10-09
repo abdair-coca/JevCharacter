@@ -4,11 +4,116 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 
 ## Retoma aquí
 
-- **Fase activa:** Fase 3 — Features determinista con demostraciones.
-- **Estado:** fase 3 implementada y verificada; pendiente revisión visual/funcional del usuario. Fase 2 aceptada con «ahora continua con la fase 3», incluida revisión del HUD/Home sin scroll. Teclado en dispositivo físico continúa pendiente como limitación de evidencia.
-- **Siguiente acción exacta:** presentar/recibir revisión de Features libre en `http://127.0.0.1:5173/features` con [capturas y resultados](evidence/phase-3/README.md). No comenzar About hasta aprobación.
-- **No iniciar fase 4 hasta:** revisión y aprobación de la entrega de fase 3.
+- **Trabajo actual / fase activa:** fase UATF única implementada y verificada, entregada para revisión visual. Especificación, resumen y plan completo aprobados; autorización «si apruebo».
+- **Fase del rediseño conservada:** Fase 4 — About scrollytelling, pendiente revisión de su entrega previa.
+- **Estado:** fase 3 aprobada explícitamente, incluida la retirada del cursor decorativo. Fase 4 implementada/verificada, pendiente revisión visual/funcional del usuario. Teclado en dispositivo físico continúa pendiente como limitación de evidencia.
+- **Siguiente acción exacta:** organizar microcommits y publicar solo frontend en Vercel, autorizado el 2026-10-09. Después, el usuario revisa la demo UATF escribiendo «quiero inscribirme» en Inicio; conservar las revisiones visuales pendientes.
+- **No iniciar fase 5 hasta:** revisión y aprobación de About.
 - **Estado actual del código:** el 2026-10-07 el usuario autorizó a Luna a organizar el trabajo pendiente en microcommits; la implementación previa, documentación y evidencias ya están guardadas. Los PNG diagnósticos temporales se conservan sin commit. La restricción de no commitear durante la migración SDD queda como antecedente de aquella tarea.
+
+### Microcommits y publicación frontend — 2026-10-09
+
+**Solicitud:** «quiero que microcomitees y lo desplegues en vercel, sin backend aun». Vercel CLI autenticada como `abdair-coca`; proyecto existente `jev-bot` en `abdairs-projects`. Engram no está disponible en las herramientas de esta sesión; este ledger conserva el handoff.
+
+**Preparación:** `build:frontend` compila con modo Vite `frontend`; el scheduler usa el fallback local directamente, sin consultar `/api/decide`. El fallback solo genera reacciones, por lo que no solicita habla. El script de empaquetado crea únicamente `static/` y `config.json` bajo `.vercel/output`, con soporte para las rutas directas; el deploy usa `--prebuilt --prod` para excluir handlers y secretos. El backend opcional permanece disponible en desarrollo/otros builds.
+
+**Línea base comprobada antes de preparar publicación:** `npm run typecheck` (proyectos app/Node/API), `npm run typecheck:tests`, `npm run lint` y `npm exec -- vitest run --maxWorkers=1`: PASS, 26 archivos / 177 tests. `git diff --check`: PASS con avisos LF/CRLF de Windows.
+
+**Verificación del modo frontend:** `npm run build:frontend`, `npm run lint`, `npm run typecheck:tests` y suite completa Vitest: PASS, 26 archivos / 178 tests, incluido el nuevo contrato sin red. Build verifica app/Node/API mediante `tsc -b`; el artefacto contiene únicamente `config.json` y `static/`, sin `functions/`. Shell 346,92 kB / gzip 110,89. Vercel vinculado al proyecto existente. La CLI añadió una regla redundante `.env*`: se retiró para preservar la excepción `.env.example`; los archivos locales de credenciales siguen ignorados. Se repuso el índice de partículas referenciado pero ausente, usando el agregado existente como antecedente. Despliegue y smoke remoto pendientes.
+
+### Inscripción UATF — entrega actual
+
+- [x] Completar diez decisiones de descubrimiento y revisar los puntos de integración existentes.
+- [x] Obtener aprobación explícita de la especificación y registrarla sin reemplazar el contexto del rediseño.
+- [x] Aprobar el resumen de una única fase de implementación: respuesta «hazlo».
+- [x] Registrar el plan técnico detallado conservando las cinco fases anteriores.
+- [x] Aprobar el plan completo antes de implementar: «si apruebo».
+- [x] Implementar, verificar y entregar la fase para revisión visual.
+- [ ] Recibir aprobación visual/funcional de la demo UATF.
+
+**Resumen aprobado:** una entrega de extremo a extremo: detección local desde el input → aparición animada de Jev/formulario → validación de nombre/celular → celebración local → cierre y limpieza. Composición móvil, teclado, ES/EN, temas y fallback forman parte de esa misma entrega.
+
+**Hallazgos de integración:** `HomePage.tsx` conecta directamente `ContextWhisper.onSubmit` con `brain.submitContext`; esa es la frontera para interceptar la intención antes de enviarla al cerebro. `useCreatureBrain` ya acepta actividad explícita, suspende scheduler/habla y detiene acciones al pausarse; la nueva coreografía debe comenzar después de esa suspensión, conservando Character activo. El shell mantiene Home montada al cambiar de ruta: salir de Inicio necesita una limpieza explícita del estado de inscripción, no depender del desmontaje. `Character` ofrece readiness/error y el controlador ya tiene reacciones temporales; no hace falta modificar el asset. Datos y UI propuestos bajo `src/features/enrollment/`, con estilos acotados al estado de inscripción.
+
+#### Implementación y evidencia UATF — 2026-10-09
+
+**Resultado:** activación local ES/EN desde el input; formulario de dos campos simultáneos; validación; confirmación local con Flower/partículas; cierre suave y vuelta a Inicio. En móvil, Jev encima y compacto al enfocar; scroll interno y altura basada en `visualViewport` para el teclado. Fallback funcional si falla Rive; reduced motion sin partículas. Nombre/celular se eliminan al confirmar, cerrar o navegar; preferencias/pestaña no borran un formulario abierto.
+
+**Cambios de runtime propios de esta entrega:** únicamente `src/pages/HomePage.tsx` y los nuevos archivos de `src/features/enrollment/`. Se añaden dos archivos de tests y `.dev/evidence/enrollment/`. No se editó el cerebro, APIs, rutas ajenas, asset, componentes compartidos ni dependencias en esta implementación. Los cambios preexistentes en esas áreas se conservan.
+
+**Coordinación:** `HomePage` intercepta la intención antes del cerebro; pausa cerebro/sensores con sus props existentes, manteniendo Character activo. La coreografía parte de un RAF cancelable después del cleanup de la pausa. Entrada Hello y aceptación Flower usan el controlador actual. Un solo canvas de personaje; Motion posee layout y partículas SVG finitas. `useEnrollment` posee la sesión efímera; `useEnrollmentViewport` retira listeners y variable de altura al cerrar. El estado `completed` mantiene la composición de éxito mientras se cierra sin conservar datos.
+
+| Comprobación ejecutada | Resultado |
+|---|---|
+| `npm exec -- tsc --noEmit -p tsconfig.app.json`, `tsconfig.node.json`, `tsconfig.api.json`, `tsconfig.tests.json` (por separado) | PASS. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1 --reporter=verbose` | PASS: 26 archivos / 177 tests. Incluye 39 nuevos casos de intención, validación y sesión/aislamiento con Strict Mode. |
+| `npm run build` | PASS. Shell 350,26 kB / gzip 111,78; CSS común 43,19 / 8,95. Incremento aproximado frente al pulido: 4,59 kB gzip de JS+CSS; sin dependencias nuevas. |
+| `node ".dev/evidence/enrollment/verify.mjs" <tamaño> <tema> <idioma> [modo]` | PASS: 13 bloques / 298 checks / 46 capturas. Ocho variantes principales escritorio/móvil × claro/oscuro × ES/EN; dos reduced, 320 px, viewport bajo y fallo de Rive. |
+| Aislamiento del formulario en navegador | Cero requests `/api/*` en los 13 bloques, incluidos cambios de preferencias, cierre/reapertura y navegación a Features/regreso. Sin datos ficticios de formulario en localStorage/sessionStorage; valores retirados del formulario en aceptación/cierre. |
+| `git diff --check` | PASS; avisos LF/CRLF de Windows. |
+
+**Evidencia:** [UATF](evidence/enrollment/README.md). Inspección visual de escritorio, móvil claro/oscuro, celebración real Flower y teclado simulado. TypeScript, tests y navegador se ejecutaron para esta funcionalidad; no se reutiliza el pulido como evidencia de UATF.
+
+**Último ajuste de accesibilidad:** el ancla `#page-title` pasa al título de inscripción mientras está abierta y regresa al título de Home al cerrar; así «Ir al contenido» no apunta a un título oculto. Después se repitieron build, lint, typecheck de tests y `enrollmentSession`/`homeSession` (6 tests PASS). Playwright adicional confirmó una sola ancla, foco en el título visible y retorno al input con Escape. La matriz de 13 bloques precede únicamente a este ajuste semántico, sin cambios visuales ni de lógica de datos.
+
+**Correcciones durante verificación:** lint pidió capturar el controlador usado por el cleanup; se corrigió. El primer test de foco esperaba un input aún oculto usando una query que incluye elementos ocultos; ahora espera el control accesible al finalizar cierre. Se conservó la vista de éxito durante su fade para evitar volver brevemente al formulario. El harness inicial buscaba ES/EN por texto en lugar de sus nombres accesibles Español/English y agotó timeout; se corrigió y repitió. El rótulo de éxito móvil se hizo visible explícitamente. Solo los reportes completos posteriores integran esta entrega.
+
+**Límites y puerta:** Chromium headless; touch, viewport, teclado visual y reduced motion emulados. No móvil físico/Safari/iOS ni benchmark LCP/FPS. Se usaron datos ficticios y Rive real, salvo el fallo 404 inyectado. No se llamó a proveedores ni se creó commit/push. La demo queda pendiente de aprobación visual; los SDD siguen conservados. Engram no está disponible en las herramientas de esta sesión; este ledger guarda el handoff.
+
+### Ajuste acotado aprobado — reacción `QUESTION` en Home, 2026-10-08
+
+### Pulido visual solicitado — 2026-10-08
+
+- [x] Inicio: mayor protagonismo de Jev, controles minimalistas sin logos ni texto redundante.
+- [x] Features/Story: quitar UI de diapositivas y detalles redundantes; scroll suave e inercia; composición móvil.
+- [x] Partículas: deformación al cursor con retorno y mayor expresividad.
+- [x] Verificar checks y navegador; documentar evidencia y límites.
+
+Se preserva el trabajo local previo de partículas/QUESTION y los assets. Esta revisión continúa dentro de fase 4; su entrega requiere revisión visual.
+
+#### Entrega de pulido — 2026-10-09
+
+**Inicio:** título secundario sin introducción/pie promocional; canvas protagonista con escenario flexible y escala local `2.1` (presentaciones `1.9`). Input de 56 px, sin logotipo ni texto de ayuda, y HUD de una fila sin logotipo/halo. Acción/confianza y etiquetas accesibles conservadas; detalles hacia arriba, sin mover el input. Borrar conversación y diagnóstico disponibles.
+
+**Features/Story:** retiradas barras anterior/repetir/siguiente, contadores, numeración y detalles «Cómo funciona»/«Un poco más de historia». Relato principal más corto, conservando autoría de Abdair, Bob y memoria persistente, TitiEdu, machine learning y JEV como experimento/visión. Features conserva ocho demostraciones y datos de ejemplo. «Ver escena» usa 1,2 s de scroll suave; Jev sigue con scrub de 1 s, deriva vertical e inclinación. «Revelar a Jev» usa 1,8 s y la historia asienta su progreso en 900 ms. Restauración de preferencias mantiene scroll inmediato. Móvil sitúa ilustración arriba y texto debajo; viewports bajos y reduced motion tienen lectura estática.
+
+**Partículas:** deformación local de mouse/pen con retorno elástico, buffers de desplazamiento/velocidad y paso temporal acotado. Corrientes entre formas, estelas/brillo reforzados y halo de revelación dentro del canvas. Un ticker GSAP, DPR y densidad adaptables conservados; suspensión y reduced motion verificados. Sin dependencias nuevas ni cambios de assets en esta revisión.
+
+| Comprobación | Resultado |
+|---|---|
+| `npm exec -- tsc --noEmit -p tsconfig.app.json`, `tsconfig.node.json`, `tsconfig.api.json`, `tsconfig.tests.json` (cuatro comandos) | PASS. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1 --reporter=verbose` | PASS: 24 archivos / 138 tests. Nuevos casos de scroll suave/nativo, pausa/cleanup del asentamiento y deformación/retorno de partículas. |
+| Tests dirigidos posteriores de `storyScroll`, `presentationScroll`, `homeSession` | PASS: 3 archivos / 12 tests tras ajustar cleanup y composición estática. |
+| `npm run build` | PASS; repetido tras corregir el min-height heredado del input en viewport bajo. |
+| `node ".dev/evidence/polish/verify.mjs" <ruta> <tamaño> <tema> <idioma> [reduced]` | PASS: 17 bloques, 207 checks y 38 capturas. Escenarios exactos en el README de evidencia. |
+| `node ".dev/evidence/polish/lifecycle.mjs"` | PASS: 12 checks; dos recorridos entre rutas, mismo canvas/borrador de Home, cambio de reduced motion en vivo, sin pins residuales ni llamadas API. |
+| `git diff --check` | PASS; avisos LF/CRLF de Windows. |
+
+**Evidencia:** [pulido visual](evidence/polish/README.md). Inspeccionadas capturas de Home, HUD en viewport bajo, Features y Story/revelación móvil, y partículas desktop. Los casos de 390×420 detectaron una regla antigua de input a 64 px: se sustituyó por el token compacto y se repitió ese caso después del build; las demás capturas corresponden al build previo a ese único ajuste CSS, fuera de sus media queries.
+
+**Incidencias de ejecución:** primera suite completa sin progreso agotó timeout; repetición verbose aprobó. La matriz inicial guardaba preferencias en formato incorrecto: se corrigió a JSON y se repitieron los doce casos principales con aserción explícita de tema/idioma. La medición de inercia se trasladó dentro del navegador para evitar latencia entre llamadas; el test reducido de Story espera la preparación de Rive al llegar a su sección, no mientras está fuera de vista. Tras interrupción se reinició preview. En desarrollo durante HMR se observó `pin.enable is not a function`; no se reprodujo en visitas limpias de producción ni en los dos ciclos de navegación/cambio de movimiento reducido. Ninguna corrida fallida se cuenta como aprobada.
+
+**Límites:** Chromium headless, móvil/touch/reduced motion emulados; sin Safari/iOS ni móvil físico, sin benchmark LCP/FPS. No se consultó a proveedores reales. Fase 4 continúa pendiente de aprobación visual. No se creó commit ni push. Herramientas Engram no disponibles en esta sesión; este ledger conserva el handoff.
+
+### Reacción `QUESTION`: antecedente y evidencia
+
+El usuario pidió `QUESTION` como reacción bilingüe de Home, decidida remotamente ante comentarios claramente raros/juzgables o preguntas incómodas; preguntas neutras no la activan y una decisión ambigua conserva reacción normal. El gesto Rive dura brevemente y vuelve a `Base`; también queda disponible en diagnóstico. El usuario confirmó que `prove2.riv` ya incluye el estado en minúsculas. El fallback local no lo selecciona. Este ajuste se añade al trabajo activo sin retirar la revisión de storytelling aprobada.
+
+- [x] Añadir reacción tipada, instrucciones remotas, umbral de confianza, duración y etiquetas ES/EN.
+- [x] Conectar el enum Rive `question`, el botón de diagnóstico y el retorno temporal a `Base`.
+- [x] Verificar selección del contrato remoto y recorrido visual de Home.
+
+| Comprobación | Resultado |
+|---|---|
+| `npm exec -- vitest run --maxWorkers=1` | PASS: 24 archivos / 135 tests. Incluye schema del endpoint, decisión de baja confianza y binding Rive. |
+| Typechecks `tsconfig.app.json`, `tsconfig.node.json`, `tsconfig.api.json`, `tsconfig.tests.json` | PASS, los cuatro proyectos. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm run build` | PASS. |
+| Playwright local con `/api/decide` interceptado | PASS ES/EN: formularios «¿Eres gay?» / “Do you like FOMO?” → decisión remota `QUESTION` → HUD «Duda» / “Skeptical” → estado Rive `question` → retorno a `Base`; Rive listo, un canvas, cero errores de consola. Estado manual de diagnóstico también comprobado. |
+
+Captura visual: [question-state.png](evidence/question-state.png). La semántica del modelo remoto se probó con respuesta mock; no se llamó al proveedor real. La revisión de storytelling de partículas sigue siendo el siguiente trabajo de fase 4.
 
 ## Migración SDD
 
@@ -190,7 +295,7 @@ El modelo anterior registró resultados en [`.dev/evidence/phase-1/`](evidence/p
 
 **Incidencia y límites:** primera corrida falló por recorte superior al retener contexto a 390×420; se corrigió, repitió la matriz completa y se inspeccionaron capturas. La evidencia final tiene cero errores de aplicación, 32 avisos WebGL ReadPixels y cuatro HTTP 503 inyectados. APIs simuladas; viewport/teclado emulados, sin móvil físico ni LCP/FPS. Evidencia independiente en [hud-upward](evidence/phase-2/hud-upward/README.md); capturas anteriores preservadas. La entrega sigue esperando revisión del usuario y no habilita fase 3.
 
-## Fase 3 — Trabajo activo
+## Fase 3 — Aprobada para avanzar
 
 **Dirección visual confirmada durante implementación:** el usuario pidió Jev libre, sin marco/contenedor; texto alternado izquierda/derecha y desplazamiento de Jev por los espacios libres al deslizar. Versión móvil con puesta en escena adaptada. Confianza/decisión se explican en su capítulo, sin HUD ni etiquetas repetidas constantemente.
 
@@ -199,7 +304,7 @@ El modelo anterior registró resultados en [`.dev/evidence/phase-1/`](evidence/p
 - [x] Aplicar composición abierta, texto alternado y trayectoria scroll desktop/móvil.
 - [x] Verificar secuencias reales, aislamiento de Home, teclado, preferencias, errores, reduced motion y teardown.
 - [x] Ejecutar matriz final y registrar capturas, dependencias, peso y límites.
-- [ ] Presentar entrega y recibir aprobación de fase 3.
+- [x] Presentar entrega y recibir aprobación de fase 3: «perfecto, aora continua con la siguiente fase, esta ya esta aprobada», tras corregir el cursor.
 
 **Checks de implementación intermedia:** cuatro archivos / 21 tests PASS; typecheck tests y build PASS. Son línea intermedia, no evidencia de la nueva dirección visual. XState/@xstate-react, GSAP/@gsap-react y Lenis instalados para las responsabilidades aprobadas; npm audit de instalación: cero vulnerabilidades. No se modifican bytes del asset.
 
@@ -241,14 +346,108 @@ El modelo anterior registró resultados en [`.dev/evidence/phase-1/`](evidence/p
 
 **Estado:** corrección verificada; pendiente revisión visual del usuario. Fase 3 continúa pendiente de aprobación y About no comenzó. Emulación de Chromium, sin móvil físico/Safari ni benchmark.
 
+### Revalidación solicitada de fase 3 — 2026-10-07 (host local)
+
+**Solicitud:** «quiero que ejecutes la fase tres». Al retomar, la implementación de Features ya estaba entregada en los commits existentes. Se contrastó con spec/plan/design y se repitió la verificación completa sobre el build actual, incluida la retirada de máscara. No se requirieron cambios del runtime para cumplir la fase.
+
+| Comprobación ejecutada | Resultado |
+|---|---|
+| `npm exec -- tsc --noEmit -p tsconfig.app.json` | PASS. |
+| `npm exec -- tsc --noEmit -p tsconfig.node.json` | PASS. |
+| `npm exec -- tsc --noEmit -p tsconfig.api.json` | PASS. |
+| `npm exec -- tsc --noEmit -p tsconfig.tests.json` | PASS. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1` | PASS: 18 archivos / 111 tests. |
+| `npm run build` | PASS: Features JS 197,36 kB / gzip 71,09; CSS Features 7,88 / 1,92; shell 340,99 / 108,48; JSX compartido 8,77 / 3,33; Character 211,71 / 59,99; Motion 85,59 / 28,34; CSS común 37,59 / 8,08. |
+| 29 bloques individuales `node ".dev/evidence/phase-3/verify.mjs" <caso> <bloque>` con `JEV_EVIDENCE_DIRECTORY=.dev/evidence/phase-3/revalidation` | PASS: 240 checks / 35 capturas en Chromium de producción. |
+| `node ".dev/evidence/phase-3/aggregate.mjs"` con la misma variable de salida | PASS: todos los reportes completos/posteriores a fuentes, cero errores inesperados, 120 avisos WebGL ReadPixels y dos errores esperados del asset 404. |
+| `node --check ".dev/evidence/phase-3/verify.mjs"` / `aggregate.mjs` | PASS, ejecutados por separado. |
+| Validador temporal `validate-jev-home-revision.mjs` | PASS: 16 documentos, 231 enlaces/anclas locales y render directo. Incluye la nueva evidencia. |
+| `git diff --check` | PASS; avisos de normalización LF/CRLF de Windows. |
+
+**Evidencia:** [revalidation](evidence/phase-3/revalidation/README.md) guarda los resultados/capturas nuevos; se conservan íntegros los originales. Los scripts permiten elegir su carpeta de salida mediante `JEV_EVIDENCE_DIRECTORY`, manteniendo el default anterior. La revisión Standards no encontró problemas; Spec detectó dos huecos del harness, corregidos: contar API desde antes de cargar Features y añadir `src/App.css`/los dos scripts al fingerprint y a la comprobación de frescura. Después se repitieron los 29 bloques: solo esta segunda matriz completa integra el agregado final. Se inspeccionaron capturas de ambos temas y tamaños, texto alternado y triángulo sin recorte radial.
+
+**Revisión final:** Standards PASS, cero hallazgos; Spec PASS, cero hallazgos pendientes. Ambos ejes comprobaron las correcciones y el registro final sin ampliar el alcance ni repetir pruebas del runtime.
+
+**Incidencias:** las dos primeras ejecuciones concurrentes aprobaron los checks de layout pero excedieron el timeout del comando durante el cierre, sin guardar su reporte. El cierre mínimo aislado y las repeticiones individuales terminaron correctamente; no se identificó una causa suficiente para modificar el cierre. En la segunda matriz, `action-6` sufrió una demora excepcional de arranque (primer progreso tras unos 490 s), registró failure por deadline y se repitió con éxito en 7 s. Ninguna corrida incompleta/fallida cuenta en el agregado. Los 29 bloques finales se ejecutaron uno a uno, con progreso: aproximadamente 3–18 s por bloque habitual y 56 s para aislamiento/recuperación. No se lanzó una matriz monolítica.
+
+**Límites y puerta:** viewport, touch, visibilidad y movimiento reducido emulados; API de Home con fixture y offline tras cargar recursos. Sin móvil físico/Safari/iOS ni LCP/FPS. Fase 3 presentada para revisión, pendiente aprobación visual/funcional; fase 4 sigue pendiente. No se creó commit ni push en esta solicitud.
+
+### Corrección acotada — retirar cursor decorativo de Percibe
+
+**Solicitud:** el usuario señaló el cursor junto a Jev en móvil y pidió «solo arregles eso».
+
+**Causa reproducida:** `.showcase-cursor` era un SVG añadido por `FeaturesPage`, con ruta `m5 3 14 11-7 1-3 7z` y coordenadas del catálogo de Percibe; el DOM móvil confirmó una instancia de 20×20 px. No procedía del asset Rive.
+
+**Delta:** retirar ese elemento, su cálculo/tipo de estilos, las coordenadas del catálogo y las dos reglas CSS exclusivas. Ajustar únicamente la descripción ES/EN de Percibe y su mención en interacción para no anunciar un cursor eliminado. Las acciones Base, los tiempos y los demás capítulos conservan sus contratos.
+
+**Verificación:** `npm run build` PASS; ESLint de `FeaturesPage.tsx`/`catalog.ts` PASS (primera ejecución tuvo timeout; repetición correcta); `vitest run tests/showcasePlayer.test.ts --maxWorkers=1` PASS, 15 tests existentes. Playwright en 390×844 y 1440×900 confirmó cero cursores decorativos, ocho capítulos, un canvas listo, reproducción Base y siguiente capítulo funcional, sin overflow horizontal ni errores de consola. [Captura móvil posterior](evidence/phase-3/cursor-removed-mobile.png). `git diff --check` PASS con avisos LF/CRLF. No se repitió la matriz completa ni se añadieron tests para este delta visual reversible; la matriz previa permanece como antecedente anterior al arreglo. Fase 3 sigue pendiente de aprobación.
+
+## Fase 4 — Entrega para revisión
+
+**Guion y alcance:** cinco escenas — pregunta, experimento 2D, evolución de Rive a comportamiento, Abdair Coca y visión futura. Relato original preservado, sin nuevas fechas/retratos ni promesas de funcionalidades entregadas. Composición abierta, metáfora 2D de salir de la caja de chat, capas DOM y autoría tipográfica. GSAP controla el escenario; Motion los controles; Rive el personaje actual. Se reutiliza el manager global Lenis existente, sin nuevas dependencias ni sesión de Home.
+
+- [x] Registrar aprobación de fase 3 y revisar relato, contratos y seams.
+- [x] Implementar catálogo ES/EN y cinco escenas accesibles.
+- [x] Implementar scroll/presentación, pausa, preferencias y alternativa estática.
+- [x] Verificar teclado, mobile, idiomas/temas, aislamiento, error y limpieza.
+- [x] Registrar checks/evidencia y presentar fase 4 para revisión.
+- [ ] Recibir aprobación visual/funcional de fase 4.
+
+### Entrega de fase 4 — 2026-10-08
+
+**Resultado:** cinco escenas con composición abierta, texto breve ES/EN y detalles ampliables. La primera abre la pregunta original con una metáfora de caja de chat; el scroll libera a Jev, presenta capas conceptuales, firma al creador y señala la visión futura. Cierre original en inglés con metadata de idioma. No fechas, retratos ni capacidades inventadas. Personaje/asset/escala `1.9` y Home conservados.
+
+**Seams:** `features/story/catalog.ts` es el guion y verifica claves ES/EN; `useStoryScroll` posee selección, anchors, pin/timeline y cleanup; `AboutPage` posee estado de lectura/carga por intento, deadline/retry y un Character de presentación que entra en Base. GSAP gobierna trayectoria/diagramas; Motion, controles/estado y un wrapper separado que retira la ilustración durante lectura móvil; Rive, el dibujo. El manager Lenis ya existente se reutiliza. `useStageVisibility` se movió sin cambio de comportamiento a `features/presentation/` y el timeout de readiness pasa a token compartido con alias de Showcase. Features conserva su sesión/guion; se ajusta únicamente ese import y la referencia de su agregador. Sin dependencias nuevas ni llamadas API en About.
+
+| Comprobación ejecutada | Resultado |
+|---|---|
+| `npm exec -- tsc --noEmit -p tsconfig.app.json` | PASS. |
+| `npm exec -- tsc --noEmit -p tsconfig.node.json` | PASS. |
+| `npm exec -- tsc --noEmit -p tsconfig.api.json` | PASS. |
+| `npm exec -- tsc --noEmit -p tsconfig.tests.json` | PASS. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1` | PASS: 20 archivos / 124 tests. Trece tests nuevos de narrativa/lifecycle/ownership/arranque estático y retorno. |
+| `npm run build` | PASS: About JS 14,60 kB / gzip 5,48; CSS About 8,31 / 2,05; scrollRuntime compartido 133,71 / 50,24; Features JS 63,11 / 20,86; shell 341,20 / 108,55; Character 212,57 / 60,31; Motion 85,59 / 28,34; CSS común 38,35 / 8,22; JSX compartido 8,77 / 3,33. |
+| 23 bloques `node ".dev/evidence/phase-4/verify.mjs" <caso> <bloque>` | PASS: 365 checks / 66 capturas; ocho variantes visuales, cuatro controles, cuatro reduced/reflow, cuatro entradas directas reducidas con retorno, lifecycle, aislamiento/error y fallback sin observer. |
+| `node ".dev/evidence/phase-4/aggregate.mjs"` | PASS: 23 reportes completos con fingerprint vigente; cero errores inesperados, 96 avisos ReadPixels y dos errores 404 esperados. |
+| `node ".dev/evidence/phase-3/verify.mjs" desktop-light-es action-1` con salida en fase 4 | PASS: seis checks adicionales de Features; bindings Hello/Flower/Ghost reales, sin inicializar Home ni consultar API. Reporte independiente, fuera del agregado de About. |
+| `node --check ".dev/evidence/phase-4/verify.mjs"` / `aggregate.mjs` | PASS, ejecutados por separado. |
+| Validador temporal `validate-jev-home-revision.mjs` | PASS: 17 documentos / 309 enlaces-anclas locales, incluido el índice completo de capturas; render directo preservado. |
+| `git diff --check` | PASS; avisos de normalización LF/CRLF de Windows. |
+
+**Peso:** About propio JS+CSS cuesta aproximadamente 7,53 kB gzip; al entrar en cualquiera de las presentaciones se añade el chunk compartido GSAP/Lenis de 50,24 kB gzip si aún no estaba cargado. Es una nueva partición de dependencias existentes, no una instalación nueva ni coste duplicado por ruta. El conjunto JS/CSS de Home sube aproximadamente 0,53 kB gzip frente a la retirada del cursor (+0,07 shell, +0,14 CSS común, +0,32 Character). Excluye WASM/`.riv`; no es un benchmark de LCP/FPS.
+
+**Hallazgos corregidos:** pausa explícita de los propios triggers visuales fuera de vista, manteniendo selección textual; reanudación del motor tras ocultar pestaña reafirma esa pausa. Detalles largos se superponían a la ilustración en móvil: se retira/pausa al leer y se conserva canvas/escena. Las etiquetas de capas se recolocaron dentro del viewport. El retry se movió fuera del wrapper GSAP a una capa independiente, porque una sección interceptaba el pointer. Base se prepara con el controlador vigente antes de declarar readiness editorial; el harness espera además 1,8 s para evitar capturar el primer frame GPU prematuro.
+
+**Corrección adicional de arranque estático:** una visita directa con reduced motion mostró un canvas vacío aunque el binding decía Base; las pruebas de cambio de preferencia en vivo no detectaban ese caso. Character prepara solo las presentaciones estáticas de forma invisible y acotada (`--presentation-pose-warmup: 3000ms`), selecciona Base mediante los bindings vigentes con trigger en el siguiente RAF, pausa/detiene render antes de anunciar readiness y bloquea nuevas acciones del controlador mientras la pose está congelada. Memoiza el layout por instancia para evitar reasignaciones en rerenders. Timer/RAF se cancelan al ocultar/desmontar; errores se envían al callback vigente. Las pruebas manuales de uno/dos draws y preparación de 1,8 s no dieron una pose válida, por lo que no se conservan como solución. La solución final se verificó visualmente y con igualdad del hash de capturas separadas por 700 ms en cuatro entradas frías. Home mantiene sus defaults: el warmup y el bloqueo de acciones solo se aplican a `presentation` estática. Asset y canvas directo intactos, sin capturar/transformar píxeles para la UI.
+
+**Retorno estático:** la revisión Spec detectó que volver a una pose ya lista podía arrancar otra preparación antes de ocultarla. Se añadió un ref de pose preparada: al reactivar una presentación estática se conserva su framebuffer pausado, sin resize/play/warmup. La preparación que sí necesita arrancar oculta su host sincrónicamente antes de `play`, sin esperar al commit React. Un test unitario y las cuatro entradas frías verifican ausencia de replay y hash idéntico tras ocultar/mostrar. Se repitieron los 23 bloques tras esta última corrección; el agregado no mezcla matrices anteriores.
+
+**Revisión final:** Standards PASS, cero hallazgos pendientes; Spec PASS, cero hallazgos pendientes tras corregir el retorno estático. Ambos ejes confirmaron el cierre sin ampliar alcance. Validación documental/sintaxis/whitespace PASS, registrada en la tabla anterior.
+
+**Incidencias y límites:** una primera corrida de tests tuvo timeout; tras ajustar los nombres accesibles con saltos de línea y esperar la transición del botón, los tests dirigidos y la suite final pasaron. Una corrida intermedia de layout agotó 60 s antes de terminar. La suspensión prolongada del host interrumpió una carga WASM con `ERR_NETWORK_IO_SUSPENDED`; se repitió con éxito. Los reportes fallidos/intermedios y la primera matriz de 19 bloques no integran el agregado final. La matriz final de 23 bloques se ejecutó uno a uno, aproximadamente 9–54 s por bloque, con avance/deadline; sin matriz monolítica. Chromium 153; viewport/touch/visibilidad/reduced motion emulados, fixture de Home y offline tras cargar recursos. Sin móvil físico/Safari/iOS ni LCP/FPS. [Evidencia completa](evidence/phase-4/README.md).
+
+**Puerta:** About presentado para revisión; fase 4 sigue pendiente de aprobación y fase 5 no comenzó. No se creó commit ni push en esta entrega. La matriz de fase 3 permanece como historial anterior a la nueva partición compartida; no se presenta como matriz actual del rediseño completo.
+
 ## Estado de fases restantes
+
+### Revisión aprobada — storytelling de partículas, 2026-10-08
+
+Usuario aportó historia real y tres recursos en `public/story/`; aprobó escenario cinematográfico oscuro en ambos temas, relato de proyectos y estrella final que se abre para revelar a Jev. Aprobó plan y solicitó «implementalo». Alcance registrado en spec/plan; implementación en curso. La evidencia anterior se conserva como antecedente, no verifica esta revisión.
+
+- [x] Inspeccionar recursos, trabajo local y contratos; registrar aprobación.
+- [x] Implementar guion ES/EN y composiciones de partículas (trabajo previo conservado y pulido).
+- [x] Integrar scroll reversible, estrella/revelación, móvil y alternativa estática.
+- [x] Verificar checks/navegador y registrar resultados de la revisión; evidencia vigente en `evidence/polish/`.
+- [ ] Recibir revisión visual; fase 5 espera aprobación.
 
 | Fase | Estado | Puerta |
 |---|---|---|
 | 1 — Home de referencia | Aceptada para avanzar | Autorización del usuario; teclado físico sigue pendiente. |
 | 2 — Conducta real de Home y habla bilingüe | Aceptada para avanzar | Autorización del usuario tras revisión HUD/Home sin scroll. |
-| 3 — Features determinista | Implementada/verificada, pendiente aprobación | Revisión visual/funcional del recorrido libre. |
-| 4 — About scrollytelling | Pendiente | Aprobación explícita de fase 3. |
+| 3 — Features determinista | Aprobada | Autorización explícita tras corregir cursor decorativo. |
+| 4 — About scrollytelling | Implementada/verificada, pendiente aprobación | Revisión visual/funcional de la entrega. |
 | 5 — Integración, accesibilidad y rendimiento | Pendiente | Aprobación explícita de fase 4. |
 
 ## Reglas de handoff

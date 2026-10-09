@@ -1,6 +1,6 @@
 # Spec: rediseño de JEVLING
 
-**Estado:** producto y alcance aprobados el 2026-10-06. Fases 1 y 2 aceptadas al autorizar continuar; fase 3 activa desde la solicitud «ahora continua con la fase 3» (2026-10-07).
+**Estado:** producto y alcance aprobados el 2026-10-06. Fases 1–3 aceptadas; fase 4 activa tras «perfecto, aora continua con la siguiente fase, esta ya esta aprobada» (2026-10-07, host local).
 
 **Fuentes:** [contrato visual](../design.md), [relato de About](../docs/jev-story.md), [plan de implementación](plan.md), [tarea activa y handoff](task.md).
 
@@ -21,6 +21,58 @@ El usuario debe poder probar Jev en Home, comprender capacidades actuales median
 La interfaz general es sencilla. Los detalles técnicos o narrativos se ofrecen como contenido opcional y progresivo.
 
 ## Alcance
+
+### Publicación frontend — autorizada el 2026-10-09
+
+El usuario pidió «quiero que microcomitees y lo desplegues en vercel, sin backend aun». Se autoriza organizar el trabajo pendiente en microcommits y publicar un artefacto estático en Vercel: Home con decisiones locales sin requests API, Features/About y demo UATF disponibles, sin funciones ni claves de proveedores. Esta publicación es una tarea independiente de las puertas de revisión del rediseño; no declara aprobadas las entregas pendientes ni abre la fase 5.
+
+### Demo visual de inscripción UATF — especificación aprobada
+
+**Aprobación:** el usuario respondió «aprobado» a la especificación consolidada después de diez decisiones de descubrimiento, «hazlo» al resumen de una única fase y «si apruebo» al plan completo. Esta ampliación conserva el historial y la revisión pendiente del rediseño.
+
+#### Objetivo y audiencia
+
+Añadir en Inicio una experiencia visual para interesados en Ingeniería Informática de la Universidad Autónoma Tomás Frías (UATF). Jev abre un formulario, acompaña el llenado y celebra la aceptación local. Es una demostración: no realiza una inscripción oficial ni guarda o envía datos.
+
+#### Recorrido y contenido
+
+1. El usuario escribe en el input actual una intención como «quiero inscribirme», «quiero registrarme», «quiero estudiar informática» o «me interesa la carrera». La detección local admite mayúsculas, tildes y puntuación; una negación como «no quiero inscribirme» no abre la experiencia. La UI y las expresiones equivalentes se localizan ES/EN.
+2. Una reacción del Jev existente, su desplazamiento suave y una estela breve de partículas descubren un formulario minimalista «Ingeniería Informática · UATF». Los dos campos aparecen juntos; el formulario no espera a que termine la animación para poder usarse.
+3. **Nombre completo:** obligatorio, con tildes y nombres compuestos. **Celular:** ocho dígitos, `+591` opcional; se toleran espacios/guiones de formato. Validación local, mensajes junto al campo y conservación del texto para corregir errores.
+4. **Confirmar datos** valida y produce una reacción celebratoria del repertorio actual de Jev, partículas breves y el mensaje **Datos completados**. Una indicación discreta identifica la demostración sin envío. **Volver a Jev** cierra suavemente la experiencia.
+5. Cerrar o abandonar Inicio descarta los datos; reabrir comienza vacío. Cambiar tema/idioma mientras el formulario permanece abierto conserva su llenado.
+
+#### Composición y límites
+
+- Alcance acotado a añadir esta experiencia en Inicio. Preservar las otras secciones, apariencia normal de Home, trabajo local y asset Rive actuales.
+- Móvil: Jev encima del formulario, más compacto al aparecer el teclado; campos y confirmación accesibles en viewport estrecho/bajo.
+- Teclado, foco, etiquetas, errores accesibles, ES/EN y ambos temas. Movimiento reducido con presentación estática funcional.
+- Si Jev tarda en cargar o la animación falla, el formulario y su confirmación siguen disponibles.
+- Datos exclusivamente en memoria temporal de esta experiencia: sin base de datos, localStorage/sessionStorage, APIs, proveedores IA ni registro de valores personales en logs.
+- Reutilizar el mismo Character/controlador. Suspender la actividad conversacional durante la experiencia para que una respuesta pendiente no interrumpa la escena; recuperar Inicio al cerrar.
+- Sin nueva ruta, cuentas, integración institucional, WhatsApp, nuevas dependencias ni cambios del personaje para esta entrega.
+
+#### Criterios de aceptación
+
+- Una intención compatible abre un único formulario y una negación no lo abre. Los otros mensajes siguen su camino normal.
+- Ambos campos están disponibles simultáneamente; errores corregibles y confirmación solo con datos válidos.
+- Entrada, aceptación y regreso suaves; ninguna espera de animación bloquea el formulario.
+- Cerrar o salir de Inicio limpia los datos; cambio de tema/idioma conserva el formulario abierto.
+- Ningún valor del formulario llega a servicios remotos, almacenamiento persistente o historial conversacional.
+- Jev conserva una sola instancia; sus reacciones de formulario no compiten con decisiones/habla previas. Suspensión, desmontaje y movimiento reducido cancelan la decoración correspondiente.
+- Funcionamiento comprobado con teclado, ES/EN, claro/oscuro, escritorio, móvil y alternativa sin Rive.
+- Typecheck por proyecto, ESLint, Vitest, build y Playwright con capturas de esta entrega. La aceptación visual es independiente de los checks automáticos.
+
+### Pulido solicitado — 2026-10-08
+
+Revisión explícita de la entrega actual, empezando por Inicio, dentro de la fase 4 abierta. Sustituye los requisitos anteriores de controles orgánicos prominentes y navegación tipo diapositivas:
+- Home: Jev considerablemente mayor; título discreto, input/HUD compactos sin miniaturas/logos, sin introducción, pie promocional ni textos de ayuda/contexto redundantes. Conservar acción/confianza, conversación y diagnóstico.
+- Features y Story: retirar numeración, barras de presentación y anterior/repetir/siguiente. Retirar «Cómo funciona» y «Un poco más de historia». Conservar lectura semántica y navegación por scroll/teclado nativo.
+- «Ver escena» y «Revelar a Jev» recorren el scroll suavemente. Jev sigue el scroll con retardo/inercia y deriva vertical, no pegado al progreso instantáneo.
+- Partículas: deformación local al cursor con retorno elástico, corrientes/estelas más expresivas; mantener Canvas 2D, pausa, presupuesto adaptable y reduced motion.
+- Móvil: ilustración protagonista en la zona superior/media y texto separado debajo; evitar personaje permanentemente pegado al fondo.
+
+Esta solicitud autoriza el delta de implementación; no implica aprobación final de fase 4 ni inicio de fase 5.
 
 ### Navegación
 
@@ -48,6 +100,7 @@ Fase 2: el usuario confirmó que regresar desde Features/About solo reanuda la s
 - Revisión solicitada el 2026-10-07: detalles del HUD hacia arriba, superpuestos sin desplazar el input. En móvil, botón minimalista pequeño a la derecha encima del input; pulsarlo abre/cierra las métricas. Home debe ocupar una sola pantalla sin scroll en escritorio/móvil, también con HUD abierto.
 - Si la decisión remota no está disponible, mantener reacciones locales y marcar brevemente el modo local.
 - «Borrar contexto» vacía también los intercambios de conversación guardados en memoria y cancela la respuesta actual; conserva preferencias y personalidad local (confirmado en fase 2).
+- `QUESTION` es una reacción remota de Home para comentarios claramente raros/juzgables o preguntas incómodas (ejemplos del usuario: «¿eres gay?» y «¿te gusta el FOMO?»), no para preguntas neutras. Muestra brevemente la duda divertida de ceja elevada y vuelve a `Base`; ante ambigüedad usa una reacción normal. Disponible también en diagnóstico y localizada ES/EN; el fallback local no la elige.
 
 ### Features
 
@@ -79,6 +132,8 @@ Narrativa de cinco escenas, con texto conciso y detalles ampliables:
 5. La visión futura, claramente identificada como visión, y cierre “Tiny creature. Big decisions.”
 
 Usar el relato original en `docs/jev-story.md`. No inventar fechas, hitos, imágenes personales ni capacidades entregadas. La historia debe separar el trabajo experimental de lo que funciona hoy.
+
+**Revisión aprobada el 2026-10-08:** About amplía el relato al recorrido real de Abdair: presentación → Bob (primer gran proyecto, robot de cartón con IA, reconocimiento, seguimiento de caras, habla, expresión emocional y memoria persistente) → TitiEdu (enseñanza de POO, IA/RAG y juegos HTML/CSS/JS) → machine-learning-App (algoritmos y ejecución con Pyodide) → JEV/visión futura. El orden intermedio es editorial, sin fechas ni causalidades inventadas. `public/story/bob.jpeg`, `curiousTiti.webp` y `housingML.svg` forman imágenes de partículas, con el gráfico de ML como foco y texto HTML legible. Escenario oscuro cinematográfico en ambos temas, partículas violeta/magenta, espiral, estelas, profundidad aparente 2D y composición móvil. Cierre: estrella de cinco puntas enteramente de partículas, hold reconocible y apertura reversible por scroll para revelar el Jev existente. Lectura ES/EN, detalles, reduced motion, pausa y errores siguen disponibles. Usuario aprobó alcance/plan y pidió implementarlo; fase 4 continúa abierta.
 
 ## Idioma y tema
 
@@ -125,7 +180,7 @@ La composición revisada de Home es la referencia aceptada al autorizar el usuar
 - Añadir escena 3D, WebGL 3D, three.js, R3F o drei.
 - Conectar Features a IA o convertir About en promesa de capacidades futuras.
 - Introducir persistencia remota, sincronización de usuario o base de datos.
-- Publicar/desplegar la web como parte de estas fases.
+- Publicar/desplegar la web como parte de estas fases; la publicación frontend autorizada arriba es una tarea separada.
 
 ## Aprobaciones
 
@@ -133,4 +188,5 @@ La composición revisada de Home es la referencia aceptada al autorizar el usuar
 - [x] Cinco resúmenes de fase y plan inicial: aprobados el 2026-10-06.
 - [x] Fase 1 aceptada al solicitar el usuario «continua con la siguiente fase» tras la entrega de controles orgánicos.
 - [x] Fase 2, incluida revisión del HUD/Home sin scroll: aceptada al solicitar continuar con fase 3.
-- [ ] Aprobación de entregas de fases 3–5: pendientes por fase.
+- [x] Fase 3, incluida retirada del cursor decorativo de Percibe: aprobada con «perfecto, aora continua con la siguiente fase, esta ya esta aprobada».
+- [ ] Aprobación de entregas de fases 4–5: pendientes por fase.

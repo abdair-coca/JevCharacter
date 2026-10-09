@@ -124,6 +124,8 @@ Leer y convertir tokens al formato del motor mediante un adaptador tipado: CSS u
 
 ## Vistas y contratos de interacción
 
+**Delta visual solicitado el 2026-10-08 (prevalece sobre las composiciones anteriores):** Jev domina Home; controles planos compactos sin mini-Jev ni respiración decorativa y texto mínimo. Features/About dejan de mostrar UI de diapositivas, numeración y detalles desplegables redundantes. Scroll explícito suave y trayectoria con retardo; en móvil ilustración arriba/texto debajo. Partículas con deformación reversible al cursor y estelas expresivas, conservando pausa, 2D, densidad adaptable y alternativa estática. Las lecturas reales del HUD, semántica y nombres accesibles se conservan.
+
 ### Navegación y preferencias
 
 - Vistas independientes: `/`, `/features`, `/about`. Navegación fija; enlaces directos, recargas y atrás/adelante correctos.
@@ -136,6 +138,8 @@ Leer y convertir tokens al formato del motor mediante un adaptador tipado: CSS u
 - Reservar el espacio de la cabecera y aplicar su offset a anclas y elementos que reciben foco.
 
 ### Home
+
+**Ampliación UATF aprobada:** una intención local de inscripción abre, dentro de Inicio, un formulario con nombre y celular y una confirmación de demostración. Durante este modo, los controles conversacionales quedan ocultos/inertes y el mismo Jev comparte escena con el formulario; al cerrar se recupera la composición normal. Motion posee el layout del escenario y las partículas SVG transitorias; Rive conserva sus reacciones. En móvil, Jev arriba y compacto al enfocar campos; el contenedor del formulario se desplaza cuando hace falta y respeta `visualViewport` con teclado. Los datos son efímeros y se eliminan al confirmar, cerrar o abandonar Inicio. La especificación completa está en `.dev/spec.md` y la evidencia de esta ampliación en `.dev/evidence/enrollment/`.
 
 Jev, input evidente, respuesta breve y HUD compacto. El HUD muestra acción elegida y confianza; sus detalles incluyen probabilidades, intensidad, atención y personalidad con nombres traducidos. Los IDs del contrato de decisión/Rive no se traducen.
 
@@ -173,6 +177,8 @@ Dirección visual de fase 3 confirmada por el usuario: escenario libre, sin cont
 Usar el [relato original](docs/jev-story.md) como fuente. Escenas: pregunta y salida de la caja de chat; experimento; capas de percepción/comportamiento/cuerpo; Abdair Coca y las iteraciones; visión futura y cierre.
 
 El recorrido principal mantiene frases cortas. Los detalles desplegables conservan el contexto completo. Presentar al creador con tipografía y composición; no crear un retrato o datos biográficos adicionales. La visión no se convierte en una lista de capacidades ya implementadas.
+
+Revisión aprobada 2026-10-08: About presenta el recorrido de Abdair (Bob, TitiEdu, machine-learning-App, JEV). Escenario oscuro cinematográfico local en ambos temas, con reconstrucciones de los tres recursos aportados y estrella de partículas que se abre para revelar al Jev actual. Canvas 2D es dueño del render, GSAP del progreso/wrapper/revelación y Rive del personaje. Se autoriza movimiento ambiental tenue de partículas durante los holds, estelas y bloom precalculado, sin filtros CSS animados. Las imágenes se reinterpretan con violeta/magenta/blanco, sin acentos verdes. Sampling fuera del loop; DPR ≤2, densidad responsive, pausa fuera de vista y reduced motion estático. Las imágenes/partículas no sustituyen el texto DOM. La memoria persistente corresponde a Bob, no a JEV.
 
 ## Stack base y contratos tipados
 
