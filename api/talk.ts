@@ -7,7 +7,7 @@ import {
   SPEECH_MESSAGE_MAX_CHARS,
   type SpeechExchange,
   type SpeechLanguage,
-} from "../src/creature/brain/speechProtocol";
+} from "../src/creature/brain/speechProtocol.js";
 
 type ApiRequest = {
   method?: string;

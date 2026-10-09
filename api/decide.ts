@@ -1,7 +1,7 @@
 import { choice, noul, score, TypeSafeClient } from "@typesafe-ai/sdk";
 
-import { BRAIN_CONFIG } from "../src/creature/brain/brainConfig";
-import { requestedMorphForm } from "../src/creature/brain/morphIntent";
+import { BRAIN_CONFIG } from "../src/creature/brain/brainConfig.js";
+import { requestedMorphForm } from "../src/creature/brain/morphIntent.js";
 import {
   REACTIONS,
   type DecisionAction,
@@ -11,7 +11,7 @@ import {
   type Personality,
   type Reaction,
   type TalkState,
-} from "../src/creature/brain/brain.types";
+} from "../src/creature/brain/brain.types.js";
 
 const rateBuckets = new Map<string, { startedAt: number; count: number }>();
 const RATE_WINDOW_MS = 60_000;

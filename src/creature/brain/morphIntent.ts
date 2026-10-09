@@ -1,4 +1,4 @@
-import type { MorphForm } from "./brain.types";
+import type { MorphForm } from "./brain.types.js";
 
 export const MORPH_FORMS: readonly MorphForm[] = ["star", "square", "triangle"];
 
