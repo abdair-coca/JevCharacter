@@ -4,7 +4,6 @@ import { REACTIONS, type BrainDecision, type BrainStatus, type Personality } fro
 import { useTranslation } from "../i18n/useTranslation";
 import { useOrganicMotion, useUiMotion } from "../lib/motionTokens";
 import type { MessageKey } from "../i18n/messages";
-import OrganicLight from "./OrganicLight";
 import type { SpeechNotice } from "../hooks/useSpeechSession";
 
 type Props = { decision: BrainDecision; status: BrainStatus; personality: Personality; speechNotice?: SpeechNotice; decisionInterrupted?: boolean };
@@ -70,7 +69,6 @@ export default function BrainHUD({ decision, status, personality, speechNotice, 
   return (
     <aside className="brain-hud" aria-label={t.details} data-expanded={expanded} data-activity={status}
       onKeyDown={(event) => { if (event.key === "Escape") setExpanded(false); }}>
-      <OrganicLight status={status} attention={decision.wantsAttention} emphasized={status === "deciding"} />
       <m.button className="brain-hud__summary" type="button" layout="position"
         aria-expanded={expanded} aria-controls={expanded ? "brain-details" : undefined}
         onClick={() => setExpanded((value) => !value)} transition={motion.spring}>
@@ -81,7 +79,6 @@ export default function BrainHUD({ decision, status, personality, speechNotice, 
           </m.span>
         </span>
         <span className="brain-hud__reading">
-          <span className="brain-hud__presence" aria-hidden="true"><i /><i /></span>
           <span className="brain-hud__action">
             <span className="brain-hud__action-label">{t.decision}</span>
             <span className="brain-hud__headline" aria-live="polite">

@@ -4,7 +4,6 @@ import { BRAIN_CONFIG } from "../creature/brain/brainConfig";
 import type { BrainStatus } from "../creature/brain/brain.types";
 import { useTranslation } from "../i18n/useTranslation";
 import { useFeedbackScale, useOrganicMotion, useUiMotion } from "../lib/motionTokens";
-import OrganicLight from "./OrganicLight";
 import { Button } from "./ui/button";
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
   attention?: number;
 };
 
-export default function ContextWhisper({ context, onSubmit, onClear, status = "observing", attention = 0 }: Props) {
+export default function ContextWhisper({ context, onSubmit, onClear, status = "observing" }: Props) {
   const t = useTranslation();
   const [value, setValue] = useState("");
   const [sent, setSent] = useState(false);
@@ -39,12 +38,9 @@ export default function ContextWhisper({ context, onSubmit, onClear, status = "o
   return (
     <div className="whisper-wrap" data-focused={focused} data-filled={hasText} data-activity={status}>
       <div className="whisper-shell">
-        <OrganicLight status={status} attention={attention} emphasized={focused || hasText} />
         <form className="whisper" onSubmit={submit}>
-          <m.span className="whisper__presence" aria-hidden="true" initial={false}
-            animate={{ scale: focused && !motion.reduced ? feedbackScale : 1 }} transition={motion.spring}><i /><i /></m.span>
           <div className="whisper__field">
-            <div className="whisper__label-row">
+            <div className="sr-only">
               <label htmlFor="creature-context">{t.input}</label>
               {status === "deciding" && <span className="whisper__thinking">{t.deciding}</span>}
             </div>
@@ -52,7 +48,7 @@ export default function ContextWhisper({ context, onSubmit, onClear, status = "o
               onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
               onChange={(event) => { setValue(event.target.value); setSent(false); }}
               onKeyDown={(event) => { if (event.key === "Escape") event.currentTarget.blur(); }}
-              maxLength={BRAIN_CONFIG.contextMaxLength} placeholder={t.placeholder} autoComplete="off" aria-describedby="context-help" />
+              maxLength={BRAIN_CONFIG.contextMaxLength} placeholder={t.placeholder} autoComplete="off" />
           </div>
           <m.div className="whisper__send-wrap" whileTap={{ scale: motion.reduced ? 1 : motion.pressScale }} transition={motion.spring}>
             <Button className="whisper__send" type="submit" size="icon" disabled={!hasText} aria-label={t.send}>
@@ -67,8 +63,7 @@ export default function ContextWhisper({ context, onSubmit, onClear, status = "o
         </form>
       </div>
       <div className="whisper__meta">
-        <span id="context-help">{t.inputHelp}</span>
-        {context && <button type="button" onClick={() => { setSent(false); onClear(); }} aria-label={t.clear}>{t.contextHeld} · <span>{t.clear}</span></button>}
+        {context && <button type="button" onClick={() => { setSent(false); onClear(); }} aria-label={t.clear}><span>{t.clear}</span></button>}
         {value.length > BRAIN_CONFIG.contextMaxLength - 45 && <span className="whisper__count" aria-live="polite">{value.length}/{BRAIN_CONFIG.contextMaxLength}</span>}
       </div>
       <span className="sr-only" role="status">{sent ? t.received : ""}</span>
