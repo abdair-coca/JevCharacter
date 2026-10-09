@@ -52,7 +52,11 @@ export function EnrollmentExperience({ session, language, characterFailed, onFie
           if (invalid) (invalid === "name" ? name : phone).current?.focus();
           else onFieldFocus(false);
         }} onFocusCapture={event => { if (event.target instanceof HTMLInputElement) onFieldFocus(true); }}
-          onBlurCapture={event => { if (!(event.relatedTarget instanceof HTMLInputElement) || !event.currentTarget.contains(event.relatedTarget)) onFieldFocus(false); }}>
+          onBlurCapture={event => {
+            // Keep geometry stable through pointerdown → blur → pointerup on
+            // Confirm/Close. Expanding on blur would move the tapped button.
+            if (!(event.relatedTarget instanceof Node) || !container.current?.contains(event.relatedTarget)) onFieldFocus(false);
+          }}>
           <div className="enrollment__field">
             <label htmlFor="enrollment-name">{copy.name}</label>
             <input ref={name} id="enrollment-name" value={session.fields.name} onChange={event => session.change("name", event.target.value)}

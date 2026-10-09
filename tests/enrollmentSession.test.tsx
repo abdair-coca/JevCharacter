@@ -43,6 +43,18 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe("Home enrollment boundary", () => {
+  it("keeps the compact layout while focus moves from a field to an enrollment action", async () => {
+    render(view()); await screen.findByTestId("character"); open(); fill();
+    const phone = screen.getByLabelText("Número de celular");
+    const confirm = screen.getByRole("button", { name: /Confirmar datos/ });
+    fireEvent.focus(phone);
+    expect(document.querySelector(".home-page")?.getAttribute("data-enrollment-focused")).toBe("true");
+    fireEvent.blur(phone, { relatedTarget: confirm });
+    expect(document.querySelector(".home-page")?.getAttribute("data-enrollment-focused")).toBe("true");
+    fireEvent.click(confirm);
+    expect(screen.getByText("Datos completados")).toBeTruthy();
+  });
+
   it("opens both fields, validates, confirms and returns using the same character without transmitting or storing fields", async () => {
     const storage = vi.spyOn(Storage.prototype, "setItem");
     render(view()); const character = await screen.findByTestId("character");
