@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-09T21:59:05.611Z",
+  "base": "https://jev-bot-sigma.vercel.app",
+  "variant": "mobile",
+  "language": "en",
+  "theme": "dark",
+  "checks": [
+    "Home direct load HTTP 200",
+    "one ready Home character",
+    "requested language and theme applied",
+    "Home without horizontal overflow",
+    "context resolves locally without online status",
+    "both enrollment fields available",
+    "empty enrollment validates both fields",
+    "confirmation discards personal fields",
+    "enrollment keeps one character",
+    "enrollment without horizontal overflow",
+    "Escape restores input focus",
+    "Features direct load HTTP 200",
+    "eight feature chapters",
+    "direct Features does not initialize Home",
+    "Features is playing or complete after character preparation",
+    "Features without horizontal overflow",
+    "About direct load HTTP 200",
+    "five project story scenes",
+    "direct About does not initialize Home",
+    "Story reveal without horizontal overflow",
+    "zero browser API requests across all flows",
+    "zero application or console errors",
+    "/api/decide absent (HTTP 404)",
+    "/api/talk absent (HTTP 404)"
+  ],
+  "screenshots": [
+    "mobile-home.png",
+    "mobile-enrollment.png",
+    "mobile-features.png",
+    "mobile-story.png"
+  ],
+  "apiRequests": [],
+  "errors": []
+}
