@@ -1,7 +1,7 @@
 import { readFile, stat, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
-const directory = ".dev/evidence/phase-3";
+const directory = process.env.JEV_EVIDENCE_DIRECTORY ?? ".dev/evidence/phase-3";
 const variants = ["desktop-light-es", "desktop-light-en", "desktop-dark-es", "desktop-dark-en", "mobile-light-es", "mobile-light-en", "mobile-dark-es", "mobile-dark-en"];
 const selected = ["desktop-light-es", "desktop-dark-en", "mobile-light-es", "mobile-dark-en"];
 const cases = [
@@ -12,10 +12,11 @@ const cases = [
   "results-desktop-light-es-navigation.json", "results-mobile-dark-en-navigation.json", "results-isolation.json",
 ];
 const sources = [
-  "package.json", "package-lock.json", "src/App.tsx", "src/components/Character.tsx", "src/styles/tokens.css",
+  "package.json", "package-lock.json", "src/App.tsx", "src/App.css", "src/components/Character.tsx", "src/styles/tokens.css",
   "src/pages/FeaturesPage.tsx", "src/features/presentation/scrollRuntime.ts",
   "src/features/showcase/catalog.ts", "src/features/showcase/player.ts", "src/features/showcase/useShowcasePlayer.ts",
-  "src/features/showcase/useShowcaseScroll.ts", "src/features/showcase/useStageVisibility.ts", "src/features/showcase/showcase.css",
+  "src/features/showcase/useShowcaseScroll.ts", "src/features/presentation/useStageVisibility.ts", "src/features/showcase/showcase.css",
+  ".dev/evidence/phase-3/verify.mjs", ".dev/evidence/phase-3/aggregate.mjs",
 ];
 const sourceStats = await Promise.all(sources.map(path => stat(path)));
 const latestSource = Math.max(...sourceStats.map(info => info.mtimeMs));

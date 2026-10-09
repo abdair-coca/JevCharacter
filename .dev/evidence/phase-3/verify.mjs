@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 
-const directory = ".dev/evidence/phase-3";
+const directory = process.env.JEV_EVIDENCE_DIRECTORY ?? ".dev/evidence/phase-3";
 const ids = ["perceives", "reacts", "decides", "answers", "talks", "transforms", "adapts", "stays"];
 const states = [["Base", "Base"], ["Hello", "Flower", "Ghost"], ["think", "Hello"], ["yes", "no"], ["think", "Talk"], ["MorphState", "square", "triangle"], ["Base", "Hello"], ["Base", "Flower"]];
 const selectedCase = process.argv[2] ?? "all";
@@ -119,9 +119,9 @@ try {
   for (const phone of [false, true]) for (const theme of ["light", "dark"]) for (const language of ["es", "en"]) {
     const label = `${phone ? "mobile" : "desktop"}-${theme}-${language}`;
     if (selectedCase !== "all" && selectedCase !== label && !(selectedCase === "actions" && label === "desktop-light-es")) continue;
+    const beforeRequests = requests.length;
     const context = await open({ phone, theme, language });
     console.log(`Checking ${label}`);
-    const beforeRequests = requests.length;
     check(await page.locator("[data-chapter-card]").count() === 8 && await page.locator(".home-session").count() === 0, `${label}: eight chapters, no Home initialized`);
     if (part === "reduced" || part === "scroll" || part === "lifecycle" || part === "navigation" || part.startsWith("action-")) {
       if (part === "reduced") await reducedCheck(label, phone);
