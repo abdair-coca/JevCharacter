@@ -72,9 +72,23 @@ npm run build
 
 ## Deploy to Vercel
 
-### Frontend only (current publication)
+### API-backed deployment (current publication)
 
-Published at **[jev-bot-sigma.vercel.app](https://jev-bot-sigma.vercel.app)**. [Deployment checks and screenshots](.dev/evidence/deployment/README.md).
+Published at **[jev-bot-sigma.vercel.app](https://jev-bot-sigma.vercel.app)** with a verified real remote decision. [Production checks and screenshot](.dev/evidence/decision-production/README.md).
+
+1. Add `TYPESAFE_API_KEY` to the project's Production environment. `JEV_MODEL` defaults to `jev-latest`.
+2. For generated speech, also configure `GROQ_API_KEY` and optionally `GROQ_MODEL`.
+3. Use the regular build (`npm run build`, output `dist`) and create a new deployment:
+
+```bash
+vercel deploy --prod
+```
+
+Vercel serves `api/decide.ts` and `api/talk.ts` as functions. `api/tsconfig.json` supplies NodeNext/Node types to the function compiler; server ESM imports use explicit `.js` extensions. The root tsconfig remains a project-reference entrypoint. Provider credentials stay server-side. No separate server or database is required.
+
+### Frontend-only alternative (previous publication)
+
+[Previous static deployment checks](.dev/evidence/deployment/README.md).
 
 Home uses local reactions; Features, Story and the UATF form work without APIs. AI-generated speech is unavailable in this build. No provider keys are needed.
 
@@ -84,13 +98,4 @@ npm run build:frontend
 vercel deploy --prebuilt --prod
 ```
 
-`build:frontend` selects Vite's `frontend` mode and generates `.vercel/output` with static files and direct-route support for `/features` and `/about`. The prebuilt deployment uploads only that artifact, without `api/*` or serverless functions. Use `--prebuilt` for this publication; a regular root deployment uses the optional API configuration below.
-
-### Optional API-backed deployment
-
-1. Import this repository into Vercel.
-2. Add `TYPESAFE_API_KEY` and `GROQ_API_KEY` under Project Settings → Environment Variables.
-3. Optionally add `JEV_MODEL` and `GROQ_MODEL`.
-4. Deploy. Vercel detects Vite and serves `api/decide.ts` and `api/talk.ts` as serverless functions.
-
-No database, authentication, or separate backend is required.
+`build:frontend` selects Vite's `frontend` mode and generates `.vercel/output` with static files and direct-route support for `/features` and `/about`. The prebuilt deployment uploads only that artifact, without `api/*` or serverless functions. Use `--prebuilt` only for that alternative. To activate APIs or use changed server environment variables, create a regular new deployment instead of trying to redeploy the prebuilt artifact.

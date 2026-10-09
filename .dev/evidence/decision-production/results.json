@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-09T23:04:53.302Z",
+  "base": "https://jev-bot-sigma.vercel.app",
+  "checks": [
+    "/: direct load HTTP 200",
+    "/features: direct load HTTP 200",
+    "/about: direct load HTTP 200",
+    "decide: live function rejects invalid input before provider",
+    "talk: live function rejects invalid input before provider",
+    "Home receives a real remote decision (source jev)",
+    "remote decision has a typed action and confidence",
+    "HUD reflects the remote source",
+    "one existing character handles remote decision",
+    "zero application or console errors"
+  ],
+  "responses": [
+    {
+      "status": 200,
+      "decision": {
+        "action": {
+          "kind": "reaction",
+          "reaction": "HELLO"
+        },
+        "actionConfidence": 1,
+        "reaction": "HELLO",
+        "reactionConfidence": 1,
+        "probabilities": {
+          "BASE": 0,
+          "HELLO": 1,
+          "GHOST": 0,
+          "FLOWER": 0,
+          "QUESTION": 0,
+          "CLOUD": 0,
+          "YES": 0,
+          "NO": 0,
+          "STAR": 0,
+          "SQUARE": 0,
+          "TRIANGLE": 0
+        },
+        "intensity": 0.98,
+        "wantsAttention": 0.78,
+        "source": "jev"
+      }
+    }
+  ],
+  "errors": []
+}

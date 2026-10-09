@@ -22,6 +22,10 @@ La interfaz general es sencilla. Los detalles técnicos o narrativos se ofrecen 
 
 ## Alcance
 
+### Decisión remota en producción — autorizada el 2026-10-09
+
+Después de la publicación estática, el usuario pidió activar el modelo en producción y autorizó «hazlo tu, las variables ya estan en vercel.com». Se autoriza un nuevo despliegue ordinario de `jev-bot`, con las funciones existentes y las variables Production configuradas por el usuario, y la comprobación de una decisión real desde Home. La restricción anterior «sin backend aún» corresponde a la publicación previa. La demo UATF sigue local; las revisiones visuales y las puertas del rediseño permanecen pendientes.
+
 ### Publicación frontend — autorizada el 2026-10-09
 
 El usuario pidió «quiero que microcomitees y lo desplegues en vercel, sin backend aun». Se autoriza organizar el trabajo pendiente en microcommits y publicar un artefacto estático en Vercel: Home con decisiones locales sin requests API, Features/About y demo UATF disponibles, sin funciones ni claves de proveedores. Esta publicación es una tarea independiente de las puertas de revisión del rediseño; no declara aprobadas las entregas pendientes ni abre la fase 5.
@@ -180,7 +184,7 @@ La composición revisada de Home es la referencia aceptada al autorizar el usuar
 - Añadir escena 3D, WebGL 3D, three.js, R3F o drei.
 - Conectar Features a IA o convertir About en promesa de capacidades futuras.
 - Introducir persistencia remota, sincronización de usuario o base de datos.
-- Publicar/desplegar la web como parte de estas fases; la publicación frontend autorizada arriba es una tarea separada.
+- Publicar/desplegar la web como parte de estas fases; las publicaciones autorizadas arriba son tareas separadas.
 
 ## Aprobaciones
 

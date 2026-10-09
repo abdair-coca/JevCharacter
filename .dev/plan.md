@@ -8,6 +8,8 @@
 
 Autorizada el 2026-10-09: revisar/preservar el trabajo pendiente → añadir build estático con decisiones locales sin requests API → verificar → guardar unidades lógicas en microcommits → desplegar el artefacto prebuilt en `jev-bot` → comprobar rutas, Rive y UATF en la URL publicada. No cambia el orden ni las aprobaciones pendientes de las cinco fases.
 
+**Continuación autorizada:** activar el backend existente mediante deploy ordinario, verificar arranque Node ESM y una decisión real desde Home; mantener la evidencia estática como antecedente. Corregir incompatibilidades de empaquetado observadas sin cambiar las decisiones, UI ni proveedores. No inicia fase 5.
+
 ## Ampliación de Inicio — demo de inscripción UATF
 
 **Prioridad actual:** entregar la funcionalidad UATF solicitada, conservando la revisión pendiente del rediseño. Este addendum no abre la fase 5 ni reemplaza las fases/evidencias anteriores.

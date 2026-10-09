@@ -8,7 +8,7 @@ La aplicación separa percepción local, decisión conductual y presentación. L
 
 ### Shell, preferencias y sesión
 
-- `/` es Home; `/features` y `/about` cargan `FeaturesPage` y `AboutPage` de forma diferida. `PendingPage` se conserva para rutas desconocidas. `vercel.json` incluye rewrites exactos para esas dos rutas, separados de `/api/*`. La publicación frontend estática en Vercel comprobó las tres rutas directas; [evidencia remota](../.dev/evidence/deployment/README.md).
+- `/` es Home; `/features` y `/about` cargan `FeaturesPage` y `AboutPage` de forma diferida. `PendingPage` se conserva para rutas desconocidas. `vercel.json` incluye rewrites exactos para esas dos rutas, separados de `/api/*`. La producción ordinaria de Vercel sirve las tres rutas y las funciones existentes; [decisión remota real verificada](../.dev/evidence/decision-production/README.md). La [publicación estática anterior](../.dev/evidence/deployment/README.md) se conserva como antecedente.
 - `public/preferences-init.js` aplica tema, idioma y `theme-color` en el head antes de React. `preferencesStore` consume ese estado inicial y usa Zustand para cambios de UI. Se guardan solo `jevling.theme` y `jevling.language`; storage bloqueado conserva cambios en memoria. El modo sistema sigue `prefers-color-scheme`; la elección manual tiene prioridad.
 - `src/i18n/messages.ts` comparte claves tipadas ES/EN. Se traducen interfaz, HUD y diagnóstico, sin traducir IDs Rive/API. Cambiar preferencias no remonta el personaje ni borra el input.
 - `Character` y las funciones de animación DOM de Motion se cargan en chunks separados. El asset sigue siendo el existente. Rive pausa por movimiento reducido y visibilidad de pestaña; Motion usa los tokens mediante un adaptador que acepta `ms` y `s`, incluso tras minificación.
@@ -72,6 +72,8 @@ El cerebro y el sensor se suspenden usando sus opciones existentes; Character si
 8. Fallar el habla elimina texto parcial y muestra un aviso localizado en el HUD, sin fabricar una frase de Jev. Interrumpir una decisión tiene un aviso distinto. «Borrar conversación» cancela ambas vías y borra contexto, intercambios y caché de decisiones que contenía texto, sin reiniciar cuotas ni personalidad.
 
 ## Servicio y persistencia
+
+La producción actual usa `npm run build` y `vercel deploy --prod`, con las variables Production configuradas en Vercel. Home consulta `/api/decide`; se verificó una respuesta real `source: "jev"`. Las funciones usan imports ESM con extensión `.js`; `api/tsconfig.json` extiende el contrato NodeNext/Node/ES2023 de `tsconfig.api.json` para el compilador de Vercel, que no consume las referencias del root. El backend de habla está publicado; su arranque/validación se verificaron sin generar texto real en esta tarea.
 
 `npm run build:frontend` usa el modo Vite `frontend`: el scheduler resuelve directamente con `fallbackBrain`, sin sondear la API ni solicitar habla generada. `scripts/prepare-vercel-frontend.mjs` empaqueta solo el build estático y las rutas directas en `.vercel/output`; `vercel deploy --prebuilt --prod` publica ese artefacto sin funciones. Los builds ordinarios conservan el backend opcional descrito a continuación.
 

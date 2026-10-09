@@ -4,7 +4,7 @@ En Home hay dos caminos distintos: respuesta pointer local, inmediata, y decisi�
 
 ## Home — interfaz y sesión
 
-La publicación frontend usa decisiones/reacciones locales desde el primer envío, sin requests `/api/*`. No genera respuestas de habla IA. Features, About, diagnóstico y la demo UATF siguen disponibles; el flujo remoto descrito abajo corresponde al build ordinario con backend opcional.
+La producción actual usa el build ordinario con backend: se verificó un envío real desde Home a `/api/decide`, respuesta `source: "jev"` y HUD remoto. Si el servicio falla, permanece el fallback local. La alternativa `build:frontend` resuelve localmente sin requests API. Features, About, diagnóstico y la demo UATF conservan sus contratos; UATF no envía sus campos aunque el backend esté publicado.
 
 Home muestra título breve, Jev, input y HUD compacto. El HUD presenta acción/confianza y origen de decisión; su botón monta/desmonta probabilidades, intensidad, atención y personalidad. Los nombres se traducen; los identificadores del contrato permanecen en el detalle. El texto del input tiene límite de 280 caracteres, ignora blanco y da feedback de envío.
 
