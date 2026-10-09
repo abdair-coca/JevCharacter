@@ -1,0 +1,38 @@
+{
+  "id": "desktop-light-es-motion",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    "Requested preferences applied",
+    "Both fields visible together",
+    "Conversational controls are inert",
+    "One persistent character",
+    "No horizontal overflow",
+    "Empty fields produce two inline errors",
+    "Invalid submission focuses the name",
+    "Invalid mobile stays editable",
+    "Preferences preserve both fields",
+    "Confirmation is local and removes input values",
+    "Completion heading is visible",
+    "Demo wording remains visible",
+    "Return restores input focus",
+    "Home composition restored",
+    "Keyboard viewport override released",
+    "Reopening starts empty",
+    "Escape discarded the draft",
+    "Leaving Home discarded the draft",
+    "Fields never persisted",
+    "Enrollment and navigation never requested APIs",
+    "No application errors"
+  ],
+  "screenshots": [
+    "desktop-light-es-motion-open.png",
+    "desktop-light-es-motion-validation.png",
+    "desktop-light-es-motion-confirmed.png"
+  ],
+  "errors": [],
+  "requests": 0,
+  "date": "2026-10-09T16:53:10.053Z"
+}

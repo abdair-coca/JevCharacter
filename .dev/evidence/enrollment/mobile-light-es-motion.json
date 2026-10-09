@@ -1,0 +1,42 @@
+{
+  "id": "mobile-light-es-motion",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "Requested preferences applied",
+    "Both fields visible together",
+    "Conversational controls are inert",
+    "One persistent character",
+    "No horizontal overflow",
+    "Jev is above the mobile form",
+    "Empty fields produce two inline errors",
+    "Invalid submission focuses the name",
+    "Invalid mobile stays editable",
+    "Preferences preserve both fields",
+    "Form respects the visual viewport with simulated keyboard",
+    "Confirmation remains reachable above keyboard",
+    "Confirmation is local and removes input values",
+    "Completion heading is visible",
+    "Demo wording remains visible",
+    "Return restores input focus",
+    "Home composition restored",
+    "Keyboard viewport override released",
+    "Reopening starts empty",
+    "Escape discarded the draft",
+    "Leaving Home discarded the draft",
+    "Fields never persisted",
+    "Enrollment and navigation never requested APIs",
+    "No application errors"
+  ],
+  "screenshots": [
+    "mobile-light-es-motion-open.png",
+    "mobile-light-es-motion-validation.png",
+    "mobile-light-es-motion-keyboard.png",
+    "mobile-light-es-motion-confirmed.png"
+  ],
+  "errors": [],
+  "requests": 0,
+  "date": "2026-10-09T16:53:03.042Z"
+}
