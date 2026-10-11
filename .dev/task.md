@@ -5,10 +5,10 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 ## Retoma aquí
 
 - **Trabajo actual / fase activa:** fase UATF única implementada y verificada, entregada para revisión visual. Especificación, resumen y plan completo aprobados; autorización «si apruebo».
-- **Fase del rediseño conservada:** Fase 4 — About scrollytelling, pendiente revisión de su entrega previa.
-- **Estado:** fase 3 aprobada explícitamente, incluida la retirada del cursor decorativo. Fase 4 implementada/verificada, pendiente revisión visual/funcional del usuario. Teclado en dispositivo físico continúa pendiente como limitación de evidencia.
-- **Siguiente acción exacta:** el usuario prueba [la web publicada](https://jev-bot-sigma.vercel.app), ahora con decisión remota real y funciones habilitadas. La demo UATF sigue local y las revisiones visuales permanecen pendientes.
-- **No iniciar fase 5 hasta:** revisión y aprobación de About.
+- **Fase del rediseño conservada:** Fase 4 — About scrollytelling, aprobada el 2026-10-11 («la fase 4 ya está aprobada»).
+- **Estado:** fases 1–4 aceptadas/aprobadas. Fase 4 comprobada de nuevo el 2026-10-11 (ver registro final). Teclado en dispositivo físico continúa pendiente como limitación de evidencia.
+- **Siguiente acción exacta:** esperar instrucción para iniciar la fase 5. La demo UATF y las revisiones visuales de Home/partículas siguen pendientes de aprobación.
+- **No iniciar fase 5 hasta:** instrucción explícita del usuario para empezarla; la aprobación de fase 4 ya la desbloquea.
 - **Estado actual del código:** el 2026-10-07 el usuario autorizó a Luna a organizar el trabajo pendiente en microcommits; la implementación previa, documentación y evidencias ya están guardadas. Los PNG diagnósticos temporales se conservan sin commit. La restricción de no commitear durante la migración SDD queda como antecedente de aquella tarea.
 
 ### Activación de decisión remota en producción — 2026-10-09
@@ -427,7 +427,7 @@ El modelo anterior registró resultados en [`.dev/evidence/phase-1/`](evidence/p
 - [x] Implementar scroll/presentación, pausa, preferencias y alternativa estática.
 - [x] Verificar teclado, mobile, idiomas/temas, aislamiento, error y limpieza.
 - [x] Registrar checks/evidencia y presentar fase 4 para revisión.
-- [ ] Recibir aprobación visual/funcional de fase 4.
+- [x] Recibir aprobación visual/funcional de fase 4 («la fase 4 ya está aprobada», 2026-10-11).
 
 ### Entrega de fase 4 — 2026-10-08
 
@@ -465,6 +465,19 @@ El modelo anterior registró resultados en [`.dev/evidence/phase-1/`](evidence/p
 
 **Puerta:** About presentado para revisión; fase 4 sigue pendiente de aprobación y fase 5 no comenzó. No se creó commit ni push en esta entrega. La matriz de fase 3 permanece como historial anterior a la nueva partición compartida; no se presenta como matriz actual del rediseño completo.
 
+### Comprobaciones tras aprobación de fase 4 — 2026-10-11
+
+**Solicitud:** «La fase 4 ya está aprobada, ejecuta las comprobaciones para confirmar que siguen pasando». Solo se repitieron comprobaciones; no se cambió código ni se inició la fase 5. Se ejecutó `npm ci` desde el lockfile (278 paquetes, cero vulnerabilidades) porque `node_modules` no estaba presente. Árbol sin modificar antes de esta entrada; sin commit ni push.
+
+| Comprobación | Resultado |
+|---|---|
+| `npm exec -- tsc --noEmit -p tsconfig.app.json`, `tsconfig.node.json`, `tsconfig.api.json`, `tsconfig.tests.json` (por separado) | PASS, sin salida de error. |
+| `npm run lint` (`eslint . --max-warnings=0`) | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1 --reporter=verbose` | PASS: 26 archivos / 179 tests. |
+| `npm run build` (`tsc -b && vite build`) | PASS. Shell 350,24 kB / gzip 111,78; About JS 23,42 / 9,48; About CSS 7,11 / 2,08; scrollRuntime 133,83 / 50,29; Features JS 61,64 / 20,57; Character 212,57 / 60,31. |
+
+No se repitieron las matrices de Playwright de fase 4 (23 bloques) en esta comprobación; la evidencia de esa matriz permanece en `evidence/phase-4/`.
+
 ## Estado de fases restantes
 
 ### Revisión aprobada — storytelling de partículas, 2026-10-08
@@ -482,8 +495,8 @@ Usuario aportó historia real y tres recursos en `public/story/`; aprobó escena
 | 1 — Home de referencia | Aceptada para avanzar | Autorización del usuario; teclado físico sigue pendiente. |
 | 2 — Conducta real de Home y habla bilingüe | Aceptada para avanzar | Autorización del usuario tras revisión HUD/Home sin scroll. |
 | 3 — Features determinista | Aprobada | Autorización explícita tras corregir cursor decorativo. |
-| 4 — About scrollytelling | Implementada/verificada, pendiente aprobación | Revisión visual/funcional de la entrega. |
-| 5 — Integración, accesibilidad y rendimiento | Pendiente | Aprobación explícita de fase 4. |
+| 4 — About scrollytelling | Aprobada | Aprobación explícita del usuario el 2026-10-11; comprobaciones repetidas. |
+| 5 — Integración, accesibilidad y rendimiento | Pendiente, no iniciada | Desbloqueada por la aprobación de fase 4; requiere instrucción para empezar. |
 
 ## Carga de Jev — ampliación 2026-10-11
 

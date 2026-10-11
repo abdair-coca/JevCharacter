@@ -201,4 +201,5 @@ La composición revisada de Home es la referencia aceptada al autorizar el usuar
 - [x] Fase 1 aceptada al solicitar el usuario «continua con la siguiente fase» tras la entrega de controles orgánicos.
 - [x] Fase 2, incluida revisión del HUD/Home sin scroll: aceptada al solicitar continuar con fase 3.
 - [x] Fase 3, incluida retirada del cursor decorativo de Percibe: aprobada con «perfecto, aora continua con la siguiente fase, esta ya esta aprobada».
-- [ ] Aprobación de entregas de fases 4–5: pendientes por fase.
+- [x] Fase 4, About scrollytelling: aprobada el 2026-10-11 («La fase 4 ya está aprobada»).
+- [ ] Aprobación de entrega de fase 5: pendiente.

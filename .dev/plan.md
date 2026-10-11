@@ -205,4 +205,4 @@ No comenzar una fase posterior hasta que el usuario acepte explícitamente la en
 - Este `plan.md` define el orden y el resultado esperado de las fases, no estado de checkboxes.
 - `task.md` es la única fuente de fase activa, checks ejecutados, evidencia, blockers y aprobación de entregas.
 - El runtime y `package.json` son autoridad de comportamiento y herramientas actuales; la documentación debe señalar explícitamente si una fase es objetivo o implementada.
-- El usuario aprobó cinco resúmenes y el plan original; tras aprobar Features y la retirada del cursor decorativo autorizó implementar About. La integración final espera aprobación de fase 4.
+- El usuario aprobó cinco resúmenes y el plan original; tras aprobar Features y la retirada del cursor decorativo autorizó implementar About. Fase 4 aprobada el 2026-10-11; la integración final (fase 5) no ha comenzado.
