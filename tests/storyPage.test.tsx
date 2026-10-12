@@ -45,6 +45,8 @@ describe("About narrative and presentation boundary", () => {
   it("provides five linear scenes, original attribution and explicitly future vision without a network request", async () => {
     const fetch = vi.fn(); vi.stubGlobal("fetch", fetch);
     render(view());
+    // Jev loads at the first particle change, so the test enters Bob before expecting the character.
+    act(() => mocks.selectScene(1));
     await screen.findByTestId("story-character");
     expect(screen.getAllByRole("region")).toHaveLength(5);
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Ideas que\ncobran vida.");
@@ -62,6 +64,8 @@ describe("About narrative and presentation boundary", () => {
 
   it("retains the scrolled scene and character while switching language and theme", async () => {
     render(view());
+    // Jev loads at the first particle change, so the test enters Bob before expecting the character.
+    act(() => mocks.selectScene(1));
     const character = await screen.findByTestId("story-character");
     await act(async () => latest().onReady?.());
     act(() => mocks.selectScene(2));
@@ -73,6 +77,8 @@ describe("About narrative and presentation boundary", () => {
 
   it("keeps load errors readable, rejects late readiness and retries only the character", async () => {
     render(view());
+    // Jev loads at the first particle change, so the test enters Bob before expecting the character.
+    act(() => mocks.selectScene(1));
     const character = await screen.findByTestId("story-character");
     const previous = latest();
     act(() => mocks.selectScene(4));
@@ -91,6 +97,8 @@ describe("About narrative and presentation boundary", () => {
 
   it("pauses offscreen and on a hidden tab and supplies the static fallback", async () => {
     const result = render(view());
+    // Jev loads at the first particle change, so the test enters Bob before expecting the character.
+    act(() => mocks.selectScene(1));
     await screen.findByTestId("story-character");
     await act(async () => latest().onReady?.());
     act(() => mocks.selectScene(4));
@@ -109,6 +117,8 @@ describe("About narrative and presentation boundary", () => {
 
   it("reveals Jev through the scroll action while keeping a single character", async () => {
     render(view());
+    // Jev loads at the first particle change, so the test enters Bob before expecting the character.
+    act(() => mocks.selectScene(1));
     const character = await screen.findByTestId("story-character");
     await act(async () => latest().onReady?.());
     act(() => mocks.selectScene(2));
@@ -122,6 +132,8 @@ describe("About narrative and presentation boundary", () => {
 
   it("offers recovery when binding never becomes ready and cancels its deadline on unmount", async () => {
     const result = render(view());
+    // Jev loads at the first particle change, so the test enters Bob before expecting the character.
+    act(() => mocks.selectScene(1));
     await screen.findByTestId("story-character");
     await waitFor(() => expect(screen.getByRole("button", { name: "Reintentar carga" })).toBeTruthy(), { timeout: 1000 });
     expect(document.querySelector(".story-page")?.getAttribute("data-story-status")).toBe("error");

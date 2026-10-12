@@ -1,0 +1,19 @@
+/* The 0.6s fade matches the reveal of Jev in App.css, so the two cross-fade. */
+.creature-loader {
+  position: absolute; inset: 0; z-index: var(--layer-content); pointer-events: none;
+  display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.creature-loader[data-visible="false"] { opacity: 0; visibility: hidden; }
+.creature-loader__dot {
+  width: var(--space-2); height: var(--space-2); border-radius: var(--radius-pill); background: var(--jev-color-primary);
+  animation: creature-loader-pulse var(--duration-consider) var(--ease-in-out) infinite;
+}
+.creature-loader__dot:nth-child(2) { animation-delay: calc(var(--duration-consider) * 0.12); }
+.creature-loader__dot:nth-child(3) { animation-delay: calc(var(--duration-consider) * 0.24); }
+.creature-loader[data-active="false"] .creature-loader__dot { animation-play-state: paused; }
+.creature-loader[data-reduced="true"] .creature-loader__dot { animation: none; opacity: 0.6; }
+@keyframes creature-loader-pulse {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(calc(var(--space-2) * -1)); opacity: 1; }
+}

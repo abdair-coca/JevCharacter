@@ -485,6 +485,80 @@ Usuario aportó historia real y tres recursos en `public/story/`; aprobó escena
 | 4 — About scrollytelling | Implementada/verificada, pendiente aprobación | Revisión visual/funcional de la entrega. |
 | 5 — Integración, accesibilidad y rendimiento | Pendiente | Aprobación explícita de fase 4. |
 
+## Carga de Jev — ampliación 2026-10-11
+
+**Solicitud:** «Sí, adelante con las cuatro decisiones y actualiza `design.md`». Contrato en [design.md](../design.md#carga-de-jev-ampliación-aprobada-2026-10-11) y requisitos en [spec.md](spec.md#carga-de-jev--ampliación-aprobada-el-2026-10-11). Sin push ni deploy.
+
+**Nota de registro:** se pidió crear `TASK.md`. En Windows, el sistema de archivos no distingue mayúsculas, así que ese nombre apuntaba a este mismo `task.md` y lo habría sobrescrito. El registro se añadió aquí para conservar el historial.
+
+**Checklist:**
+
+- [x] Decisiones aprobadas registradas en `design.md` y `spec.md`.
+- [x] Línea base antes de editar: typecheck (`tsc -b`), `typecheck:tests`, lint y Vitest: 26 archivos / 179 tests PASS.
+- [x] Jev revelada con retardo de 1,8 s. Revertida la detección por `Advance`: el usuario vio el logo en todos los casos. Vuelve el retardo de CSS (`data-ready` + `transition ... 1.8s`), y `onPainted` avisa a los mismos 1,8 s para el cargador y el freno.
+- [x] Pantalla de carga en Home con vuelo de partículas hacia «Historia» y reacción del enlace (verificado en Chromium headless: vuelo de ~1,2 s y enlace reaccionando).
+- [x] Capacidades: freno con rebote hasta que Jev esté pintada (verificado con `prove2.riv` retrasado: el scroll se detiene en el inicio de «Reacciona», el rebote sube 16 px y vuelve a 0, y se libera tras pintarse).
+- [x] Historia: inicio de la carga en el primer cambio de partículas (verificado: el personaje se monta al entrar en «Todo empezó con cartón»; se pinta después).
+- [x] Pruebas y comprobaciones: `tsc -b`, `typecheck:tests`, `npm run lint`, Vitest 29 archivos / 191 tests PASS, `npm run build` PASS.
+- [ ] Verificación visual en navegador: pendiente de revisión del usuario (estética del vuelo, rebote, logo en primeros frames). Chromium headless con Playwright se usó como comprobación de comportamiento, no visual. La extensión de Chrome no estaba conectada.
+
+**Supuestos a verificar:**
+
+- Con el retardo fijo de 1,8 s, el logo puede seguir visible si la primera pose tarda más en el equipo del usuario. Revisar en el navegador real.
+- Con movimiento reducido elegí una parada seca sin rebote en Capacidades, porque el usuario no decidió ese caso. Revisar.
+- Movimiento reducido en Home y Capacidades no se ha probado en navegador; solo en pruebas unitarias.
+- En Historia, la carga sí arranca al primer cambio, pero el tiempo hasta pintar en Chromium headless con SwiftShader fue de unos 3 s; en un equipo real será menor. No es una medición de rendimiento.
+
+### Pantalla de carga reutilizable — 2026-10-11
+
+**Solicitud:** la pantalla de carga también en Capacidades, sin vuelo hacia About, con las partículas de About (incluida su reacción al cursor) y como componente reutilizable.
+
+**Cambios:**
+
+- `CreatureLoader` en `src/features/loading/`: componente reutilizable con `visible`, `active`, `reduced` y `caption`. Usa `ParticleVortex` en su estado inicial (`StarParticles`, cargado con `lazy`). Con movimiento reducido muestra un punto estático.
+- `ParticleVortex`: nueva prop opcional `sources` (por defecto, las imágenes de la historia). El cargador pasa una lista vacía para no preparar imágenes.
+- `story.css`: las variables `--particle-*` se movieron de `.story-page` a `:root`, con los mismos valores.
+- Home y Capacidades usan el mismo cargador. Capacidades lo muestra mientras el freno está activo.
+- Eliminados: el vuelo hacia About, `id="nav-about"` en la cabecera (revertido), las reglas de reacción del enlace y el módulo de geometría propio con su prueba.
+
+**Verificación:** `tsc -b`, `typecheck:tests`, lint y build: PASS. Vitest: 29 archivos / 187 tests PASS. En Chromium (Playwright, WebGL por SwiftShader): el cargador muestra las partículas en ambas páginas (`prepared` y `running`), la deformación del cursor responde (`data-deformation` ≈ 0,08), no hay atributos de vuelo, y el cargador se oculta al revelarse Jev, 1,8 s después de estar lista.
+
+**Pendiente:** revisión visual del usuario de las partículas en el cargador (tamaño, densidad y contraste sobre Home y Capacidades).
+
+### Cambio posterior del cargador — 2026-10-11
+
+**Solicitud:** sustituir las partículas por tres puntos animados sencillos, quitar el texto «Despertando a Jev…» en Home y Capacidades, y limpiar el código de este cambio.
+
+**Cambios:**
+
+- `CreatureLoader` ahora solo renderiza tres puntos CSS (`transform` y `opacity`), decorativos (`aria-hidden`), sin props de texto.
+- Eliminados: `StarParticles.tsx`, la prop `sources` de `ParticleVortex`, el reubicado de `--particle-*` en `:root` de `story.css` (revertidos a su versión original), las claves `waking` y `observing` de `messages.ts`, y la clase huérfana `.character-loading` de `App.css`.
+- `tests/creatureLoader.test.tsx` cubre los puntos, la visibilidad y el modo reducido.
+
+**Verificación:** `tsc -b`, `typecheck:tests`, lint y build: PASS. Vitest: 29 archivos / 187 tests PASS. En Chromium (Playwright, WebGL por SwiftShader): tres puntos presentes, animación activa, sin texto en el cargador en ambas páginas, y el cargador se oculta al revelarse Jev.
+
+**Pendiente:** revisión visual del tamaño y ritmo de los puntos.
+
+### Corrección del tope de Capacidades — 2026-10-11
+
+**Problema:** mientras Jev cargaba, el scroll llegaba hasta «Reacciona» sin tope en «Percibe».
+
+**Corrección:** el límite pasa al inicio de «Percibe». Se mide una vez al activarse el freno y al cambiar el tamaño de la ventana, porque el rebote desplaza las tarjetas y una medición en vivo hacía que el tope se corriera 16 px.
+
+**Verificación:** `tsc -b`, `typecheck:tests`, lint, build: PASS. Vitest: 187 tests PASS. En Chromium con la descarga de Rive retrasada: el scroll se detiene en la posición de «Percibe» (332 px) y se libera al cargar Jev.
+
+### Freno rígido en Capacidades — 2026-10-11
+
+**Solicitud:** quitar el rebote del freno, para que la parada sea rígida y sin errores, y limpiar el código de esa eliminación.
+
+**Cambios:**
+
+- `useShowcaseScroll`: eliminados el rebote (`pull`, la animación con Motion, su ref y su transición), el caché del límite y el listener de `resize`. El límite se mide en vivo con `targetTop(0)`, porque ya nada desplaza las tarjetas.
+- `scrollGate.ts`: eliminada `GATE_PULL_PX`.
+- Documentación actualizada en `design.md`, `docs/interaction.md` y `.dev/spec.md`.
+
+**Verificación:** typecheck, typecheck de pruebas, lint y build: PASS. Vitest: 29 archivos / 187 tests PASS. Chromium con la descarga de Rive retrasada: la parada es rígida en 332 px (inicio de «Percibe») y se libera al cargar Jev, sin errores.
+
 ## Reglas de handoff
 
 - Seguir `spec.md` para intención y `plan.md` para secuencia. Si código y docs divergen, inspeccionar comportamiento real y conservar clara la diferencia entre objetivo e implementación.

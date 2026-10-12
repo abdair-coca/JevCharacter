@@ -11,6 +11,7 @@ import { CHAPTERS, chapterAt, showcaseCopy } from "../features/showcase/catalog"
 import { useShowcasePlayer } from "../features/showcase/useShowcasePlayer";
 import { useShowcaseScroll } from "../features/showcase/useShowcaseScroll";
 import { useStageVisibility } from "../features/presentation/useStageVisibility";
+import CreatureLoader from "../features/loading/CreatureLoader";
 import "../features/showcase/showcase.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -37,6 +38,8 @@ export default function FeaturesPage() {
   const running = visible && inView;
   const controller = useRef<CharacterController | null>(null);
   const [attempt, setAttempt] = useState(0);
+  // The gate lifts once Jev has painted the current attempt, or when loading fails.
+  const [paintedAttempt, setPaintedAttempt] = useState(-1);
   const activeAttempt = useRef(0);
   const { actor, snapshot } = useShowcasePlayer(controller, running, reduced);
   const chapterIndex = snapshot.context.chapter;
@@ -44,13 +47,15 @@ export default function FeaturesPage() {
   const step = chapter.steps[snapshot.context.step];
   const phase = snapshot.value;
   const scrollSelect = useCallback((index: number) => actor.send({ type: "SELECT", chapter: index }), [actor]);
-  const scrollToChapter = useShowcaseScroll(root, stage, scrollSelect, running, reduced, `${language}-${theme}`, chapterIndex);
+  const gated = paintedAttempt !== attempt && phase !== "error";
+  const scrollToChapter = useShowcaseScroll(root, stage, scrollSelect, running, reduced, `${language}-${theme}`, chapterIndex, gated);
   const choose = (index: number) => {
-    scrollToChapter(index);
+    if (!scrollToChapter(index)) return;
     if (index === chapterIndex) actor.send({ type: "REPLAY" });
     else if (reduced) actor.send({ type: "SELECT", chapter: index });
   };
   const ready = useCallback(() => { if (activeAttempt.current === attempt) actor.send({ type: "READY" }); }, [actor, attempt]);
+  const painted = useCallback(() => { if (activeAttempt.current === attempt) setPaintedAttempt(attempt); }, [attempt]);
   const failed = useCallback(() => { if (activeAttempt.current === attempt) actor.send({ type: "ERROR" }); }, [actor, attempt]);
   const retry = () => { activeAttempt.current++; actor.send({ type: "RETRY" }); setAttempt(value => value + 1); };
   const stateText = phase === "prepare" ? copy.preparing : phase === "loading" ? copy.loading : phase === "playing" ? copy.playing : phase === "complete" ? copy.complete : phase === "static" ? copy.static : phase === "error" ? copy.error : copy.interrupted;
@@ -67,10 +72,11 @@ export default function FeaturesPage() {
           <div className="showcase-flight" id="showcase-scene" role="group" aria-label={`Jev — ${chapter.title[language]}`}>
             <div className="creature-zone showcase-creature">
               <div className="creature-presence">
-                <Suspense fallback={<span className="character-loading">{copy.loading}</span>}>
-                  <Character key={attempt} ref={controller} onReady={ready} onError={failed} active={running && phase !== "error"} presentation staticPose={reduced} />
+                <Suspense fallback={null}>
+                  <Character key={attempt} ref={controller} onReady={ready} onPainted={painted} onError={failed} active={running && phase !== "error"} presentation staticPose={reduced} />
                 </Suspense>
               </div>
+              <CreatureLoader visible={gated} active={running} reduced={reduced} />
             </div>
             <div className="showcase-caption" role="status" aria-live="polite">
               {running && <AnimatePresence mode="wait" initial={false}>

@@ -4,11 +4,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { acquirePresentationScroll, enablePresentationEngine, releaseIdlePresentationEngine, setPresentationVisibility } from "../presentation/scrollRuntime";
 import { cssDurationSeconds } from "../../lib/motionTokens";
+import { clampToLimit, isGatedDownwards, keyScrollsDown } from "./scrollGate";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 // One presentation owns global smooth scroll. GSAP's ticker is the sole RAF driver.
-export function useShowcaseScroll(root: RefObject<HTMLElement | null>, stage: RefObject<HTMLDivElement | null>, onChapter: (index: number) => void, visible: boolean, reduced: boolean, preferenceKey: string, selected: number) {
+export function useShowcaseScroll(root: RefObject<HTMLElement | null>, stage: RefObject<HTMLDivElement | null>, onChapter: (index: number) => void, visible: boolean, reduced: boolean, preferenceKey: string, selected: number, gated = false) {
   const scroll = useRef<ReturnType<typeof acquirePresentationScroll> | null>(null);
   const select = useRef(onChapter);
   const locked = useRef(false);
@@ -84,13 +85,78 @@ export function useShowcaseScroll(root: RefObject<HTMLElement | null>, stage: Re
     unlockFrame.current = requestAnimationFrame(() => { locked.current = false; unlockFrame.current = null; });
   }, [preferenceKey, selected, root]);
 
+  // Target offset of a chapter card, shared by jumps and the gate limit.
+  const targetTop = useCallback((index: number) => {
+    const element = root.current;
+    const target = element?.querySelector<HTMLElement>(`[data-chapter-card="${index}"]`);
+    if (!element || !target) return null;
+    const offset = document.querySelector(".site-header")!.getBoundingClientRect().bottom + Number.parseFloat(getComputedStyle(element).getPropertyValue("--showcase-pin-gap"));
+    return Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
+  }, [root]);
+
+  // While Jev is not painted, the scroll stops at the start of "Percibe". Native and smooth gestures are both stopped at window capture.
+  useEffect(() => {
+    if (!gated) return;
+    const element = root.current;
+    if (!element) return;
+    const blocked = () => {
+      const top = targetTop(0);
+      return top !== null && isGatedDownwards(window.scrollY, top);
+    };
+    const onWheel = (event: WheelEvent) => {
+      if (event.deltaY <= 0 || !blocked()) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    };
+    let lastTouchY: number | null = null;
+    const onTouchStart = (event: TouchEvent) => { lastTouchY = event.touches[0]?.clientY ?? null; };
+    const onTouchMove = (event: TouchEvent) => {
+      const y = event.touches[0]?.clientY;
+      if (y === undefined || lastTouchY === null) return;
+      const delta = lastTouchY - y;
+      lastTouchY = y;
+      if (delta <= 0 || !blocked()) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!keyScrollsDown(event.key) || !blocked()) return;
+      const target = event.target;
+      if (target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']")) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    };
+    // Anchors, jumps and restoration can bypass gestures; return any overshoot to the limit.
+    const onScroll = () => {
+      const top = targetTop(0);
+      if (top === null) return;
+      const clamped = clampToLimit(window.scrollY, top);
+      if (clamped !== null) window.scrollTo({ top: clamped, behavior: "instant" });
+    };
+    window.addEventListener("wheel", onWheel, { capture: true, passive: false });
+    window.addEventListener("touchstart", onTouchStart, { capture: true, passive: true });
+    window.addEventListener("touchmove", onTouchMove, { capture: true, passive: false });
+    window.addEventListener("keydown", onKeyDown, { capture: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener("wheel", onWheel, { capture: true });
+      window.removeEventListener("touchstart", onTouchStart, { capture: true });
+      window.removeEventListener("touchmove", onTouchMove, { capture: true });
+      window.removeEventListener("keydown", onKeyDown, { capture: true });
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [gated, root, targetTop]);
+
+  // Returns false when the gate blocks the jump, so the caller keeps the current chapter.
   return useCallback((index: number) => {
-    const target = root.current?.querySelector<HTMLElement>(`[data-chapter-card="${index}"]`);
-    if (!target) return;
-    const offset = document.querySelector(".site-header")!.getBoundingClientRect().bottom + Number.parseFloat(getComputedStyle(root.current!).getPropertyValue("--showcase-pin-gap"));
-    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
+    const top = targetTop(index);
+    if (top === null) return false;
+    const limitTop = targetTop(0);
+    if (gated && limitTop !== null && top > limitTop + 1) return false;
     const duration = reduced ? 0 : cssDurationSeconds(getComputedStyle(root.current!).getPropertyValue("--showcase-jump"));
     if (scroll.current) scroll.current.scrollTo(top, duration);
     else window.scrollTo({ top, behavior: reduced ? "instant" : "smooth" });
-  }, [root, reduced]);
+    return true;
+  }, [gated, reduced, root, targetTop]);
 }

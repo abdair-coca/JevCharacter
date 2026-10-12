@@ -36,7 +36,7 @@ El scroll nativo, teclado y touch recorren el contenido. «Ver escena» desplaza
 
 Decide explica acción, confianza, intensidad y atención con un ejemplo fijo. La puntuación de confianza no garantiza corrección ni es la confianza de personalidad. Habla usa una frase escrita predefinida sin audio; Percibe representa atención mediante una escena fija, sin cursor decorativo ni sensor real. Las reacciones locales, ausencia y personalidad también son datos de ejemplo. Nada consulta `/api/*` ni modifica contexto/persona de Home.
 
-Con movimiento reducido, sin observer o viewport muy bajo, el contenido sigue lineal y sin pinning; el modo estático añade una lista de pasos por capítulo. Si Rive no carga, el texto/controles siguen disponibles y hay reintento. [Matriz de evidencia](../.dev/evidence/phase-3/README.md).
+Con movimiento reducido, sin observer o viewport muy bajo, el contenido sigue lineal y sin pinning; el modo estático añade una lista de pasos por capítulo. Si Rive no carga, el texto/controles siguen disponibles y hay reintento. [Matriz de evidencia](../.dev/evidence/phase-3/README.md). Carga de Jev: Home y Capacidades muestran el mismo cargador de tres puntos animados mientras Jev no está revelada; se desvanece al revelarse, 1,8 s después de estar lista; Capacidades no avanza más allá del inicio de «Percibe» hasta que Jev está revelada, con una parada rígida; About empieza a cargar a Jev al entrar en «Todo empezó con cartón».
 
 ### About: historia y visión
 

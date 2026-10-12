@@ -139,6 +139,14 @@ Usar el relato original en `docs/jev-story.md`. No inventar fechas, hitos, imág
 
 **Revisión aprobada el 2026-10-08:** About amplía el relato al recorrido real de Abdair: presentación → Bob (primer gran proyecto, robot de cartón con IA, reconocimiento, seguimiento de caras, habla, expresión emocional y memoria persistente) → TitiEdu (enseñanza de POO, IA/RAG y juegos HTML/CSS/JS) → machine-learning-App (algoritmos y ejecución con Pyodide) → JEV/visión futura. El orden intermedio es editorial, sin fechas ni causalidades inventadas. `public/story/bob.jpeg`, `curiousTiti.webp` y `housingML.svg` forman imágenes de partículas, con el gráfico de ML como foco y texto HTML legible. Escenario oscuro cinematográfico en ambos temas, partículas violeta/magenta, espiral, estelas, profundidad aparente 2D y composición móvil. Cierre: estrella de cinco puntas enteramente de partículas, hold reconocible y apertura reversible por scroll para revelar el Jev existente. Lectura ES/EN, detalles, reduced motion, pausa y errores siguen disponibles. Usuario aprobó alcance/plan y pidió implementarlo; fase 4 continúa abierta.
 
+### Carga de Jev — ampliación aprobada el 2026-10-11
+
+- **Home y Capacidades:** pantalla de carga reutilizable con tres puntos animados, sin texto, mientras Jev no está revelada. No hay vuelo hacia la cabecera ni hacia otros enlaces. Se desvanece al revelarse Jev, 1,8 s después de estar lista.
+- **Capacidades:** la página se puede recorrer hasta el inicio de «Percibe»; desde ese punto, si Jev no está lista, el scroll se detiene en seco hasta que cargue. Al estar lista, se libera. Si falla la carga, se libera.
+- **Historia:** la carga de Jev empieza al primer cambio de partículas («Todo empezó con cartón») para que la escena de Jev aparezca ya lista.
+- **Movimiento reducido:** sin vuelo de partículas; Jev y la historia siguen accesibles.
+- Detalle de contrato en [design.md](design.md#carga-de-jev-ampliación-aprobada-2026-10-11).
+
 ## Idioma y tema
 
 - Toda la interfaz, navegación, texto accesible, Features y About están disponibles en español e inglés.

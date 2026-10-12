@@ -28,9 +28,12 @@ import {
 } from "../character/useCharacterController";
 
 const STATE_MACHINE = "State Machine 1";
+// Keep in sync with the data-ready transition delay in App.css: Jev stays hidden for this long.
+const REVEAL_DELAY_MS = 1800;
 
 type Props = {
   onReady?: () => void;
+  onPainted?: () => void;
   onError?: () => void;
   active?: boolean;
   presentation?: boolean;
@@ -38,7 +41,7 @@ type Props = {
 };
 
 const Character = forwardRef<CharacterController, Props>(
-  function Character({ onReady, onError, active = true, presentation = false, staticPose = false }, ref) {
+  function Character({ onReady, onPainted, onError, active = true, presentation = false, staticPose = false }, ref) {
     const motionPreference = useReducedMotionPreference();
     const reducedMotion = motionPreference || staticPose;
     const wasSuspended = useRef(false);
@@ -103,6 +106,13 @@ const Character = forwardRef<CharacterController, Props>(
     useEffect(() => {
       if (ready && active && (!reducedMotion || (presentation && staticPrepared))) onReady?.();
     }, [active, onReady, presentation, ready, reducedMotion, staticPrepared]);
+
+    useEffect(() => {
+      if (!ready || !onPainted) return;
+      // Same delay as the CSS reveal: the creature becomes visible when this fires.
+      const timeout = window.setTimeout(onPainted, REVEAL_DELAY_MS);
+      return () => window.clearTimeout(timeout);
+    }, [onPainted, ready]);
 
     useEffect(() => {
       if (!rive) return;

@@ -31,6 +31,8 @@ export default function AboutPage() {
   const controller = useRef<CharacterController | null>(null);
   const inView = useStageVisibility(stage);
   const [selected, setSelected] = useState(0);
+  // Jev starts loading at the first particle change ("Todo empezó con cartón"), so the Jev scene is ready.
+  const [started, setStarted] = useState(false);
   const active = visible && inView;
   const { progress, reveal } = useStoryScroll(root, stage, { onScene: setSelected, active, visible, reduced, preferenceKey: `${language}-${theme}`, selected });
   const particlesFailed = useCallback(() => setParticleError(true), []);
@@ -56,12 +58,14 @@ export default function AboutPage() {
     return () => media.removeEventListener("change", sync);
   }, []);
 
+  useEffect(() => { if (selected >= 1) setStarted(true); }, [selected]);
+
   useEffect(() => {
-    if (status !== "loading" || !active) return;
+    if (status !== "loading" || !active || !started) return;
     const duration = cssDurationSeconds(getComputedStyle(root.current!).getPropertyValue("--story-ready-timeout")) * 1000;
     const timeout = window.setTimeout(failed, duration);
     return () => window.clearTimeout(timeout);
-  }, [status, active, failed]);
+  }, [status, active, started, failed]);
 
   return (
     <main className="story-page" ref={root} data-story-selected={STORY_SCENES[selected].id} data-static={reduced} data-story-status={status} data-particle-error={particleError}>
@@ -71,7 +75,7 @@ export default function AboutPage() {
             <div className="story-art" aria-hidden="true">
             <ParticleVortex progress={progress} active={active} reduced={reduced} onError={particlesFailed} />
             <div className="creature-zone story-creature"><div className="creature-presence">
-               <Suspense fallback={null}><Character key={attempt} ref={controller} presentation staticPose={reduced} active={active && status !== "error" && (selected === 4 || status === "loading" || reduced)} onReady={ready} onError={failed} /></Suspense>
+               <Suspense fallback={null}>{started && <Character key={attempt} ref={controller} presentation staticPose={reduced} active={active && status !== "error" && (selected === 4 || status === "loading" || reduced)} onReady={ready} onError={failed} />}</Suspense>
             </div></div>
             <div className="story-nebula" aria-hidden="true" />
             </div>

@@ -10,12 +10,14 @@ import { useTranslation } from "../i18n/useTranslation";
 import { useUiMotion } from "../lib/motionTokens";
 import { usePreferences } from "../stores/preferencesStore";
 import { usePageVisibility } from "../hooks/usePageVisibility";
+import { useReducedMotionPreference } from "../hooks/useReducedMotionPreference";
 import { executeDecisionAction } from "../creature/rive/riveReactionAdapter";
 import type { SpeechCaption as Caption } from "../hooks/useSpeechSession";
 import { useEnrollment } from "../features/enrollment/useEnrollment";
 import { useEnrollmentMotion } from "../features/enrollment/useEnrollmentMotion";
 import { EnrollmentExperience } from "../features/enrollment/EnrollmentExperience";
 import { EnrollmentParticles } from "../features/enrollment/EnrollmentParticles";
+import CreatureLoader from "../features/loading/CreatureLoader";
 import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewport";
 import "../features/enrollment/enrollment.css";
 
@@ -47,6 +49,9 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const enrollment = useEnrollment(active, enrollmentMotion.close);
   const [enrollmentFocused, setEnrollmentFocused] = useState(false);
   const [characterStatus, setCharacterStatus] = useState<"loading" | "ready" | "error">("loading");
+  const reducedMotion = useReducedMotionPreference();
+  // The loader covers the wait until Jev is revealed, 1.8s after she is ready.
+  const [characterRevealed, setCharacterRevealed] = useState(false);
   const conversational = running && !enrollment.isOpen;
   const stageRef = useRef<HTMLElement | null>(null);
   const creatureShellRef = useRef<HTMLDivElement | null>(null);
@@ -106,6 +111,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
     else if (brain.speechCaption?.text) void characterRef.current?.talk(brain.decision.action.state);
   }, [brain.decision, brain.speechCaption, brain.status, brain.userContext, running, enrollment.isOpen]);
   const characterFailed = useCallback(() => setCharacterStatus("error"), []);
+  const revealCharacter = useCallback(() => setCharacterRevealed(true), []);
   useEffect(() => {
     if (!conversational) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -126,8 +132,9 @@ export default function HomePage({ active = true }: { active?: boolean }) {
       </section>
       <m.section className="creature-zone" aria-label={t.creature} layout={!enrollmentMotion.reduced} layoutDependency={`${enrollment.isOpen}-${enrollmentFocused}`} transition={enrollmentMotion.scene}>
         <div className="creature-presence" ref={creatureShellRef}>
-          <Suspense fallback={<div className="character-loading" role="status">{t.observing}…</div>}><Character ref={characterRef} onReady={wakeCharacter} onError={characterFailed} active={running} /></Suspense>
+          <Suspense fallback={null}><Character ref={characterRef} onReady={wakeCharacter} onPainted={revealCharacter} onError={characterFailed} active={running} /></Suspense>
         </div>
+        <CreatureLoader visible={!characterRevealed && characterStatus !== "error"} active={running} reduced={reducedMotion} />
         {running && (enrollment.phase === "editing" || enrollment.phase === "confirmed") && <EnrollmentParticles key={enrollment.phase} duration={enrollmentMotion.burst} celebrate={enrollment.phase === "confirmed"} />}
       </m.section>
       {enrollment.isOpen && <EnrollmentExperience session={enrollment} language={language} characterFailed={characterStatus === "error"} onFieldFocus={setEnrollmentFocused} />}

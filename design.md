@@ -126,6 +126,17 @@ Leer y convertir tokens al formato del motor mediante un adaptador tipado: CSS u
 
 **Delta visual solicitado el 2026-10-08 (prevalece sobre las composiciones anteriores):** Jev domina Home; controles planos compactos sin mini-Jev ni respiración decorativa y texto mínimo. Features/About dejan de mostrar UI de diapositivas, numeración y detalles desplegables redundantes. Scroll explícito suave y trayectoria con retardo; en móvil ilustración arriba/texto debajo. Partículas con deformación reversible al cursor y estelas expresivas, conservando pausa, 2D, densidad adaptable y alternativa estática. Las lecturas reales del HUD, semántica y nombres accesibles se conservan.
 
+### Carga de Jev: ampliación aprobada 2026-10-11
+
+Aplica a Home, Capacidades y Historia. Decisiones aprobadas por el usuario; los valores numéricos de pantalla son de partida y se ajustan en la verificación visual.
+
+- **Condición de «Jev lista»:** Jev se muestra con el mismo método de retardo de CSS que antes, ahora de 1,8 s: `.character-rive[data-ready="true"]` tiene `transition: opacity 0.6s ease 1.8s`. La señal `onPainted` del componente se dispara a los mismos 1,8 s tras `ready` (constante `REVEAL_DELAY_MS` en `Character.tsx`), y el cargador y el freno de Capacidades usan ese aviso. Se descartó la detección por `Advance`: el runtime 4.34 no emite `Draw`, y el logo seguía visible con esa señal.
+- **Pantalla de carga reutilizable (Home y Capacidades):** mientras Jev no está revelada, un componente `CreatureLoader` muestra tres puntos animados, sin texto. Es decorativo (`aria-hidden`), con animación solo de `transform` y `opacity` mediante CSS, y se pausa cuando la vista no está activa. Se desvanece al revelarse Jev, con el mismo fundido de 0,6 s.
+- **Sin vuelo hacia About:** el cargador no envía elementos a la cabecera ni a otros enlaces.
+- **Movimiento reducido:** los puntos quedan estáticos, sin animación, y el cargador se desvanece al revelarse Jev.
+- **Capacidades (`/features`), freno rígido:** el límite es el inicio de la tarjeta «Percibe»: mientras Jev no esté revelada, la página no baja más allá de esa posición, y «Reacciona» queda bloqueada. El freno es una parada rígida, sin rebote ni animación: rueda, táctil, teclado, anclas y el botón «Reproducir» se detienen en el límite. Al revelarse Jev, el freno se libera desde la posición del usuario. Si la carga falla, se libera para que la historia siga disponible. El freno es el mismo con movimiento reducido o viewport bajo.
+- **Historia (`/about`), inicio temprano:** la carga de Jev arranca cuando las partículas hacen su primer cambio, al entrar en «Todo empezó con cartón». Para cuando se llega a la escena de Jev, solo debe mostrarse. El texto «Preparando a Jev…» queda como respaldo si aún no está pintada. Cambiar la escena de partículas no debe reiniciar la carga.
+
 ### Navegación y preferencias
 
 - Vistas independientes: `/`, `/features`, `/about`. Navegación fija; enlaces directos, recargas y atrás/adelante correctos.
