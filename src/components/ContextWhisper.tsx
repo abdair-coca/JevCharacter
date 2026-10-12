@@ -63,7 +63,9 @@ export default function ContextWhisper({ context, onSubmit, onClear, status = "o
         </form>
       </div>
       <div className="whisper__meta">
-        {context && <button type="button" onClick={() => { setSent(false); onClear(); }} aria-label={t.clear}><span>{t.clear}</span></button>}
+        <AnimatePresence initial={false}>
+          {context && <m.button key="clear" type="button" onClick={() => { setSent(false); onClear(); }} aria-label={t.clear} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition}><span>{t.clear}</span></m.button>}
+        </AnimatePresence>
         {value.length > BRAIN_CONFIG.contextMaxLength - 45 && <span className="whisper__count" aria-live="polite">{value.length}/{BRAIN_CONFIG.contextMaxLength}</span>}
       </div>
       <span className="sr-only" role="status">{sent ? t.received : ""}</span>

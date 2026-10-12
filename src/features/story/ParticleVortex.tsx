@@ -79,6 +79,8 @@ export function ParticleVortex({ progress, active, reduced, onError }: Props) {
     const config = readConfig(host);
     const abort = new AbortController();
     let disposed = false; let ticking = false; let time = 0; let width = 0; let height = 0;
+    // The canvas is larger than its host by a bleed margin; drawing stays in host coordinates.
+    let bleedX = 0; let bleedY = 0; let canvasWidth = 0; let canvasHeight = 0;
     let count = config.count; let geometries: ParticleGeometry[] = [];
     let pointerX = 0; let pointerY = 0; let px = 0; let py = 0;
     let pointer: { x: number; y: number } | null = null;
@@ -113,7 +115,7 @@ export function ParticleVortex({ progress, active, reduced, onError }: Props) {
       const cursorY = pointerInside && pointer ? (pointer.y - box.top - height / 2) / size : 0;
       pointerX = pointerInside ? Math.max(-0.5, Math.min(0.5, cursorX)) : 0;
       pointerY = pointerInside ? Math.max(-0.5, Math.min(0.5, cursorY)) : 0;
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(-bleedX, -bleedY, canvasWidth, canvasHeight);
       px += (pointerX - px) * 0.055; py += (pointerY - py) * 0.055;
       const parallaxX = moving ? px * size * config.parallax : 0;
       const parallaxY = moving ? py * size * config.parallax : 0;
@@ -237,9 +239,12 @@ export function ParticleVortex({ progress, active, reduced, onError }: Props) {
     render.current = sync;
     const resize = () => {
       const box = host.getBoundingClientRect(); width = box.width; height = box.height;
+      const canvasBox = element.getBoundingClientRect();
+      bleedX = box.left - canvasBox.left; bleedY = box.top - canvasBox.top;
+      canvasWidth = canvasBox.width; canvasHeight = canvasBox.height;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      element.width = Math.round(width * dpr); element.height = Math.round(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      element.width = Math.round(canvasWidth * dpr); element.height = Math.round(canvasHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, bleedX * dpr, bleedY * dpr);
       count = window.matchMedia("(max-width: 64rem)").matches ? config.mobileCount : config.count;
       element.dataset.count = String(count); history = false; draw();
     };

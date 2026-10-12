@@ -14,7 +14,7 @@
 .showcase-workspace { position: relative; max-width: var(--size-content); margin-inline: auto; }
 .showcase-stage { position: absolute; top: 0; left: 0; z-index: var(--layer-stage); width: 100%; height: calc(100dvh - var(--size-header) - var(--space-16)); pointer-events: none; }
 .showcase-flight { position: absolute; top: var(--showcase-flight-top); left: 50%; width: var(--showcase-flight-size); aspect-ratio: 1; transform: translate(-50%, -50%); }
-.showcase-creature { width: 100%; height: 100%; max-height: none; overflow: clip; }
+.showcase-creature { width: 100%; height: 100%; max-height: none; }
 .showcase-creature .character-rive { pointer-events: none; }
 .showcase-caption { position: absolute; top: 76%; left: 50%; transform: translateX(-50%); width: min(90%, var(--size-input)); text-align: center; font-size: var(--text-small); line-height: var(--line-body); }
 .showcase-caption p { margin: 0; }

@@ -1,0 +1,459 @@
+[
+  {
+    "shot": "home-desktop-light",
+    "label": "rest",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": null,
+    "flight": null,
+    "creatureZone": {
+      "x": 24,
+      "y": 146,
+      "w": 1392,
+      "h": 594
+    },
+    "riveCanvas": {
+      "x": -5,
+      "y": -282,
+      "w": 1450,
+      "h": 1450
+    },
+    "errors": []
+  },
+  {
+    "shot": "home-mobile-light",
+    "label": "rest",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": null,
+    "flight": null,
+    "creatureZone": {
+      "x": 16,
+      "y": 171,
+      "w": 358,
+      "h": 473
+    },
+    "riveCanvas": {
+      "x": -248,
+      "y": -36,
+      "w": 886,
+      "h": 886
+    },
+    "errors": []
+  },
+  {
+    "shot": "home-mobile-dark",
+    "label": "rest",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": null,
+    "flight": null,
+    "creatureZone": {
+      "x": 16,
+      "y": 171,
+      "w": 358,
+      "h": 473
+    },
+    "riveCanvas": {
+      "x": -248,
+      "y": -36,
+      "w": 886,
+      "h": 886
+    },
+    "errors": []
+  },
+  {
+    "shot": "features-desktop-light",
+    "label": "s00",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": null,
+    "flight": {
+      "x": 688,
+      "y": 456,
+      "w": 640,
+      "h": 640
+    },
+    "creatureZone": {
+      "x": 688,
+      "y": 456,
+      "w": 640,
+      "h": 640
+    },
+    "riveCanvas": {
+      "x": 430,
+      "y": 198,
+      "w": 1155,
+      "h": 1155
+    },
+    "errors": []
+  },
+  {
+    "shot": "features-desktop-light",
+    "label": "s20",
+    "horizontalOverflow": 0,
+    "scrollY": 1329,
+    "particles": null,
+    "flight": {
+      "x": 202,
+      "y": 160,
+      "w": 674,
+      "h": 674
+    },
+    "creatureZone": {
+      "x": 202,
+      "y": 160,
+      "w": 674,
+      "h": 674
+    },
+    "riveCanvas": {
+      "x": -69,
+      "y": -111,
+      "w": 1217,
+      "h": 1217
+    },
+    "errors": []
+  },
+  {
+    "shot": "features-desktop-light",
+    "label": "s50",
+    "horizontalOverflow": 0,
+    "scrollY": 3322,
+    "particles": null,
+    "flight": {
+      "x": 645,
+      "y": 86,
+      "w": 690,
+      "h": 690
+    },
+    "creatureZone": {
+      "x": 645,
+      "y": 86,
+      "w": 690,
+      "h": 690
+    },
+    "riveCanvas": {
+      "x": 368,
+      "y": -191,
+      "w": 1246,
+      "h": 1246
+    },
+    "errors": []
+  },
+  {
+    "shot": "features-mobile-light",
+    "label": "s00",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": null,
+    "flight": {
+      "x": 36,
+      "y": 415,
+      "w": 367,
+      "h": 367
+    },
+    "creatureZone": {
+      "x": 36,
+      "y": 415,
+      "w": 367,
+      "h": 367
+    },
+    "riveCanvas": {
+      "x": -129,
+      "y": 250,
+      "w": 697,
+      "h": 697
+    },
+    "errors": []
+  },
+  {
+    "shot": "features-mobile-light",
+    "label": "s20",
+    "horizontalOverflow": 0,
+    "scrollY": 1579,
+    "particles": null,
+    "flight": {
+      "x": 0,
+      "y": 141,
+      "w": 373,
+      "h": 373
+    },
+    "creatureZone": {
+      "x": 0,
+      "y": 141,
+      "w": 373,
+      "h": 373
+    },
+    "riveCanvas": {
+      "x": -168,
+      "y": -27,
+      "w": 709,
+      "h": 709
+    },
+    "errors": []
+  },
+  {
+    "shot": "features-mobile-light",
+    "label": "s50",
+    "horizontalOverflow": 0,
+    "scrollY": 3949,
+    "particles": null,
+    "flight": {
+      "x": 26,
+      "y": 113,
+      "w": 385,
+      "h": 385
+    },
+    "creatureZone": {
+      "x": 26,
+      "y": 113,
+      "w": 385,
+      "h": 385
+    },
+    "riveCanvas": {
+      "x": -147,
+      "y": -60,
+      "w": 731,
+      "h": 731
+    },
+    "errors": []
+  },
+  {
+    "shot": "about-desktop-light",
+    "label": "s00",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": {
+      "x": 445,
+      "y": -76,
+      "w": 1126,
+      "h": 1126
+    },
+    "flight": {
+      "x": 656,
+      "y": 135,
+      "w": 704,
+      "h": 704
+    },
+    "creatureZone": {
+      "x": 709,
+      "y": 188,
+      "w": 598,
+      "h": 598
+    },
+    "riveCanvas": null,
+    "errors": []
+  },
+  {
+    "shot": "about-desktop-light",
+    "label": "s20",
+    "horizontalOverflow": 0,
+    "scrollY": 1259,
+    "particles": {
+      "x": -131,
+      "y": -96,
+      "w": 1126,
+      "h": 1126
+    },
+    "flight": {
+      "x": 80,
+      "y": 115,
+      "w": 704,
+      "h": 704
+    },
+    "creatureZone": {
+      "x": 133,
+      "y": 168,
+      "w": 598,
+      "h": 598
+    },
+    "riveCanvas": {
+      "x": -59,
+      "y": -24,
+      "w": 982,
+      "h": 982
+    },
+    "errors": []
+  },
+  {
+    "shot": "about-desktop-light",
+    "label": "s45",
+    "horizontalOverflow": 0,
+    "scrollY": 2833,
+    "particles": {
+      "x": 227,
+      "y": -53,
+      "w": 1126,
+      "h": 1126
+    },
+    "flight": {
+      "x": 438,
+      "y": 158,
+      "w": 704,
+      "h": 704
+    },
+    "creatureZone": {
+      "x": 491,
+      "y": 211,
+      "w": 598,
+      "h": 598
+    },
+    "riveCanvas": {
+      "x": 299,
+      "y": 19,
+      "w": 982,
+      "h": 982
+    },
+    "errors": []
+  },
+  {
+    "shot": "about-desktop-light",
+    "label": "s70",
+    "horizontalOverflow": 0,
+    "scrollY": 4407,
+    "particles": {
+      "x": 445,
+      "y": -55,
+      "w": 1126,
+      "h": 1126
+    },
+    "flight": {
+      "x": 656,
+      "y": 156,
+      "w": 704,
+      "h": 704
+    },
+    "creatureZone": {
+      "x": 709,
+      "y": 209,
+      "w": 598,
+      "h": 598
+    },
+    "riveCanvas": {
+      "x": 517,
+      "y": 17,
+      "w": 982,
+      "h": 982
+    },
+    "errors": []
+  },
+  {
+    "shot": "about-mobile-light",
+    "label": "s00",
+    "horizontalOverflow": 0,
+    "scrollY": 0,
+    "particles": {
+      "x": -79,
+      "y": 38,
+      "w": 587,
+      "h": 587
+    },
+    "flight": {
+      "x": 31,
+      "y": 148,
+      "w": 367,
+      "h": 367
+    },
+    "creatureZone": {
+      "x": 58,
+      "y": 175,
+      "w": 312,
+      "h": 312
+    },
+    "riveCanvas": null,
+    "errors": []
+  },
+  {
+    "shot": "about-mobile-light",
+    "label": "s20",
+    "horizontalOverflow": 0,
+    "scrollY": 1149,
+    "particles": {
+      "x": -117,
+      "y": 26,
+      "w": 587,
+      "h": 587
+    },
+    "flight": {
+      "x": -7,
+      "y": 136,
+      "w": 367,
+      "h": 367
+    },
+    "creatureZone": {
+      "x": 20,
+      "y": 163,
+      "w": 312,
+      "h": 312
+    },
+    "riveCanvas": {
+      "x": -120,
+      "y": 23,
+      "w": 592,
+      "h": 592
+    },
+    "errors": []
+  },
+  {
+    "shot": "about-mobile-light",
+    "label": "s45",
+    "horizontalOverflow": 0,
+    "scrollY": 2586,
+    "particles": {
+      "x": -100,
+      "y": 48,
+      "w": 587,
+      "h": 587
+    },
+    "flight": {
+      "x": 10,
+      "y": 158,
+      "w": 367,
+      "h": 367
+    },
+    "creatureZone": {
+      "x": 38,
+      "y": 186,
+      "w": 312,
+      "h": 312
+    },
+    "riveCanvas": {
+      "x": -102,
+      "y": 45,
+      "w": 592,
+      "h": 592
+    },
+    "errors": []
+  },
+  {
+    "shot": "about-mobile-light",
+    "label": "s70",
+    "horizontalOverflow": 0,
+    "scrollY": 4022,
+    "particles": {
+      "x": -79,
+      "y": 50,
+      "w": 587,
+      "h": 587
+    },
+    "flight": {
+      "x": 31,
+      "y": 160,
+      "w": 367,
+      "h": 367
+    },
+    "creatureZone": {
+      "x": 58,
+      "y": 188,
+      "w": 312,
+      "h": 312
+    },
+    "riveCanvas": {
+      "x": -82,
+      "y": 48,
+      "w": 592,
+      "h": 592
+    },
+    "errors": []
+  }
+]

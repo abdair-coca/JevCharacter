@@ -572,6 +572,42 @@ Usuario aportó historia real y tres recursos en `public/story/`; aprobó escena
 
 **Verificación:** typecheck, typecheck de pruebas, lint y build: PASS. Vitest: 29 archivos / 187 tests PASS. Chromium con la descarga de Rive retrasada: la parada es rígida en 332 px (inicio de «Percibe») y se libera al cargar Jev, sin errores.
 
+### Recorte de Jev y de partículas — 2026-10-12
+
+**Solicitud:** revisión visual: el halo de Jev (Inicio, Capacidades) y la nube de partículas (Historia) aparecían cortados en rectángulos. Pedido: aplicar el arreglo sin romper móvil ni escritorio.
+
+**Causa verificada:** el canvas de partículas mide el cuadrado `.story-art`; un `<canvas>` siempre recorta su bitmap, así que la nube se corta en sus bordes (visible en móvil en «Machine learning»). Jev tenía `overflow` de recorte en `.creature-zone`, `.showcase-creature` y `.story-creature`, y su canvas se agranda con `transform: scale` (2,1 en Inicio, 1,9 en el resto).
+
+**Cambios:**
+
+- `App.css`, `story.css`, `showcase.css`: retirado el `overflow` de recorte de los contenedores de Jev. La página conserva su recorte horizontal (`overflow-x: clip` / `overflow: clip` del home).
+- `story.css`: nuevo token `--particle-bleed: 0.3`; `.story-particles` ocupa el cuadrado más un 30 % por lado.
+- `ParticleVortex.tsx`: el bitmap se dimensiona con el canvas completo y el sistema de coordenadas se desplaza al cuadrado del host; `clearRect` limpia el bitmap completo. La geometría, el cursor y el presupuesto de partículas no cambian.
+- `design.md` y `docs/architecture.md`: documentados el nuevo contrato y el sangrado.
+
+**Verificación:** `npm run typecheck`, `typecheck:tests`, `lint`, `npm run build`: PASS. `npx vitest run`: 29 archivos / 187 tests PASS. Playwright (Chromium, SwiftShader) en escritorio 1440×900 y móvil 390×844, claro y oscuro: sin overflow horizontal ni errores de consola. Medición de alfa en el borde del canvas en 10 posiciones de scroll: 0 en todas. Cursor: deformación ≈0,14 y retorno a 0. Evidencia en [clipping-2026-10-12](evidence/clipping-2026-10-12/README.md).
+
+**Limitación y decisión pendiente:** en Features móvil, el cuerpo de Jev ya tapaba parte del capítulo «Reacciona» antes de este cambio. Tras el cambio, el halo difuminado pasa también por detrás de ese texto; el texto sigue encima y legible con menos contraste. Pendiente de revisión visual del usuario.
+
+**Estado:** cambio en el working tree, sin commit.
+
+### Controles de Inicio sin desplazamiento — 2026-10-12
+
+**Solicitud:** la respuesta de Jev con texto y «Borrar conversación» no deben mover los componentes; el texto se superpone y el botón aparece con suavidad sin mover el input. Sin cambios adicionales.
+
+**Causa verificada:** el `speech-slot` y la fila `whisper__meta` crecían dentro del flujo y empujaban la zona de Jev y el input (medido: zona −30 px con respuesta; input −46 px con el botón en escritorio).
+
+**Cambios:**
+
+- `ContextWhisper.tsx`: el botón de borrar entra y sale con fundido (`AnimatePresence` + `m.button`).
+- `App.css`: `.speech-caption` pasa a posición absoluta sobre la zona de Jev; `.speech-slot` conserva su altura en reposo. `.whisper__meta` pasa a posición absoluta bajo el input (`.whisper-wrap` relativo); se elimina el reservado de altura y se mantiene la regla `:empty`.
+
+**Descartado:** reservar la altura de la fila en el flujo. Cambiaba el layout en reposo (zona de Jev −46 px en escritorio) y, en la carga, dejaba el bitmap de Rive calculado con la escala del canvas y el cuerpo de Jev sin pintar.
+
+**Verificación:** typecheck, typecheck de pruebas, lint, build: PASS. Vitest: 29 archivos / 187 tests PASS. Playwright (Chromium) en escritorio 1440×900, móvil 390×844 y móvil bajo 390×640: input, zona y footer idénticos en reposo, con botón y con respuesta. El reposo coincide con el original (escritorio: input 784, zona 594; móvil: input 728, zona 473). Canvas de Rive pintado en las seis cargas medidas. Evidencia en [home-controls-2026-10-12](evidence/home-controls-2026-10-12/README.md).
+
+**Limitación:** en desarrollo no hay respuesta remota de Jev, así que la respuesta se verificó inyectando un nodo `speech-caption` en el DOM.
+
 ## Reglas de handoff
 
 - Seguir `spec.md` para intención y `plan.md` para secuencia. Si código y docs divergen, inspeccionar comportamiento real y conservar clara la diferencia entre objetivo e implementación.
