@@ -88,6 +88,7 @@ export default function AboutPage() {
                 <p className="story-eyebrow">{scene.label[language]}</p>
                 {index === 0 ? <h1 id="page-title" data-page-route="/about" tabIndex={-1}><span id={`story-title-${scene.id}`}>{scene.title[language]}</span></h1> : <h2 id={`story-title-${scene.id}`}>{scene.title[language]}</h2>}
                 <p className="story-lead">{scene.lead[language]}</p>
+                {"projectUrl" in scene && <p className="story-project"><a className="ui-button ui-button--ghost ui-button--default" href={scene.projectUrl} target="_blank" rel="noopener noreferrer">{copy.project} <span aria-hidden="true">↗</span></a></p>}
                 {scene.id === "vision" && <p className="story-vision-note">{copy.vision}</p>}
                 {index === 0 && <p className="story-scroll-cue"><span aria-hidden="true">↓</span> {copy.scroll}</p>}
                 {scene.id === "vision" && <div className="story-reveal-cue"><Button variant="ghost" onClick={reveal}><span aria-hidden="true">✧</span> {copy.revealAction}</Button></div>}
