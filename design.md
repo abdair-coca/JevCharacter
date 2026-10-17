@@ -147,6 +147,14 @@ Aplica a Home, Capacidades y Historia. Decisiones aprobadas por el usuario; los 
 - Cambiar tema/idioma conserva vista y progreso. No remontar el personaje por usar esas preferencias como `key`.
 - Transferir foco al destino de una navegación explícita y conservar restauración de scroll adecuada al historial. No mover el foco en cada capítulo activado por scroll.
 - Reservar el espacio de la cabecera y aplicar su offset a anclas y elementos que reciben foco.
+- Implementado en fase 5: una visita nueva empieza arriba; atrás/adelante y recarga restauran la posición guardada en la entrada del historial (`scrollRestoration` manual).
+
+### Voz de Jev: aprobada 2026-10-16
+
+- Pitidos y trinos sintetizados con Web Audio, al estilo de R2-D2/WALL-E/EVA. Nunca palabras ni voz humana.
+- **Habla:** una nota por sílaba escrita del texto real, con pausas en comas y fin de frase, subida final en preguntas, realce en exclamaciones y caída al cerrar afirmaciones. **Acciones:** un motivo corto y distinto por acción visible; el regreso a `Base` no suena.
+- Encendida por defecto; empieza con el primer gesto del usuario. Botón de altavoz en la cabecera, junto al de tema, con `aria-pressed`, nombre accesible y elección persistida (`jevling.sound`).
+- Suena en Inicio y Capacidades; Historia queda en silencio. Se detiene al ocultar la ruta o la pestaña, al cancelar el habla y al silenciar. Volumen moderado con compresor; sin archivos de audio ni dependencias.
 
 ### Home
 

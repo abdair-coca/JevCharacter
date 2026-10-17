@@ -1,0 +1,189 @@
+{
+  "block": "perf",
+  "variant": "",
+  "date": "2026-10-17T04:23:17.702Z",
+  "conditions": "Production build via vite preview; headless Chromium; viewport, touch, reduced motion, visibility and throttling emulated; /api/* answered by fixtures, no providers.",
+  "checks": [
+    "measured LCP and frame pacing for three routes under two profiles on the hardware GPU (ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)), plus bundle sizes",
+    "zero application or console errors"
+  ],
+  "measurements": {
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "desktop": {
+      "/": {
+        "lcp": {
+          "ms": 600,
+          "element": "h1"
+        },
+        "frames": {
+          "frames": 151,
+          "p50": 16.7,
+          "p95": 33.4,
+          "max": 350,
+          "over33": 10.6
+        },
+        "warm": null
+      },
+      "/features": {
+        "lcp": {
+          "ms": 236,
+          "element": "h1"
+        },
+        "frames": {
+          "frames": 223,
+          "p50": 16.7,
+          "p95": 16.7,
+          "max": 333.4,
+          "over33": 0.4
+        },
+        "warm": {
+          "frames": 226,
+          "p50": 16.7,
+          "p95": 33.3,
+          "max": 33.4,
+          "over33": 0.4
+        }
+      },
+      "/about": {
+        "lcp": {
+          "ms": 216,
+          "element": "h1"
+        },
+        "frames": {
+          "frames": 173,
+          "p50": 16.7,
+          "p95": 50,
+          "max": 216.6,
+          "over33": 9.2
+        },
+        "warm": {
+          "frames": 220,
+          "p50": 16.7,
+          "p95": 16.8,
+          "max": 133.2,
+          "over33": 1.8
+        }
+      }
+    },
+    "mobile-throttled": {
+      "/": {
+        "lcp": {
+          "ms": 1176,
+          "element": "h1"
+        },
+        "frames": {
+          "frames": 242,
+          "p50": 16.7,
+          "p95": 16.7,
+          "max": 16.8,
+          "over33": 0
+        },
+        "warm": null
+      },
+      "/features": {
+        "lcp": {
+          "ms": 1972,
+          "element": "h1"
+        },
+        "frames": {
+          "frames": 220,
+          "p50": 16.7,
+          "p95": 16.7,
+          "max": 350,
+          "over33": 0.5
+        },
+        "warm": {
+          "frames": 241,
+          "p50": 16.7,
+          "p95": 16.7,
+          "max": 33.3,
+          "over33": 0
+        }
+      },
+      "/about": {
+        "lcp": {
+          "ms": 1788,
+          "element": "p"
+        },
+        "frames": {
+          "frames": 233,
+          "p50": 16.7,
+          "p95": 16.8,
+          "max": 83.3,
+          "over33": 0.9
+        },
+        "warm": {
+          "frames": 213,
+          "p50": 16.7,
+          "p95": 16.8,
+          "max": 283.3,
+          "over33": 0.9
+        }
+      }
+    },
+    "bundle": [
+      {
+        "file": "AboutPage-DsJQHGOH.css",
+        "kB": 7.46,
+        "gzipKB": 2.15
+      },
+      {
+        "file": "AboutPage-DsK1Tz30.js",
+        "kB": 24.82,
+        "gzipKB": 9.87
+      },
+      {
+        "file": "Character-Dkvm8o80.js",
+        "kB": 212.8,
+        "gzipKB": 59.86
+      },
+      {
+        "file": "FeaturesPage-Bu2k04sR.js",
+        "kB": 63.64,
+        "gzipKB": 21.01
+      },
+      {
+        "file": "FeaturesPage-Bw3fo4RR.css",
+        "kB": 5.46,
+        "gzipKB": 1.43
+      },
+      {
+        "file": "index-bZvcp2sN.js",
+        "kB": 358.81,
+        "gzipKB": 113.85
+      },
+      {
+        "file": "index-CNe-SK1T.css",
+        "kB": 44.32,
+        "gzipKB": 9.21
+      },
+      {
+        "file": "jsx-runtime-Dk72oS4N.js",
+        "kB": 8.77,
+        "gzipKB": 3.33
+      },
+      {
+        "file": "motionFeatures-PbwQxePg.js",
+        "kB": 85.59,
+        "gzipKB": 28.12
+      },
+      {
+        "file": "PendingPage-CDHDUG6k.js",
+        "kB": 0.52,
+        "gzipKB": 0.35
+      },
+      {
+        "file": "scrollRuntime-NsJoEnvz.js",
+        "kB": 133.83,
+        "gzipKB": 49.87
+      }
+    ]
+  },
+  "screenshots": [],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [],
+  "apiRequests": [],
+  "browser": "153.0.8010.12",
+  "passed": true
+}

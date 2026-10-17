@@ -4,13 +4,15 @@ import type { BinaryAnswer, MorphForm, TalkState } from "../creature/brain/brain
 
 export const CHARACTER_STATES = ["Base", "Hello", "Ghost", "Flower", "question", "Talk", "Cloud", "yes", "no", "talkb", "talkc", "talkbc"] as const;
 export type CharacterState = (typeof CHARACTER_STATES)[number];
+/** A visible action that has just started, for listeners such as Jev's voice. */
+export type CharacterCue = CharacterState | "think" | MorphForm | "bump";
 type SetState = ((value: string) => void) | undefined;
 type SetNumber = ((value: number) => void) | undefined;
 type Trigger = (() => void) | undefined;
 type SequenceStep = { state: CharacterState; duration: number };
 const MORPH_STATE: Record<MorphForm, string> = { star: "MorphState", square: "square", triangle: "triangle" };
 
-export function useCharacterController(setRiveState: SetState, triggerState: Trigger, setShapeType?: SetNumber, active = true) {
+export function useCharacterController(setRiveState: SetState, triggerState: Trigger, setShapeType?: SetNumber, active = true, onCue?: (cue: CharacterCue) => void) {
   const executionId = useRef(0);
   const enabled = useRef(active);
   const currentState = useRef<CharacterState>("Base");
@@ -51,7 +53,8 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
     if (!await wait() || !enabled.current || id !== executionId.current) return;
     currentState.current = state;
     triggerState();
-  }, [setRiveState, setShapeType, triggerState, wait]);
+    if (state !== "Base") onCue?.(state);
+  }, [onCue, setRiveState, setShapeType, triggerState, wait]);
 
   const play = useCallback(async (state: CharacterState) => {
     if (!enabled.current) return;
@@ -74,8 +77,10 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
     const id = executionId.current;
     setShapeType?.(0);
     setRiveState("think");
-    if (await wait() && enabled.current && id === executionId.current) triggerState();
-  }, [setRiveState, setShapeType, stop, triggerState, wait]);
+    if (!await wait() || !enabled.current || id !== executionId.current) return;
+    triggerState();
+    onCue?.("think");
+  }, [onCue, setRiveState, setShapeType, stop, triggerState, wait]);
 
   const morph = useCallback(async (form: MorphForm) => {
     if (!enabled.current || !setRiveState || !triggerState) return;
@@ -85,9 +90,10 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
     setRiveState(MORPH_STATE[form]);
     if (!await wait() || !enabled.current || id !== executionId.current) return;
     triggerState();
+    onCue?.(form);
     if (!await wait(BRAIN_CONFIG.morphDurationMs) || id !== executionId.current) return;
     await rawPlay("Base", id);
-  }, [rawPlay, setRiveState, stop, triggerState, wait]);
+  }, [onCue, rawPlay, setRiveState, stop, triggerState, wait]);
 
   const sequence = useCallback(async (steps: SequenceStep[]) => {
     if (!enabled.current) return;
@@ -107,8 +113,10 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
     const id = executionId.current;
     lastBumpAt.current = now;
     setRiveState(currentState.current);
-    if (await wait() && enabled.current && id === executionId.current) triggerState();
-  }, [setRiveState, triggerState, wait]);
+    if (!await wait() || !enabled.current || id !== executionId.current) return;
+    triggerState();
+    onCue?.("bump");
+  }, [onCue, setRiveState, triggerState, wait]);
 
   return useMemo(() => ({
     play, think, playFor, sequence, stop, bump, morph,

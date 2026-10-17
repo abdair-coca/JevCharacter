@@ -2,6 +2,7 @@
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useCharacterController } from "../src/character/useCharacterController";
+import { BRAIN_CONFIG } from "../src/creature/brain/brainConfig";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -58,5 +59,27 @@ describe("character lifecycle", () => {
     await act(async () => vi.advanceTimersByTimeAsync(1000));
     expect(state.mock.calls.map(([name]) => name)).toEqual(["Hello", "Flower"]);
     expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe("character action cues", () => {
+  it("announces each visible action once it is triggered, never the return to Base or a cancelled action", async () => {
+    const cue = vi.fn();
+    const { result, rerender } = renderHook(({ active }) => useCharacterController(vi.fn(), vi.fn(), vi.fn(), active, cue), { initialProps: { active: true } });
+    act(() => { void result.current.playFor("Hello", 100); });
+    expect(cue).not.toHaveBeenCalled();
+    await act(async () => vi.advanceTimersByTimeAsync(200));
+    act(() => { void result.current.think(); });
+    await act(async () => vi.advanceTimersByTimeAsync(16));
+    act(() => { void result.current.morph("star"); });
+    // Past the tap cooldown, which starts at the beginning of the fake clock.
+    await act(async () => vi.advanceTimersByTimeAsync(BRAIN_CONFIG.bumpCooldownMs));
+    act(() => { void result.current.bump(); });
+    await act(async () => vi.advanceTimersByTimeAsync(16));
+    expect(cue.mock.calls.map(([name]) => name)).toEqual(["Hello", "think", "star", "bump"]);
+    act(() => { void result.current.answer("yes"); });
+    rerender({ active: false });
+    await act(async () => vi.advanceTimersByTimeAsync(5000));
+    expect(cue).toHaveBeenCalledTimes(4);
   });
 });

@@ -1,0 +1,55 @@
+{
+  "block": "sound",
+  "variant": "",
+  "date": "2026-10-17T04:18:36.705Z",
+  "conditions": "Production build via vite preview; headless Chromium; viewport, touch, reduced motion, visibility and throttling emulated; /api/* answered by fixtures, no providers.",
+  "checks": [
+    "no audio before the first user gesture (Hello wake stays silent)",
+    "first gesture creates one running AudioContext",
+    "think + Hello actions play their motifs (Hello rises to 1500 Hz)",
+    "one chirp per written syllable (8 for \"¿Quieres jugar conmigo hoy?\", plus 5 think chirps)",
+    "the question ends rising (640 → 1121 Hz)",
+    "chirps are spread as phrasing, not a single beep (2.58 s)",
+    "mute toggle reports pressed=false and persists",
+    "muted Jev plays no new sounds",
+    "mute survives reload and gestures do not create audio while muted",
+    "unmuting from the header starts audio in that same gesture",
+    "hidden tab suspends audio",
+    "visible tab resumes audio",
+    "About stays silent, including the Jev reveal",
+    "Features \"Habla\" chirps its scripted line (24 chirps, think motif included)",
+    "zero application or console errors"
+  ],
+  "measurements": {
+    "actionOscillators": 10,
+    "speech": {
+      "notes": 13,
+      "think": 5,
+      "syllables": 8,
+      "finalFrom": 640,
+      "finalTo": 1121,
+      "span": 2.5783858336495857
+    }
+  },
+  "screenshots": [
+    "sound-home-speaking.png",
+    "sound-header-muted.png",
+    "sound-features-talks.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x55e400426e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x55e400426e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x55e400426e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x55e400426e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "apiRequests": [
+    "/api/decide",
+    "/api/decide",
+    "/api/talk",
+    "/api/decide"
+  ],
+  "browser": "153.0.8010.12",
+  "passed": true
+}

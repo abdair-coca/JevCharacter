@@ -35,7 +35,7 @@ const latest = () => mocks.characters.at(-1)!;
 beforeEach(() => {
   mocks.characters.length = 0; mocks.reduced = false; mocks.inView = true;
   vi.clearAllMocks();
-  vi.stubGlobal("IntersectionObserver", class {});
+  vi.stubGlobal("IntersectionObserver", class { observe() {} unobserve() {} disconnect() {} });
   Object.defineProperty(document, "visibilityState", { configurable: true, value: "visible" });
   preferencesStore.setState({ language: "es", theme: "light", themePreference: "light" });
 });

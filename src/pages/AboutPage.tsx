@@ -11,6 +11,7 @@ import { useStageVisibility } from "../features/presentation/useStageVisibility"
 import { STORY_SCENES, storyCopy } from "../features/story/catalog";
 import { useStoryScroll } from "../features/story/useStoryScroll";
 import { ParticleVortex } from "../features/story/ParticleVortex";
+import { StillImage } from "../features/story/StillImage";
 import "../features/story/story.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -94,7 +95,7 @@ export default function AboutPage() {
                 {scene.id === "vision" && <div className="story-reveal-cue"><Button variant="ghost" onClick={reveal}><span aria-hidden="true">✧</span> {copy.revealAction}</Button></div>}
               </div>
               <figure className="story-static-media">
-                {scene.image && <img src={scene.image} alt={scene.caption[language]} loading="lazy" />}
+                {scene.image && ("animated" in scene && reduced ? <StillImage src={scene.image} alt={scene.caption[language]} /> : <img src={scene.image} alt={scene.caption[language]} loading="lazy" />)}
                 <figcaption>{scene.caption[language]}</figcaption>
               </figure>
             </section>

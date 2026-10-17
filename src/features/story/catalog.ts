@@ -1,7 +1,8 @@
 import type { Language } from "../../stores/preferencesStore";
 
 type StoryText = Record<Language, string>;
-type StoryScene = { id: string; label: StoryText; title: StoryText; lead: StoryText; detail: StoryText; caption: StoryText; image: string | null; projectUrl?: string };
+/** `animated` marks an animated image: the static reading shows its first frame. */
+type StoryScene = { id: string; label: StoryText; title: StoryText; lead: StoryText; detail: StoryText; caption: StoryText; image: string | null; animated?: true; projectUrl?: string };
 const text = (es: string, en: string): StoryText => ({ es, en });
 
 // Author-provided facts in docs/jev-story.md. Order is editorial, not a dated timeline.
@@ -21,7 +22,7 @@ export const STORY_SCENES = [
     caption: text("Bob · De cartón, con personalidad", "Bob · Cardboard, with personality"),
   },
   {
-    id: "titi", label: text("TITIEDU", "TITIEDU"), image: "/story/curiousTiti.webp", projectUrl: "https://titiedu.vercel.app",
+    id: "titi", label: text("TITIEDU", "TITIEDU"), image: "/story/curiousTiti.webp", animated: true, projectUrl: "https://titiedu.vercel.app",
     title: text("Construir\npara enseñar.", "Building\nto teach."),
     lead: text("Programación orientada a objetos, IA y un espacio para aprender jugando.", "Object-oriented programming, AI and a space to learn through play."),
     detail: text("Usé TitiEdu para enseñar programación orientada a objetos a mis estudiantes. Hoy es una plataforma completa con IA, un sistema RAG y un simulador integrado de juegos con HTML, CSS y JavaScript.", "I used TitiEdu to teach object-oriented programming to my students. Today it is a complete platform with AI, a RAG system and an integrated HTML, CSS and JavaScript game simulator."),

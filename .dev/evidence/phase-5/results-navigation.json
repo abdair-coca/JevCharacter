@@ -1,0 +1,37 @@
+{
+  "block": "navigation",
+  "variant": "",
+  "date": "2026-10-17T04:19:39.110Z",
+  "conditions": "Production build via vite preview; headless Chromium; viewport, touch, reduced motion, visibility and throttling emulated; /api/* answered by fixtures, no providers.",
+  "checks": [
+    "link navigation focuses the destination h1 and starts at the top",
+    "document title follows the route",
+    "Home stays mounted but hidden, inert and suspended on another route",
+    "About scrolls (1600px)",
+    "Home keeps its draft and the same canvas after crossing routes",
+    "no API requests or sounds while Home was hidden",
+    "Back restores About at 1600px",
+    "Back focuses the restored page heading",
+    "Forward returns to Home",
+    "reload keeps the route and restores the saved position",
+    "language change keeps route",
+    "language change keeps the Features chapter",
+    "unknown path renders the in-app not-found page (preview SPA fallback)",
+    "zero application or console errors"
+  ],
+  "measurements": {},
+  "screenshots": [
+    "navigation-not-found.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x6e2c01840c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x6e2c01840c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x6e2c01840c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x6e2c01840c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "apiRequests": [],
+  "browser": "153.0.8010.12",
+  "passed": true
+}

@@ -194,6 +194,8 @@ No comenzar una fase posterior hasta que el usuario acepte explícitamente la en
 
 **Seams previstos:** `src/App.tsx`, `src/navigation/`, `src/stores/`, `vercel.json`, tests e índices de `README.md`/`docs/`.
 
+**Ampliación aprobada el 2026-10-16 — voz de Jev:** antes de la auditoría, `src/creature/voice/` (partitura pura, motor Web Audio, runtime y enlace del habla), `onCue` en el controlador, prop `voice` de `Character` (Home/Features), botón de altavoz y preferencia `jevling.sound`. La auditoría de fase 5 cubre también la voz: gesto, silencio, pestaña oculta, rutas silenciosas y sin dependencias.
+
 **Aceptación:** criterios completos de spec; rutas recargables; sin actividad oculta o fugas; typechecks ESLint Vitest build Playwright; rendimiento medido y límites informados; usuario aprueba experiencia final.
 
 **Puerta final:** presentar resumen, evidencias y limitaciones; solo tras aprobación final vaciar el contenido de los tres SDD files, preservando los archivos.
@@ -205,4 +207,4 @@ No comenzar una fase posterior hasta que el usuario acepte explícitamente la en
 - Este `plan.md` define el orden y el resultado esperado de las fases, no estado de checkboxes.
 - `task.md` es la única fuente de fase activa, checks ejecutados, evidencia, blockers y aprobación de entregas.
 - El runtime y `package.json` son autoridad de comportamiento y herramientas actuales; la documentación debe señalar explícitamente si una fase es objetivo o implementada.
-- El usuario aprobó cinco resúmenes y el plan original; tras aprobar Features y la retirada del cursor decorativo autorizó implementar About. Fase 4 aprobada el 2026-10-11; la integración final (fase 5) no ha comenzado.
+- El usuario aprobó cinco resúmenes y el plan original; tras aprobar Features y la retirada del cursor decorativo autorizó implementar About. Fase 4 aprobada el 2026-10-11. El 2026-10-16 el usuario pidió culminar la fase 5 y añadir la voz de Jev, en ese orden (sonido primero); la fase 5 quedó implementada y entregada para revisión el 2026-10-17.

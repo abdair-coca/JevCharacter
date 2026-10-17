@@ -1,6 +1,6 @@
 # Spec: rediseño de JEVLING
 
-**Estado:** producto y alcance aprobados el 2026-10-06. Fases 1–3 aceptadas; fase 4 activa tras «perfecto, aora continua con la siguiente fase, esta ya esta aprobada» (2026-10-07, host local).
+**Estado:** producto y alcance aprobados el 2026-10-06. Fases 1–4 aprobadas; fase 5 (con la voz de Jev aprobada el 2026-10-16) entregada para revisión el 2026-10-17.
 
 **Fuentes:** [contrato visual](../design.md), [relato de About](../docs/jev-story.md), [plan de implementación](plan.md), [tarea activa y handoff](task.md).
 
@@ -21,6 +21,16 @@ El usuario debe poder probar Jev en Home, comprender capacidades actuales median
 La interfaz general es sencilla. Los detalles técnicos o narrativos se ofrecen como contenido opcional y progresivo.
 
 ## Alcance
+
+### Voz sintetizada de Jev — aprobada el 2026-10-16
+
+El usuario pidió «agregues sonido a jev, que sea acorde con como hable, entonando las palabras cuando hable pero nunca diciendo una palabra, como eva o walle o AR2D2. y si no habla tambien haya sonido cuando haga cada una de las acciones», y eligió en el quiz: encendido tras el primer toque, Inicio y Capacidades, síntesis en el navegador y sonido antes de cerrar la fase 5.
+
+- **Habla:** pitidos/trinos sintetizados que siguen el texto real de la respuesta: una sílaba sonora por sílaba escrita, pausas en comas y fin de frase, tono que sube en preguntas, más alto en exclamaciones y descendente al cerrar una afirmación. Nunca reproduce palabras ni voz humana.
+- **Acciones:** cada acción visible tiene un motivo sonoro propio (saludo, flor, fantasma, duda, nube, sí, no, pensar, transformaciones y toque). El regreso a `Base` no suena.
+- **Activación:** encendido por defecto; el audio se habilita con el primer gesto del usuario (requisito de los navegadores). Un botón en la cabecera silencia/activa y la elección se guarda localmente.
+- **Alcance:** Inicio (habla y acciones reales) y Capacidades (demostraciones; «Habla» suena con su frase de ejemplo). Historia permanece en silencio.
+- **Límites:** Web Audio API, sin dependencias ni archivos de audio. Se detiene al ocultar la ruta o la pestaña, al cancelar el habla y al silenciar. No cambia el asset Rive ni el contrato de decisión/habla.
 
 ### Decisión remota en producción — autorizada el 2026-10-09
 
@@ -116,7 +126,7 @@ Capítulos aprobados:
 2. **Reacciona:** saludo y reacciones visuales disponibles.
 3. **Decide:** situación predefinida → acción tipada y presentación del HUD.
 4. **Responde:** demostraciones visuales sí/no.
-5. **Habla:** pensamiento, gesto de habla y una frase escrita de ejemplo.
+5. **Habla:** pensamiento, gesto de habla y una frase escrita de ejemplo, entonada con la voz sintetizada de Jev.
 6. **Se transforma:** formas que el runtime actual pueda reproducir y validar.
 7. **Se adapta:** personalidad, contexto temporal y retorno tras ausencia, simulados con datos fijos.
 8. **Sigue contigo:** fallback local ante indisponibilidad remota.
@@ -145,7 +155,7 @@ Usar el relato original en `docs/jev-story.md`. No inventar fechas, hitos, imág
 - **Capacidades:** la página se puede recorrer hasta el inicio de «Percibe»; desde ese punto, si Jev no está lista, el scroll se detiene en seco hasta que cargue. Al estar lista, se libera. Si falla la carga, se libera.
 - **Historia:** la carga de Jev empieza al primer cambio de partículas («Todo empezó con cartón») para que la escena de Jev aparezca ya lista.
 - **Movimiento reducido:** sin vuelo de partículas; Jev y la historia siguen accesibles.
-- Detalle de contrato en [design.md](design.md#carga-de-jev-ampliación-aprobada-2026-10-11).
+- Detalle de contrato en [design.md](../design.md#carga-de-jev-ampliación-aprobada-2026-10-11).
 
 ## Idioma y tema
 

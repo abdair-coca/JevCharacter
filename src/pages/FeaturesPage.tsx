@@ -12,6 +12,7 @@ import { useShowcasePlayer } from "../features/showcase/useShowcasePlayer";
 import { useShowcaseScroll } from "../features/showcase/useShowcaseScroll";
 import { useStageVisibility } from "../features/presentation/useStageVisibility";
 import CreatureLoader from "../features/loading/CreatureLoader";
+import { jevVoice } from "../creature/voice/voiceEngine";
 import "../features/showcase/showcase.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -58,6 +59,14 @@ export default function FeaturesPage() {
   const painted = useCallback(() => { if (activeAttempt.current === attempt) setPaintedAttempt(attempt); }, [attempt]);
   const failed = useCallback(() => { if (activeAttempt.current === attempt) actor.send({ type: "ERROR" }); }, [actor, attempt]);
   const retry = () => { activeAttempt.current++; actor.send({ type: "RETRY" }); setAttempt(value => value + 1); };
+  // The scripted talk line is chirped like Home's replies; each playback is a new phrase.
+  const talkLine = running && phase === "playing" && step.action.kind === "state" && step.action.state === "Talk" ? step.caption[language] : null;
+  const talkPlayback = useRef(0);
+  useEffect(() => {
+    if (!talkLine) return;
+    jevVoice.speak(`features-${++talkPlayback.current}`, talkLine, true);
+    return () => jevVoice.stopSpeech();
+  }, [talkLine]);
   const stateText = phase === "prepare" ? copy.preparing : phase === "loading" ? copy.loading : phase === "playing" ? copy.playing : phase === "complete" ? copy.complete : phase === "static" ? copy.static : phase === "error" ? copy.error : copy.interrupted;
 
   return (
@@ -73,7 +82,7 @@ export default function FeaturesPage() {
             <div className="creature-zone showcase-creature">
               <div className="creature-presence">
                 <Suspense fallback={null}>
-                  <Character key={attempt} ref={controller} onReady={ready} onPainted={painted} onError={failed} active={running && phase !== "error"} presentation staticPose={reduced} />
+                  <Character key={attempt} ref={controller} onReady={ready} onPainted={painted} onError={failed} active={running && phase !== "error"} presentation staticPose={reduced} voice />
                 </Suspense>
               </div>
               <CreatureLoader visible={gated} active={running} reduced={reduced} />

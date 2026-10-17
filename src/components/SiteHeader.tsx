@@ -4,6 +4,7 @@ import { usePreferences } from "../stores/preferencesStore";
 import { Button } from "./ui/button";
 import { m } from "motion/react";
 import { useThemeIconMotion, useUiMotion } from "../lib/motionTokens";
+import { jevVoice } from "../creature/voice/voiceEngine";
 
 export default function SiteHeader({ route }: { route: PageRoute }) {
   const t = useTranslation();
@@ -11,6 +12,15 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
   const setLanguage = usePreferences((state) => state.setLanguage);
   const theme = usePreferences((state) => state.theme);
   const setThemePreference = usePreferences((state) => state.setThemePreference);
+  const sound = usePreferences((state) => state.sound);
+  const setSound = usePreferences((state) => state.setSound);
+  const toggleSound = () => {
+    setSound(!sound);
+    if (sound) return;
+    // Turning sound on is itself a gesture, so audio can start right away.
+    jevVoice.setEnabled(true);
+    jevVoice.unlock();
+  };
   const transition = useUiMotion();
   const iconMotion = useThemeIconMotion();
   const links: { route: Route; label: string }[] = [
@@ -33,6 +43,14 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
             ))}
           </nav>
           <div className="preferences">
+            <Button className="theme-toggle sound-toggle" variant="ghost" size="icon" aria-label={t.sound} aria-pressed={sound} title={sound ? t.mute : t.unmute} onClick={toggleSound}>
+              <span className="theme-toggle__icons" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+                  {sound ? <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /> : <path d="m16 9.5 5 5m0-5-5 5" />}
+                </svg>
+              </span>
+            </Button>
             <Button className="theme-toggle" variant="ghost" size="icon" aria-label={t.theme} aria-pressed={theme === "dark"} title={theme === "dark" ? t.light : t.dark} onClick={() => setThemePreference(theme === "dark" ? "light" : "dark")}>
               <span className="theme-toggle__icons" aria-hidden="true">
                 <m.svg className="theme-toggle__sun" viewBox="0 0 24 24" initial={false} animate={{ opacity: theme === "light" ? 1 : 0, rotate: theme === "light" ? 0 : iconMotion.turn, scale: theme === "light" ? 1 : iconMotion.scale }} transition={transition}>

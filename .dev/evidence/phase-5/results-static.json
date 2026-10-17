@@ -1,0 +1,30 @@
+{
+  "block": "static",
+  "variant": "",
+  "date": "2026-10-17T04:18:36.251Z",
+  "conditions": "Production build via vite preview; headless Chromium; viewport, touch, reduced motion, visibility and throttling emulated; /api/* answered by fixtures, no providers.",
+  "checks": [
+    "Vercel rewrites only the two app routes to index.html",
+    "no rewrite can intercept /api/*",
+    "only the decide/talk functions are server-side",
+    "client bundle has no provider keys or server env references (none)",
+    "the client only calls /api/decide and /api/talk (3 call sites)",
+    "the legacy conversation key jevling.context is only removed, never written",
+    "local storage holds preferences/personality only (jevling.context, jevling.language, jevling.personality, jevling.sound, jevling.theme); conversation stays in memory"
+  ],
+  "measurements": {
+    "storageKeys": [
+      "jevling.context",
+      "jevling.language",
+      "jevling.personality",
+      "jevling.sound",
+      "jevling.theme"
+    ]
+  },
+  "screenshots": [],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [],
+  "apiRequests": [],
+  "passed": true
+}

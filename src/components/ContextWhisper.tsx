@@ -50,7 +50,8 @@ export default function ContextWhisper({ context, onSubmit, onClear, status = "o
               onKeyDown={(event) => { if (event.key === "Escape") event.currentTarget.blur(); }}
               maxLength={BRAIN_CONFIG.contextMaxLength} placeholder={t.placeholder} autoComplete="off" />
           </div>
-          <m.div className="whisper__send-wrap" whileTap={{ scale: motion.reduced ? 1 : motion.pressScale }} transition={motion.spring}>
+          {/* whileTap makes a plain div focusable; the button inside is the only tab stop. */}
+          <m.div className="whisper__send-wrap" tabIndex={-1} whileTap={{ scale: motion.reduced ? 1 : motion.pressScale }} transition={motion.spring}>
             <Button className="whisper__send" type="submit" size="icon" disabled={!hasText} aria-label={t.send}>
               <AnimatePresence mode="wait" initial={false}>
                 <m.span key={sent ? "received" : "send"} initial={{ opacity: 0, scale: motion.reduced ? 1 : motion.revealScale }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={transition}>

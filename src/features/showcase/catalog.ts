@@ -68,8 +68,8 @@ export const CHAPTERS = [
   {
     id: "talks", title: text("Habla", "Talks"),
     description: text("Piensa, se expresa y encuentra su voz.", "Thinks, expresses itself and finds its voice."),
-    scenario: text("Una frase escrita de ejemplo, sin audio.", "An example written sentence, without audio."),
-    explanation: text("Gesto Talk y texto preescrito. No se consulta un modelo ni se genera voz.", "Talk gesture and prewritten text. No model request or generated voice."),
+    scenario: text("Una frase escrita de ejemplo, entonada con pitidos.", "An example written sentence, intoned in chirps."),
+    explanation: text("Gesto Talk, texto preescrito y pitidos sintetizados que siguen su entonación, sin decir palabras. No se consulta un modelo.", "Talk gesture, prewritten text and synthesized chirps that follow its intonation without saying words. No model request."),
     steps: [
       { action: state("think"), duration: "think", caption: text("Primero, una pausa.", "First, a pause." ) },
       { action: state("Talk"), duration: "talk", caption: text("¡Hola! Una pequeña criatura, muchas formas de responder.", "Hi! A tiny creature, many ways to respond." ) },

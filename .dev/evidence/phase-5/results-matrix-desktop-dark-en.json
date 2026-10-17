@@ -1,0 +1,172 @@
+{
+  "block": "matrix",
+  "variant": "desktop-dark-en",
+  "date": "2026-10-17T04:22:01.051Z",
+  "conditions": "Production build via vite preview; headless Chromium; viewport, touch, reduced motion, visibility and throttling emulated; /api/* answered by fixtures, no providers.",
+  "checks": [
+    "/ applies en/dark",
+    "/ has one visible h1 and a main landmark",
+    "/ navigation marks the current page",
+    "/ has no horizontal overflow (0px)",
+    "/ every visible control has an accessible name",
+    "/ targets meet 24×24 CSS px (12 measured; 4 below 44)",
+    "/ AA text contrast (16 measured, 0 over images/animated, lowest 4.79)",
+    "/features direct load HTTP 200",
+    "/features applies en/dark",
+    "/features has one visible h1 and a main landmark",
+    "/features navigation marks the current page",
+    "/features has no horizontal overflow (0px)",
+    "/features every visible control has an accessible name",
+    "/features targets meet 24×24 CSS px (17 measured; 3 below 44)",
+    "/features AA text contrast (49 measured, 0 over images/animated, lowest 4.79)",
+    "/about direct load HTTP 200",
+    "/about applies en/dark",
+    "/about has one visible h1 and a main landmark",
+    "/about navigation marks the current page",
+    "/about has no horizontal overflow (0px)",
+    "/about every visible control has an accessible name",
+    "/about targets meet 24×24 CSS px (14 measured; 3 below 44)",
+    "/about AA text contrast (8 measured, 26 over images/animated, lowest 4.79)",
+    "zero application or console errors"
+  ],
+  "measurements": {
+    "/": {
+      "overflow": 0,
+      "h1": 1,
+      "main": 1,
+      "navLinks": 3,
+      "current": "/",
+      "unnamed": [],
+      "under24": [],
+      "under44": [
+        {
+          "element": "a.brand-mark",
+          "width": 109,
+          "height": 28
+        },
+        {
+          "element": "button.ui-button.inline-flex",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "element": "button.ui-button.inline-flex",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "element": "input#creature-context",
+          "width": 374,
+          "height": 32
+        }
+      ],
+      "targets": 12,
+      "contrast": {
+        "measured": 16,
+        "unmeasured": 0,
+        "failures": [],
+        "lowest": {
+          "element": "em",
+          "ratio": 4.79
+        }
+      },
+      "lang": "en",
+      "theme": "dark",
+      "title": "JEVLING — Tiny creature. Big decisions."
+    },
+    "/features": {
+      "overflow": 0,
+      "h1": 1,
+      "main": 1,
+      "navLinks": 3,
+      "current": "/features",
+      "unnamed": [],
+      "under24": [],
+      "under44": [
+        {
+          "element": "a.brand-mark",
+          "width": 109,
+          "height": 28
+        },
+        {
+          "element": "button.ui-button.inline-flex",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "element": "button.ui-button.inline-flex",
+          "width": 40,
+          "height": 40
+        }
+      ],
+      "targets": 17,
+      "contrast": {
+        "measured": 49,
+        "unmeasured": 0,
+        "failures": [],
+        "lowest": {
+          "element": "a.ui-button.ui-button--primary",
+          "ratio": 4.79
+        }
+      },
+      "lang": "en",
+      "theme": "dark",
+      "title": "JEVLING — Features"
+    },
+    "/about": {
+      "overflow": 0,
+      "h1": 1,
+      "main": 1,
+      "navLinks": 3,
+      "current": "/about",
+      "unnamed": [],
+      "under24": [],
+      "under44": [
+        {
+          "element": "a.brand-mark",
+          "width": 109,
+          "height": 28
+        },
+        {
+          "element": "button.ui-button.inline-flex",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "element": "button.ui-button.inline-flex",
+          "width": 40,
+          "height": 40
+        }
+      ],
+      "targets": 14,
+      "contrast": {
+        "measured": 8,
+        "unmeasured": 26,
+        "failures": [],
+        "lowest": {
+          "element": "button.ui-button.inline-flex",
+          "ratio": 4.79
+        }
+      },
+      "lang": "en",
+      "theme": "dark",
+      "title": "JEVLING — About"
+    }
+  },
+  "screenshots": [
+    "matrix-desktop-dark-en-home.png",
+    "matrix-desktop-dark-en-features.png",
+    "matrix-desktop-dark-en-about.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x35401944000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x35401944000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x35401944000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x35401944000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "apiRequests": [],
+  "browser": "153.0.8010.12",
+  "passed": true
+}

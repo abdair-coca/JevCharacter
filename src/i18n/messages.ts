@@ -3,6 +3,7 @@ import type { Language } from "../stores/preferencesStore";
 const es = {
   home: "Inicio", features: "Capacidades", about: "Historia", navigation: "Navegación principal",
   skip: "Ir al contenido", theme: "Tema", system: "Sistema", light: "Claro", dark: "Oscuro",
+  sound: "Sonido de Jev", mute: "Silenciar a Jev", unmute: "Activar el sonido de Jev",
   language: "Idioma", title: "Pequeña criatura.", titleAccent: "Grandes decisiones.",
   intro: "Mueve el cursor. Acércate. Dile algo.", creature: "Jev, tu criatura digital interactiva",
   input: "Dale contexto a Jev", placeholder: "¿Qué quieres contarle a Jev?", send: "Enviar a Jev",
@@ -18,7 +19,7 @@ const es = {
   reaction: "Reacción", answer: "Respuesta", talk: "Habla", morph: "Transformación", decision: "Decisión",
   BASE: "Observa", HELLO: "Saluda", GHOST: "Se asusta", FLOWER: "Florece", QUESTION: "Duda", CLOUD: "Nube",
   YES: "Sí", NO: "No", STAR: "Estrella", SQUARE: "Cuadrado", TRIANGLE: "Triángulo",
-  pending: "Esta vista se construirá en una próxima fase.", backHome: "Volver a Jev", notFound: "Página no encontrada",
+  notFoundBody: "Esta dirección no lleva a ninguna vista de JEVLING.", backHome: "Volver a Jev", notFound: "Página no encontrada",
   footer: "Una interfaz con personalidad.", diagnostics: "Diagnóstico", close: "Cerrar diagnóstico",
   debugSignal: "Señales en vivo", distance: "Distancia", speed: "Velocidad", near: "Cerca", idle: "Inactividad",
   clicks: "Toques", absence: "Ausencia", source: "Origen", latency: "Latencia", reactionConfidence: "Confianza de reacción",
@@ -28,6 +29,7 @@ export type MessageKey = keyof typeof es;
 const en: Record<MessageKey, string> = {
   home: "Home", features: "Features", about: "About", navigation: "Main navigation",
   skip: "Skip to content", theme: "Theme", system: "System", light: "Light", dark: "Dark",
+  sound: "Jev's sound", mute: "Mute Jev", unmute: "Turn on Jev's sound",
   language: "Language", title: "Tiny creature.", titleAccent: "Big decisions.",
   intro: "Move your cursor. Come closer. Say something.", creature: "Jev, your interactive digital creature",
   input: "Give Jev context", placeholder: "What would you like to tell Jev?", send: "Send to Jev",
@@ -43,7 +45,7 @@ const en: Record<MessageKey, string> = {
   reaction: "Reaction", answer: "Answer", talk: "Talk", morph: "Transformation", decision: "Decision",
   BASE: "Observes", HELLO: "Waves", GHOST: "Gets scared", FLOWER: "Blooms", QUESTION: "Skeptical", CLOUD: "Cloud",
   YES: "Yes", NO: "No", STAR: "Star", SQUARE: "Square", TRIANGLE: "Triangle",
-  pending: "This view will be built in an upcoming phase.", backHome: "Back to Jev", notFound: "Page not found",
+  notFoundBody: "This address doesn't lead to any JEVLING view.", backHome: "Back to Jev", notFound: "Page not found",
   footer: "An interface with personality.", diagnostics: "Diagnostics", close: "Close diagnostics",
   debugSignal: "Live signals", distance: "Distance", speed: "Speed", near: "Nearby", idle: "Idle",
   clicks: "Clicks", absence: "Absence", source: "Source", latency: "Latency", reactionConfidence: "Reaction confidence",

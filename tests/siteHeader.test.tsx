@@ -6,7 +6,7 @@ import { preferencesStore } from "../src/stores/preferencesStore";
 
 vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useThemeIconMotion: () => ({ turn: 0, scale: 1 }) }));
 afterEach(cleanup);
-beforeEach(() => preferencesStore.setState({ language: "es", theme: "light", themePreference: "system" }));
+beforeEach(() => preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true }));
 
 describe("header preference controls", () => {
   it("keeps automatic system selection until the user toggles the resolved theme", () => {
@@ -33,5 +33,18 @@ describe("header preference controls", () => {
     expect(screen.getByRole("button", { name: "Theme" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Features" }).getAttribute("aria-current")).toBe("page");
     expect(preferencesStore.getState().themePreference).toBe("system");
+  });
+
+  it("toggles Jev's sound with an accessible pressed state and keeps the other preferences", () => {
+    render(<SiteHeader route="/" />);
+    const button = screen.getByRole("button", { name: "Sonido de Jev" });
+    expect(button.getAttribute("aria-pressed")).toBe("true");
+    expect(button.getAttribute("title")).toBe("Silenciar a Jev");
+    fireEvent.click(button);
+    expect(button.getAttribute("aria-pressed")).toBe("false");
+    expect(button.getAttribute("title")).toBe("Activar el sonido de Jev");
+    expect(preferencesStore.getState()).toMatchObject({ sound: false, theme: "light", language: "es" });
+    fireEvent.click(button);
+    expect(preferencesStore.getState().sound).toBe(true);
   });
 });

@@ -1,0 +1,94 @@
+{
+  "block": "keyboard",
+  "variant": "",
+  "date": "2026-10-17T04:20:04.440Z",
+  "conditions": "Production build via vite preview; headless Chromium; viewport, touch, reduced motion, visibility and throttling emulated; /api/* answered by fixtures, no providers.",
+  "checks": [
+    "Tab starts with the skip link",
+    "header focus order: brand, three routes, sound, theme, ES, EN",
+    "every focused control shows a visible focus indicator",
+    "skip link moves focus to the page title",
+    "after the title, Tab reaches Jev's input",
+    "keyboard-only message reaches Jev",
+    "HUD details expand from the keyboard with aria-expanded",
+    "Escape collapses HUD details and keeps focus",
+    "Features scenes start from the keyboard",
+    "About reveal works from the keyboard",
+    "About project links open safely in a new tab",
+    "About uses its static reading in reduced motion",
+    "About is visually still in reduced motion (identical frames 1.5 s apart)",
+    "About stays still after scrolling to another scene in reduced motion",
+    "Features uses static steps in reduced motion",
+    "zero application or console errors"
+  ],
+  "measurements": {
+    "tabOrder": [
+      {
+        "name": "Ir al contenido",
+        "visible": true
+      },
+      {
+        "name": "Jevling",
+        "visible": true
+      },
+      {
+        "name": "Inicio",
+        "visible": true
+      },
+      {
+        "name": "Capacidades",
+        "visible": true
+      },
+      {
+        "name": "Historia",
+        "visible": true
+      },
+      {
+        "name": "Sonido de Jev",
+        "visible": true
+      },
+      {
+        "name": "Tema",
+        "visible": true
+      },
+      {
+        "name": "Español",
+        "visible": true
+      },
+      {
+        "name": "English",
+        "visible": true
+      },
+      {
+        "name": "creature-context",
+        "visible": true
+      },
+      {
+        "name": "Instinto localDecisiónOb",
+        "visible": true
+      }
+    ],
+    "reducedAboutFramesIn2s": {
+      "frames": 128,
+      "note": "ScrollTrigger _rafBugFix no-op loop while section triggers exist; no rendering"
+    }
+  },
+  "screenshots": [
+    "keyboard-reduced-features.png"
+  ],
+  "errors": [],
+  "expectedErrors": [],
+  "warnings": [
+    "[.WebGL-0x1a540040ee00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x1a540040ee00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x1a540040ee00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x1a540040ee00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "[.WebGL-0x75ec023e1e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x75ec023e1e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+  ],
+  "apiRequests": [
+    "/api/decide"
+  ],
+  "browser": "153.0.8010.12",
+  "passed": true
+}

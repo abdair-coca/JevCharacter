@@ -26,6 +26,7 @@ import {
   useCharacterController,
   type CharacterController,
 } from "../character/useCharacterController";
+import { jevVoice } from "../creature/voice/voiceEngine";
 
 const STATE_MACHINE = "State Machine 1";
 // Keep in sync with the data-ready transition delay in App.css: Jev stays hidden for this long.
@@ -38,10 +39,12 @@ type Props = {
   active?: boolean;
   presentation?: boolean;
   staticPose?: boolean;
+  /** Lets this Jev sound its actions through the shared synthesized voice. */
+  voice?: boolean;
 };
 
 const Character = forwardRef<CharacterController, Props>(
-  function Character({ onReady, onPainted, onError, active = true, presentation = false, staticPose = false }, ref) {
+  function Character({ onReady, onPainted, onError, active = true, presentation = false, staticPose = false, voice = false }, ref) {
     const motionPreference = useReducedMotionPreference();
     const reducedMotion = motionPreference || staticPose;
     const wasSuspended = useRef(false);
@@ -95,6 +98,7 @@ const Character = forwardRef<CharacterController, Props>(
         triggerState,
          resetShape,
          active && ready && !(presentation && reducedMotion),
+         voice ? jevVoice.cue : undefined,
       );
 
     useImperativeHandle(
@@ -102,6 +106,13 @@ const Character = forwardRef<CharacterController, Props>(
       () => character,
       [character]
     );
+
+    // A hidden or removed Jev must not keep sounding its last action or phrase.
+    useEffect(() => {
+      if (!voice) return;
+      if (!active) jevVoice.stop();
+      return () => jevVoice.stop();
+    }, [active, voice]);
 
     useEffect(() => {
       if (ready && active && (!reducedMotion || (presentation && staticPrepared))) onReady?.();

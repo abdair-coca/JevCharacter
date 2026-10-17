@@ -10,7 +10,7 @@ Home muestra título breve, Jev, input y HUD compacto. El HUD presenta acción/c
 
 Input/HUD tienen superficies discretas sin logos ni halo animado. El input ocupa una sola línea; su etiqueta permanece accesible. No se muestran textos promocionales ni rótulos de contexto de sesión; «Borrar conversación» sigue disponible cuando hay contexto. El envío tiene feedback y el HUD conserva acción/confianza, origen accesible y métricas reales desplegables. El título es secundario respecto a Jev.
 
-La cabecera fija permite navegar a Features y a About, alternar claro/oscuro con un botón sol/luna y seleccionar ES/EN con indicador animado. El tema del sistema se detecta inicialmente, sin una tercera opción visible; el primer cambio manual queda persistido. Cambiar preferencias conserva el personaje, borrador y HUD desplegado. Atrás/adelante y navegación explícita transfieren el foco al título; la carga inicial no lo mueve. El enlace de salto al contenido precede a los controles. Home ocupa la altura dinámica disponible sin scroll de página; Jev cede espacio en viewport bajo. Los detalles del HUD se superponen hacia arriba sin desplazar el input y se cierran al pulsar de nuevo o con Escape. Las otras rutas conservan scroll nativo.
+La cabecera fija permite navegar a Features y a About, silenciar o activar la voz de Jev con un botón de altavoz, alternar claro/oscuro con un botón sol/luna y seleccionar ES/EN con indicador animado. El tema del sistema se detecta inicialmente, sin una tercera opción visible; el primer cambio manual queda persistido. Cambiar preferencias conserva el personaje, borrador y HUD desplegado. Atrás/adelante y navegación explícita transfieren el foco al título; la carga inicial no lo mueve. Una visita nueva empieza arriba; atrás/adelante y recarga devuelven la posición de scroll de esa entrada. El enlace de salto al contenido precede a los controles. Home ocupa la altura dinámica disponible sin scroll de página; Jev cede espacio en viewport bajo. Los detalles del HUD se superponen hacia arriba sin desplazar el input y se cierran al pulsar de nuevo o con Escape. Las otras rutas conservan scroll nativo.
 
 El input está centrado debajo de Jev independientemente del HUD lateral. En ancho estrecho, el HUD compacto pasa arriba a la derecha. El personaje usa `prove2.riv`, un único canvas directo sin máscara CSS radial. Home aprovecha el alto libre y usa escala local `2.1`; Features/About mantienen `1.9`. La composición no procesa píxeles por frame; se conserva el halo propio del personaje.
 
@@ -34,7 +34,7 @@ Ocho capítulos: Percibe, Reacciona, Decide, Responde, Habla, Se transforma, Se 
 
 El scroll nativo, teclado y touch recorren el contenido. «Ver escena» desplaza suavemente hacia el capítulo; pulsarlo en el capítulo actual vuelve a ejecutar su demostración. El scroll selecciona capítulo sin mover el foco y cada cambio cancela la secuencia anterior. Las preferencias conservan capítulo/paso/canvas. Fuera de viewport/pestaña se suspenden reproducción/Rive. Salir de la ruta destruye la presentación, conservando Home.
 
-Decide explica acción, confianza, intensidad y atención con un ejemplo fijo. La puntuación de confianza no garantiza corrección ni es la confianza de personalidad. Habla usa una frase escrita predefinida sin audio; Percibe representa atención mediante una escena fija, sin cursor decorativo ni sensor real. Las reacciones locales, ausencia y personalidad también son datos de ejemplo. Nada consulta `/api/*` ni modifica contexto/persona de Home.
+Decide explica acción, confianza, intensidad y atención con un ejemplo fijo. La puntuación de confianza no garantiza corrección ni es la confianza de personalidad. Habla usa una frase escrita predefinida, entonada con la voz de pitidos de Jev; Percibe representa atención mediante una escena fija, sin cursor decorativo ni sensor real. Las reacciones locales, ausencia y personalidad también son datos de ejemplo. Nada consulta `/api/*` ni modifica contexto/persona de Home.
 
 Con movimiento reducido, sin observer o viewport muy bajo, el contenido sigue lineal y sin pinning; el modo estático añade una lista de pasos por capítulo. Si Rive no carga, el texto/controles siguen disponibles y hay reintento. [Matriz de evidencia](../.dev/evidence/phase-3/README.md). Carga de Jev: Home y Capacidades muestran el mismo cargador de tres puntos animados mientras Jev no está revelada; se desvanece al revelarse, 1,8 s después de estar lista; Capacidades no avanza más allá del inicio de «Percibe» hasta que Jev está revelada, con una parada rígida; About empieza a cargar a Jev al entrar en «Todo empezó con cartón».
 
@@ -88,6 +88,12 @@ El adaptador traduce reacciones estructuradas a estados ordinarios: `BASE` a `Ba
 - El arranque, al quedar Rive listo, reproduce `Hello` una vez. Panel de diagnóstico puede forzar reacciones, respuestas visuales y estados hablados.
 
 La documentación describe contrato y disparadores observables; no infiere cómo están construidas las animaciones internas. El personaje depende de un asset Rive propiedad del usuario, configurado desde fuente; no copiar, extraer, incrustar ni describir su contenido en docs o exports. Ver [arquitectura](architecture.md) y [entrada para agentes](README.md).
+
+## Voz de Jev
+
+Jev suena como una pequeña criatura (al estilo de R2-D2, WALL-E o EVA), nunca con palabras. Al hablar, sus pitidos siguen el texto real: una sílaba sonora por sílaba escrita, pausas en comas y fin de frase, tono que sube en preguntas, más brillante en exclamaciones y que cae al cerrar una afirmación. Sin hablar, cada acción tiene su motivo: saludo, flor, fantasma, duda, nube, sí, no, pensar, estrella, cuadrado, triángulo y toque. El regreso a reposo no suena.
+
+La voz está activada por defecto y empieza con el primer clic, toque o tecla, porque los navegadores no permiten audio antes. El botón de altavoz de la cabecera la silencia y la elección se recuerda. Suena en Inicio y en Capacidades; Historia permanece en silencio. Se detiene al ocultar la ruta o la pestaña, al cancelar una respuesta y al silenciar.
 
 ## Habla real de Home
 

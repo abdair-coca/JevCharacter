@@ -1,16 +1,17 @@
 import { createStore } from "zustand/vanilla";
 import { useStore } from "zustand";
 
-import { writeStorage } from "../lib/storage";
+import { readStorage, writeStorage } from "../lib/storage";
 import type { SpeechLanguage } from "../creature/brain/speechProtocol";
 
 export type Theme = "light" | "dark";
 export type ThemePreference = Theme | "system";
 export type Language = SpeechLanguage;
-type Preferences = { theme: Theme; themePreference: ThemePreference; language: Language };
+type Preferences = { theme: Theme; themePreference: ThemePreference; language: Language; sound: boolean };
 type PreferencesState = Preferences & {
   setThemePreference: (preference: ThemePreference) => void;
   setLanguage: (language: Language) => void;
+  setSound: (sound: boolean) => void;
   syncSystemTheme: (dark: boolean) => void;
 };
 
@@ -30,6 +31,10 @@ export function createPreferencesStore(
       persist("jevling.language", language);
       set({ language });
     },
+    setSound: (sound) => {
+      persist("jevling.sound", sound);
+      set({ sound });
+    },
     syncSystemTheme: (dark) => {
       if (get().themePreference === "system") set({ theme: dark ? "dark" : "light" });
     },
@@ -43,6 +48,8 @@ export const preferencesStore = createPreferencesStore({
   theme: root.dataset.theme === "dark" ? "dark" : "light",
   themePreference: preference === "light" || preference === "dark" ? preference : "system",
   language: root.lang === "en" ? "en" : "es",
+  // Jev's voice is on by default; it still waits for the first user gesture.
+  sound: readStorage("jevling.sound", true, (value): value is boolean => typeof value === "boolean"),
 });
 
 export function usePreferences<T>(selector: (state: PreferencesState) => T): T {

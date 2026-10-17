@@ -76,6 +76,6 @@
 .story-page[data-static="true"] .story-scene { flex-direction: column; gap: var(--space-8); min-height: auto; padding-block: var(--space-12); }
 .story-page[data-static="true"] .story-scene:last-child { padding-bottom: min(100vw, 34rem); }
 .story-page[data-static="true"] .story-static-media { display: block; margin: 0; align-self: center; width: min(100%, 26rem); text-align: center; color: var(--color-muted); font: var(--text-small)/var(--line-body) var(--font-mono); }
-.story-page[data-static="true"] .story-static-media img { max-width: 100%; max-height: 26rem; object-fit: contain; filter: grayscale(1); }
+.story-page[data-static="true"] .story-static-media :is(img, canvas) { max-width: 100%; max-height: 26rem; object-fit: contain; filter: grayscale(1); }
 .story-page[data-static="true"] .story-static-media figcaption { margin-top: var(--space-4); }
 .story-page[data-static="true"] .story-scroll-cue, .story-page[data-static="true"] .story-reveal-cue { display: none; }

@@ -19,6 +19,7 @@ import { EnrollmentExperience } from "../features/enrollment/EnrollmentExperienc
 import { EnrollmentParticles } from "../features/enrollment/EnrollmentParticles";
 import CreatureLoader from "../features/loading/CreatureLoader";
 import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewport";
+import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
 import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -62,6 +63,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const sensors = usePointerSensor(stageRef, creatureShellRef, conversational, active && !enrollment.isOpen);
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
   const enrollmentWasOpen = useRef(false);
+  useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice));
 
   useEffect(() => {
     if (enrollment.phase === "closed") {
@@ -132,7 +134,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
       </section>
       <m.section className="creature-zone" aria-label={t.creature} layout={!enrollmentMotion.reduced} layoutDependency={`${enrollment.isOpen}-${enrollmentFocused}`} transition={enrollmentMotion.scene}>
         <div className="creature-presence" ref={creatureShellRef}>
-          <Suspense fallback={null}><Character ref={characterRef} onReady={wakeCharacter} onPainted={revealCharacter} onError={characterFailed} active={running} /></Suspense>
+          <Suspense fallback={null}><Character ref={characterRef} onReady={wakeCharacter} onPainted={revealCharacter} onError={characterFailed} active={running} voice /></Suspense>
         </div>
         <CreatureLoader visible={!characterRevealed && characterStatus !== "error"} active={running} reduced={reducedMotion} />
         {running && (enrollment.phase === "editing" || enrollment.phase === "confirmed") && <EnrollmentParticles key={enrollment.phase} duration={enrollmentMotion.burst} celebrate={enrollment.phase === "confirmed"} />}

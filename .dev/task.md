@@ -4,12 +4,41 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 
 ## Retoma aquí
 
-- **Trabajo actual / fase activa:** fase UATF única implementada y verificada, entregada para revisión visual. Especificación, resumen y plan completo aprobados; autorización «si apruebo».
-- **Fase del rediseño conservada:** Fase 4 — About scrollytelling, aprobada el 2026-10-11 («la fase 4 ya está aprobada»).
-- **Estado:** fases 1–4 aceptadas/aprobadas. Fase 4 comprobada de nuevo el 2026-10-11 (ver registro final). Teclado en dispositivo físico continúa pendiente como limitación de evidencia.
-- **Siguiente acción exacta:** esperar instrucción para iniciar la fase 5. La demo UATF y las revisiones visuales de Home/partículas siguen pendientes de aprobación.
-- **No iniciar fase 5 hasta:** instrucción explícita del usuario para empezarla; la aprobación de fase 4 ya la desbloquea.
+- **Trabajo actual / fase activa:** Fase 5 — integración, accesibilidad, rendimiento y voz de Jev. Implementada y verificada el 2026-10-16/17; **entregada para revisión**. Solicitud: «quiero que culmines la fase 5 y que agregues sonido a jev…»; quiz: encendido tras el primer toque, Inicio y Capacidades, síntesis en el navegador, sonido primero.
+- **Fase anterior:** Fase 4 — About scrollytelling, aprobada el 2026-10-11 («la fase 4 ya está aprobada»).
+- **Estado:** fases 1–4 aprobadas; fase 5 pendiente de aprobación final. La demo UATF también sigue pendiente de aprobación visual. Teclado y rendimiento en dispositivo físico continúan como limitación de evidencia.
+- **Siguiente acción exacta:** que el usuario revise la fase 5 (incluida la voz, de oído). Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado actual del código:** el 2026-10-07 el usuario autorizó a Luna a organizar el trabajo pendiente en microcommits; la implementación previa, documentación y evidencias ya están guardadas. Los PNG diagnósticos temporales se conservan sin commit. La restricción de no commitear durante la migración SDD queda como antecedente de aquella tarea.
+
+## Fase 5 — entrega para revisión, 2026-10-17
+
+- [x] Registrar en `spec.md` la voz de Jev aprobada en el quiz, y en `plan.md` su orden dentro de la fase.
+- [x] Voz: partitura pura, motor Web Audio, desbloqueo por gesto, silencio persistido, pestaña oculta, habla en streaming y motivos por acción; Inicio y Capacidades suenan, Historia no.
+- [x] URL directa, recarga, atrás/adelante, restauración de scroll por entrada del historial y foco en el h1 al navegar.
+- [x] Estado al cruzar vistas: Inicio oculto, inerte y suspendido, sin API ni sonido; tema, idioma y capítulo conservados.
+- [x] Auditoría: teclado, orden de foco, ARIA, colapsados, contraste AA, objetivos táctiles, reflow sin overflow, DOM alternativo y movimiento reducido.
+- [x] Matriz Playwright: tres rutas × ES/EN × claro/oscuro × escritorio/móvil, más teclado, movimiento reducido, fallos de Rive/API, consola y limpieza.
+- [x] Rendimiento: chunks, carga diferida, LCP y ritmo de frames con GPU real, con las condiciones declaradas.
+- [x] Vercel/seguridad: rewrites, `/api/*` sin interceptar, claves solo en servidor, sin historial remoto.
+- [x] Docs de estado actual (`architecture`, `interaction`, `README`, `docs/README`) y contrato `design.md`.
+- [ ] Aprobación final del usuario.
+
+**Cambios de runtime:** nuevos `src/creature/voice/{voiceScore,voiceEngine,useVoiceRuntime,useSpeechVoice}.ts` y `src/features/story/StillImage.tsx`. Ediciones en `useCharacterController` (`onCue` tras cada trigger), `Character` (prop `voice` y parada al desactivarse), `HomePage`, `FeaturesPage` (frase de «Habla»), `App` (runtime de voz y restauración de scroll), `routes` (`rememberScroll`/`savedScroll`), `SiteHeader` (botón de altavoz), `preferencesStore` (`sound`), `messages` (sonido y texto de ruta desconocida), `PendingPage`, `ContextWhisper` (`tabIndex={-1}` en el envoltorio de `whileTap`), catálogo y copy de Features/Historia, `AboutPage` y `story.css`. Sin dependencias nuevas ni cambios en el asset Rive.
+
+| Comprobación | Resultado |
+|---|---|
+| Línea base antes de editar: `npm run typecheck`, `typecheck:tests`, `lint`, Vitest | PASS: 29 archivos / 187 tests. |
+| `tsc --noEmit -p` app / node / api / tests (cuatro comandos) | PASS. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1 --reporter=dot` | PASS: 34 archivos / 216 tests. Nuevos: `voiceScore`, `voiceEngine`, `speechVoice`, `navigation`, `stillImage`, y casos en `characterController`, `siteHeader` y `preferences`. |
+| `npm run build` | PASS. Shell 358,80 kB / gzip 114,99 (+3,1 kB gzip frente a la línea base 350,71 / 111,86). |
+| `node .dev/evidence/phase-5/verify.mjs <bloque>`: `static`, `sound`, `navigation`, `keyboard`, `fallback`, `matrix` ×8, `perf` | PASS: 252 checks y 31 capturas sobre el build final. Detalle en [evidencia de fase 5](evidence/phase-5/README.md). |
+
+**Hallazgos corregidos:** envoltorio de Enviar enfocable sin nombre por `whileTap`; WebP animado de TitiEdu moviéndose en la lectura estática; texto obsoleto «se construirá en una próxima fase» en ruta desconocida; atrás/adelante sin restaurar el scroll.
+
+**Incidencias de verificación:** el harness inicial chocaba en el enlace «Capacidades» (coincidía con «Ver sus capacidades») y esperaba con `isVisible()` sin aguardar la carga diferida; ambos se corrigieron. Hubo dos falsos positivos de auditoría, ajustados con su causa documentada: `mask-*` de tailwind-merge confundido con una clave `sk-`, y el ES/EN activo, que se pinta sobre un indicador hermano. Contar frames con movimiento reducido no servía, por el bucle vacío `_rafBugFix` de ScrollTrigger; se sustituyó por capturas idénticas. El primer perf corrió con SwiftShader (software) y se repitió con GPU vía ANGLE/D3D11. Una corrida intermedia mostró un hueco de unos 15 s en Historia escritorio en frío, no reproducido en 5 sondas ni en la final. Ningún resultado de una corrida fallida forma parte del registro final.
+
+**Límites:** emulación de Chromium, sin móvil físico, Safari/iOS, lector de pantalla ni teclado virtual. El audio se verificó por instrumentación, no de oído. El contraste de texto sobre imágenes o canvas no es medible. Inicio en escritorio tiene un 10,6 % de frames por encima de 33 ms en la GPU integrada Intel UHD. Historia tiene un tirón único de 157–430 ms al inicializar Rive durante el scroll, que es el diseño aprobado. No se llamó a proveedores reales, no hubo deploy y no hubo push.
 
 ### Activación de decisión remota en producción — 2026-10-09
 
