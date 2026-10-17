@@ -12,6 +12,7 @@ import { STORY_SCENES, storyCopy } from "../features/story/catalog";
 import { useStoryScroll } from "../features/story/useStoryScroll";
 import { ParticleVortex } from "../features/story/ParticleVortex";
 import { StillImage } from "../features/story/StillImage";
+import { useStoryMusic } from "../features/story/useStoryMusic";
 import "../features/story/story.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -36,6 +37,7 @@ export default function AboutPage() {
   const [started, setStarted] = useState(false);
   const active = visible && inView;
   const { progress, reveal } = useStoryScroll(root, stage, { onScene: setSelected, active, visible, reduced, preferenceKey: `${language}-${theme}`, selected });
+  useStoryMusic(selected, progress, reduced);
   const particlesFailed = useCallback(() => setParticleError(true), []);
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [attempt, setAttempt] = useState(0);
