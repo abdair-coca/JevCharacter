@@ -4,7 +4,7 @@ import { usePreferences } from "../stores/preferencesStore";
 import { Button } from "./ui/button";
 import { m } from "motion/react";
 import { useThemeIconMotion, useUiMotion } from "../lib/motionTokens";
-import { jevVoice } from "../creature/voice/voiceEngine";
+import { appAudio } from "../lib/audioCore";
 
 export default function SiteHeader({ route }: { route: PageRoute }) {
   const t = useTranslation();
@@ -18,8 +18,8 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
     setSound(!sound);
     if (sound) return;
     // Turning sound on is itself a gesture, so audio can start right away.
-    jevVoice.setEnabled(true);
-    jevVoice.unlock();
+    appAudio.setEnabled(true);
+    appAudio.unlock();
   };
   const transition = useUiMotion();
   const iconMotion = useThemeIconMotion();

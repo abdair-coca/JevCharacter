@@ -1,29 +1,49 @@
 import type { CharacterCue } from "../../character/useCharacterController";
 import type { TalkState } from "../brain/brain.types";
 
-/** One synthesized chirp. Times are seconds from the start of its phrase. */
-export type VoiceNote = {
+/**
+ * A pitch target inside a glide; `open` colours its vowel, from "oo" (0) to "ee" (1).
+ * A `snap` target is reached fast: the little scoop that makes a syllable bounce.
+ */
+export type VoicePoint = { at: number; hz: number; open?: number; snap?: true };
+/**
+ * One continuous, lively coo. Times are seconds from the start of its phrase;
+ * points and dips are fractions of the glide, approached smoothly.
+ */
+export type VoiceGlide = {
   at: number;
   duration: number;
-  from: number;
-  to: number;
-  wave: OscillatorType;
+  points: readonly VoicePoint[];
+  /** Quick loudness dips that bounce from one syllable to the next. */
+  dips: readonly number[];
+  /** Loudness of each syllable relative to `gain`, so stressed ones stand out. */
+  accents?: readonly number[];
   gain: number;
-  vibrato?: { rate: number; depth: number };
+  vibrato?: { rate: number; depth: number; delay: number };
 };
-/** A speech chirp remembers where its word ends, so streamed text is voiced once. */
-export type SpeechNote = VoiceNote & { end: number };
+/** A speech glide remembers where its word ends, so streamed text is voiced once. */
+export type SpeechGlide = VoiceGlide & { end: number };
+type Syllable = { hz: number; length: number; open?: number; accent?: number };
 
-const PITCH = 640;
-const SYLLABLE = 0.075;
-const SYLLABLE_GAP = 0.022;
-const WORD_GAP = 0.07;
-const COMMA_PAUSE = 0.15;
-const SENTENCE_PAUSE = 0.26;
+const PITCH = 600;
+// Major pentatonic steps around the base pitch: every melody stays sing-song and in tune.
+const SCALE = [-5, -3, 0, 2, 4, 7, 9, 12];
+const HOME = 2;
+const SYLLABLE = 0.1;
+// Long and short syllables alternate, so speech bounces instead of marching.
+const SWING = [1.12, 0.88];
+// Each syllable scoops up into its note from a little below, like a chirp.
+const SCOOP = 0.84;
+const SCOOP_SECONDS = 0.02;
+const WORD_GAP = 0.05;
+const COMMA_PAUSE = 0.16;
+const SENTENCE_PAUSE = 0.3;
+const HELD = { rate: 6.5, depth: 16, delay: 0.55 };
 export const MAX_SPEECH_SECONDS = 9;
 
 const WORD = /[\p{L}\p{N}'’]+/gu;
 const VOWELS = /[aeiouyáéíóúüàèìòùâêîôûäëïö]+/gu;
+const VOWEL_OPEN: Record<string, number> = { u: 0.1, o: 0.25, a: 0.55, e: 0.75, i: 0.95, y: 0.95 };
 type Ending = "question" | "exclamation" | "statement" | "comma" | "none";
 
 function hash(value: string) {
@@ -43,9 +63,11 @@ function random(seed: number) {
   };
 }
 
-function syllables(word: string) {
-  if (/^\p{N}+$/u.test(word)) return Math.min(3, word.length);
-  return Math.max(1, Math.min(4, word.toLowerCase().match(VOWELS)?.length ?? 1));
+/** Vowel colour of each written syllable (its last vowel), at most four per word. */
+function syllables(word: string): number[] {
+  if (/^\p{N}+$/u.test(word)) return Array.from({ length: Math.min(3, word.length) }, () => 0.55);
+  const groups = word.toLowerCase().match(VOWELS) ?? ["a"];
+  return groups.slice(0, 4).map(group => VOWEL_OPEN[group.normalize("NFD").replace(/\p{M}/gu, "").at(-1) ?? "a"] ?? 0.55);
 }
 
 function ending(between: string, last: boolean, complete: boolean): Ending {
@@ -56,14 +78,41 @@ function ending(between: string, last: boolean, complete: boolean): Ending {
   return last && complete ? "statement" : "none";
 }
 
+/** Sings syllables as one glide: each scoops into its note, with a bounce at every seam. */
+function sing(notes: readonly Syllable[]) {
+  const duration = notes.reduce((sum, note) => sum + note.length, 0);
+  const points: VoicePoint[] = [];
+  const dips: number[] = [];
+  let offset = 0;
+  for (const [index, { hz, length, open }] of notes.entries()) {
+    if (index > 0) dips.push(offset / duration);
+    points.push(
+      { at: offset / duration, hz: hz * SCOOP, open, snap: true },
+      { at: (offset + Math.min(SCOOP_SECONDS, length / 4)) / duration, hz },
+    );
+    offset += length;
+  }
+  return { duration, points, dips, accents: notes.map(note => note.accent ?? 1) };
+}
+
+/** A happy giggle after an exclamation: quick bright bounces that fall away. */
+function giggle(roll: () => number, pitch: number): VoiceGlide {
+  const count = 3 + Math.floor(roll() * 2);
+  const notes = Array.from({ length: count }, (_, index) => ({
+    hz: pitch * (index % 2 === 0 ? 1.5 : 1.26) * (1 - index * 0.03), length: 0.07, open: 0.95, accent: 1 - index * 0.15,
+  }));
+  return { at: 0, ...sing(notes), gain: 0.45 };
+}
+
 /**
- * Turns text into chirps that follow its prosody, never its words: one chirp per
- * written syllable, a gentle fall across each sentence, a rise for questions, a
- * bright lift for exclamations and a drop when a statement closes.
+ * Turns text into playful coos that follow its prosody, never its words: one bouncing
+ * tone per word, a pentatonic note and vowel colour per written syllable, a lift on
+ * the stressed one, a gentle fall across each sentence, a rise for questions, a bright
+ * whoop and a giggle for exclamations and a soft drop when a statement closes.
  */
-export function scoreSpeech(text: string, complete = true): SpeechNote[] {
+export function scoreSpeech(text: string, complete = true): SpeechGlide[] {
   const words = [...text.matchAll(WORD)];
-  const notes: SpeechNote[] = [];
+  const glides: SpeechGlide[] = [];
   let at = 0;
   let inSentence = 0;
   for (const [index, match] of words.entries()) {
@@ -71,38 +120,52 @@ export function scoreSpeech(text: string, complete = true): SpeechNote[] {
     const end = match.index + word.length;
     const next = words[index + 1]?.index ?? text.length;
     const close = ending(text.slice(end, next), index === words.length - 1, complete);
+    const closes = close === "question" || close === "exclamation" || close === "statement";
     const roll = random(hash(word.toLowerCase()));
-    const count = syllables(word);
-    const stressed = count === 1 ? 0 : count - 2;
-    const declination = Math.max(0.82, 1 - inSentence * 0.035);
-    const lift = close === "exclamation" ? 1.2 : close === "question" ? 1.08 : 1;
-    for (let syllable = 0; syllable < count; syllable++) {
-      const accent = syllable === stressed ? 1.12 : 1;
-      const from = PITCH * declination * lift * accent * 2 ** (roll() * 0.5 - 0.15);
-      let to = from * (1 + (roll() - 0.5) * 0.25);
-      let duration = (SYLLABLE + roll() * 0.03) * (syllable === stressed ? 1.2 : 1);
-      let vibrato: VoiceNote["vibrato"];
-      let gain = close === "exclamation" ? 0.95 : 0.78;
-      const final = syllable === count - 1;
-      if (final && close === "question") { to = from * 1.75; duration *= 1.6; vibrato = { rate: 18, depth: 24 }; }
-      if (final && close === "exclamation") { to = from * 1.3; duration *= 1.2; }
-      if (final && close === "statement") { to = from * 0.68; duration *= 1.4; vibrato = { rate: 14, depth: 18 }; gain *= 0.9; }
-      notes.push({ at, duration, from, to, wave: "sine", gain, vibrato, end });
-      at += duration + SYLLABLE_GAP;
-      if (final && close === "exclamation") {
-        notes.push({ at, duration: 0.07, from: to, to: to * 0.72, wave: "sine", gain: gain * 0.8, end });
-        at += 0.07 + SYLLABLE_GAP;
-      }
+    const vowels = syllables(word);
+    const stressed = vowels.length === 1 ? 0 : vowels.length - 2;
+    const declination = Math.max(0.88, 1 - inSentence * 0.035);
+    const lift = close === "exclamation" ? 1.12 : close === "question" ? 1.05 : 1;
+    let degree = HOME - 1 + Math.floor(roll() * 3);
+    const notes = vowels.map((open, syllable): Syllable => {
+      // Steps and small leaps keep the melody singing, never wandering off.
+      if (syllable > 0) degree = Math.max(0, Math.min(SCALE.length - 3, degree + [-2, -1, 1, 2][Math.floor(roll() * 4)]));
+      const last = syllable === vowels.length - 1;
+      let step = degree + (syllable === stressed ? 2 : 0);
+      // A question dips before it rises; an exclamation leaves room for its whoop.
+      if (last && close === "question") step = Math.min(step, HOME);
+      if (last && close === "exclamation") step = Math.min(step, 5);
+      const length = (SYLLABLE + roll() * 0.03) * SWING[syllable % 2] * (syllable === stressed ? 1.25 : 1) * (last && closes ? 1.5 : 1);
+      return { hz: PITCH * 2 ** (SCALE[step] / 12) * declination * lift, length, open, accent: syllable === stressed ? 1 : 0.8 };
+    });
+    const sung = sing(notes);
+    const finalHz = notes[notes.length - 1].hz;
+    const final = 1 - notes[notes.length - 1].length / sung.duration;
+    const tail = (fraction: number) => final + (1 - final) * fraction;
+    const points = [...sung.points];
+    if (close === "question") points.push({ at: tail(0.5), hz: finalHz * 1.6 });
+    if (close === "exclamation") points.push({ at: tail(0.45), hz: finalHz * 1.3 }, { at: tail(0.85), hz: finalHz * 1.06 });
+    if (close === "statement") points.push({ at: tail(0.55), hz: finalHz * 0.8 });
+    glides.push({ ...sung, at, points, end, gain: close === "exclamation" ? 0.8 : 0.7, vibrato: closes ? HELD : undefined });
+    at += sung.duration;
+    if (close === "exclamation") {
+      const laugh = giggle(roll, PITCH * lift * declination);
+      glides.push({ ...laugh, at: at + 0.05, end });
+      at += 0.05 + laugh.duration;
     }
-    at += close === "question" || close === "exclamation" || close === "statement" ? SENTENCE_PAUSE
-      : close === "comma" ? COMMA_PAUSE : WORD_GAP;
-    inSentence = close === "question" || close === "exclamation" || close === "statement" ? 0 : inSentence + 1;
+    at += closes ? SENTENCE_PAUSE : close === "comma" ? COMMA_PAUSE : WORD_GAP;
+    inSentence = closes ? 0 : inSentence + 1;
   }
-  return notes.filter(note => note.at < MAX_SPEECH_SECONDS);
+  return glides.filter(glide => glide.at < MAX_SPEECH_SECONDS);
 }
 
-const note = (at: number, duration: number, from: number, to = from, wave: OscillatorType = "sine", gain = 0.8, vibrato?: VoiceNote["vibrato"]): VoiceNote =>
-  ({ at, duration, from, to, wave, gain, vibrato });
+type Note = readonly [hz: number, length: number, open: number];
+/** A motif sung syllable by syllable, with the same bounce as speech. */
+const coo = (at: number, notes: readonly Note[], options: { gain?: number; accents?: number[]; vibrato?: VoiceGlide["vibrato"] } = {}): VoiceGlide =>
+  ({ at, ...sing(notes.map(([hz, length, open], index) => ({ hz, length, open, accent: options.accents?.[index] }))), gain: options.gain ?? 0.7, vibrato: options.vibrato });
+/** A motif that slides freely through its targets, without syllables. */
+const glide = (at: number, duration: number, points: readonly (readonly [number, number])[], options: { gain?: number; open?: number; vibrato?: VoiceGlide["vibrato"] } = {}): VoiceGlide =>
+  ({ at, duration, points: points.map(([offset, hz], index) => index === 0 && options.open !== undefined ? { at: offset, hz, open: options.open } : { at: offset, hz }), dips: [], gain: options.gain ?? 0.7, vibrato: options.vibrato });
 
 /** Nonsense phrasing for a talk gesture that arrives without text, e.g. from diagnostics. */
 export const TALK_BABBLE: Record<TalkState, string> = {
@@ -114,18 +177,27 @@ export const TALK_BABBLE: Record<TalkState, string> = {
 
 export type VoiceCue = Exclude<CharacterCue, "Base" | TalkState>;
 
-/** Short, distinct motifs so each visible action is recognizable by ear. */
-export const ACTION_MOTIFS: Record<VoiceCue, readonly VoiceNote[]> = {
-  Hello: [note(0, 0.09, 700, 1100), note(0.11, 0.07, 1100, 900), note(0.21, 0.16, 900, 1500, "sine", 0.85, { rate: 16, depth: 20 })],
-  Flower: [note(0, 0.07, 1047, 1047, "triangle"), note(0.08, 0.07, 1319, 1319, "triangle"), note(0.16, 0.07, 1568, 1568, "triangle"), note(0.24, 0.26, 2093, 2093, "triangle", 0.7, { rate: 12, depth: 40 })],
-  Ghost: [note(0, 0.18, 300, 720, "triangle", 0.85, { rate: 7, depth: 30 }), note(0.2, 0.42, 720, 340, "triangle", 0.8, { rate: 6, depth: 45 })],
-  question: [note(0, 0.12, 600, 600, "sine", 0.7), note(0.16, 0.24, 640, 1100, "sine", 0.8, { rate: 18, depth: 24 })],
-  Cloud: [note(0, 0.4, 820, 520, "sine", 0.55), note(0.46, 0.45, 620, 380, "sine", 0.45, { rate: 5, depth: 12 })],
-  yes: [note(0, 0.07, 880, 1000), note(0.1, 0.11, 1175, 1400)],
-  no: [note(0, 0.11, 520, 420, "square", 0.32), note(0.15, 0.16, 440, 300, "square", 0.32)],
-  think: [note(0, 0.05, 620), note(0.12, 0.05, 820), note(0.24, 0.05, 540), note(0.36, 0.05, 900), note(0.48, 0.05, 700)].map(value => ({ ...value, gain: 0.45 })),
-  star: [note(0, 0.3, 600, 2000, "triangle", 0.7), note(0.32, 0.12, 2400, 2400, "sine", 0.4), note(0.46, 0.12, 2400, 2400, "sine", 0.3)],
-  square: [note(0, 0.08, 400, 400, "square", 0.3), note(0.1, 0.08, 600, 600, "square", 0.3), note(0.2, 0.12, 400, 400, "square", 0.3)],
-  triangle: [note(0, 0.16, 500, 1200, "triangle", 0.75), note(0.18, 0.16, 1200, 700, "triangle", 0.7)],
-  bump: [note(0, 0.05, 900, 700, "sine", 0.5)],
+// Notes of the D major pentatonic around Jev's voice.
+const A4 = 440, D5 = 587, E5 = 659, FS5 = 740, A5 = 880, B5 = 988, D6 = 1175, FS6 = 1480, A6 = 1760;
+
+/** Short, charismatic motifs in the same bouncy timbre, so each action is recognizable by ear. */
+export const ACTION_MOTIFS: Record<VoiceCue, readonly VoiceGlide[]> = {
+  Hello: [
+    coo(0, [[D5, 0.1, 0.75], [A5, 0.22, 0.55]], { gain: 0.75, accents: [0.85, 1], vibrato: HELD }),
+    coo(0.37, [[B5, 0.07, 0.95], [A5, 0.07, 0.95], [D6, 0.1, 0.95]], { gain: 0.42, accents: [1, 0.85, 0.75] }),
+  ],
+  Flower: [coo(0, [[D5, 0.1, 0.25], [FS5, 0.1, 0.55], [A5, 0.1, 0.75], [D6, 0.3, 0.95]], { gain: 0.62, accents: [0.8, 0.85, 0.9, 1], vibrato: { rate: 6.5, depth: 20, delay: 0.7 } })],
+  Ghost: [glide(0, 0.75, [[0, A4], [0.35, A5], [0.75, 660], [1, 520]], { gain: 0.6, open: 0.1, vibrato: { rate: 5, depth: 40, delay: 0.15 } })],
+  question: [coo(0, [[E5, 0.12, 0.1]], { gain: 0.5 }), glide(0.18, 0.34, [[0, 520], [0.25, 560], [0.8, 1000]], { gain: 0.65, open: 0.75, vibrato: { rate: 6, depth: 14, delay: 0.55 } })],
+  Cloud: [glide(0, 0.9, [[0, A5], [0.5, 700], [1, 520]], { gain: 0.45, open: 0.55, vibrato: { rate: 4.5, depth: 10, delay: 0.35 } })],
+  yes: [coo(0, [[E5, 0.1, 0.25], [A5, 0.2, 0.55]], { gain: 0.65, accents: [0.8, 1] })],
+  no: [coo(0, [[A5, 0.12, 0.25], [E5, 0.2, 0.25]], { gain: 0.55, accents: [1, 0.85] })],
+  think: [coo(0, [[E5, 0.14, 0.1], [D5, 0.14, 0.1], [FS5, 0.14, 0.1], [E5, 0.22, 0.1]], { gain: 0.42, accents: [0.9, 0.75, 0.9, 0.8] })],
+  star: [
+    glide(0, 0.5, [[0, D5], [0.6, D6], [1, 1319]], { gain: 0.55, open: 0.95, vibrato: { rate: 7, depth: 22, delay: 0.6 } }),
+    coo(0.56, [[FS6, 0.07, 0.95], [A6, 0.1, 0.95]], { gain: 0.3 }),
+  ],
+  square: [coo(0, [[D5, 0.12, 0.25], [D5, 0.12, 0.25], [D5, 0.16, 0.25]], { gain: 0.55, accents: [1, 0.85, 1] })],
+  triangle: [coo(0, [[A5, 0.12, 0.95], [E5, 0.12, 0.25], [A5, 0.18, 0.95]], { gain: 0.6 })],
+  bump: [glide(0, 0.1, [[0, A5], [0.4, FS5]], { gain: 0.45, open: 0.25 })],
 };

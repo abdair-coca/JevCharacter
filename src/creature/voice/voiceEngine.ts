@@ -1,26 +1,31 @@
 import type { CharacterCue } from "../../character/useCharacterController";
+import { appAudio, type AudioCore } from "../../lib/audioCore";
 import type { TalkState } from "../brain/brain.types";
-import { ACTION_MOTIFS, scoreSpeech, TALK_BABBLE, type VoiceNote } from "./voiceScore";
+import { ACTION_MOTIFS, scoreSpeech, TALK_BABBLE, type VoiceGlide } from "./voiceScore";
 
 type Channel = "action" | "speech";
 type Speech = { key: string; voicedUntil: number; offsetEnd: number; timeEnd: number | null };
-type EngineOptions = {
-  createContext?: () => AudioContext | null;
-  now?: () => number;
-};
+type EngineOptions = { core?: AudioCore; now?: () => number };
 
-const MASTER_GAIN = 0.22;
 // A talk gesture waits this long for its real text before babbling on its own.
 const TALK_TEXT_WAIT_MS = 450;
 const SPEECH_RECENT_MS = 1500;
 const TALK_STATES: readonly CharacterCue[] = ["Talk", "talkb", "talkc", "talkbc"];
+// Timbre: a filtered triangle for a round "oo/ah" body plus a sweet sine octave,
+// dry and close. Crisp attacks and fast scoops give the voice its bounce.
+const ATTACK = 0.022;
+const GLIDE = 0.03;
+const SNAP = 0.012;
+const RELEASE = 0.03;
+const OCTAVE_GAIN = 0.12;
+const VOWEL_DARK = 1000;
+const VOWEL_BRIGHT = 1300;
+const VOWEL_Q = 1.4;
+// How far the loudness drops at each syllable seam.
+const SEAM_DIP = 0.4;
 
 function isTalk(cue: CharacterCue): cue is TalkState {
   return TALK_STATES.includes(cue);
-}
-
-function defaultContext() {
-  return typeof AudioContext === "undefined" ? null : new AudioContext({ latencyHint: "interactive" });
 }
 
 /** Last index where streamed text ends a whole word; later text may still change. */
@@ -31,21 +36,15 @@ function voicedBoundary(text: string, complete: boolean) {
 }
 
 /**
- * Owns Jev's synthesized voice: an AudioContext created on the first user gesture,
- * one channel for action motifs and one for speech. Every scheduled node can be
- * cancelled, so muting, hiding a route or the tab, or replacing speech stops sound.
+ * Jev's playful, dry voice on the shared audio core: one channel for action motifs
+ * and one for speech. Every scheduled node can be cancelled, so muting, hiding a
+ * route or the tab, or replacing speech stops sound.
  */
-export function createVoiceEngine({ createContext = defaultContext, now = () => performance.now() }: EngineOptions = {}) {
-  let context: AudioContext | null = null;
-  let output: GainNode | null = null;
-  let enabled = true;
-  let hidden = false;
+export function createVoiceEngine({ core = appAudio, now = () => performance.now() }: EngineOptions = {}) {
   let speech: Speech | null = null;
   let lastSpeechAt = -Infinity;
   let talkTimer: number | null = null;
   const nodes: Record<Channel, Set<AudioScheduledSourceNode>> = { action: new Set(), speech: new Set() };
-
-  const audible = () => enabled && !hidden && context !== null && context.state !== "closed";
 
   function clearTalkTimer() {
     if (talkTimer !== null) window.clearTimeout(talkTimer);
@@ -60,72 +59,80 @@ export function createVoiceEngine({ createContext = defaultContext, now = () => 
     nodes[channel].clear();
   }
 
-  function schedule(channel: Channel, notes: readonly VoiceNote[], startAt: number) {
+  function schedule(channel: Channel, glides: readonly VoiceGlide[], startAt: number) {
+    const context = core.context();
+    const output = core.bus("voice");
     if (!context || !output) return;
-    for (const note of notes) {
-      const start = startAt + note.at;
-      const end = start + note.duration;
-      const oscillator = context.createOscillator();
+    for (const glide of glides) {
+      const start = startAt + glide.at;
+      const end = start + glide.duration;
+      const tone = context.createOscillator();
+      const octave = context.createOscillator();
+      const octaveGain = context.createGain();
+      const vowel = context.createBiquadFilter();
       const envelope = context.createGain();
-      oscillator.type = note.wave;
-      oscillator.frequency.setValueAtTime(note.from, start);
-      if (note.to !== note.from) oscillator.frequency.exponentialRampToValueAtTime(note.to, end);
+      tone.type = "triangle";
+      octave.type = "sine";
+      octaveGain.gain.setValueAtTime(OCTAVE_GAIN, start);
+      vowel.type = "lowpass";
+      vowel.Q.setValueAtTime(VOWEL_Q, start);
+      for (const [index, point] of glide.points.entries()) {
+        const time = start + point.at * glide.duration;
+        const cutoff = VOWEL_DARK + (point.open ?? 0.5) * VOWEL_BRIGHT;
+        if (index === 0) {
+          tone.frequency.setValueAtTime(point.hz, start);
+          octave.frequency.setValueAtTime(point.hz * 2, start);
+          vowel.frequency.setValueAtTime(cutoff, start);
+        } else {
+          // Approach each target smoothly: the tone slides or scoops, it never jumps.
+          const pace = point.snap ? SNAP : GLIDE;
+          tone.frequency.setTargetAtTime(point.hz, time, pace);
+          octave.frequency.setTargetAtTime(point.hz * 2, time, pace);
+          if (point.open !== undefined) vowel.frequency.setTargetAtTime(cutoff, time, GLIDE);
+        }
+      }
+      const level = (syllable: number) => glide.gain * (glide.accents?.[syllable] ?? 1);
       envelope.gain.setValueAtTime(0.0001, start);
-      envelope.gain.exponentialRampToValueAtTime(note.gain, start + Math.min(0.012, note.duration / 3));
-      envelope.gain.setValueAtTime(note.gain, start + note.duration * 0.7);
-      envelope.gain.exponentialRampToValueAtTime(0.0001, end);
-      oscillator.connect(envelope).connect(output);
-      const sources: AudioScheduledSourceNode[] = [oscillator];
-      if (note.vibrato) {
+      envelope.gain.linearRampToValueAtTime(level(0), start + Math.min(ATTACK, glide.duration / 3));
+      for (const [index, dip] of glide.dips.entries()) {
+        const seam = start + dip * glide.duration;
+        envelope.gain.setTargetAtTime(level(index) * SEAM_DIP, seam - 0.022, 0.008);
+        envelope.gain.setTargetAtTime(level(index + 1), seam + 0.006, 0.012);
+      }
+      envelope.gain.setTargetAtTime(0.0001, end - RELEASE, RELEASE);
+      tone.connect(vowel);
+      octave.connect(octaveGain).connect(vowel);
+      vowel.connect(envelope).connect(output);
+      const sources: AudioScheduledSourceNode[] = [tone, octave];
+      if (glide.vibrato) {
+        // Vibrato blooms late in the note, like a held, happy sound.
         const lfo = context.createOscillator();
         const depth = context.createGain();
-        lfo.frequency.setValueAtTime(note.vibrato.rate, start);
-        depth.gain.setValueAtTime(note.vibrato.depth, start);
-        lfo.connect(depth).connect(oscillator.frequency);
+        lfo.frequency.setValueAtTime(glide.vibrato.rate, start);
+        depth.gain.setValueAtTime(0, start);
+        depth.gain.setValueAtTime(0, start + glide.vibrato.delay * glide.duration);
+        depth.gain.linearRampToValueAtTime(glide.vibrato.depth, end);
+        lfo.connect(depth).connect(tone.frequency);
         sources.push(lfo);
       }
       for (const source of sources) {
         nodes[channel].add(source);
         source.onended = () => { nodes[channel].delete(source); source.disconnect(); };
         source.start(start);
-        source.stop(end + 0.02);
+        source.stop(end + 0.2);
       }
-      oscillator.addEventListener("ended", () => envelope.disconnect());
+      tone.addEventListener("ended", () => { envelope.disconnect(); vowel.disconnect(); octaveGain.disconnect(); });
     }
   }
 
   function babble(state: TalkState) {
-    if (!audible() || !context) return;
+    const context = core.context();
+    if (!core.audible() || !context) return;
     silence("speech");
     schedule("speech", scoreSpeech(TALK_BABBLE[state]), context.currentTime + 0.02);
   }
 
   const engine = {
-    /** Called from a user gesture: browsers only allow audio to start there. */
-    unlock() {
-      if (!enabled) return;
-      if (!context) {
-        try { context = createContext(); } catch { context = null; }
-        if (!context) return;
-        const compressor = context.createDynamicsCompressor();
-        output = context.createGain();
-        output.gain.setValueAtTime(MASTER_GAIN, context.currentTime);
-        output.connect(compressor).connect(context.destination);
-      }
-      if (context.state === "suspended" && !hidden) void context.resume().catch(() => {});
-    },
-    unlocked: () => context !== null,
-    setEnabled(value: boolean) {
-      enabled = value;
-      if (!value) engine.stop();
-    },
-    setHidden(value: boolean) {
-      hidden = value;
-      if (value) {
-        engine.stop();
-        if (context?.state === "running") void context.suspend().catch(() => {});
-      } else if (context?.state === "suspended" && enabled) void context.resume().catch(() => {});
-    },
     cue(cue: CharacterCue) {
       if (cue === "Base") return;
       if (isTalk(cue)) {
@@ -136,7 +143,8 @@ export function createVoiceEngine({ createContext = defaultContext, now = () => 
         }, TALK_TEXT_WAIT_MS);
         return;
       }
-      if (!audible() || !context) return;
+      const context = core.context();
+      if (!core.audible() || !context) return;
       silence("action");
       // A new action replaces speech; a tap while talking does not.
       if (cue !== "bump") engine.stopSpeech();
@@ -150,10 +158,11 @@ export function createVoiceEngine({ createContext = defaultContext, now = () => 
         silence("speech");
         speech = { key, voicedUntil: 0, offsetEnd: 0, timeEnd: null };
       }
-      if (!audible() || !context) return;
+      const context = core.context();
+      if (!core.audible() || !context) return;
       const boundary = voicedBoundary(text, complete);
       const current = speech;
-      const pending = scoreSpeech(text, complete).filter(note => note.end > current.voicedUntil && note.end <= boundary);
+      const pending = scoreSpeech(text, complete).filter(glide => glide.end > current.voicedUntil && glide.end <= boundary);
       current.voicedUntil = Math.max(current.voicedUntil, boundary);
       if (pending.length === 0) return;
       const first = pending[0].at;
@@ -161,7 +170,7 @@ export function createVoiceEngine({ createContext = defaultContext, now = () => 
       // Keep the score's own rhythm while text streams faster than it is voiced.
       const start = current.timeEnd === null ? earliest : Math.max(earliest, current.timeEnd + first - current.offsetEnd);
       schedule("speech", pending, start - first);
-      const last = pending.reduce((latest, note) => Math.max(latest, note.at + note.duration), 0);
+      const last = pending.reduce((latest, glide) => Math.max(latest, glide.at + glide.duration), 0);
       current.offsetEnd = last;
       current.timeEnd = start - first + last;
     },
@@ -175,6 +184,8 @@ export function createVoiceEngine({ createContext = defaultContext, now = () => 
       engine.stopSpeech();
     },
   };
+  // Muting or hiding the tab silences whatever is still scheduled.
+  core.subscribe(() => { if (!core.audible()) engine.stop(); });
   return engine;
 }
 
