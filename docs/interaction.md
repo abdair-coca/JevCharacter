@@ -91,9 +91,11 @@ La documentación describe contrato y disparadores observables; no infiere cómo
 
 ## Voz de Jev
 
-Jev suena como una pequeña criatura (al estilo de R2-D2, WALL-E o EVA), nunca con palabras. Al hablar, sus pitidos siguen el texto real: una sílaba sonora por sílaba escrita, pausas en comas y fin de frase, tono que sube en preguntas, más brillante en exclamaciones y que cae al cerrar una afirmación. Sin hablar, cada acción tiene su motivo: saludo, flor, fantasma, duda, nube, sí, no, pensar, estrella, cuadrado, triángulo y toque. El regreso a reposo no suena.
+Jev suena como una pequeña criatura carismática (al estilo de BB-8 o EVA), nunca con palabras: una voz juguetona, cercana y sin eco. Al hablar, cada palabra rebota por sus sílabas con una melodía cantarina y el color de sus vocales («oo» a «ii»), y la sílaba tónica destaca. Hay pausas en comas y fin de frase, el tono sube en preguntas, las exclamaciones se avivan y terminan con una risita y las afirmaciones caen al cerrar. Sin hablar, cada acción tiene su motivo con el mismo carácter: saludo, flor, fantasma, duda, nube, sí, no, pensar, estrella, cuadrado, triángulo y toque. El regreso a reposo no suena.
 
-La voz está activada por defecto y empieza con el primer clic, toque o tecla, porque los navegadores no permiten audio antes. El botón de altavoz de la cabecera la silencia y la elección se recuerda. Suena en Inicio y en Capacidades; Historia permanece en silencio. Se detiene al ocultar la ruta o la pestaña, al cancelar una respuesta y al silenciar.
+Historia tiene banda sonora y Jev no habla allí. Es épica y crece escena a escena, de un inicio íntimo al clímax. Mientras deslizas hacia la siguiente escena sube un barrido y, al llegar, un golpe grave marca el cambio con un acorde nuevo; al retroceder, el golpe es más suave. La revelación de Jev es el clímax. Entra y sale con fundidos.
+
+El sonido está activado por defecto y empieza con el primer clic, toque o tecla, porque los navegadores no permiten audio antes; desplazarse con la rueda o el dedo no cuenta. El botón de altavoz de la cabecera silencia o activa voz y música a la vez, y la elección se recuerda. La voz suena en Inicio y Capacidades, y la música solo en Historia. Todo se detiene al ocultar la pestaña y al silenciar; la voz, además, al cancelar una respuesta o cambiar de ruta.
 
 ## Habla real de Home
 

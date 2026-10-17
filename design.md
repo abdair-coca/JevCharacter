@@ -151,10 +151,11 @@ Aplica a Home, Capacidades y Historia. Decisiones aprobadas por el usuario; los 
 
 ### Voz de Jev: aprobada 2026-10-16
 
-- Pitidos y trinos sintetizados con Web Audio, al estilo de R2-D2/WALL-E/EVA. Nunca palabras ni voz humana.
-- **Habla:** una nota por sílaba escrita del texto real, con pausas en comas y fin de frase, subida final en preguntas, realce en exclamaciones y caída al cerrar afirmaciones. **Acciones:** un motivo corto y distinto por acción visible; el regreso a `Base` no suena.
-- Encendida por defecto; empieza con el primer gesto del usuario. Botón de altavoz en la cabecera, junto al de tema, con `aria-pressed`, nombre accesible y elección persistida (`jevling.sound`).
-- Suena en Inicio y Capacidades; Historia queda en silencio. Se detiene al ocultar la ruta o la pestaña, al cancelar el habla y al silenciar. Volumen moderado con compresor; sin archivos de audio ni dependencias.
+- Sonido sintetizado con Web Audio, carismático y fluido, acorde con la cara redonda de Jev. Nunca palabras ni voz humana.
+- **Habla (segunda revisión del 2026-10-17, juguetona y seca):** una curva por palabra que rebota por sus sílabas escritas: cada sílaba entra con un pequeño salto ascendente, sobre una melodía pentatónica con la tónica acentuada, ritmo alterno largo-corto y color de vocal. Sin eco ni sala. Pausas en comas y fin de frase; subida en preguntas, realce y risita en exclamaciones, caída al cerrar. **Acciones:** un motivo corto y distinto por acción, con el mismo rebote y sin ondas cuadradas. El regreso a `Base` no suena.
+- **Banda sonora de Historia (épica cinematográfica):** arco Am(add9) → F(add9) → C(add9) → G6 → Fmaj9, Gsus4 mientras se abre la estrella y un Do mayor amplio en la revelación. Cada escena suma energía: arpegio a 104 bpm, bombo, bajo pulsante, tema heroico de metales desde machine learning y palmas en el clímax. Al deslizar hacia la siguiente escena sube un barrido; al llegar, un golpe grave cae en el tiempo fuerte con el acorde nuevo. Los golpes muy seguidos se funden, salvo que el nuevo sea más fuerte, así que el clímax nunca se pierde. Jev no habla en Historia.
+- Encendido por defecto; empieza con el primer gesto. Un solo botón de altavoz en la cabecera para voz y música, con `aria-pressed`, nombre accesible y elección persistida (`jevling.sound`).
+- Voz en Inicio y Capacidades; música solo en Historia. Todo se detiene con la pestaña oculta y al silenciar; la voz, además, al cancelar el habla o cambiar de ruta. Un contexto compartido con compresor; solo la música pasa por la sala de reverberación. Sin archivos de audio ni dependencias.
 
 ### Home
 

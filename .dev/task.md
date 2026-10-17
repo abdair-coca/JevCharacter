@@ -7,7 +7,7 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 - **Trabajo actual / fase activa:** Fase 5 — integración, accesibilidad, rendimiento y voz de Jev. Implementada y verificada el 2026-10-16/17; **entregada para revisión**. Solicitud: «quiero que culmines la fase 5 y que agregues sonido a jev…»; quiz: encendido tras el primer toque, Inicio y Capacidades, síntesis en el navegador, sonido primero.
 - **Fase anterior:** Fase 4 — About scrollytelling, aprobada el 2026-10-11 («la fase 4 ya está aprobada»).
 - **Estado:** fases 1–4 aprobadas; fase 5 pendiente de aprobación final. La demo UATF también sigue pendiente de aprobación visual. Teclado y rendimiento en dispositivo físico continúan como limitación de evidencia.
-- **Siguiente acción exacta:** que el usuario revise la fase 5 (incluida la voz, de oído). Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
+- **Siguiente acción exacta:** que el usuario revise la fase 5, incluidas de oído la voz juguetona y la banda sonora épica de Historia ([revisiones de sonido](#revisiones-de-sonido--2026-10-17)). Pendiente: regenerar la evidencia de sonido de fase 5. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado actual del código:** el 2026-10-07 el usuario autorizó a Luna a organizar el trabajo pendiente en microcommits; la implementación previa, documentación y evidencias ya están guardadas. Los PNG diagnósticos temporales se conservan sin commit. La restricción de no commitear durante la migración SDD queda como antecedente de aquella tarea.
 
 ## Fase 5 — entrega para revisión, 2026-10-17
@@ -39,6 +39,25 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 **Incidencias de verificación:** el harness inicial chocaba en el enlace «Capacidades» (coincidía con «Ver sus capacidades») y esperaba con `isVisible()` sin aguardar la carga diferida; ambos se corrigieron. Hubo dos falsos positivos de auditoría, ajustados con su causa documentada: `mask-*` de tailwind-merge confundido con una clave `sk-`, y el ES/EN activo, que se pinta sobre un indicador hermano. Contar frames con movimiento reducido no servía, por el bucle vacío `_rafBugFix` de ScrollTrigger; se sustituyó por capturas idénticas. El primer perf corrió con SwiftShader (software) y se repitió con GPU vía ANGLE/D3D11. Una corrida intermedia mostró un hueco de unos 15 s en Historia escritorio en frío, no reproducido en 5 sondas ni en la final. Ningún resultado de una corrida fallida forma parte del registro final.
 
 **Límites:** emulación de Chromium, sin móvil físico, Safari/iOS, lector de pantalla ni teclado virtual. El audio se verificó por instrumentación, no de oído. El contraste de texto sobre imágenes o canvas no es medible. Inicio en escritorio tiene un 10,6 % de frames por encima de 33 ms en la GPU integrada Intel UHD. Historia tiene un tirón único de 157–430 ms al inicializar Rive durante el scroll, que es el diseño aprobado. No se llamó a proveedores reales, no hubo deploy y no hubo push.
+
+### Revisiones de sonido — 2026-10-17
+
+**Primera revisión (arrullo cálido y pads):** una sesión anterior aplicó la revisión registrada en `spec.md` (voz de arrullo, música de Historia y control único) junto con su evidencia local. Quedó sustituida por la segunda revisión.
+
+**Segunda revisión (voz juguetona sin eco y banda sonora épica):** solicitudes en `spec.md`; alcance limitado al sonido. Cambios de runtime solo en `lib/audioCore.ts` (la voz ya no envía señal a la sala), `creature/voice/{voiceScore,voiceEngine}.ts` y `features/story/{storyMusic,useStoryMusic}.ts`; tests en `tests/{audioFakes,audioCore,voiceScore,voiceEngine,storyMusic}.test.ts`. Sin dependencias ni archivos de audio.
+
+| Comprobación | Resultado |
+|---|---|
+| Tests de sonido antes de editar | PASS: 4 archivos / 29 tests. |
+| `tsc --noEmit -p` app / node / api / tests | PASS; app y tests repetidos tras el último cambio. |
+| `npm run lint` | PASS, cero advertencias. |
+| `npm exec -- vitest run --maxWorkers=1 --reporter=dot` | PASS: 36 archivos / 235 tests. Nuevos: voz seca (sin camino a la sala), scoops, pentatónica, risita, golpe en la siguiente semicorchea, fusión de golpes, clímax que nunca se pierde, barrido silenciado al llegar y crecimiento por escena. |
+| Render offline (OfflineAudioContext en Chromium, script temporal fuera del repo) | 0 clics a 24, 32 y 48 kHz. La voz cae a −74/−81 dB 150 ms después de cada frase: sin cola de eco. Música: −39 dB en la escena 0 hasta −31 dB en las escenas 3–4, unos +4 dB en cada golpe y los medios y agudos más altos en el clímax. Render 20 veces más rápido que el tiempo real. |
+| Humo en Historia real (dev server, Chromium, script temporal) | Sin audio antes del gesto; contexto en marcha tras el clic; 5 golpes (4 escenas + clímax) recorriendo con la rueda rápida; ningún oscilador nuevo tras salir de Historia; 0 errores. |
+
+**Hallazgos corregidos:** clics de una muestra en las fuentes de ruido. Un `GainNode` vale 1 antes de su primer evento y la fuente podía sonar un frame antes; ahora el envolvente nace en 0. Además, al desplazarse rápido el golpe del clímax se fundía con el de la escena 4; ahora un golpe más fuerte siempre suena.
+
+**Límites y pendientes:** la mezcla se ajustó por mediciones, no de oído: la calidad sonora espera la revisión del usuario. Los scripts de render y humo no están en el repo. La evidencia local de fase 5 (`verify.mjs` bloque `sound`, `results-*.json`, capturas `sound-*` y `audio/`) corresponde a la primera revisión y no se commiteó. Hay que adaptar el bloque `sound` a la segunda revisión y volver a generarla; no se hizo porque el sistema cerró el dev server por falta de memoria.
 
 ### Activación de decisión remota en producción — 2026-10-09
 
