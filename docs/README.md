@@ -7,7 +7,7 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 ## Lectura rápida
 
 - [Instrucciones raíz para agentes](../AGENTS.md): qué documento consultar según el trabajo y cómo registrar evidencia.
-- [Spec de producto](../.dev/spec.md), [plan por fases](../.dev/plan.md) y [tarea/handoff activo](../.dev/task.md): fases 1–4 aprobadas; la fase 5 (integración, accesibilidad, rendimiento y voz de Jev) está entregada para revisión.
+- Los SDD de la feature ([spec](../.dev/spec.md), [plan por fases](../.dev/plan.md) y [tarea](../.dev/task.md)) se vaciaron tras la aprobación final de la fase 5 el 2026-10-18; su historial está en git. Fases 1–4 aceptadas o aprobadas; la fase 5 (integración, accesibilidad, rendimiento y voz de Jev) quedó aprobada.
 - [Contrato de diseño](../design.md): reglas visuales, tokens, ES/EN, temas, animación 2D, accesibilidad y verificación.
 - [Historia de JEV](jev-story.md): relato original del usuario y autoría para About.
 - [Arquitectura](architecture.md): runtime, responsabilidades de módulos, estado y camino de decisión.
@@ -16,7 +16,7 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 
 ## Estado del rediseño
 
-El spec y las cinco fases aprobadas se mantienen en `.dev/spec.md` y `.dev/plan.md`; `.dev/task.md` registra el handoff. Fases 1–3 fueron aceptadas al autorizar avanzar. Home conserva sesión en memoria suspendida al ocultarse; la [producción actual verificó decisión remota real](../.dev/evidence/decision-production/README.md), mientras `build:frontend` sigue disponible como alternativa local. Features presenta ocho escenas deterministas; [evidencia de fase 3](../.dev/evidence/phase-3/README.md). About narra el recorrido de Abdair Coca con partículas 2D; [evidencia inicial de fase 4](../.dev/evidence/phase-4/README.md) y [pulido vigente](../.dev/evidence/polish/README.md). Inicio incorpora la [demo local UATF](../.dev/evidence/enrollment/README.md). Jev tiene voz sintetizada en Inicio y Capacidades, e Historia tiene banda sonora. La integración final está en [evidencia de fase 5](../.dev/evidence/phase-5/README.md), pendiente de aprobación.
+Fases 1–4 fueron aceptadas o aprobadas, y la fase 5 se aprobó el 2026-10-18. Home conserva sesión en memoria suspendida al ocultarse; la [producción actual verificó decisión remota real](../.dev/evidence/decision-production/README.md), mientras `build:frontend` sigue disponible como alternativa local. Features presenta ocho escenas deterministas; [evidencia de fase 3](../.dev/evidence/phase-3/README.md). About narra el recorrido de Abdair Coca con partículas 2D; [evidencia inicial de fase 4](../.dev/evidence/phase-4/README.md) y [pulido vigente](../.dev/evidence/polish/README.md). Inicio incorpora la [demo local UATF](../.dev/evidence/enrollment/README.md), sin aprobación visual registrada. Jev tiene voz sintetizada en Inicio y Capacidades, e Historia tiene banda sonora. La integración final está en [evidencia de fase 5](../.dev/evidence/phase-5/README.md); su evidencia de sonido describe la voz anterior y queda pendiente de regenerar.
 
 El usuario declaró terminado JEV Lab y pidió reemplazar su plan activo, aclarando que no había registrado aprobación formal. El [plan anterior](../.dev/archive/jev-lab-plan-2026-10-06.md) conserva íntegro su estado histórico. Las instrucciones locales del laboratorio siguen en [jev-lab/AGENTS.md](../jev-lab/AGENTS.md).
 

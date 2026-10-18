@@ -68,7 +68,7 @@ npm test
 npm run build
 ```
 
-`lint` ejecuta ESLint sin advertencias; `lint:ox` conserva el verificador previo. TypeScript strict está habilitado en los cuatro proyectos. Tailwind v4 consume `src/styles/tokens.css`; el Button de shadcn/ui, Motion y Zustand cubren controles, feedback y preferencias. Features carga XState de forma diferida; Features/About comparten GSAP/ScrollTrigger y un manager global Lenis, que Home no descarga inicialmente. Estado en [task.md](.dev/task.md); evidencia de [fase 1](.dev/evidence/phase-1/README.md), [fase 2](.dev/evidence/phase-2/README.md), [fase 3](.dev/evidence/phase-3/README.md), [fase 4 con comandos cortos](.dev/evidence/phase-4/README.md) y [fase 5: integración, accesibilidad, rendimiento y voz](.dev/evidence/phase-5/README.md). La voz de Jev y la música de Historia usan Web Audio sin dependencias nuevas.
+`lint` ejecuta ESLint sin advertencias; `lint:ox` conserva el verificador previo. TypeScript strict está habilitado en los cuatro proyectos. Tailwind v4 consume `src/styles/tokens.css`; el Button de shadcn/ui, Motion y Zustand cubren controles, feedback y preferencias. Features carga XState de forma diferida; Features/About comparten GSAP/ScrollTrigger y un manager global Lenis, que Home no descarga inicialmente. Historial del rediseño en git (`.dev/task.md` se vació tras la aprobación de la fase 5); evidencia de [fase 1](.dev/evidence/phase-1/README.md), [fase 2](.dev/evidence/phase-2/README.md), [fase 3](.dev/evidence/phase-3/README.md), [fase 4 con comandos cortos](.dev/evidence/phase-4/README.md) y [fase 5: integración, accesibilidad, rendimiento y voz](.dev/evidence/phase-5/README.md). La voz de Jev y la música de Historia usan Web Audio sin dependencias nuevas.
 
 ## Deploy to Vercel
 
