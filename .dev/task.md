@@ -57,7 +57,7 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 
 **Hallazgos corregidos:** clics de una muestra en las fuentes de ruido. Un `GainNode` vale 1 antes de su primer evento y la fuente podía sonar un frame antes; ahora el envolvente nace en 0. Además, al desplazarse rápido el golpe del clímax se fundía con el de la escena 4; ahora un golpe más fuerte siempre suena.
 
-**Límites y pendientes:** la mezcla se ajustó por mediciones, no de oído: la calidad sonora espera la revisión del usuario. Los scripts de render y humo no están en el repo. La evidencia local de fase 5 (`verify.mjs` bloque `sound`, `results-*.json`, capturas `sound-*` y `audio/`) corresponde a la primera revisión y no se commiteó. Hay que adaptar el bloque `sound` a la segunda revisión y volver a generarla; no se hizo porque el sistema cerró el dev server por falta de memoria.
+**Límites y pendientes:** la mezcla se ajustó por mediciones, no de oído: la calidad sonora espera la revisión del usuario. Los scripts de render y humo no están en el repo. La evidencia de sonido de fase 5 (`verify.mjs` bloque `sound`, `results-*.json`, capturas `sound-*`) sigue en la versión commiteada, que describe la voz de chirridos anterior. Los archivos locales de la primera revisión se descartaron el 2026-10-17 por pedido del usuario. Hay que adaptar el bloque `sound` a la segunda revisión y volver a generarla.
 
 ### Activación de decisión remota en producción — 2026-10-09
 
