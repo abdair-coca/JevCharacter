@@ -59,6 +59,23 @@ Este es el handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `pl
 
 **Límites y pendientes:** la mezcla se ajustó por mediciones, no de oído: la calidad sonora espera la revisión del usuario. Los scripts de render y humo no están en el repo. La evidencia de sonido de fase 5 (`verify.mjs` bloque `sound`, `results-*.json`, capturas `sound-*`) sigue en la versión commiteada, que describe la voz de chirridos anterior. Los archivos locales de la primera revisión se descartaron el 2026-10-17 por pedido del usuario. Hay que adaptar el bloque `sound` a la segunda revisión y volver a generarla.
 
+### Corrección: Historia inmóvil al entrar desde Capacidades — 2026-10-17
+
+**Síntoma reportado:** al bajar hasta el final de Capacidades y pasar a Historia, a veces las partículas no respondían y la música no sonaba; recargar lo arreglaba.
+
+**Causa verificada:** Historia monta con la ventana en el scroll de Capacidades (5072–5405 px) y la App lo lleva a 0 después. El `IntersectionObserver` del escenario entrega un lote con dos entradas: la posición vieja (no visible) y la actual (visible). `useStageVisibility` leía solo la primera; `inView` y `active` quedaban en `false`, el progreso y el canvas se detenían y el estado seguía en «loading». Solo se recuperaba al salir del escenario y volver a entrar.
+
+**Corrección:** `useStageVisibility` toma la entrada más reciente del lote. Test de regresión en `tests/stageVisibility.test.tsx`: con el código anterior fallan 2 de 3 casos; con la corrección, los 3 pasan.
+
+| Comprobación | Resultado |
+|---|---|
+| Recorrido en navegador sin recargar (Inicio → Capacidades al final → Historia, tres veces), antes | Ciclo 2 llega con `progress` 0,49 congelado, canvas parado y estado «loading». |
+| Mismo recorrido, después de la corrección | Tres de tres llegadas con canvas corriendo, estado «ready» y progreso que responde. Cero errores de página o de consola. |
+| `tsc --noEmit` app / node / api / tests; `npm run lint` | PASS. |
+| `npx vitest run --maxWorkers=1` | PASS: 238 tests. |
+
+**Límites:** en los casos congelados la música seguía disparando sus golpes de escena, así que no se reprodujo el silencio. El síntoma «no suena» queda pendiente de un paso exacto o del error de consola. Historia sigue heredando el scroll de la página anterior antes de restaurarlo; corregirlo tocaría la navegación y queda como seguimiento. El hook también lo usa Capacidades, donde la corrección aplica sin prueba propia en navegador. Chromium headless, sin Safari ni móvil físico. Commit de la corrección: `3e46a6d`, sin push.
+
 ### Activación de decisión remota en producción — 2026-10-09
 
 **Autorización:** «hazlo tu, las variables ya estan en vercel.com», después de explicar que un artefacto prebuilt no se puede reconstruir desde Redeploy con variables nuevas. Se usa el proyecto existente y `vercel deploy --prod --yes`, sin `--prebuilt`; no se leen ni imprimen valores de credenciales.
