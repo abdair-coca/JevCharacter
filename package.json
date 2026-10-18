@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "typecheck": "tsc -b",
     "typecheck:tests": "tsc -p tsconfig.tests.json --noEmit",
     "build": "tsc -b && vite build",

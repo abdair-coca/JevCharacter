@@ -65,8 +65,11 @@ npm run typecheck
 npm run typecheck:tests
 npm run lint
 npm test
+npm run test:e2e
 npm run build
 ```
+
+`test:e2e` levanta el build con `vite preview` y ejecuta Playwright en Chromium sin llamar a proveedores. `.github/workflows/ci.yml` repite lint, typecheck, Vitest y e2e en cada push a `main` y en cada PR.
 
 `lint` ejecuta ESLint sin advertencias; `lint:ox` conserva el verificador previo. TypeScript strict está habilitado en los cuatro proyectos. Tailwind v4 consume `src/styles/tokens.css`; el Button de shadcn/ui, Motion y Zustand cubren controles, feedback y preferencias. Features carga XState de forma diferida; Features/About comparten GSAP/ScrollTrigger y un manager global Lenis, que Home no descarga inicialmente. Historial del rediseño en git (`.dev/task.md` se vació tras la aprobación de la fase 5); evidencia de [fase 1](.dev/evidence/phase-1/README.md), [fase 2](.dev/evidence/phase-2/README.md), [fase 3](.dev/evidence/phase-3/README.md), [fase 4 con comandos cortos](.dev/evidence/phase-4/README.md) y [fase 5: integración, accesibilidad, rendimiento y voz](.dev/evidence/phase-5/README.md). La voz de Jev y la música de Historia usan Web Audio sin dependencias nuevas.
 
