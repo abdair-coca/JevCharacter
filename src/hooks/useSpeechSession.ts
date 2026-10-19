@@ -19,6 +19,14 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
   const languageRef = useRef(language);
   const activeRef = useRef(active);
   const fadeTimerRef = useRef<number | null>(null);
+  const talkingRef = useRef(false);
+
+  // Returns Jev to Base only when this session is the one holding the talk state.
+  const releaseTalk = useCallback(() => {
+    if (!talkingRef.current) return;
+    talkingRef.current = false;
+    void characterRef.current?.idle();
+  }, [characterRef]);
 
   const invalidate = useCallback(() => {
     generationRef.current++;
@@ -28,7 +36,8 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     previous?.controller.abort();
     if (fadeTimerRef.current !== null) window.clearTimeout(fadeTimerRef.current);
     fadeTimerRef.current = null;
-  }, []);
+    releaseTalk();
+  }, [releaseTalk]);
 
   const cancel = useCallback((clearHistory = false) => {
     invalidate();
@@ -62,7 +71,6 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       void characterRef.current?.idle();
     };
     request.timeout = window.setTimeout(fail, SPEECH_REQUEST_TIMEOUT_MS);
-    let talking = false;
     void streamSpeechReply({
       message: request.message,
       language: request.language,
@@ -70,9 +78,9 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       signal: request.controller.signal,
       onText: text => {
         if (!isCurrent()) return;
-        if (!talking) {
-          talking = true;
-          void characterRef.current?.talk(request.state);
+        if (!talkingRef.current) {
+          talkingRef.current = true;
+          void characterRef.current?.speak(request.state);
         }
         setNotice(null);
         setStatus("streaming");
@@ -82,11 +90,12 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       if (!isCurrent()) return;
       if (request.timeout !== null) window.clearTimeout(request.timeout);
       pendingRef.current = null;
+      releaseTalk();
       historyRef.current = [...historyRef.current, { user: request.message, assistant: text }].slice(-SPEECH_HISTORY_LIMIT);
       setStatus("idle");
       setCaption({ text, complete: true, generation: request.generation, language: request.language });
     }).catch(fail);
-  }, [characterRef, invalidate]);
+  }, [characterRef, invalidate, releaseTalk]);
 
   const onCaptionRevealed = useCallback((generation: number) => {
     if (generation !== generationRef.current || !activeRef.current) return;

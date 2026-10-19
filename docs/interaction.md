@@ -83,7 +83,7 @@ El adaptador traduce reacciones estructuradas a estados ordinarios: `BASE` a `Ba
 - `think`: se activa al enviar contexto y permanece durante Jev y la espera de Groq; el primer texto recibido puede reemplazarlo por la animación hablada. Otra acción seleccionada lo reemplaza.
 - `Cloud`: disponible en el panel de diagnóstico para pruebas manuales; no se usa como espera normal.
 - `yes`/`no`: animaciones visuales para respuestas binarias claras.
-- `Talk`, `talkb`, `talkc`, `talkbc`: opciones de animación hablada; solo se disparan al recibir texto de una acción contextual `talk`.
+- `Talk`, `talkb`, `talkc`, `talkbc`: opciones de animación hablada; solo se disparan al recibir texto de una acción contextual `talk`, se mantienen mientras llega la respuesta y vuelven a `Base` al completarse.
 - El morph usa los estados enum `MorphState`, `square` o `triangle`; el panel de diagnóstico no ofrece control manual de formas.
 - El arranque, al quedar Rive listo, reproduce `Hello` una vez. Panel de diagnóstico puede forzar reacciones, respuestas visuales y estados hablados.
 

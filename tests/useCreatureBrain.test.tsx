@@ -15,6 +15,7 @@ function createCharacter() {
   return {
     think: vi.fn(),
     talk: vi.fn(),
+    speak: vi.fn(),
     idle: vi.fn(),
     morph: vi.fn(),
     answer: vi.fn(),
@@ -119,7 +120,7 @@ describe("useCreatureBrain talk flow", () => {
     });
     expect(character.think).toHaveBeenCalledOnce();
     expect(result.current.speechCaption).toBeNull();
-    expect(character.talk).toHaveBeenCalledWith("talkb");
+    expect(character.speak).toHaveBeenCalledWith("talkb");
     expect(character.idle).toHaveBeenCalled();
     expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual(["/api/decide", "/api/talk"]);
     unmount();

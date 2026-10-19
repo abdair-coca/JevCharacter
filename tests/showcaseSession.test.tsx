@@ -9,7 +9,7 @@ import { useShowcasePlayer } from "../src/features/showcase/useShowcasePlayer";
 const methods = {
   stop: vi.fn(), idle: vi.fn(async () => {}), play: vi.fn(async () => {}), think: vi.fn(async () => {}), morph: vi.fn(async () => {}),
   playFor: vi.fn(async () => {}), sequence: vi.fn(async () => {}), bump: vi.fn(async () => {}),
-  hello: vi.fn(async () => {}), ghost: vi.fn(async () => {}), flower: vi.fn(async () => {}), talk: vi.fn(async () => {}), answer: vi.fn(async () => {}), cloud: vi.fn(async () => {}),
+  hello: vi.fn(async () => {}), ghost: vi.fn(async () => {}), flower: vi.fn(async () => {}), talk: vi.fn(async () => {}), speak: vi.fn(async () => {}), answer: vi.fn(async () => {}), cloud: vi.fn(async () => {}),
 } satisfies CharacterController;
 const controller = { current: methods };
 beforeEach(() => {

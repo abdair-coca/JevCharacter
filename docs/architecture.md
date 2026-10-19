@@ -84,7 +84,7 @@ El cerebro y el sensor se suspenden usando sus opciones existentes; Character si
 3. Contexto enviado explícitamente solicita una decisión contextual. El scheduler también puede solicitarla al volver tras una ausencia suficiente, una vez cumplido el cooldown.
 4. Scheduler puede reutilizar caché; limita ritmo, aborta reemplazos/tiempos agotados y valida respuesta. Si falla o endpoint informa `unavailable`, recurre a `fallbackBrain`.
 5. La decisión coherida actualiza estado e interfaz. Adaptador traduce reacción a estado Rive; intensidad y atención alimentan el escenario.
-6. Si la acción contextual es `talk`, Jev termina primero. `think` sigue hasta que llegue el primer texto de Groq; un único rótulo recibe los fragmentos y desaparece al cabo de unos 5 s.
+6. Si la acción contextual es `talk`, `think` sigue hasta que llegue el primer texto de Groq; desde ese momento Jev habla mientras llegan los fragmentos y vuelve a `Base` al completarse la respuesta; un único rótulo recibe los fragmentos y desaparece al cabo de unos 5 s.
 7. Cambiar idioma durante habla invalida la generación y aborta su reader, luego repite el mismo mensaje con el idioma nuevo y solo el historial previamente completado. Si todavía se espera a `/api/decide`, esa decisión no se repite: el habla usará el idioma vigente al comenzar. Los captions completos conservan su `lang` original.
 8. Fallar el habla elimina texto parcial y muestra un aviso localizado en el HUD, sin fabricar una frase de Jev. Interrumpir una decisión tiene un aviso distinto. «Borrar conversación» cancela ambas vías y borra contexto, intercambios y caché de decisiones que contenía texto, sin reiniciar cuotas ni personalidad.
 

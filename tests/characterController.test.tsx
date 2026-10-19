@@ -62,6 +62,29 @@ describe("character lifecycle", () => {
   });
 });
 
+describe("character speech hold", () => {
+  it("speak keeps the talk state until another action replaces it", async () => {
+    const { result, state } = mountController();
+    act(() => { void result.current.speak("talkb"); });
+    await act(async () => vi.advanceTimersByTimeAsync(5000));
+    expect(state).toHaveBeenLastCalledWith("talkb");
+    expect(vi.getTimerCount()).toBe(0);
+    act(() => { void result.current.idle(); });
+    await act(async () => vi.advanceTimersByTimeAsync(16));
+    expect(state).toHaveBeenLastCalledWith("Base");
+  });
+
+  it("resumes a hold cut by suspension as Base, not as an unattended talk loop", async () => {
+    const { result, rerender, state } = mountController();
+    act(() => { void result.current.speak("Talk"); });
+    await act(async () => vi.advanceTimersByTimeAsync(16));
+    rerender({ active: false });
+    rerender({ active: true });
+    await act(async () => vi.advanceTimersByTimeAsync(16));
+    expect(state).toHaveBeenLastCalledWith("Base");
+  });
+});
+
 describe("character action cues", () => {
   it("announces each visible action once it is triggered, never the return to Base or a cancelled action", async () => {
     const cue = vi.fn();

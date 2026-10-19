@@ -22,7 +22,7 @@ vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 })
 vi.mock("../src/components/Character", async () => {
   const { forwardRef, useImperativeHandle } = await import("react");
   const noop = async () => {};
-  const controller = { idle: noop, stop: vi.fn(), play: noop, think: noop, morph: noop, playFor: noop, sequence: noop, bump: noop, hello: noop, ghost: noop, flower: noop, talk: noop, answer: noop, cloud: noop } satisfies CharacterController;
+  const controller = { idle: noop, stop: vi.fn(), play: noop, think: noop, morph: noop, playFor: noop, sequence: noop, bump: noop, hello: noop, ghost: noop, flower: noop, talk: noop, speak: noop, answer: noop, cloud: noop } satisfies CharacterController;
   return { default: forwardRef<CharacterController, CharacterProps>(function MockStoryCharacter(props, ref) {
     useImperativeHandle(ref, () => controller, []);
     mocks.characters.push(props);

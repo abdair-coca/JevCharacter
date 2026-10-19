@@ -11,6 +11,7 @@ type SetNumber = ((value: number) => void) | undefined;
 type Trigger = (() => void) | undefined;
 type SequenceStep = { state: CharacterState; duration: number };
 const MORPH_STATE: Record<MorphForm, string> = { star: "MorphState", square: "square", triangle: "triangle" };
+const TALK_STATES = new Set<CharacterState>(["Talk", "talkb", "talkc", "talkbc"]);
 
 export function useCharacterController(setRiveState: SetState, triggerState: Trigger, setShapeType?: SetNumber, active = true, onCue?: (cue: CharacterCue) => void) {
   const executionId = useRef(0);
@@ -18,6 +19,7 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
   const currentState = useRef<CharacterState>("Base");
   const lastBumpAt = useRef(0);
   const pending = useRef(new Set<() => void>());
+  const resumeAsBase = useRef(false);
 
   const stop = useCallback(() => {
     executionId.current++;
@@ -61,6 +63,16 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
     stop();
     await rawPlay(state, executionId.current);
   }, [rawPlay, stop]);
+
+  // A talk hold cut by suspension must not come back as an unattended loop.
+  useLayoutEffect(() => {
+    if (!active) {
+      if (TALK_STATES.has(currentState.current)) resumeAsBase.current = true;
+    } else if (resumeAsBase.current) {
+      resumeAsBase.current = false;
+      void play("Base");
+    }
+  }, [active, play]);
 
   const playFor = useCallback(async (state: CharacterState, duration = 1500) => {
     if (!enabled.current) return;
@@ -122,6 +134,7 @@ export function useCharacterController(setRiveState: SetState, triggerState: Tri
     play, think, playFor, sequence, stop, bump, morph,
     idle: () => play("Base"), hello: () => play("Hello"), ghost: () => play("Ghost"), flower: () => play("Flower"),
     talk: (state: TalkState = "Talk") => playFor(state, BRAIN_CONFIG.talkDurationMs),
+    speak: (state: TalkState) => play(state),
     answer: (answer: BinaryAnswer) => playFor(answer, BRAIN_CONFIG.yesNoDurationMs),
     cloud: () => playFor("Cloud", BRAIN_CONFIG.cloudDurationMs),
   }), [bump, morph, play, playFor, sequence, stop, think]);

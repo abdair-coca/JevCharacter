@@ -17,7 +17,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 function mountSpeech(strict = false) {
-  const character = { think: vi.fn(), talk: vi.fn(), idle: vi.fn() } as unknown as CharacterController;
+  const character = { think: vi.fn(), talk: vi.fn(), speak: vi.fn(), idle: vi.fn() } as unknown as CharacterController;
   const ref = { current: character };
   const initialProps: { language: SpeechLanguage; active: boolean } = { language: "es", active: true };
   const rendered = renderHook(props => useSpeechSession(ref, props.language, props.active), {
@@ -30,6 +30,30 @@ function mountSpeech(strict = false) {
 async function complete(request: Request, text: string) {
   await act(async () => { request.options.onText(text); request.resolve(text); });
 }
+
+describe("speech session talk hold", () => {
+  it("holds the talk state from the first fragment until the reply completes", async () => {
+    const { result, character } = mountSpeech();
+    act(() => result.current.start("Hola", "talkb"));
+    act(() => requests[0].options.onText("Hola"));
+    act(() => requests[0].options.onText("Hola, ¿cómo"));
+    expect(character.speak).toHaveBeenCalledOnce();
+    expect(character.speak).toHaveBeenCalledWith("talkb");
+    expect(character.talk).not.toHaveBeenCalled();
+    expect(character.idle).not.toHaveBeenCalled();
+    await complete(requests[0], "Hola, ¿cómo estás?");
+    expect(character.idle).toHaveBeenCalledOnce();
+  });
+
+  it("returns Jev to Base when the reply is cancelled mid-talk", () => {
+    const { result, character } = mountSpeech();
+    act(() => result.current.start("Hola", "Talk"));
+    act(() => requests[0].options.onText("Hola"));
+    act(() => result.current.cancel());
+    expect(requests[0].options.signal.aborted).toBe(true);
+    expect(character.idle).toHaveBeenCalledOnce();
+  });
+});
 
 describe("speech session generations", () => {
   it("regenerates the same message in the latest language and excludes stale fragments/history", async () => {
