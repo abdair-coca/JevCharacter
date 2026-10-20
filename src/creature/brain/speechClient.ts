@@ -1,5 +1,5 @@
+import { acceptsBlock, clampText, parseBlock, SPEECH_SPOKEN_MAX_CHARS, type SpeechBlock, type SpeechReply } from "./speechBlocks";
 import {
-  appendFirstSentence,
   isSpeechLanguage,
   SPEECH_HISTORY_LIMIT,
   SPEECH_MESSAGE_MAX_CHARS,
@@ -12,10 +12,15 @@ type StreamSpeechOptions = {
   language: SpeechLanguage;
   history: SpeechExchange[];
   signal: AbortSignal;
-  onText: (text: string) => void;
+  onSpoken: (text: string) => void;
+  onBlock: (block: SpeechBlock) => void;
 };
 
-export async function streamSpeechReply({ message, language, history, signal, onText }: StreamSpeechOptions) {
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+/** Streams one reply: the spoken sentence first, then each block the client also validates. */
+export async function streamSpeechReply({ message, language, history, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechReply> {
   if (!isSpeechLanguage(language)) throw new Error("Invalid speech language");
   signal.throwIfAborted();
   const response = await fetch("/api/talk", {
@@ -42,8 +47,8 @@ export async function streamSpeechReply({ message, language, history, signal, on
   let buffer = "";
   let eventName = "";
   let dataLines: string[] = [];
-  let text = "";
-  let sentenceComplete = false;
+  let spoken: string | null = null;
+  const blocks: SpeechBlock[] = [];
   let streamComplete = false;
   const onAbort = () => { void reader.cancel().catch(() => undefined); };
   signal.addEventListener("abort", onAbort, { once: true });
@@ -61,7 +66,7 @@ export async function streamSpeechReply({ message, language, history, signal, on
       streamComplete = true;
       return;
     }
-    if (name !== "delta" || sentenceComplete) return;
+    if (name !== "spoken" && name !== "block") return;
 
     let payload: unknown;
     try {
@@ -69,13 +74,20 @@ export async function streamSpeechReply({ message, language, history, signal, on
     } catch {
       throw new Error("Invalid speech stream event");
     }
-    if (!payload || typeof payload !== "object" || !("text" in payload) || typeof payload.text !== "string") throw new Error("Invalid speech text");
+    if (!isRecord(payload)) throw new Error("Invalid speech stream event");
 
-    const update = appendFirstSentence(text, payload.text);
-    if (update.added) {
-      text = update.text;
-      sentenceComplete = update.complete;
-      onText(text);
+    if (name === "spoken") {
+      const text = clampText(payload.text, SPEECH_SPOKEN_MAX_CHARS);
+      if (spoken !== null || !text) throw new Error("Invalid speech text");
+      spoken = text;
+      onSpoken(text);
+      return;
+    }
+    if (spoken === null) throw new Error("Speech block before its sentence");
+    const block = parseBlock(payload.block);
+    if (block && acceptsBlock(blocks, block)) {
+      blocks.push(block);
+      onBlock(block);
     }
   };
 
@@ -116,6 +128,6 @@ export async function streamSpeechReply({ message, language, history, signal, on
   }
 
   signal.throwIfAborted();
-  if (!streamComplete || !text.trim()) throw new Error("Incomplete speech stream");
-  return text;
+  if (!streamComplete || spoken === null) throw new Error("Incomplete speech stream");
+  return { spoken, blocks };
 }

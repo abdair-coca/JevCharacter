@@ -4,11 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { StrictMode, type ReactNode } from "react";
 import type { CharacterController } from "../src/character/useCharacterController";
 import { useSpeechSession } from "../src/hooks/useSpeechSession";
+import type { SpeechBlock, SpeechReply } from "../src/creature/brain/speechBlocks";
 import { streamSpeechReply } from "../src/creature/brain/speechClient";
 import { SPEECH_REQUEST_TIMEOUT_MS, type SpeechLanguage } from "../src/creature/brain/speechProtocol";
 
 vi.mock("../src/creature/brain/speechClient", () => ({ streamSpeechReply: vi.fn() }));
-type Request = { options: Parameters<typeof streamSpeechReply>[0]; resolve: (text: string) => void; reject: (error: Error) => void };
+type Request = { options: Parameters<typeof streamSpeechReply>[0]; resolve: (reply: SpeechReply) => void; reject: (error: Error) => void };
 let requests: Request[];
 beforeEach(() => {
   requests = [];
@@ -27,21 +28,26 @@ function mountSpeech(strict = false) {
   return { ...rendered, character };
 }
 
-async function complete(request: Request, text: string) {
-  await act(async () => { request.options.onText(text); request.resolve(text); });
+async function complete(request: Request, spoken: string, blocks: SpeechBlock[] = []) {
+  await act(async () => {
+    request.options.onSpoken(spoken);
+    for (const block of blocks) request.options.onBlock(block);
+    request.resolve({ spoken, blocks });
+  });
 }
 
 describe("speech session talk hold", () => {
-  it("holds the talk state from the first fragment until the voice reports the end", async () => {
+  it("holds the talk state from the spoken sentence until the voice reports the end", async () => {
     const { result, character } = mountSpeech();
     act(() => result.current.start("Hola", "talkb"));
-    act(() => requests[0].options.onText("Hola"));
-    act(() => requests[0].options.onText("Hola, ¿cómo"));
+    act(() => requests[0].options.onSpoken("Hola, ¿cómo estás?"));
+    act(() => requests[0].options.onBlock({ type: "paragraph", text: "Detalle." }));
     expect(character.speak).toHaveBeenCalledOnce();
     expect(character.speak).toHaveBeenCalledWith("talkb");
     expect(character.talk).not.toHaveBeenCalled();
     expect(character.idle).not.toHaveBeenCalled();
-    await complete(requests[0], "Hola, ¿cómo estás?");
+    act(() => requests[0].resolve({ spoken: "Hola, ¿cómo estás?", blocks: [{ type: "paragraph", text: "Detalle." }] }));
+    await act(async () => {});
     expect(character.idle).not.toHaveBeenCalled();
     act(() => result.current.finishTalk());
     expect(character.idle).toHaveBeenCalledOnce();
@@ -50,7 +56,7 @@ describe("speech session talk hold", () => {
   it("returns Jev to Base when the reply is cancelled mid-talk", () => {
     const { result, character } = mountSpeech();
     act(() => result.current.start("Hola", "Talk"));
-    act(() => requests[0].options.onText("Hola"));
+    act(() => requests[0].options.onSpoken("Hola."));
     act(() => result.current.cancel());
     expect(requests[0].options.signal.aborted).toBe(true);
     expect(character.idle).toHaveBeenCalledOnce();
@@ -61,8 +67,8 @@ describe("speech session generations", () => {
   it("regenerates the same message in the latest language and excludes stale fragments/history", async () => {
     const { result, rerender } = mountSpeech();
     act(() => result.current.start("Mi mensaje original", "talkb"));
-    act(() => requests[0].options.onText("Fragmento viejo"));
-    expect(result.current.caption?.text).toBe("Fragmento viejo");
+    act(() => requests[0].options.onSpoken("Frase vieja."));
+    expect(result.current.caption?.text).toBe("Frase vieja.");
     rerender({ language: "en", active: true });
     expect(requests[0].options.signal.aborted).toBe(true);
     expect(requests[1].options).toMatchObject({ message: "Mi mensaje original", language: "en", history: [] });
@@ -132,9 +138,11 @@ describe("speech session generations", () => {
   it("reports failures separately from captions and does not add failed text to history", async () => {
     const { result, character } = mountSpeech();
     act(() => result.current.start("Pregunta", "Talk"));
-    act(() => requests[0].options.onText("Incompleto"));
+    act(() => requests[0].options.onSpoken("Incompleto."));
+    act(() => requests[0].options.onBlock({ type: "paragraph", text: "Parcial." }));
     await act(async () => requests[0].reject(new Error("Stream error")));
     expect(result.current.caption).toBeNull();
+    expect(result.current.detail).toBeNull();
     expect(result.current.notice).toBe("unavailable");
     expect(character.idle).toHaveBeenCalled();
     act(() => result.current.start("Otra", "Talk"));
@@ -161,5 +169,52 @@ describe("speech session generations", () => {
     act(() => result.current.start("Hola", "Talk"));
     await complete(requests[0], "Hola.");
     expect(result.current.caption?.text).toBe("Hola.");
+  });
+});
+
+describe("speech session blocks", () => {
+  const steps: SpeechBlock = { type: "steps", items: ["Uno", "Dos"] };
+  const chips: SpeechBlock = { type: "chips", items: ["¿Más?"] };
+
+  it("streams blocks apart from the spoken caption and keeps a digest in history", async () => {
+    const { result } = mountSpeech();
+    act(() => result.current.start("Pasos", "Talk"));
+    act(() => requests[0].options.onSpoken("Te cuento."));
+    const caption = result.current.caption;
+    act(() => requests[0].options.onBlock(steps));
+    expect(result.current.caption).toBe(caption);
+    expect(result.current.detail).toMatchObject({ blocks: [steps], complete: false, language: "es" });
+    expect(result.current.status).toBe("streaming");
+    act(() => requests[0].options.onBlock(chips));
+    act(() => requests[0].resolve({ spoken: "Te cuento.", blocks: [steps, chips] }));
+    await act(async () => {});
+    expect(result.current.detail).toMatchObject({ blocks: [steps, chips], complete: true });
+    expect(result.current.status).toBe("idle");
+    act(() => result.current.start("Otra", "Talk"));
+    expect(result.current.detail).toBeNull();
+    expect(requests[1].options.history).toEqual([{ user: "Pasos", assistant: "Te cuento.\nUno; Dos" }]);
+  });
+
+  it("drops the blocks of a cancelled or regenerated reply", async () => {
+    const { result, rerender } = mountSpeech();
+    act(() => result.current.start("Pasos", "Talk"));
+    act(() => requests[0].options.onSpoken("Te cuento."));
+    act(() => requests[0].options.onBlock(steps));
+    rerender({ language: "en", active: true });
+    expect(result.current.detail).toBeNull();
+    act(() => requests[0].options.onBlock(chips));
+    expect(result.current.detail).toBeNull();
+    await complete(requests[1], "Here you go.", [chips]);
+    expect(result.current.detail).toMatchObject({ blocks: [chips], language: "en" });
+    act(() => result.current.cancel(true));
+    expect(result.current.detail).toBeNull();
+  });
+
+  it("leaves no detail for a reply without blocks", async () => {
+    const { result } = mountSpeech();
+    act(() => result.current.start("Hola", "Talk"));
+    await complete(requests[0], "Hola.");
+    expect(result.current.caption?.text).toBe("Hola.");
+    expect(result.current.detail).toBeNull();
   });
 });

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import handler from "../api/talk";
+import { SPEECH_HISTORY_REPLY_MAX_CHARS } from "../src/creature/brain/speechBlocks";
 import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS } from "../src/creature/brain/speechProtocol";
 
 function apiResponse() {
@@ -50,6 +51,12 @@ function groqResponse(frames: string[]) {
   return new Response(stream, { status: 200 });
 }
 
+function content(text: string) {
+  return `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`;
+}
+
+const spoken = (text: string) => content(JSON.stringify({ type: "spoken", text }));
+
 const validBody = {
   message: "¿Cómo estás?",
   language: "es",
@@ -96,7 +103,7 @@ describe("/api/talk", () => {
   it.each([["es", "español (Spanish)"], ["en", "inglés (English)"]])("usa %s explícito sin reescribir historial", async (language, instruction) => {
     vi.stubEnv("GROQ_API_KEY", "test-key");
     const fetchMock = vi.fn().mockResolvedValue(groqResponse([
-      `data: ${JSON.stringify({ choices: [{ delta: { content: "Reply." } }] })}\n\n`,
+      spoken("Reply."),
       "data: [DONE]\n\n",
     ]));
     vi.stubGlobal("fetch", fetchMock);
@@ -104,7 +111,7 @@ describe("/api/talk", () => {
     const payload = JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body)) as { messages: { role: string; content: string }[] };
     expect(payload.messages[0].content).toContain(instruction);
     expect(payload.messages[1]).toEqual({ role: "user", content: "hola" });
-    expect(payload.messages[2]).toEqual({ role: "assistant", content: "Hola." });
+    expect(payload.messages[2]).toEqual({ role: "assistant", content: '{"type":"spoken","text":"Hola."}' });
     expect(payload.messages.at(-1)?.content).toBe(validBody.message);
   });
 
@@ -112,7 +119,8 @@ describe("/api/talk", () => {
     vi.stubEnv("GROQ_API_KEY", "test-key");
     const clock = vi.spyOn(Date, "now").mockReturnValue(100_000);
     const fetchMock = vi.fn().mockImplementation(() => groqResponse([
-      `data: ${JSON.stringify({ choices: [{ delta: { content: "Bien." } }] })}\n\n`,
+      spoken("Bien."),
+      "data: [DONE]\n\n",
     ]));
     vi.stubGlobal("fetch", fetchMock);
     const client = `window-${crypto.randomUUID()}`;
@@ -131,7 +139,7 @@ describe("/api/talk", () => {
   it("limita solicitudes por cliente y ventana sin contactar al proveedor para la excedente", async () => {
     vi.stubEnv("GROQ_API_KEY", "test-key");
     const fetchMock = vi.fn().mockImplementation(() => groqResponse([
-      `data: ${JSON.stringify({ choices: [{ delta: { content: "Listo." } }] })}\n\n`,
+      spoken("Listo."),
       "data: [DONE]\n\n",
     ]));
     vi.stubGlobal("fetch", fetchMock);
@@ -154,7 +162,7 @@ describe("/api/talk", () => {
     vi.stubEnv("GROQ_MODEL", "openai/gpt-oss-20b");
     const fetchMock = vi.fn().mockResolvedValue(groqResponse([
       `data: ${JSON.stringify({ choices: [{ delta: { reasoning: "privado" } }] })}\n\n`,
-      `data: ${JSON.stringify({ choices: [{ delta: { content: "Bien." } }] })}\n\n`,
+      spoken("Bien."),
       "data: [DONE]\n\n",
     ]));
     vi.stubGlobal("fetch", fetchMock);
@@ -165,10 +173,10 @@ describe("/api/talk", () => {
     const upstreamOptions = fetchMock.mock.calls[0][1] as RequestInit;
     const payload = JSON.parse(String(upstreamOptions.body)) as Record<string, unknown>;
     expect(payload.reasoning_effort).toBe("low");
-    expect(payload.max_completion_tokens).toBe(64);
+    expect(payload.max_completion_tokens).toBe(512);
     expect(payload.messages).toHaveLength(6);
     expect(response.statusCode).toBe(200);
-    expect(response.writes.join("")).toContain('event: delta\ndata: {"text":"Bien."}');
+    expect(response.writes.join("")).toContain('event: spoken\ndata: {"text":"Bien."}');
     expect(response.writes.join("")).toContain("event: done");
     expect(response.writableEnded).toBe(true);
   });
@@ -177,7 +185,7 @@ describe("/api/talk", () => {
     vi.stubEnv("GROQ_API_KEY", "test-key");
     vi.stubEnv("GROQ_MODEL", "llama-3.3-70b-versatile");
     const fetchMock = vi.fn().mockResolvedValue(groqResponse([
-      `data: ${JSON.stringify({ choices: [{ delta: { content: "Bien." } }] })}\n\n`,
+      spoken("Bien."),
       "data: [DONE]\n\n",
     ]));
     vi.stubGlobal("fetch", fetchMock);
@@ -234,6 +242,80 @@ describe("/api/talk", () => {
     vi.stubGlobal("fetch", fetchMock);
     const response = apiResponse();
     await handler(request({ ...validBody, history: [exchange] }), response.response);
+    expect(response.statusCode).toBe(400);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("transmite la frase y los bloques normalizados aunque lleguen pegados y partidos", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    const reply = '{"type":"spoken","text":"Te cuento."}{"type":"steps","items":["1. Uno","2. Dos"]}\n{"type":"chart","title":"Raro"}{"type":"chips","items":["¿Más?"]}';
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([
+      content(reply.slice(0, 25)),
+      content(reply.slice(25, 70)),
+      content(reply.slice(70)),
+      "data: [DONE]\n\n",
+    ])));
+    const response = apiResponse();
+
+    await handler(request(validBody), response.response);
+
+    const events = response.writes.join("").split("\n\n").filter(Boolean);
+    expect(events).toEqual([
+      'event: spoken\ndata: {"text":"Te cuento."}',
+      'event: block\ndata: {"block":{"type":"steps","items":["Uno","Dos"]}}',
+      'event: block\ndata: {"block":{"type":"paragraph","text":"Raro"}}',
+      'event: block\ndata: {"block":{"type":"chips","items":["¿Más?"]}}',
+      "event: done\ndata: {}",
+    ]);
+  });
+
+  it("deja de leer al completar seis bloques", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    const block = JSON.stringify({ type: "paragraph", text: "Corto." });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([
+      spoken("Hola."),
+      ...Array.from({ length: 8 }, () => content(block)),
+    ])));
+    const response = apiResponse();
+
+    await handler(request(validBody), response.response);
+
+    const output = response.writes.join("");
+    expect(output.match(/event: block/g)).toHaveLength(6);
+    expect(output).toContain("event: done");
+  });
+
+  it.each([
+    ["sin frase hablada", content('{"type":"paragraph","text":"Hola."}')],
+    ["texto sin JSON", content("Hola, soy Jev.")],
+  ])("falla con evento de error %s", async (_case, frame) => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([frame, "data: [DONE]\n\n"])));
+    const response = apiResponse();
+
+    await handler(request(validBody), response.response);
+
+    expect(response.writes.join("")).toContain("event: error");
+    expect(response.writes.join("")).not.toContain("event: done");
+  });
+
+  it("devuelve al modelo el historial con resumen en el mismo formato de objetos", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    const fetchMock = vi.fn().mockResolvedValue(groqResponse([spoken("Bien."), "data: [DONE]\n\n"]));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await handler(request({ ...validBody, history: [{ user: "pasos", assistant: "Te cuento.\nUno; Dos" }] }), apiResponse().response);
+
+    const payload = JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body)) as { messages: { role: string; content: string }[] };
+    expect(payload.messages[2].content).toBe('{"type":"spoken","text":"Te cuento."}\n{"type":"paragraph","text":"Uno; Dos"}');
+  });
+
+  it("rechaza un historial que supera el resumen permitido", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const response = apiResponse();
+    await handler(request({ ...validBody, history: [{ user: "hola", assistant: "x".repeat(SPEECH_HISTORY_REPLY_MAX_CHARS + 1) }] }), response.response);
     expect(response.statusCode).toBe(400);
     expect(fetchMock).not.toHaveBeenCalled();
   });

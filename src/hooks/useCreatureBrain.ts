@@ -23,7 +23,7 @@ import {
 } from "../creature/personality/personalityStorage";
 import { MORPH_FORMS, mentionedMorphForms, requestedMorphForm } from "../creature/brain/morphIntent";
 import type { SpeechLanguage } from "../creature/brain/speechProtocol";
-import { useSpeechSession, type SpeechCaption, type SpeechNotice } from "./useSpeechSession";
+import { useSpeechSession, type SpeechCaption, type SpeechDetail, type SpeechNotice } from "./useSpeechSession";
 import { executeDecisionAction } from "../creature/rive/riveReactionAdapter";
 import type { SensorController } from "../creature/sensors/pointerSensor";
 
@@ -58,6 +58,7 @@ type CreatureBrain = {
   personality: Personality;
   userContext: string;
   speechCaption: SpeechCaption | null;
+  speechDetail: SpeechDetail | null;
   speechNotice: SpeechNotice;
   decisionInterrupted: boolean;
   onSpeechCaptionRevealed: (generation: number) => void;
@@ -321,6 +322,7 @@ export function useCreatureBrain(
     personality,
     userContext,
     speechCaption: speech.caption,
+    speechDetail: speech.detail,
     speechNotice: speech.notice,
     decisionInterrupted,
     onSpeechCaptionRevealed: speech.onCaptionRevealed,

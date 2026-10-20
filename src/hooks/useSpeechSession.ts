@@ -1,16 +1,20 @@
 import { useCallback, useLayoutEffect, useRef, useState, type RefObject } from "react";
 import type { CharacterController } from "../character/useCharacterController";
 import type { TalkState } from "../creature/brain/brain.types";
+import { historyReply, type SpeechBlock } from "../creature/brain/speechBlocks";
 import { streamSpeechReply } from "../creature/brain/speechClient";
 import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage } from "../creature/brain/speechProtocol";
 
 export type SpeechNotice = "unavailable" | "regenerating" | "interrupted" | null;
 export type SpeechCaption = { text: string; complete: boolean; generation: number; language: SpeechLanguage };
+/** Blocks of the current reply; `complete` once the stream has ended. */
+export type SpeechDetail = { blocks: SpeechBlock[]; complete: boolean; generation: number; language: SpeechLanguage };
 type PendingSpeech = { message: string; state: TalkState; language: SpeechLanguage; controller: AbortController; generation: number; timeout: number | null };
 
 /** Owns only the speech generation and bounded, in-memory conversation history. */
 export function useSpeechSession(characterRef: RefObject<CharacterController | null>, language: SpeechLanguage, active: boolean) {
   const [caption, setCaption] = useState<SpeechCaption | null>(null);
+  const [detail, setDetail] = useState<SpeechDetail | null>(null);
   const [notice, setNotice] = useState<SpeechNotice>(null);
   const [status, setStatus] = useState<"idle" | "waiting" | "streaming">("idle");
   const historyRef = useRef<SpeechExchange[]>([]);
@@ -43,6 +47,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     invalidate();
     if (clearHistory) historyRef.current = [];
     setCaption(null);
+    setDetail(null);
     setNotice(null);
     setStatus("idle");
   }, [invalidate]);
@@ -57,6 +62,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     };
     pendingRef.current = request;
     setCaption(null);
+    setDetail(null);
     setNotice(regenerating ? "regenerating" : null);
     setStatus("waiting");
     if (regenerating) void characterRef.current?.think();
@@ -66,6 +72,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       if (!isCurrent()) return;
       invalidate();
       setCaption(null);
+      setDetail(null);
       setNotice("unavailable");
       setStatus("idle");
       void characterRef.current?.idle();
@@ -76,24 +83,30 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       language: request.language,
       history: historyRef.current.slice(-SPEECH_HISTORY_LIMIT),
       signal: request.controller.signal,
-      onText: text => {
+      // The spoken sentence arrives whole: Jev talks while the blocks keep streaming.
+      onSpoken: text => {
         if (!isCurrent()) return;
-        if (!talkingRef.current) {
-          talkingRef.current = true;
-          void characterRef.current?.speak(request.state);
-        }
+        talkingRef.current = true;
+        void characterRef.current?.speak(request.state);
         setNotice(null);
         setStatus("streaming");
-        setCaption({ text, complete: false, generation: request.generation, language: request.language });
+        setCaption({ text, complete: true, generation: request.generation, language: request.language });
       },
-    }).then(text => {
+      onBlock: block => {
+        if (!isCurrent()) return;
+        setDetail(current => ({
+          blocks: [...(current?.generation === request.generation ? current.blocks : []), block],
+          complete: false, generation: request.generation, language: request.language,
+        }));
+      },
+    }).then(reply => {
       if (!isCurrent()) return;
       if (request.timeout !== null) window.clearTimeout(request.timeout);
       pendingRef.current = null;
       // The voice reports the end of a finished reply through finishTalk.
-      historyRef.current = [...historyRef.current, { user: request.message, assistant: text }].slice(-SPEECH_HISTORY_LIMIT);
+      historyRef.current = [...historyRef.current, { user: request.message, assistant: historyReply(reply) }].slice(-SPEECH_HISTORY_LIMIT);
       setStatus("idle");
-      setCaption({ text, complete: true, generation: request.generation, language: request.language });
+      setDetail(reply.blocks.length > 0 ? { blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
     }).catch(fail);
   }, [characterRef, invalidate]);
 
@@ -114,6 +127,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       const interrupted = pendingRef.current !== null;
       invalidate();
       setCaption(null);
+      setDetail(null);
       setStatus("idle");
       setNotice(interrupted ? "interrupted" : null);
     }
@@ -130,5 +144,5 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     invalidate();
   }, [invalidate]);
 
-  return { caption, notice, status, start, cancel, onCaptionRevealed, finishTalk: releaseTalk };
+  return { caption, detail, notice, status, start, cancel, onCaptionRevealed, finishTalk: releaseTalk };
 }

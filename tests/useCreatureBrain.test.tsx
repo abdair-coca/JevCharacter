@@ -52,7 +52,7 @@ describe("useCreatureBrain talk flow", () => {
     let resolveDecision: (response: Response) => void = () => {};
     const fetchMock = vi.fn((url: RequestInfo | URL) => {
       if (String(url) === "/api/decide") return new Promise<Response>(resolve => { resolveDecision = resolve; });
-      return Promise.resolve(new Response('event: delta\ndata: {"text":"Hello."}\n\nevent: done\ndata: {}\n\n'));
+      return Promise.resolve(new Response('event: spoken\ndata: {"text":"Hello."}\n\nevent: done\ndata: {}\n\n'));
     });
     vi.stubGlobal("fetch", fetchMock);
     const characterRef = { current: createCharacter() };
@@ -105,7 +105,7 @@ describe("useCreatureBrain talk flow", () => {
       }
       if (String(input) === "/api/talk") {
         return new Response([
-          "event: delta\ndata: {\"text\":\"Parcial\"}\n\n",
+          "event: spoken\ndata: {\"text\":\"Parcial.\"}\n\n",
           "event: error\ndata: {}\n\n",
         ].join(""), { status: 200 });
       }

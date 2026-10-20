@@ -1,9 +1,16 @@
 import {
-  appendFirstSentence,
-  finishFirstSentence,
+  acceptsBlock,
+  createJsonObjectScanner,
+  parseBlock,
+  parseSpoken,
+  SPEECH_BLOCKS_MAX,
+  SPEECH_HISTORY_REPLY_MAX_CHARS,
+  splitHistoryReply,
+  type SpeechBlock,
+} from "../src/creature/brain/speechBlocks.js";
+import {
   isSpeechLanguage,
   SPEECH_HISTORY_LIMIT,
-  SPEECH_MAX_CHARS,
   SPEECH_MESSAGE_MAX_CHARS,
   type SpeechExchange,
   type SpeechLanguage,
@@ -36,6 +43,8 @@ const rateBuckets = new Map<string, RateBucket>();
 const RATE_WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 12;
 const UPSTREAM_TIMEOUT_MS = 8_000;
+// Measured 2026-10-20 with gpt-oss-20b: replies with blocks used at most 231 completion tokens.
+const MAX_COMPLETION_TOKENS = 512;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -44,7 +53,7 @@ function isExchange(value: unknown): value is SpeechExchange {
   return isRecord(value) &&
     Object.keys(value).length === 2 &&
     typeof value.user === "string" && Boolean(value.user.trim()) && value.user.length <= SPEECH_MESSAGE_MAX_CHARS &&
-    typeof value.assistant === "string" && Boolean(value.assistant.trim()) && [...value.assistant].length <= SPEECH_MAX_CHARS;
+    typeof value.assistant === "string" && Boolean(value.assistant.trim()) && [...value.assistant].length <= SPEECH_HISTORY_REPLY_MAX_CHARS;
 }
 
 function parseBody(value: unknown): TalkBody | null {
@@ -93,15 +102,35 @@ function firstTextDelta(value: unknown) {
   return typeof choice.delta.content === "string" ? choice.delta.content : "";
 }
 
+function systemPrompt(language: SpeechLanguage) {
+  return `Eres Jev, compañero tranquilo y cálido. Responde exclusivamente en ${language === "es" ? "español (Spanish)" : "inglés (English)"}, aunque el mensaje o el historial estén en otro idioma.
+Formato obligatorio: solo objetos JSON, uno por línea, sin markdown ni texto fuera de ellos.
+Primero: {"type":"spoken","text":"..."}, una frase de máximo 120 caracteres que dirás en voz alta.
+Si es charla, saludo o algo breve, termina ahí.
+Si pide explicar, comparar, enumerar o dar pasos, añade de 1 a 6 bloques (máximo 800 caracteres visibles en total) usando solo:
+{"type":"paragraph","text":"máx 320","emphasis":["opcional: hasta 3 frases exactas del texto"]}
+{"type":"list","items":["2 a 6 ítems, máx 120 cada uno"]}
+{"type":"steps","items":["2 a 6 pasos sin numerar, máx 120 cada uno"]}
+{"type":"compare","columns":[{"title":"máx 40","points":["1 a 4, máx 90 cada uno"]}]} con 2 o 3 columnas
+{"type":"highlight","value":"máx 24","label":"máx 80"}
+{"type":"callout","tone":"tip o warning","text":"máx 200"}
+{"type":"chips","items":["1 a 3 preguntas para continuar, máx 60 cada una"]}, siempre al final
+Historial solo para continuidad.`;
+}
+
+// Past replies return to the model in the same object format it must answer in.
+function historyContent(assistant: string) {
+  const { spoken, digest } = splitHistoryReply(assistant);
+  const objects = [{ type: "spoken", text: spoken }, ...(digest ? [{ type: "paragraph", text: digest }] : [])];
+  return objects.map((object) => JSON.stringify(object)).join("\n");
+}
+
 function upstreamMessages(body: TalkBody) {
   return [
-    {
-      role: "system",
-      content: `Eres Jev, compañero tranquilo. Responde exclusivamente en ${body.language === "es" ? "español (Spanish)" : "inglés (English)"}, aunque el mensaje o el historial estén en otro idioma. Una frase, máximo 120 caracteres Unicode; sin prefacios ni listas. Historial solo para continuidad.`,
-    },
+    { role: "system", content: systemPrompt(body.language) },
     ...body.history.flatMap((exchange) => [
       { role: "user", content: exchange.user },
-      { role: "assistant", content: exchange.assistant },
+      { role: "assistant", content: historyContent(exchange.assistant) },
     ]),
     { role: "user", content: body.message },
   ];
@@ -139,7 +168,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   });
 
   const model = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-20b";
-  // GPT-OSS spends completion tokens on reasoning; low effort preserves room for the short reply.
+  // GPT-OSS spends completion tokens on reasoning; low effort preserves room for the reply.
   const supportsReasoningEffort = model === "openai/gpt-oss-20b" || model === "openai/gpt-oss-120b";
 
   try {
@@ -155,7 +184,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         stream: true,
         store: false,
         temperature: 0.55,
-        max_completion_tokens: 64,
+        max_completion_tokens: MAX_COMPLETION_TOKENS,
         ...(supportsReasoningEffort ? { reasoning_effort: "low" } : {}),
       }),
       signal: abortController.signal,
@@ -178,10 +207,34 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     const decoder = new TextDecoder();
     let buffer = "";
     let dataLines: string[] = [];
-    let sentence = "";
-    let sentenceComplete = false;
+    const scanner = createJsonObjectScanner();
+    let spoken: string | null = null;
+    const blocks: SpeechBlock[] = [];
+    let blocksFull = false;
     let upstreamComplete = false;
     let upstreamEnded = false;
+
+    // The first object must be the spoken sentence; later ones are blocks, kept while they fit.
+    const acceptObject = (raw: string) => {
+      let value: unknown;
+      try {
+        value = JSON.parse(raw);
+      } catch {
+        value = undefined;
+      }
+      if (spoken === null) {
+        spoken = parseSpoken(value);
+        if (spoken === null) throw new Error("Invalid spoken sentence");
+        emit(response, "spoken", { text: spoken });
+        return;
+      }
+      const block = parseBlock(value);
+      if (block && acceptsBlock(blocks, block)) {
+        blocks.push(block);
+        emit(response, "block", { block });
+      }
+      blocksFull = blocks.length >= SPEECH_BLOCKS_MAX;
+    };
 
     const dispatchData = () => {
       const data = dataLines.join("\n");
@@ -199,12 +252,10 @@ export default async function handler(request: ApiRequest, response: ApiResponse
         throw new Error("Invalid upstream event");
       }
       const delta = firstTextDelta(payload);
-      if (!delta || sentenceComplete) return;
-
-      const update = appendFirstSentence(sentence, delta);
-      sentence = update.text;
-      sentenceComplete = update.complete;
-      if (update.added) emit(response, "delta", { text: update.added });
+      for (const object of delta ? scanner.push(delta) : []) {
+        if (blocksFull) return;
+        acceptObject(object);
+      }
     };
 
     const consumeLine = (line: string) => {
@@ -214,14 +265,14 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     };
 
     try {
-      while (!upstreamComplete && !sentenceComplete && !upstreamEnded && !abortController.signal.aborted) {
+      while (!upstreamComplete && !blocksFull && !upstreamEnded && !abortController.signal.aborted) {
         const { value, done } = await reader.read();
         buffer += decoder.decode(value, { stream: !done });
         let newline = buffer.indexOf("\n");
         while (newline >= 0) {
           consumeLine(buffer.slice(0, newline));
           buffer = buffer.slice(newline + 1);
-          if (upstreamComplete || sentenceComplete) break;
+          if (upstreamComplete || blocksFull) break;
           newline = buffer.indexOf("\n");
         }
         if (done) {
@@ -237,13 +288,10 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     }
 
     if (abortController.signal.aborted) throw new Error("Speech request interrupted");
-    if (upstreamEnded && !upstreamComplete && !sentenceComplete) {
+    if (upstreamEnded && !upstreamComplete && !blocksFull) {
       throw new Error("Incomplete upstream speech stream");
     }
-    const finalSentence = finishFirstSentence(sentence);
-    if (!finalSentence) throw new Error("Empty speech response");
-    const suffix = [...finalSentence].slice([...sentence].length).join("");
-    if (suffix) emit(response, "delta", { text: suffix });
+    if (spoken === null) throw new Error("Empty speech response");
     emit(response, "done", {});
     response.end();
   } catch {
