@@ -20,6 +20,7 @@ import { EnrollmentParticles } from "../features/enrollment/EnrollmentParticles"
 import CreatureLoader from "../features/loading/CreatureLoader";
 import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewport";
 import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
+import { jevVoice } from "../creature/voice/voiceEngine";
 import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -63,7 +64,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const sensors = usePointerSensor(stageRef, creatureShellRef, conversational, active && !enrollment.isOpen);
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
   const enrollmentWasOpen = useRef(false);
-  useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice));
+  useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice), jevVoice, brain.onSpeechFinished);
 
   useEffect(() => {
     if (enrollment.phase === "closed") {

@@ -9,9 +9,10 @@ const caption = (text: string, complete: boolean, generation = 1): SpeechCaption
 
 function mount() {
   const voice = { speak: vi.fn(), stopSpeech: vi.fn() };
+  const onFinished = vi.fn();
   const initialProps: { value: SpeechCaption | null; silenced: boolean } = { value: null, silenced: false };
-  const hook = renderHook(({ value, silenced }) => useSpeechVoice(value, silenced, voice), { initialProps });
-  return { ...hook, voice };
+  const hook = renderHook(({ value, silenced }) => useSpeechVoice(value, silenced, voice, onFinished), { initialProps });
+  return { ...hook, voice, onFinished };
 }
 
 describe("Home reply voice", () => {
@@ -19,7 +20,7 @@ describe("Home reply voice", () => {
     const { rerender, voice } = mount();
     rerender({ value: caption("Hola", false), silenced: false });
     rerender({ value: caption("Hola, ¿cómo estás?", true), silenced: false });
-    expect(voice.speak.mock.calls).toEqual([["home-1", "Hola", false], ["home-1", "Hola, ¿cómo estás?", true]]);
+    expect(voice.speak.mock.calls.map(call => call.slice(0, 3))).toEqual([["home-1", "Hola", false], ["home-1", "Hola, ¿cómo estás?", true]]);
   });
 
   it("stops an unfinished reply when it is cancelled, but lets a finished one fade naturally", () => {
@@ -36,5 +37,21 @@ describe("Home reply voice", () => {
     const { rerender, voice } = mount();
     rerender({ value: caption("Hola", false), silenced: true });
     expect(voice.speak).not.toHaveBeenCalled();
+  });
+
+  it("reports the end of a complete reply through the voice, not when the text stops", () => {
+    const { rerender, voice, onFinished } = mount();
+    rerender({ value: caption("Hola", false), silenced: false });
+    rerender({ value: caption("Hola, ¿cómo estás?", true), silenced: false });
+    expect(onFinished).not.toHaveBeenCalled();
+    const reportEnd = voice.speak.mock.calls.at(-1)?.[3] as () => void;
+    reportEnd();
+    expect(onFinished).toHaveBeenCalledOnce();
+  });
+
+  it("reports the end at once when a complete reply is silenced", () => {
+    const { rerender, onFinished } = mount();
+    rerender({ value: caption("Listo.", true), silenced: true });
+    expect(onFinished).toHaveBeenCalledOnce();
   });
 });

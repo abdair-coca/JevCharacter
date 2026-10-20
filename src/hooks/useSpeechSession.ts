@@ -90,12 +90,12 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       if (!isCurrent()) return;
       if (request.timeout !== null) window.clearTimeout(request.timeout);
       pendingRef.current = null;
-      releaseTalk();
+      // The voice reports the end of a finished reply through finishTalk.
       historyRef.current = [...historyRef.current, { user: request.message, assistant: text }].slice(-SPEECH_HISTORY_LIMIT);
       setStatus("idle");
       setCaption({ text, complete: true, generation: request.generation, language: request.language });
     }).catch(fail);
-  }, [characterRef, invalidate, releaseTalk]);
+  }, [characterRef, invalidate]);
 
   const onCaptionRevealed = useCallback((generation: number) => {
     if (generation !== generationRef.current || !activeRef.current) return;
@@ -130,5 +130,5 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     invalidate();
   }, [invalidate]);
 
-  return { caption, notice, status, start, cancel, onCaptionRevealed };
+  return { caption, notice, status, start, cancel, onCaptionRevealed, finishTalk: releaseTalk };
 }

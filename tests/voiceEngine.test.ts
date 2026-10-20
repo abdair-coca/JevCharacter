@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createVoiceEngine } from "../src/creature/voice/voiceEngine";
 import { ACTION_MOTIFS, scoreSpeech, type VoiceGlide } from "../src/creature/voice/voiceScore";
 import { FakeContext, fakeCore, reaches, silenced } from "./audioFakes";
@@ -16,6 +16,44 @@ function setup() {
 beforeEach(() => {
   context = new FakeContext();
   clock = 10_000;
+});
+
+describe("Jev voice reply end", () => {
+  afterEach(() => { vi.useRealTimers(); });
+
+  it("reports a complete reply only after its last syllable has sounded", () => {
+    vi.useFakeTimers();
+    const { core, voice } = setup();
+    core.unlock();
+    const onEnd = vi.fn();
+    voice.speak("reply", "Hola, ¿cómo estás?", true, onEnd);
+    expect(onEnd).not.toHaveBeenCalled();
+    const stops = context.oscillators.flatMap(oscillator => oscillator.stops).filter((time): time is number => typeof time === "number");
+    vi.advanceTimersByTime((Math.max(...stops) + 1) * 1000);
+    expect(onEnd).toHaveBeenCalledOnce();
+  });
+
+  it("reports a complete reply at once when there is no sound to wait for", () => {
+    const { voice } = setup();
+    const onEnd = vi.fn();
+    voice.speak("reply", "Listo.", true, onEnd);
+    expect(onEnd).toHaveBeenCalledOnce();
+  });
+
+  it("cancels the pending end when speech stops, and reports it when muting", () => {
+    vi.useFakeTimers();
+    const { core, voice } = setup();
+    core.unlock();
+    const cancelled = vi.fn();
+    voice.speak("reply", "Hola.", true, cancelled);
+    voice.stopSpeech();
+    vi.advanceTimersByTime(60_000);
+    expect(cancelled).not.toHaveBeenCalled();
+    const muted = vi.fn();
+    voice.speak("next", "Hola.", true, muted);
+    voice.stop();
+    expect(muted).toHaveBeenCalledOnce();
+  });
 });
 
 describe("Jev voice engine", () => {

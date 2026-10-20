@@ -4,7 +4,7 @@ import type { TalkState } from "../brain/brain.types";
 import { ACTION_MOTIFS, scoreSpeech, TALK_BABBLE, type VoiceGlide } from "./voiceScore";
 
 type Channel = "action" | "speech";
-type Speech = { key: string; voicedUntil: number; offsetEnd: number; timeEnd: number | null };
+type Speech = { key: string; voicedUntil: number; offsetEnd: number; timeEnd: number | null; finish: (() => void) | null; timer: number | null };
 type EngineOptions = { core?: AudioCore; now?: () => number };
 
 // A talk gesture waits this long for its real text before babbling on its own.
@@ -49,6 +49,26 @@ export function createVoiceEngine({ core = appAudio, now = () => performance.now
   function clearTalkTimer() {
     if (talkTimer !== null) window.clearTimeout(talkTimer);
     talkTimer = null;
+  }
+
+  // Reports the end of a finished reply, once.
+  function notifyEnd(current: Speech) {
+    current.timer = null;
+    const finish = current.finish;
+    current.finish = null;
+    finish?.();
+  }
+
+  // Cuts the current speech. Only `notify` reports its end: a replaced or cancelled reply must not.
+  function endSpeech(notify: boolean) {
+    silence("speech");
+    const current = speech;
+    speech = null;
+    if (!current) return;
+    if (current.timer !== null) window.clearTimeout(current.timer);
+    current.timer = null;
+    if (notify) notifyEnd(current);
+    else current.finish = null;
   }
 
   function silence(channel: Channel) {
@@ -150,38 +170,50 @@ export function createVoiceEngine({ core = appAudio, now = () => performance.now
       if (cue !== "bump") engine.stopSpeech();
       schedule("action", ACTION_MOTIFS[cue], context.currentTime + 0.01);
     },
-    /** Voices streamed text once: only whole words until the text is complete. */
-    speak(key: string, text: string, complete: boolean) {
+    /**
+     * Voices streamed text once: only whole words until the text is complete. A complete
+     * reply reports its end through `onEnd` once its last syllable has sounded, or at once
+     * when nothing sounds (muted or without audio).
+     */
+    speak(key: string, text: string, complete: boolean, onEnd?: () => void) {
       lastSpeechAt = now();
       clearTalkTimer();
       if (speech?.key !== key) {
-        silence("speech");
-        speech = { key, voicedUntil: 0, offsetEnd: 0, timeEnd: null };
+        endSpeech(false);
+        speech = { key, voicedUntil: 0, offsetEnd: 0, timeEnd: null, finish: null, timer: null };
       }
       const context = core.context();
-      if (!core.audible() || !context) return;
+      if (!core.audible() || !context) {
+        if (complete) onEnd?.();
+        return;
+      }
       const boundary = voicedBoundary(text, complete);
       const current = speech;
       const pending = scoreSpeech(text, complete).filter(glide => glide.end > current.voicedUntil && glide.end <= boundary);
       current.voicedUntil = Math.max(current.voicedUntil, boundary);
-      if (pending.length === 0) return;
-      const first = pending[0].at;
-      const earliest = context.currentTime + 0.03;
-      // Keep the score's own rhythm while text streams faster than it is voiced.
-      const start = current.timeEnd === null ? earliest : Math.max(earliest, current.timeEnd + first - current.offsetEnd);
-      schedule("speech", pending, start - first);
-      const last = pending.reduce((latest, glide) => Math.max(latest, glide.at + glide.duration), 0);
-      current.offsetEnd = last;
-      current.timeEnd = start - first + last;
+      if (pending.length > 0) {
+        const first = pending[0].at;
+        const earliest = context.currentTime + 0.03;
+        // Keep the score's own rhythm while text streams faster than it is voiced.
+        const start = current.timeEnd === null ? earliest : Math.max(earliest, current.timeEnd + first - current.offsetEnd);
+        schedule("speech", pending, start - first);
+        const last = pending.reduce((latest, glide) => Math.max(latest, glide.at + glide.duration), 0);
+        current.offsetEnd = last;
+        current.timeEnd = start - first + last;
+      }
+      if (!complete) return;
+      if (current.timer !== null) window.clearTimeout(current.timer);
+      current.finish = onEnd ?? null;
+      const remainingMs = current.timeEnd === null ? 0 : Math.max(0, current.timeEnd - context.currentTime) * 1000;
+      current.timer = window.setTimeout(() => notifyEnd(current), remainingMs);
     },
     stopSpeech() {
-      silence("speech");
-      speech = null;
+      endSpeech(false);
     },
     stop() {
       clearTalkTimer();
       silence("action");
-      engine.stopSpeech();
+      endSpeech(true);
     },
   };
   // Muting or hiding the tab silences whatever is still scheduled.

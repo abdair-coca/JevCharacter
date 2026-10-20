@@ -32,7 +32,7 @@ async function complete(request: Request, text: string) {
 }
 
 describe("speech session talk hold", () => {
-  it("holds the talk state from the first fragment until the reply completes", async () => {
+  it("holds the talk state from the first fragment until the voice reports the end", async () => {
     const { result, character } = mountSpeech();
     act(() => result.current.start("Hola", "talkb"));
     act(() => requests[0].options.onText("Hola"));
@@ -42,6 +42,8 @@ describe("speech session talk hold", () => {
     expect(character.talk).not.toHaveBeenCalled();
     expect(character.idle).not.toHaveBeenCalled();
     await complete(requests[0], "Hola, ¿cómo estás?");
+    expect(character.idle).not.toHaveBeenCalled();
+    act(() => result.current.finishTalk());
     expect(character.idle).toHaveBeenCalledOnce();
   });
 
