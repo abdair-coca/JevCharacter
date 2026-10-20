@@ -4,12 +4,21 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 1 (protocolo de respuesta estructurada), implementada y verificada el 2026-10-20; **entregada para revisión**.
-- **Aprobaciones:** spec y plan aprobados el 2026-10-20 («aprobado»).
-- **Siguiente acción exacta:** que el usuario revise la fase 1. Con su aprobación, abrir la fase 2 (tarjeta persistente: Jev se aparta en escritorio, vista previa y panel en móvil).
-- **Estado del código:** fase 1 commiteada. La burbuja muestra solo la frase hablada; los bloques llegan validados a `brain.speechDetail`, pero todavía no se dibujan.
+- **Fase activa:** fase 2 (tarjeta persistente), abierta el 2026-10-20.
+- **Aprobaciones:** spec y plan aprobados el 2026-10-20 («aprobado»). Fase 1 aprobada el 2026-10-20 («continua con el plan y reduce los tokens de respuesta, pero no mucho»).
+- **Siguiente acción exacta:** implementar la fase 2 según `plan.md`.
+- **Estado del código:** fase 1 y ajuste de tokens commiteados. La burbuja muestra solo la frase hablada; los bloques llegan validados a `brain.speechDetail`, pero todavía no se dibujan.
 
-## Fase 1 — entrega para revisión, 2026-10-20
+## Ajuste de tokens — 2026-10-20
+
+Pedido: «reduce los tokens de respuesta, pero no mucho». En el quiz se eligió un tope de 384 tokens y unos 650 caracteres. Cambios:
+- `max_completion_tokens`: de 512 a 384. El máximo medido fue 231.
+- El prompt pide unos 650 caracteres visibles, en vez de 800.
+- `SPEECH_BLOCKS_MAX_CHARS`: de 900 a 750, con el mismo margen.
+
+Verificación: typecheck de la API y tests de `apiTalk`, `speechBlocks` y `speechClient` en PASS (38 tests).
+
+## Fase 1 — aprobada, 2026-10-20
 
 - [x] Medir `gpt-oss-20b` con el formato antes de implementar.
 - [x] Catálogo tipado y normalización compartida en `src/creature/brain/speechBlocks.ts`, más el escáner de objetos JSON.
@@ -17,7 +26,7 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - [x] `speechClient.ts`: callbacks `onSpoken` / `onBlock`, revalidación y `{ spoken, blocks }` como resultado.
 - [x] `useSpeechSession.ts`: estado `detail` aparte de la frase; historial con resumen; limpieza al cancelar, regenerar, fallar o suspender. `useCreatureBrain` expone `speechDetail`.
 - [x] Docs de estado actual (`docs/architecture.md`, `docs/interaction.md`).
-- [ ] Aprobación del usuario.
+- [x] Aprobación del usuario (2026-10-20).
 
 **Medición previa (script temporal fuera del repo, Groq real):** 15 de 15 respuestas válidas, en 0,4–0,8 s y con 231 tokens de completado como máximo. El modelo **no** separa los objetos con saltos de línea aunque se le pida: los pega uno tras otro. Por eso el servidor usa un escáner de llaves en lugar de dividir por líneas; también tolera arrays y bloques de código markdown. Otros desvíos que se normalizan: pasos numerados («1. …»), varios pasos en un solo ítem con `\n`, claves extra (`max_chars`), listas de más de 6 ítems y claves `type` duplicadas.
 

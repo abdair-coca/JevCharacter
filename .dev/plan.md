@@ -2,7 +2,7 @@
 
 - **Base:** [spec.md](spec.md).
 - **Contratos de UI/animación:** [design.md](../design.md).
-- **Estado:** aprobado el 2026-10-20. Fase 1 entregada para revisión; las fases 2 y 3 esperan su aprobación.
+- **Estado:** aprobado el 2026-10-20. Fase 1 aprobada; fase 2 activa; la fase 3 espera su aprobación.
 
 ## Dependencias y orden
 

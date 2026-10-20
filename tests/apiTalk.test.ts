@@ -173,7 +173,7 @@ describe("/api/talk", () => {
     const upstreamOptions = fetchMock.mock.calls[0][1] as RequestInit;
     const payload = JSON.parse(String(upstreamOptions.body)) as Record<string, unknown>;
     expect(payload.reasoning_effort).toBe("low");
-    expect(payload.max_completion_tokens).toBe(512);
+    expect(payload.max_completion_tokens).toBe(384);
     expect(payload.messages).toHaveLength(6);
     expect(response.statusCode).toBe(200);
     expect(response.writes.join("")).toContain('event: spoken\ndata: {"text":"Bien."}');

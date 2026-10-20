@@ -3,7 +3,7 @@
 
 export const SPEECH_SPOKEN_MAX_CHARS = 120;
 export const SPEECH_BLOCKS_MAX = 6;
-export const SPEECH_BLOCKS_MAX_CHARS = 900;
+export const SPEECH_BLOCKS_MAX_CHARS = 750;
 export const SPEECH_HISTORY_REPLY_MAX_CHARS = 600;
 
 const PARAGRAPH_MAX_CHARS = 320;

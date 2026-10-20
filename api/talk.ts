@@ -44,7 +44,7 @@ const RATE_WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 12;
 const UPSTREAM_TIMEOUT_MS = 8_000;
 // Measured 2026-10-20 with gpt-oss-20b: replies with blocks used at most 231 completion tokens.
-const MAX_COMPLETION_TOKENS = 512;
+const MAX_COMPLETION_TOKENS = 384;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -107,7 +107,7 @@ function systemPrompt(language: SpeechLanguage) {
 Formato obligatorio: solo objetos JSON, uno por línea, sin markdown ni texto fuera de ellos.
 Primero: {"type":"spoken","text":"..."}, una frase de máximo 120 caracteres que dirás en voz alta.
 Si es charla, saludo o algo breve, termina ahí.
-Si pide explicar, comparar, enumerar o dar pasos, añade de 1 a 6 bloques (máximo 800 caracteres visibles en total) usando solo:
+Si pide explicar, comparar, enumerar o dar pasos, añade de 1 a 6 bloques (máximo 650 caracteres visibles en total) usando solo:
 {"type":"paragraph","text":"máx 320","emphasis":["opcional: hasta 3 frases exactas del texto"]}
 {"type":"list","items":["2 a 6 ítems, máx 120 cada uno"]}
 {"type":"steps","items":["2 a 6 pasos sin numerar, máx 120 cada uno"]}

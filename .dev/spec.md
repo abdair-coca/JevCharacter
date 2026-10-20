@@ -1,6 +1,6 @@
 # Spec: respuestas largas con UI generada
 
-**Estado:** aprobada el 2026-10-20 («aprobado»). Fase 1 entregada para revisión.
+**Estado:** aprobada el 2026-10-20 («aprobado»). Fase 1 aprobada; fase 2 activa.
 
 **Fuentes:** [contrato visual](../design.md), [arquitectura](../docs/architecture.md), [interacción](../docs/interaction.md), [plan](plan.md), [tarea activa](task.md).
 
@@ -16,7 +16,7 @@ En el quiz eligió:
 - **Cierre:** la respuesta se queda hasta un mensaje nuevo o hasta cerrarla.
 - **UI generada:** catálogo de bloques tipados; el modelo no escribe HTML.
 - **Voz:** Jev dice un resumen corto; la tarjeta muestra todo.
-- **Longitud:** media, unos 800 caracteres de contenido visible.
+- **Longitud:** media, unos 800 caracteres de contenido visible. Ajuste del 2026-10-20 («reduce los tokens de respuesta, pero no mucho»; quiz: tope 384 y ~650): unos 650 caracteres y tope de 384 tokens de completado.
 - **Extras:** palabras que entran con desenfoque, como excepción acotada al contrato de movimiento.
 - **Proceso:** tres fases (protocolo → tarjeta → bloques visuales), con revisión entre cada una.
 
@@ -30,7 +30,7 @@ En el quiz eligió:
 
 ### Respuesta estructurada
 
-- Cada respuesta tiene `spoken` (obligatorio, una frase de 120 caracteres o menos) y `blocks` (opcional, de 0 a 6 bloques, unos 800 caracteres de texto en total).
+- Cada respuesta tiene `spoken` (obligatorio, una frase de 120 caracteres o menos) y `blocks` (opcional, de 0 a 6 bloques, unos 650 caracteres de texto en total).
 - Una charla casual llega solo con `spoken` y se ve como la burbuja actual. Una explicación añade bloques y abre la tarjeta.
 - **Catálogo cerrado:**
   - `paragraph`: texto, con énfasis opcional en palabras.
