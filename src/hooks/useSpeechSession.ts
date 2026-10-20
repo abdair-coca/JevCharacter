@@ -7,9 +7,9 @@ import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_
 
 export type SpeechNotice = "unavailable" | "regenerating" | "interrupted" | null;
 export type SpeechCaption = { text: string; complete: boolean; generation: number; language: SpeechLanguage };
-/** Blocks of the current reply; `complete` once the stream has ended. */
-export type SpeechDetail = { blocks: SpeechBlock[]; complete: boolean; generation: number; language: SpeechLanguage };
-type PendingSpeech = { message: string; state: TalkState; language: SpeechLanguage; controller: AbortController; generation: number; timeout: number | null };
+/** A reply with blocks, kept until dismissed or replaced; `complete` once the stream has ended. */
+export type SpeechDetail = { spoken: string; blocks: SpeechBlock[]; complete: boolean; generation: number; language: SpeechLanguage };
+type PendingSpeech = { message: string; state: TalkState; language: SpeechLanguage; controller: AbortController; generation: number; timeout: number | null; spoken: string; dismissed: boolean };
 
 /** Owns only the speech generation and bounded, in-memory conversation history. */
 export function useSpeechSession(characterRef: RefObject<CharacterController | null>, language: SpeechLanguage, active: boolean) {
@@ -58,7 +58,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     const request: PendingSpeech = {
       message: message.slice(0, SPEECH_MESSAGE_MAX_CHARS), state,
       language: languageRef.current, controller: new AbortController(),
-      generation: generationRef.current, timeout: null,
+      generation: generationRef.current, timeout: null, spoken: "", dismissed: false,
     };
     pendingRef.current = request;
     setCaption(null);
@@ -86,6 +86,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       // The spoken sentence arrives whole: Jev talks while the blocks keep streaming.
       onSpoken: text => {
         if (!isCurrent()) return;
+        request.spoken = text;
         talkingRef.current = true;
         void characterRef.current?.speak(request.state);
         setNotice(null);
@@ -93,8 +94,9 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
         setCaption({ text, complete: true, generation: request.generation, language: request.language });
       },
       onBlock: block => {
-        if (!isCurrent()) return;
+        if (!isCurrent() || request.dismissed) return;
         setDetail(current => ({
+          spoken: request.spoken,
           blocks: [...(current?.generation === request.generation ? current.blocks : []), block],
           complete: false, generation: request.generation, language: request.language,
         }));
@@ -106,9 +108,17 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       // The voice reports the end of a finished reply through finishTalk.
       historyRef.current = [...historyRef.current, { user: request.message, assistant: historyReply(reply) }].slice(-SPEECH_HISTORY_LIMIT);
       setStatus("idle");
-      setDetail(reply.blocks.length > 0 ? { blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
+      if (!request.dismissed) setDetail(reply.blocks.length > 0 ? { spoken: reply.spoken, blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
     }).catch(fail);
   }, [characterRef, invalidate]);
+
+  // Closing a reply hides it without cancelling the voice; its late blocks are ignored.
+  const dismissDetail = useCallback((generation: number) => {
+    const pending = pendingRef.current;
+    if (pending?.generation === generation) pending.dismissed = true;
+    setDetail(current => current?.generation === generation ? null : current);
+    setCaption(current => current?.generation === generation ? null : current);
+  }, []);
 
   const onCaptionRevealed = useCallback((generation: number) => {
     if (generation !== generationRef.current || !activeRef.current) return;
@@ -144,5 +154,5 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     invalidate();
   }, [invalidate]);
 
-  return { caption, detail, notice, status, start, cancel, onCaptionRevealed, finishTalk: releaseTalk };
+  return { caption, detail, notice, status, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk };
 }

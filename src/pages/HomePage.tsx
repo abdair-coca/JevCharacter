@@ -21,6 +21,8 @@ import CreatureLoader from "../features/loading/CreatureLoader";
 import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewport";
 import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
 import { jevVoice } from "../creature/voice/voiceEngine";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import { ReplyCard, ReplyPreview, ReplySheet } from "../features/reply/SpeechReply";
 import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -36,7 +38,6 @@ function SpeechCaption({ text, complete, generation, language, onRevealed }: Spe
   return (
     <m.div className="speech-caption" lang={language} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition}>
       <span aria-hidden="true">{text}</span>
-      {complete && <span className="sr-only" role="status">{text}</span>}
     </m.div>
   );
 }
@@ -65,6 +66,20 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
   const enrollmentWasOpen = useRef(false);
   useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice), jevVoice, brain.onSpeechFinished);
+  // A reply with blocks becomes a card beside Jev on wide screens and a preview with a sheet otherwise.
+  const wide = useMediaQuery("(min-width: 64.001rem)");
+  const reply = brain.speechDetail;
+  const [sheetGeneration, setSheetGeneration] = useState<number | null>(null);
+  const sheetOpen = !wide && reply !== null && sheetGeneration === reply.generation;
+  const readAllRef = useRef<HTMLButtonElement | null>(null);
+  const { dismissSpeechDetail } = brain;
+  const dismissReply = useCallback(() => {
+    if (reply) dismissSpeechDetail(reply.generation);
+  }, [reply, dismissSpeechDetail]);
+  const collapseSheet = useCallback(() => {
+    setSheetGeneration(null);
+    requestAnimationFrame(() => readAllRef.current?.focus({ preventScroll: true }));
+  }, []);
 
   useEffect(() => {
     if (enrollment.phase === "closed") {
@@ -129,23 +144,28 @@ export default function HomePage({ active = true }: { active?: boolean }) {
 
   const style: StageStyle = { "--intensity": brain.decision.intensity, "--attention": brain.decision.wantsAttention };
   return (
-    <main className="home-page" ref={stageRef} style={style} data-active={running} data-enrollment={enrollment.phase} data-enrollment-focused={enrollmentFocused} onPointerDown={handleStagePointerDown}>
+    <main className="home-page" ref={stageRef} style={style} data-active={running} data-enrollment={enrollment.phase} data-enrollment-focused={enrollmentFocused} data-reply={wide && reply ? "open" : undefined} onPointerDown={handleStagePointerDown}>
       <section className="intro-copy" aria-hidden={enrollment.isOpen} inert={enrollment.isOpen}>
         <h1 id={active && !enrollment.isOpen ? "page-title" : "home-title"} data-page-route="/" tabIndex={-1}>{t.title} <em>{t.titleAccent}</em></h1>
       </section>
-      <m.section className="creature-zone" aria-label={t.creature} layout={!enrollmentMotion.reduced} layoutDependency={`${enrollment.isOpen}-${enrollmentFocused}`} transition={enrollmentMotion.scene}>
+      <m.section className="creature-zone" aria-label={t.creature} layout={!enrollmentMotion.reduced} layoutDependency={`${enrollment.isOpen}-${enrollmentFocused}-${wide && reply !== null}`} transition={enrollmentMotion.scene}>
         <div className="creature-presence" ref={creatureShellRef}>
           <Suspense fallback={null}><Character ref={characterRef} onReady={wakeCharacter} onPainted={revealCharacter} onError={characterFailed} active={running} voice /></Suspense>
         </div>
         <CreatureLoader visible={!characterRevealed && characterStatus !== "error"} active={running} reduced={reducedMotion} />
         {running && (enrollment.phase === "editing" || enrollment.phase === "confirmed") && <EnrollmentParticles key={enrollment.phase} duration={enrollmentMotion.burst} celebrate={enrollment.phase === "confirmed"} />}
       </m.section>
+      <AnimatePresence>{wide && reply && <ReplyCard key={reply.generation} detail={reply} onClose={dismissReply} />}</AnimatePresence>
       {enrollment.isOpen && <EnrollmentExperience session={enrollment} language={language} characterFailed={characterStatus === "error"} onFieldFocus={setEnrollmentFocused} />}
       <div className="home-controls" inert={enrollment.isOpen} aria-hidden={enrollment.isOpen}>
         <div className="speech-slot">
           {!brain.speechNotice && <AnimatePresence mode="wait">
-            {brain.speechCaption && <SpeechCaption key={brain.speechCaption.generation} {...brain.speechCaption} onRevealed={brain.onSpeechCaptionRevealed} />}
+            {reply
+              ? !wide && <ReplyPreview key={`reply-${reply.generation}`} detail={reply} openRef={readAllRef} onOpen={() => setSheetGeneration(reply.generation)} onClose={dismissReply} />
+              : brain.speechCaption && <SpeechCaption key={brain.speechCaption.generation} {...brain.speechCaption} onRevealed={brain.onSpeechCaptionRevealed} />}
           </AnimatePresence>}
+          {/* One live region: the sentence is announced once, whether it shows as a caption or a reply. */}
+          <p className="sr-only" role="status">{!brain.speechNotice && brain.speechCaption?.complete ? brain.speechCaption.text : ""}</p>
         </div>
         <m.div className="interaction-dock" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={transition}>
           <ContextWhisper context={brain.userContext} onSubmit={submitContext} onClear={brain.clearContext} status={brain.status} />
@@ -153,6 +173,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
         </m.div>
         <footer className="home-footer"><button type="button" onClick={() => setDebugActive((value) => !value)} aria-expanded={debugActive}>{t.diagnostics} <span aria-hidden="true">↗</span></button></footer>
       </div>
+      {sheetOpen && reply && <ReplySheet key={reply.generation} detail={reply} onCollapse={collapseSheet} />}
       <DebugPanel active={debugActive && conversational} getSnapshot={sensors.getSnapshot} personality={brain.personality} decision={brain.decision} latencyMs={brain.apiLatencyMs} onState={brain.forceState} onClose={() => setDebugActive(false)} />
     </main>
   );

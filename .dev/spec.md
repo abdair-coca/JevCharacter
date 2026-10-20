@@ -1,6 +1,6 @@
 # Spec: respuestas largas con UI generada
 
-**Estado:** aprobada el 2026-10-20 («aprobado»). Fase 1 aprobada; fase 2 activa.
+**Estado:** aprobada el 2026-10-20 («aprobado»). Fase 1 aprobada; fase 2 entregada para revisión.
 
 **Fuentes:** [contrato visual](../design.md), [arquitectura](../docs/architecture.md), [interacción](../docs/interaction.md), [plan](plan.md), [tarea activa](task.md).
 
@@ -60,14 +60,15 @@ En el quiz eligió:
 - **Escritorio:**
   - Jev se desplaza a un lado con una animación `layout` de Motion y la tarjeta ocupa el otro. Al cerrar, Jev vuelve al centro.
   - La tarjeta tiene alto máximo, scroll interno y desvanecido en los bordes.
-  - Mientras llegan bloques, el scroll los sigue. Si el usuario sube para releer, deja de seguirlos y aparece «↓ nuevo».
+  - ~~Mientras llegan bloques, el scroll los sigue.~~ **Cambio del 2026-10-20 (quiz de fase 2):** la lectura empieza arriba, con la frase de Jev; si hay contenido debajo aparece «Más ↓», que baja al tocarlo. Motivo: los bloques llegan casi juntos y seguirlos ocultaba el inicio.
 - **Móvil:**
   - Encima del input aparece una vista previa de dos líneas con «Leer todo».
   - Ese botón abre un panel inferior con barra de arrastre y dos alturas (aprox. 45 % y 90 % de `dvh`) que respeta `safe-area` y el teclado.
   - Jev sigue visible arriba.
+  - **Decisión del 2026-10-20 (quiz de fase 2):** arrastrar el panel hacia abajo, su ✕ o `Esc` vuelven a la vista previa; el ✕ de la vista previa descarta la respuesta.
 - **Accesibilidad:**
   - Zona desplazable con nombre accesible y alcanzable por teclado.
-  - El foco no se roba al llegar la respuesta. Al abrir el panel, el foco entra; al cerrarlo, vuelve al input.
+  - El foco no se roba al llegar la respuesta. Al abrir el panel, el foco entra; al cerrarlo, vuelve a «Leer todo» (patrón estándar de diálogo, sin abrir el teclado móvil). Al cerrar la tarjeta de escritorio con el foco dentro, vuelve al input.
   - Se anuncia la respuesta una vez, cuando está completa.
 - **Compatibilidad:** la tarjeta no aparece durante la inscripción UATF y se suspende al cambiar de ruta. «Borrar conversación» la cierra.
 

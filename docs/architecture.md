@@ -24,6 +24,7 @@ La aplicación separa percepción local, decisión conductual y presentación. L
 | `hooks/useSpeechSession.ts` | Posee generación, idioma, caption (frase hablada), bloques de la respuesta, avisos y hasta dos intercambios completos en memoria; regenera por idioma, cancela al ocultar y descarta resultados obsoletos. |
 | `creature/brain/decisionScheduler.ts` | Controla causas de solicitud, espera, deduplicación, caché, límites, validación y fallback. |
 | `creature/brain/speechClient.ts` | Envía idioma validado, lee SSE (`spoken`, `block`, `done`), revalida cada bloque y cancela el reader por `AbortSignal`. |
+| `features/reply/` | Tarjeta de respuesta junto a Jev en pantallas anchas; vista previa y panel inferior arrastrable en pantallas de 64rem o menos. Bloques dibujados como texto semántico. |
 | `creature/brain/speechBlocks.ts` | Catálogo tipado de bloques, normalización compartida por cliente y servidor, límites, resumen para el historial y escáner de objetos JSON. |
 | `creature/brain/fallbackBrain.ts` | Produce decisión local cuando endpoint no está disponible o límite local impide consultar. |
 | `api/decide.ts` | Implementa endpoint opcional: valida estado, limita solicitudes y, si hay configuración, llama al SDK TypeSafe. |
@@ -85,7 +86,7 @@ El cerebro y el sensor se suspenden usando sus opciones existentes; Character si
 3. Contexto enviado explícitamente solicita una decisión contextual. El scheduler también puede solicitarla al volver tras una ausencia suficiente, una vez cumplido el cooldown.
 4. Scheduler puede reutilizar caché; limita ritmo, aborta reemplazos/tiempos agotados y valida respuesta. Si falla o endpoint informa `unavailable`, recurre a `fallbackBrain`.
 5. La decisión coherida actualiza estado e interfaz. Adaptador traduce reacción a estado Rive; intensidad y atención alimentan el escenario.
-6. Si la acción contextual es `talk`, `think` sigue hasta que llegue la frase hablada de Groq; desde ese momento Jev habla y vuelve a `Base` cuando la voz termina de sonar la última sílaba (o enseguida si Jev no suena). Un único rótulo muestra la frase y desaparece al cabo de unos 5 s; los bloques siguen llegando aparte y todavía no se dibujan.
+6. Si la acción contextual es `talk`, `think` sigue hasta que llegue la frase hablada de Groq; desde ese momento Jev habla y vuelve a `Base` cuando la voz termina de sonar la última sílaba (o enseguida si Jev no suena). Sin bloques, un único rótulo muestra la frase y desaparece al cabo de unos 5 s. Con bloques, la respuesta pasa a una tarjeta (escritorio) o a una vista previa con panel (móvil) que no caduca: se cierra a mano, con un mensaje nuevo, al borrar la conversación o al suspender Home.
 7. Cambiar idioma durante habla invalida la generación y aborta su reader, luego repite el mismo mensaje con el idioma nuevo y solo el historial previamente completado. Si todavía se espera a `/api/decide`, esa decisión no se repite: el habla usará el idioma vigente al comenzar. Los captions completos conservan su `lang` original.
 8. Fallar el habla elimina texto parcial y muestra un aviso localizado en el HUD, sin fabricar una frase de Jev. Interrumpir una decisión tiene un aviso distinto. «Borrar conversación» cancela ambas vías y borra contexto, intercambios y caché de decisiones que contenía texto, sin reiniciar cuotas ni personalidad.
 

@@ -1,0 +1,73 @@
+:root {
+  --reply-width: 30rem; --reply-sheet-height: 90dvh; --reply-fade: var(--space-6);
+  --reply-handle-width: 2.5rem; --reply-handle-height: 0.3rem;
+}
+
+/* Desktop: Jev steps aside into the first column and the card takes the second. */
+.home-page[data-reply="open"] { grid-template-columns: minmax(0, 1fr) minmax(0, var(--reply-width)); column-gap: var(--space-8); }
+.home-page[data-reply="open"] > .intro-copy,
+.home-page[data-reply="open"] > .home-controls { grid-column: 1 / -1; }
+.home-page[data-reply="open"] > .creature-zone { grid-column: 1; grid-row: 2; }
+.reply-card {
+  grid-column: 2; grid-row: 2; align-self: center; z-index: var(--layer-content);
+  display: flex; flex-direction: column; min-height: 0; max-height: 100%;
+  padding: var(--space-4) var(--space-2) var(--space-2) var(--space-6);
+  border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg);
+  background: var(--color-background-secondary); box-shadow: var(--shadow-elevated);
+}
+
+.reply__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-right: var(--space-2); }
+.reply__eyebrow { margin: 0; color: var(--color-accent); font-size: var(--text-caption); font-weight: var(--weight-label); letter-spacing: var(--tracking-label); }
+.reply__eyebrow:focus { outline: none; }
+.reply__close { display: grid; place-items: center; flex-shrink: 0; width: var(--size-target); height: var(--size-target); color: var(--color-muted); background: transparent; border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); }
+.reply__close:hover { color: var(--color-foreground); background: var(--color-surface-raised); }
+.reply__close svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.reply__body { position: relative; display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.reply__scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-3) var(--space-4) var(--space-4) 0; scrollbar-width: thin; }
+.reply__scroll:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); border-radius: var(--radius-sm); }
+/* Fades mark hidden content at either edge; they do not animate. */
+.reply__scroll[data-below="true"] { mask-image: linear-gradient(to bottom, #000 calc(100% - var(--reply-fade)), transparent); }
+.reply__scroll[data-above="true"] { mask-image: linear-gradient(to bottom, transparent, #000 var(--reply-fade)); }
+.reply__scroll[data-above="true"][data-below="true"] { mask-image: linear-gradient(to bottom, transparent, #000 var(--reply-fade), #000 calc(100% - var(--reply-fade)), transparent); }
+.reply__lead { margin: 0 0 var(--space-4); color: var(--color-foreground); font: var(--weight-label) var(--text-lead)/var(--line-title) var(--font-display); text-wrap: balance; }
+.reply__more { position: absolute; bottom: var(--space-2); left: 50%; translate: -50% 0; display: inline-flex; align-items: center; gap: var(--space-2); min-height: calc(var(--size-target) - var(--space-2)); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface-raised); color: var(--color-foreground); font-size: var(--text-caption); box-shadow: var(--shadow-control); }
+
+.reply-blocks { display: grid; gap: var(--space-4); color: var(--color-foreground); font-size: var(--text-body); line-height: var(--line-body); }
+.reply-block { margin: 0; }
+.reply-block ul, .reply-block--list, .reply-block--steps, .reply-block--chips { margin: 0; padding-left: var(--space-6); }
+.reply-block--compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: var(--space-4); }
+.reply-block--compare h3 { margin: 0 0 var(--space-2); font-size: var(--text-small); font-weight: var(--weight-label); }
+.reply-block--highlight strong { font-size: var(--text-lead); }
+.reply-block--chips { color: var(--color-muted); }
+
+/* Mobile: preview above the input and the sheet over the stage. */
+.reply-preview {
+  position: absolute; bottom: 100%; left: 0; right: 0; width: min(100%, var(--size-input)); margin: 0 auto var(--space-3);
+  display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-background-secondary); pointer-events: auto;
+}
+.reply-preview__text { margin: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; color: var(--color-foreground); font-size: var(--text-small); line-height: var(--line-body); }
+.reply-preview__actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.reply-preview__open { min-height: var(--size-target); padding-inline: var(--space-4); border: 0; border-radius: var(--radius-pill); background: var(--color-accent); color: var(--color-accent-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
+.reply-sheet-layer { position: fixed; inset: 0; z-index: var(--layer-dialog); }
+.reply-sheet__backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--color-background) 60%, transparent); }
+.reply-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; height: var(--reply-sheet-height);
+  display: flex; flex-direction: column; min-height: 0;
+  padding: 0 var(--space-2) env(safe-area-inset-bottom) var(--space-6);
+  border: var(--border-thin) solid var(--color-border); border-bottom: 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--color-background-secondary); box-shadow: var(--shadow-elevated); touch-action: none;
+}
+.reply-sheet .reply__scroll { touch-action: pan-y; }
+.reply-sheet__handle { display: grid; place-items: center; align-self: center; width: var(--size-target); min-height: var(--size-target); margin-right: var(--space-4); border: 0; background: transparent; cursor: grab; touch-action: none; }
+.reply-sheet__handle span { width: var(--reply-handle-width); height: var(--reply-handle-height); border-radius: var(--radius-pill); background: var(--color-border); }
+.reply-sheet__handle:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); border-radius: var(--radius-sm); }
+
+/* Short viewports keep the preview to one row so Jev stays visible. */
+@media (max-height: 45rem) {
+  .reply-preview { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); margin-bottom: 0; }
+  .reply-preview__text { -webkit-line-clamp: 1; line-clamp: 1; }
+  .reply-preview__open { min-height: calc(var(--size-target) - var(--space-2)); padding-inline: var(--space-3); }
+  .reply-preview .reply__close { width: calc(var(--size-target) - var(--space-2)); height: calc(var(--size-target) - var(--space-2)); }
+}

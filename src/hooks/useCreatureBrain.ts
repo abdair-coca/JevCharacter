@@ -59,6 +59,7 @@ type CreatureBrain = {
   userContext: string;
   speechCaption: SpeechCaption | null;
   speechDetail: SpeechDetail | null;
+  dismissSpeechDetail: (generation: number) => void;
   speechNotice: SpeechNotice;
   decisionInterrupted: boolean;
   onSpeechCaptionRevealed: (generation: number) => void;
@@ -323,6 +324,7 @@ export function useCreatureBrain(
     userContext,
     speechCaption: speech.caption,
     speechDetail: speech.detail,
+    dismissSpeechDetail: speech.dismissDetail,
     speechNotice: speech.notice,
     decisionInterrupted,
     onSpeechCaptionRevealed: speech.onCaptionRevealed,

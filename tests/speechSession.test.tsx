@@ -218,3 +218,43 @@ describe("speech session blocks", () => {
     expect(result.current.detail).toBeNull();
   });
 });
+
+describe("speech session dismissal", () => {
+  it("dismisses a streaming reply and ignores its late blocks and completion", async () => {
+    const { result } = mountSpeech();
+    act(() => result.current.start("Pasos", "Talk"));
+    act(() => requests[0].options.onSpoken("Te cuento."));
+    act(() => requests[0].options.onBlock({ type: "paragraph", text: "Uno." }));
+    const generation = result.current.detail!.generation;
+    act(() => result.current.dismissDetail(generation));
+    expect(result.current.detail).toBeNull();
+    expect(result.current.caption).toBeNull();
+    act(() => requests[0].options.onBlock({ type: "paragraph", text: "Dos." }));
+    act(() => requests[0].resolve({ spoken: "Te cuento.", blocks: [{ type: "paragraph", text: "Uno." }, { type: "paragraph", text: "Dos." }] }));
+    await act(async () => {});
+    expect(result.current.detail).toBeNull();
+    act(() => result.current.start("Siguiente", "Talk"));
+    expect(requests[1].options.history).toEqual([{ user: "Pasos", assistant: "Te cuento.\nUno. Dos." }]);
+  });
+
+  it("ignores a dismissal of an older generation", async () => {
+    const { result } = mountSpeech();
+    act(() => result.current.start("Pasos", "Talk"));
+    await complete(requests[0], "Te cuento.", [{ type: "paragraph", text: "Uno." }]);
+    act(() => result.current.dismissDetail(result.current.detail!.generation - 1));
+    expect(result.current.detail).toMatchObject({ spoken: "Te cuento." });
+  });
+});
+
+describe("speech session suspension", () => {
+  it("clears a reply card when Home is suspended (route change or UATF form)", async () => {
+    const { result, rerender } = mountSpeech();
+    act(() => result.current.start("Pasos", "Talk"));
+    await complete(requests[0], "Te cuento.", [{ type: "paragraph", text: "Uno." }]);
+    expect(result.current.detail).not.toBeNull();
+    rerender({ language: "es", active: false });
+    expect(result.current.detail).toBeNull();
+    rerender({ language: "es", active: true });
+    expect(result.current.detail).toBeNull();
+  });
+});
