@@ -7,7 +7,7 @@ Esta carpeta orienta a personas y modelos de lenguaje sobre el comportamiento ob
 ## Lectura rápida
 
 - [Instrucciones raíz para agentes](../AGENTS.md): qué documento consultar según el trabajo y cómo registrar evidencia.
-- Los SDD de la feature ([spec](../.dev/spec.md), [plan por fases](../.dev/plan.md) y [tarea](../.dev/task.md)) se vaciaron tras la aprobación final de la fase 5 el 2026-10-18; su historial está en git. Fases 1–4 aceptadas o aprobadas; la fase 5 (integración, accesibilidad, rendimiento y voz de Jev) quedó aprobada.
+- Los SDD de la feature ([spec](../.dev/spec.md), [plan por fases](../.dev/plan.md) y [tarea](../.dev/task.md)) se vaciaron tras la aprobación final de «respuestas largas con UI generada» el 2026-10-21, como antes tras la fase 5 del rediseño (2026-10-18); su historial está en git. La evidencia de respuestas largas sigue en `.dev/evidence/long-reply/`.
 - [Contrato de diseño](../design.md): reglas visuales, tokens, ES/EN, temas, animación 2D, accesibilidad y verificación.
 - [Historia de JEV](jev-story.md): relato original del usuario y autoría para About.
 - [Arquitectura](architecture.md): runtime, responsabilidades de módulos, estado y camino de decisión.
