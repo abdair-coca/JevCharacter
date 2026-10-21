@@ -21,14 +21,15 @@ La aplicación separa percepción local, decisión conductual y presentación. L
 |---|---|
 | `creature/sensors/pointerSensor.ts` | Mide pointer, actividad, proximidad, clicks y ausencia en cliente; actualiza variables CSS para seguimiento visual. |
 | `hooks/useCreatureBrain.ts` | Reúne estado de mundo/persona, aplica acciones Jev, conserva el scheduler y coordina suspensión. |
-| `hooks/useSpeechSession.ts` | Posee generación, idioma, caption (frase hablada), bloques de la respuesta, avisos y hasta dos intercambios completos en memoria; regenera por idioma, cancela al ocultar y descarta resultados obsoletos. |
+| `hooks/useSpeechSession.ts` | Posee generación, idioma, caption (frase hablada), bloques de la respuesta, avisos y hasta dos intercambios completos en memoria; envía las notas de memoria relevantes y guarda la nota de una respuesta terminada; regenera por idioma, cancela al ocultar y descarta resultados obsoletos. |
+| `creature/memory/memoryStore.ts` | Notas persistentes de Jev en `jevling.memory` (hasta 40, sin duplicados ni números largos) y selección de las que viajan con cada mensaje: las 2 más recientes y las que comparten palabras, hasta 8 notas y 1000 caracteres. Sin storage, duran la sesión. |
 | `creature/brain/decisionScheduler.ts` | Controla causas de solicitud, espera, deduplicación, caché, límites, validación y fallback. |
 | `creature/brain/speechClient.ts` | Envía idioma validado, lee SSE (`spoken`, `block`, `done`), revalida cada bloque y cancela el reader por `AbortSignal`. |
 | `features/reply/` | Tarjeta de respuesta junto a Jev en pantallas anchas; vista previa y panel inferior arrastrable en pantallas de 64rem o menos. Cada bloque tiene su componente (`ReplyBlocks`), con entrada en cascada por CSS. El panel (`ReplySheet`) se carga con `lazy` al abrirse, para no sumar arrastre y animación imperativa al bundle inicial. |
 | `creature/brain/speechBlocks.ts` | Catálogo tipado de bloques, normalización compartida por cliente y servidor, límites, resumen para el historial y escáner de objetos JSON. |
 | `creature/brain/fallbackBrain.ts` | Produce decisión local cuando endpoint no está disponible o límite local impide consultar. |
 | `api/decide.ts` | Implementa endpoint opcional: valida estado, limita solicitudes y, si hay configuración, llama al SDK TypeSafe. |
-| `api/talk.ts` | Valida `{message, language, history}`, fija explícitamente español/inglés en el prompt, pide objetos JSON (frase hablada y bloques opcionales), normaliza cada objeto y lo transmite como evento SSE; aborta upstream al desconectarse el cliente. |
+| `api/talk.ts` | Valida `{message, language, history, memory}`, fija explícitamente español/inglés en el prompt, entrega las notas como un mensaje de sistema de datos, pide objetos JSON (frase hablada, nota de memoria opcional y bloques opcionales), normaliza cada objeto y lo transmite como evento SSE (`spoken`, `memory`, `block`); aborta upstream al desconectarse el cliente. |
 | `creature/rive/riveReactionAdapter.ts` y `character/useCharacterController.ts` | Mapean reacción a enum y trigger del controlador; temporizan estados transitorios, incluida `QUESTION` → `question` en Rive. |
 | `pages/HomePage.tsx`, `styles/tokens.css` y `components/BrainHUD.tsx` | Presentan a Jev, feedback de pointer/envío, acción, confianza, probabilidades, intensidad, atención y personalidad. |
 
@@ -98,7 +99,7 @@ La producción actual usa `npm run build` y `vercel deploy --prod`, con las vari
 
 El middleware de Vite carga `TYPESAFE_API_KEY`, `JEV_MODEL`, `GROQ_API_KEY` y `GROQ_MODEL` desde `.env` al entorno server-side y delega `POST /api/decide` y `POST /api/talk` a sus handlers reales. La segunda ruta transmite SSE y solo consulta Groq tras una acción contextual `talk`. Las claves no se incluyen en el bundle del navegador. Vercel limita la ruta de habla a 10 s. El build local no prueba despliegue ni disponibilidad del proveedor.
 
-Los mensajes y respuestas no se guardan en `localStorage`: el contexto actual y los últimos dos intercambios completos viven en memoria de Home y se pierden al recargar o borrar la conversación. Al iniciar se elimina el antiguo valor `jevling.context`. La personalidad sigue en `jevling.personality`, con validación local. No hay base de datos indicada por este flujo.
+Los mensajes y respuestas no se guardan en `localStorage`: el contexto actual y los últimos dos intercambios completos viven en memoria de Home y se pierden al recargar o borrar la conversación. Lo que sí persiste son las notas cortas que el modelo decide recordar (`jevling.memory`); «Borrar conversación» las conserva. Al iniciar se elimina el antiguo valor `jevling.context`. La personalidad sigue en `jevling.personality`, con validación local. No hay base de datos indicada por este flujo.
 
 El habla tiene un límite de espera de 12 s en cliente, mientras upstream conserva su timeout de 8 s. Las peticiones nuevas/reemplazadas y el desmontaje cancelan timers/readers. El límite existente de `/api/talk` vuelve a habilitar su bucket después de la ventana de 60 s; las solicitudes inválidas también cuentan hacia la cuota del endpoint.
 

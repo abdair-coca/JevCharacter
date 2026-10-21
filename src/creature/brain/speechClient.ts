@@ -1,4 +1,4 @@
-import { acceptsBlock, clampText, parseBlock, SPEECH_SPOKEN_MAX_CHARS, type SpeechBlock, type SpeechReply } from "./speechBlocks";
+import { acceptsBlock, clampText, parseBlock, parseMemoryNote, SPEECH_SPOKEN_MAX_CHARS, type SpeechBlock, type SpeechReply } from "./speechBlocks";
 import {
   isSpeechLanguage,
   SPEECH_HISTORY_LIMIT,
@@ -11,16 +11,21 @@ type StreamSpeechOptions = {
   message: string;
   language: SpeechLanguage;
   history: SpeechExchange[];
+  /** Persistent notes chosen for this message; the server bounds them again. */
+  memory: string[];
   signal: AbortSignal;
   onSpoken: (text: string) => void;
   onBlock: (block: SpeechBlock) => void;
 };
 
+/** A finished reply, with the note Jev chose to remember, if any. */
+export type SpeechResult = SpeechReply & { memory?: string };
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
 /** Streams one reply: the spoken sentence first, then each block the client also validates. */
-export async function streamSpeechReply({ message, language, history, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechReply> {
+export async function streamSpeechReply({ message, language, history, memory: notes, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechResult> {
   if (!isSpeechLanguage(language)) throw new Error("Invalid speech language");
   signal.throwIfAborted();
   const response = await fetch("/api/talk", {
@@ -30,6 +35,7 @@ export async function streamSpeechReply({ message, language, history, signal, on
       message: message.slice(0, SPEECH_MESSAGE_MAX_CHARS),
       language,
       history: history.slice(-SPEECH_HISTORY_LIMIT),
+      memory: notes,
     }),
     signal,
   });
@@ -49,6 +55,7 @@ export async function streamSpeechReply({ message, language, history, signal, on
   let dataLines: string[] = [];
   let spoken: string | null = null;
   const blocks: SpeechBlock[] = [];
+  let memory: string | null = null;
   let streamComplete = false;
   const onAbort = () => { void reader.cancel().catch(() => undefined); };
   signal.addEventListener("abort", onAbort, { once: true });
@@ -66,7 +73,7 @@ export async function streamSpeechReply({ message, language, history, signal, on
       streamComplete = true;
       return;
     }
-    if (name !== "spoken" && name !== "block") return;
+    if (name !== "spoken" && name !== "block" && name !== "memory") return;
 
     let payload: unknown;
     try {
@@ -84,6 +91,10 @@ export async function streamSpeechReply({ message, language, history, signal, on
       return;
     }
     if (spoken === null) throw new Error("Speech block before its sentence");
+    if (name === "memory") {
+      memory ??= parseMemoryNote({ type: "memory", text: payload.text });
+      return;
+    }
     const block = parseBlock(payload.block);
     if (block && acceptsBlock(blocks, block)) {
       blocks.push(block);
@@ -129,5 +140,5 @@ export async function streamSpeechReply({ message, language, history, signal, on
 
   signal.throwIfAborted();
   if (!streamComplete || spoken === null) throw new Error("Incomplete speech stream");
-  return { spoken, blocks };
+  return memory === null ? { spoken, blocks } : { spoken, blocks, memory };
 }

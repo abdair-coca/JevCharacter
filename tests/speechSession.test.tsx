@@ -4,15 +4,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { StrictMode, type ReactNode } from "react";
 import type { CharacterController } from "../src/character/useCharacterController";
 import { useSpeechSession } from "../src/hooks/useSpeechSession";
-import type { SpeechBlock, SpeechReply } from "../src/creature/brain/speechBlocks";
-import { streamSpeechReply } from "../src/creature/brain/speechClient";
+import type { SpeechBlock } from "../src/creature/brain/speechBlocks";
+import { streamSpeechReply, type SpeechResult } from "../src/creature/brain/speechClient";
+import { addMemory, readMemory } from "../src/creature/memory/memoryStore";
 import { SPEECH_REQUEST_TIMEOUT_MS, type SpeechLanguage } from "../src/creature/brain/speechProtocol";
 
 vi.mock("../src/creature/brain/speechClient", () => ({ streamSpeechReply: vi.fn() }));
-type Request = { options: Parameters<typeof streamSpeechReply>[0]; resolve: (reply: SpeechReply) => void; reject: (error: Error) => void };
+type Request = { options: Parameters<typeof streamSpeechReply>[0]; resolve: (reply: SpeechResult) => void; reject: (error: Error) => void };
 let requests: Request[];
 beforeEach(() => {
   requests = [];
+  window.localStorage.clear();
   vi.mocked(streamSpeechReply).mockImplementation(options => new Promise((resolve, reject) => { requests.push({ options, resolve, reject }); }));
 });
 afterEach(cleanup);
@@ -35,6 +37,29 @@ async function complete(request: Request, spoken: string, blocks: SpeechBlock[] 
     request.resolve({ spoken, blocks });
   });
 }
+
+describe("speech session memory", () => {
+  it("sends the relevant notes and keeps the note of a finished reply for later visits", async () => {
+    addMemory("Le gusta la programación.", 1);
+    const { result } = mountSpeech();
+    act(() => result.current.start("¿Qué carrera de programación estudio?", "Talk"));
+    expect(requests[0].options.memory).toEqual(["Le gusta la programación."]);
+    await act(async () => {
+      requests[0].options.onSpoken("Te ayudo.");
+      requests[0].resolve({ spoken: "Te ayudo.", blocks: [], memory: "Busca una carrera de programación." });
+    });
+    expect(readMemory().map(note => note.text)).toEqual(["Le gusta la programación.", "Busca una carrera de programación."]);
+  });
+
+  it("keeps no note from a cancelled reply and keeps memory when the conversation is cleared", async () => {
+    addMemory("Le gusta la programación.", 1);
+    const { result } = mountSpeech();
+    act(() => result.current.start("Hola", "Talk"));
+    act(() => result.current.cancel(true));
+    await act(async () => requests[0].resolve({ spoken: "Tarde.", blocks: [], memory: "No guardar." }));
+    expect(readMemory().map(note => note.text)).toEqual(["Le gusta la programación."]);
+  });
+});
 
 describe("speech session talk hold", () => {
   it("holds the talk state from the spoken sentence until the voice reports the end", async () => {

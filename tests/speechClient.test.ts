@@ -6,7 +6,7 @@ function event(name: string, data: unknown) {
   return `event: ${name}\ndata: ${JSON.stringify(data)}\n\n`;
 }
 
-const callbacks = () => ({ onSpoken: vi.fn(), onBlock: vi.fn() });
+const callbacks = () => ({ memory: [] as string[], onSpoken: vi.fn(), onBlock: vi.fn() });
 
 describe("streamSpeechReply", () => {
   it("acota entrada, limita historial y entrega la frase y los bloques validados", async () => {
@@ -38,6 +38,36 @@ describe("streamSpeechReply", () => {
     expect(reply).toEqual({ spoken: "Te cuento.", blocks: [{ type: "steps", items: ["Uno", "Dos"] }] });
     expect(handlers.onSpoken).toHaveBeenCalledExactlyOnceWith("Te cuento.");
     expect(handlers.onBlock).toHaveBeenCalledExactlyOnceWith({ type: "steps", items: ["Uno", "Dos"] });
+  });
+
+  it("envía las notas elegidas y devuelve solo la primera nota válida, sin mostrarla", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response([
+      event("spoken", { text: "Te cuento." }),
+      event("memory", { text: "Le interesa la tecnología." }),
+      event("memory", { text: "Otra nota." }),
+      event("done", {}),
+    ].join(""), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const handlers = { ...callbacks(), memory: ["Estudia en Potosí."] };
+
+    const reply = await streamSpeechReply({ message: "hola", language: "es", history: [], signal: new AbortController().signal, ...handlers });
+
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1].body)).memory).toEqual(["Estudia en Potosí."]);
+    expect(reply).toEqual({ spoken: "Te cuento.", blocks: [], memory: "Le interesa la tecnología." });
+    expect(handlers.onBlock).not.toHaveBeenCalled();
+  });
+
+  it("descarta una nota con números largos", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response([
+      event("spoken", { text: "Anotado." }),
+      event("memory", { text: "Su celular es 712 345 67." }),
+      event("done", {}),
+    ].join(""), { status: 200 })));
+
+    const reply = await streamSpeechReply({ message: "hola", language: "es", history: [], signal: new AbortController().signal, ...callbacks() });
+
+    expect(reply).toEqual({ spoken: "Anotado.", blocks: [] });
+    expect("memory" in reply).toBe(false);
   });
 
   it("rechaza un evento de error del stream aunque HTTP sea 200", async () => {

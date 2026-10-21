@@ -3,6 +3,7 @@ import type { CharacterController } from "../character/useCharacterController";
 import type { TalkState } from "../creature/brain/brain.types";
 import { historyReply, type SpeechBlock } from "../creature/brain/speechBlocks";
 import { streamSpeechReply } from "../creature/brain/speechClient";
+import { addMemory, readMemory, selectRelevant } from "../creature/memory/memoryStore";
 import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage } from "../creature/brain/speechProtocol";
 
 export type SpeechNotice = "unavailable" | "regenerating" | "interrupted" | null;
@@ -11,7 +12,7 @@ export type SpeechCaption = { text: string; complete: boolean; generation: numbe
 export type SpeechDetail = { spoken: string; blocks: SpeechBlock[]; complete: boolean; generation: number; language: SpeechLanguage };
 type PendingSpeech = { message: string; state: TalkState; language: SpeechLanguage; controller: AbortController; generation: number; timeout: number | null; spoken: string; dismissed: boolean };
 
-/** Owns only the speech generation and bounded, in-memory conversation history. */
+/** Owns the speech generation, the bounded session history and the notes Jev keeps between visits. */
 export function useSpeechSession(characterRef: RefObject<CharacterController | null>, language: SpeechLanguage, active: boolean) {
   const [caption, setCaption] = useState<SpeechCaption | null>(null);
   const [detail, setDetail] = useState<SpeechDetail | null>(null);
@@ -82,6 +83,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       message: request.message,
       language: request.language,
       history: historyRef.current.slice(-SPEECH_HISTORY_LIMIT),
+      memory: selectRelevant(readMemory(), request.message),
       signal: request.controller.signal,
       // The spoken sentence arrives whole: Jev talks while the blocks keep streaming.
       onSpoken: text => {
@@ -107,6 +109,8 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       pendingRef.current = null;
       // The voice reports the end of a finished reply through finishTalk.
       historyRef.current = [...historyRef.current, { user: request.message, assistant: historyReply(reply) }].slice(-SPEECH_HISTORY_LIMIT);
+      // Only a finished reply is remembered; cancelled or failed ones leave no note.
+      if (reply.memory) addMemory(reply.memory);
       setStatus("idle");
       if (!request.dismissed) setDetail(reply.blocks.length > 0 ? { spoken: reply.spoken, blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
     }).catch(fail);

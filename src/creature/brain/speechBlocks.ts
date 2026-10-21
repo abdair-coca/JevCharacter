@@ -5,6 +5,10 @@ export const SPEECH_SPOKEN_MAX_CHARS = 120;
 export const SPEECH_BLOCKS_MAX = 6;
 export const SPEECH_BLOCKS_MAX_CHARS = 750;
 export const SPEECH_HISTORY_REPLY_MAX_CHARS = 600;
+// Persistent memory: one hidden note per reply, and a bounded selection sent with each message.
+export const SPEECH_MEMORY_NOTE_MAX_CHARS = 160;
+export const SPEECH_MEMORY_SEND_MAX = 8;
+export const SPEECH_MEMORY_SEND_MAX_CHARS = 1_000;
 
 const PARAGRAPH_MAX_CHARS = 320;
 const EMPHASIS_MAX = 3;
@@ -23,6 +27,8 @@ const CALLOUT_MAX_CHARS = 200;
 const CHIPS_MAX = 3;
 const CHIP_MAX_CHARS = 60;
 const OBJECT_MAX_CHARS = 4_000;
+// Seven or more digits, even with spaces, dots or dashes: phone, ID or account numbers.
+const LONG_NUMBER = /\d(?:[\s.-]?\d){6,}/u;
 
 export type CalloutTone = "tip" | "warning";
 export type CompareColumn = { title: string; points: string[] };
@@ -118,7 +124,8 @@ function collectText(value: unknown, depth = 0): string[] {
 
 /** Normalizes one block. A malformed block with readable text becomes a paragraph. */
 export function parseBlock(value: unknown): SpeechBlock | null {
-  if (!isRecord(value)) return null;
+  // A memory note is never shown, not even when it is rejected.
+  if (!isRecord(value) || value.type === "memory") return null;
   const known = normalizeKnown(value);
   if (known) return known;
   const text = clampText(collectText(value).join(" "), PARAGRAPH_MAX_CHARS);
@@ -129,6 +136,13 @@ export function parseBlock(value: unknown): SpeechBlock | null {
 export function parseSpoken(value: unknown): string | null {
   if (!isRecord(value) || value.type !== "spoken") return null;
   return clampText(value.text, SPEECH_SPOKEN_MAX_CHARS) || null;
+}
+
+/** The note Jev keeps about the user, from a hidden memory object; long numbers are never kept. */
+export function parseMemoryNote(value: unknown): string | null {
+  if (!isRecord(value) || value.type !== "memory") return null;
+  const text = clampText(value.text, SPEECH_MEMORY_NOTE_MAX_CHARS);
+  return text && !LONG_NUMBER.test(text) ? text : null;
 }
 
 function blockStrings(block: SpeechBlock): string[] {
