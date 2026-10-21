@@ -269,6 +269,24 @@ describe("/api/talk", () => {
     ]);
   });
 
+  it("emite después de la frase los bloques que el modelo escribió antes que ella", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    const compare = { type: "compare", columns: [{ title: "Gatos", points: ["Independientes"] }, { title: "Perros", points: ["Leales"] }] };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([
+      content(JSON.stringify(compare)),
+      spoken("Te los comparo."),
+      content(JSON.stringify({ type: "chips", items: ["¿Cuál prefieres?"] })),
+      "data: [DONE]\n\n",
+    ])));
+    const response = apiResponse();
+
+    await handler(request(validBody), response.response);
+
+    const events = response.writes.join("").split("\n\n").filter(Boolean).map((event) => event.split("\n")[0]);
+    expect(events).toEqual(["event: spoken", "event: block", "event: block", "event: done"]);
+    expect(response.writes.join("")).toContain('"type":"compare"');
+  });
+
   it("deja de leer al completar seis bloques", async () => {
     vi.stubEnv("GROQ_API_KEY", "test-key");
     const block = JSON.stringify({ type: "paragraph", text: "Corto." });

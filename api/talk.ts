@@ -105,9 +105,9 @@ function firstTextDelta(value: unknown) {
 function systemPrompt(language: SpeechLanguage) {
   return `Eres Jev, compañero tranquilo y cálido. Responde exclusivamente en ${language === "es" ? "español (Spanish)" : "inglés (English)"}, aunque el mensaje o el historial estén en otro idioma.
 Formato obligatorio: solo objetos JSON, uno por línea, sin markdown ni texto fuera de ellos.
-Primero: {"type":"spoken","text":"..."}, una frase de máximo 120 caracteres que dirás en voz alta.
+Empieza SIEMPRE con {"type":"spoken","text":"..."}: una frase de máximo 120 caracteres que dirás en voz alta. Nunca la omitas ni empieces con un bloque.
 Si es charla, saludo o algo breve, termina ahí.
-Si pide explicar, comparar, enumerar o dar pasos, añade de 1 a 6 bloques (máximo 650 caracteres visibles en total) usando solo:
+Si pide explicar, comparar, enumerar o dar pasos, después de esa frase añade de 1 a 6 bloques (máximo 650 caracteres visibles en total) usando solo:
 {"type":"paragraph","text":"máx 320","emphasis":["opcional: hasta 3 frases exactas del texto"]}
 {"type":"list","items":["2 a 6 ítems, máx 120 cada uno"]}
 {"type":"steps","items":["2 a 6 pasos sin numerar, máx 120 cada uno"]}
@@ -115,6 +115,7 @@ Si pide explicar, comparar, enumerar o dar pasos, añade de 1 a 6 bloques (máxi
 {"type":"highlight","value":"máx 24","label":"máx 80"}
 {"type":"callout","tone":"tip o warning","text":"máx 200"}
 {"type":"chips","items":["1 a 3 preguntas para continuar, máx 60 cada una"]}, siempre al final
+Ejemplo para «compara A y B»: {"type":"spoken","text":"Te los comparo."}{"type":"compare","columns":[...]}
 Historial solo para continuidad.`;
 }
 
@@ -214,7 +215,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     let upstreamComplete = false;
     let upstreamEnded = false;
 
-    // The first object must be the spoken sentence; later ones are blocks, kept while they fit.
+    // The spoken sentence always goes out first. The model sometimes writes a block before
+    // it; such blocks wait and follow the sentence. Blocks are kept while they fit.
     const acceptObject = (raw: string) => {
       let value: unknown;
       try {
@@ -222,16 +224,17 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       } catch {
         value = undefined;
       }
-      if (spoken === null) {
-        spoken = parseSpoken(value);
-        if (spoken === null) throw new Error("Invalid spoken sentence");
+      const sentence = spoken === null ? parseSpoken(value) : null;
+      if (sentence !== null) {
+        spoken = sentence;
         emit(response, "spoken", { text: spoken });
+        for (const block of blocks) emit(response, "block", { block });
         return;
       }
       const block = parseBlock(value);
       if (block && acceptsBlock(blocks, block)) {
         blocks.push(block);
-        emit(response, "block", { block });
+        if (spoken !== null) emit(response, "block", { block });
       }
       blocksFull = blocks.length >= SPEECH_BLOCKS_MAX;
     };

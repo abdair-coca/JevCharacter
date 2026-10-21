@@ -9,6 +9,21 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** que el usuario revise la fase 2 en escritorio y móvil (capturas en `evidence/long-reply/`). Con su aprobación, abrir la fase 3 (bloques visuales, entrada con desenfoque, chips que envían, `design.md`).
 - **Estado del código:** fase 2 commiteada. Los bloques se dibujan como texto semántico sin estilo propio; el estilo es de la fase 3.
 
+## Corrección — «el habla no está disponible», 2026-10-20
+
+El usuario informó: «me sale que el habla no esta disponible».
+- **Reproducción:** contra `/api/talk` local, 1 de 8 pedidos falló. Con un arnés que ejecuta el handler real por Vite SSR y registra el texto crudo de Groq (script temporal fuera del repo), fallaron 5–6 de 9–12 pedidos de comparación.
+- **Causa:** en pedidos de comparación, `gpt-oss-20b` empezaba muchas veces directamente con `{"type":"compare"}` y omitía `spoken`. El servidor exigía que el primer objeto fuera la frase, cortaba con error y la UI mostraba «no disponible». Todas las fallas terminaron con `finish=stop` y 117–164 tokens, así que no es el tope de 384.
+- **Arreglo:**
+  - El prompt exige empezar siempre por `spoken`, con un ejemplo de comparación.
+  - El servidor retiene los bloques que lleguen antes de la frase y los emite después de ella. Solo falla si la frase nunca llega.
+- **Verificación:**
+  - Test nuevo en `apiTalk`: falla antes del arreglo y pasa después.
+  - Arnés con Groq real: 0 de 12 fallas en los mismos pedidos.
+  - Repro amplio vía `vite`: 8 de 8 correctas.
+  - Checks en la tabla de abajo.
+- **Limpieza:** se cerró un `vite --port 5199` que quedó vivo de una prueba anterior de esta sesión (PID 9680).
+
 ## Fase 2 — entrega para revisión, 2026-10-20
 
 Quiz de la fase: lectura desde arriba con «Más ↓» y panel móvil que vuelve a la vista previa; ambos registrados en `spec.md`.
