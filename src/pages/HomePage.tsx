@@ -22,10 +22,11 @@ import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewp
 import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
 import { jevVoice } from "../creature/voice/voiceEngine";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { ReplyCard, ReplyPreview, ReplySheet } from "../features/reply/SpeechReply";
+import { ReplyCard, ReplyPreview } from "../features/reply/SpeechReply";
 import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
+const ReplySheet = lazy(() => import("../features/reply/ReplySheet"));
 
 type StageStyle = CSSProperties & { "--intensity": number; "--attention": number };
 type SpeechCaptionProps = Caption & { onRevealed: (generation: number) => void };
@@ -76,6 +77,11 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const dismissReply = useCallback(() => {
     if (reply) dismissSpeechDetail(reply.generation);
   }, [reply, dismissSpeechDetail]);
+  // A follow-up chip is sent like typed context; the new message replaces the reply.
+  const askFromReply = (question: string) => {
+    submitContext(question);
+    if (wide) document.getElementById("creature-context")?.focus({ preventScroll: true });
+  };
   const collapseSheet = useCallback(() => {
     setSheetGeneration(null);
     requestAnimationFrame(() => readAllRef.current?.focus({ preventScroll: true }));
@@ -155,7 +161,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
         <CreatureLoader visible={!characterRevealed && characterStatus !== "error"} active={running} reduced={reducedMotion} />
         {running && (enrollment.phase === "editing" || enrollment.phase === "confirmed") && <EnrollmentParticles key={enrollment.phase} duration={enrollmentMotion.burst} celebrate={enrollment.phase === "confirmed"} />}
       </m.section>
-      <AnimatePresence>{wide && reply && <ReplyCard key={reply.generation} detail={reply} onClose={dismissReply} />}</AnimatePresence>
+      <AnimatePresence>{wide && reply && <ReplyCard key={reply.generation} detail={reply} onClose={dismissReply} onAsk={askFromReply} />}</AnimatePresence>
       {enrollment.isOpen && <EnrollmentExperience session={enrollment} language={language} characterFailed={characterStatus === "error"} onFieldFocus={setEnrollmentFocused} />}
       <div className="home-controls" inert={enrollment.isOpen} aria-hidden={enrollment.isOpen}>
         <div className="speech-slot">
@@ -173,7 +179,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
         </m.div>
         <footer className="home-footer"><button type="button" onClick={() => setDebugActive((value) => !value)} aria-expanded={debugActive}>{t.diagnostics} <span aria-hidden="true">↗</span></button></footer>
       </div>
-      {sheetOpen && reply && <ReplySheet key={reply.generation} detail={reply} onCollapse={collapseSheet} />}
+      {sheetOpen && reply && <Suspense fallback={null}><ReplySheet key={reply.generation} detail={reply} onCollapse={collapseSheet} onAsk={askFromReply} /></Suspense>}
       <DebugPanel active={debugActive && conversational} getSnapshot={sensors.getSnapshot} personality={brain.personality} decision={brain.decision} latencyMs={brain.apiLatencyMs} onState={brain.forceState} onClose={() => setDebugActive(false)} />
     </main>
   );

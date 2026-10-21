@@ -24,7 +24,7 @@ La aplicación separa percepción local, decisión conductual y presentación. L
 | `hooks/useSpeechSession.ts` | Posee generación, idioma, caption (frase hablada), bloques de la respuesta, avisos y hasta dos intercambios completos en memoria; regenera por idioma, cancela al ocultar y descarta resultados obsoletos. |
 | `creature/brain/decisionScheduler.ts` | Controla causas de solicitud, espera, deduplicación, caché, límites, validación y fallback. |
 | `creature/brain/speechClient.ts` | Envía idioma validado, lee SSE (`spoken`, `block`, `done`), revalida cada bloque y cancela el reader por `AbortSignal`. |
-| `features/reply/` | Tarjeta de respuesta junto a Jev en pantallas anchas; vista previa y panel inferior arrastrable en pantallas de 64rem o menos. Bloques dibujados como texto semántico. |
+| `features/reply/` | Tarjeta de respuesta junto a Jev en pantallas anchas; vista previa y panel inferior arrastrable en pantallas de 64rem o menos. Cada bloque tiene su componente (`ReplyBlocks`), con entrada en cascada por CSS. El panel (`ReplySheet`) se carga con `lazy` al abrirse, para no sumar arrastre y animación imperativa al bundle inicial. |
 | `creature/brain/speechBlocks.ts` | Catálogo tipado de bloques, normalización compartida por cliente y servidor, límites, resumen para el historial y escáner de objetos JSON. |
 | `creature/brain/fallbackBrain.ts` | Produce decisión local cuando endpoint no está disponible o límite local impide consultar. |
 | `api/decide.ts` | Implementa endpoint opcional: valida estado, limita solicitudes y, si hay configuración, llama al SDK TypeSafe. |

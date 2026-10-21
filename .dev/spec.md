@@ -1,6 +1,6 @@
 # Spec: respuestas largas con UI generada
 
-**Estado:** aprobada el 2026-10-20 («aprobado»). Fase 1 aprobada; fase 2 entregada para revisión.
+**Estado:** aprobada el 2026-10-20 («aprobado»). Fases 1 y 2 aprobadas; fase 3 entregada para revisión final.
 
 **Fuentes:** [contrato visual](../design.md), [arquitectura](../docs/architecture.md), [interacción](../docs/interaction.md), [plan](plan.md), [tarea activa](task.md).
 
@@ -17,7 +17,7 @@ En el quiz eligió:
 - **UI generada:** catálogo de bloques tipados; el modelo no escribe HTML.
 - **Voz:** Jev dice un resumen corto; la tarjeta muestra todo.
 - **Longitud:** media, unos 800 caracteres de contenido visible. Ajuste del 2026-10-20 («reduce los tokens de respuesta, pero no mucho»; quiz: tope 384 y ~650): unos 650 caracteres y tope de 384 tokens de completado.
-- **Extras:** palabras que entran con desenfoque, como excepción acotada al contrato de movimiento.
+- **Extras:** palabras que entran con desenfoque, como excepción acotada al contrato de movimiento. En el quiz de la fase 3 (2026-10-20), ante la medición de frames, el usuario eligió conservar el desenfoque **palabra por palabra** frente a la alternativa por bloque.
 - **Proceso:** tres fases (protocolo → tarjeta → bloques visuales), con revisión entre cada una.
 
 ## Punto de partida

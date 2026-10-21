@@ -3,7 +3,10 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SpeechDetail } from "../src/hooks/useSpeechSession";
-import { ReplyCard, ReplyPreview, ReplySheet } from "../src/features/reply/SpeechReply";
+import { ReplyCard, ReplyPreview } from "../src/features/reply/SpeechReply";
+import ReplySheet from "../src/features/reply/ReplySheet";
+import { ReplyBlocks } from "../src/features/reply/ReplyBlocks";
+import type { SpeechBlock } from "../src/creature/brain/speechBlocks";
 import { preferencesStore } from "../src/stores/preferencesStore";
 
 vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }) }));
@@ -79,5 +82,41 @@ describe("reply preview and sheet", () => {
     fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
     expect(document.activeElement).toBe(region);
     expect(close).toBeTruthy();
+  });
+});
+
+describe("reply blocks", () => {
+  it("splits text into staggered words and marks the model's emphasis", () => {
+    render(<ReplyBlocks blocks={[{ type: "paragraph", text: "La luz llega a la hoja.", emphasis: ["llega a"] }]} />);
+    const words = [...document.querySelectorAll<HTMLElement>(".reply-word")];
+    expect(words.map(word => word.textContent)).toEqual(["La", "luz", "llega", "a", "la", "hoja."]);
+    expect(words.map(word => word.style.getPropertyValue("--w"))).toEqual(["0", "1", "2", "3", "4", "5"]);
+    expect(document.querySelector(".reply-emphasis")?.textContent).toBe("llega a");
+    expect(document.querySelector(".reply-block")?.textContent).toBe("La luz llega a la hoja.");
+  });
+
+  it("labels callouts with text, not only color, in the current language", () => {
+    render(<ReplyBlocks blocks={[{ type: "callout", tone: "warning", text: "Cuidado." }, { type: "callout", tone: "tip", text: "Idea." }]} />);
+    expect(screen.getByText("Atención:")).toBeTruthy();
+    expect(screen.getByText("Consejo:")).toBeTruthy();
+  });
+
+  it("sends a follow-up chip and disables chips without a sender", () => {
+    const onAsk = vi.fn();
+    const chips: SpeechBlock = { type: "chips", items: ["¿Y de noche?"] };
+    const { rerender } = render(<ReplyBlocks blocks={[chips]} onAsk={onAsk} />);
+    const group = screen.getByRole("navigation", { name: "Preguntas para seguir" });
+    fireEvent.click(screen.getByRole("button", { name: "¿Y de noche?" }));
+    expect(onAsk).toHaveBeenCalledWith("¿Y de noche?");
+    expect(group).toBeTruthy();
+    rerender(<ReplyBlocks blocks={[chips]} />);
+    expect((screen.getByRole("button", { name: "¿Y de noche?" }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it("orders the cascade after the spoken lead", () => {
+    render(<ReplyBlocks blocks={[{ type: "highlight", value: "8", label: "Planetas" }, { type: "list", items: ["Uno", "Dos"] }]} />);
+    const blocks = [...document.querySelectorAll<HTMLElement>(".reply-block")];
+    expect(blocks.map(block => block.style.getPropertyValue("--i"))).toEqual(["1", "2"]);
+    expect(blocks[0].querySelector(".reply-highlight__value")?.textContent).toBe("8");
   });
 });
