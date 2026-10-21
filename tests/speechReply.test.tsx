@@ -1,9 +1,8 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SpeechDetail } from "../src/hooks/useSpeechSession";
-import { ReplyCard, ReplyPreview } from "../src/features/reply/SpeechReply";
+import { ReplyCard } from "../src/features/reply/SpeechReply";
 import ReplySheet from "../src/features/reply/ReplySheet";
 import { ReplyBlocks } from "../src/features/reply/ReplyBlocks";
 import type { SpeechBlock } from "../src/creature/brain/speechBlocks";
@@ -48,30 +47,13 @@ describe("reply card", () => {
   });
 });
 
-describe("reply preview and sheet", () => {
-  it("opens the full reply or discards it from the preview", () => {
-    const onOpen = vi.fn();
-    const onClose = vi.fn();
-    render(<ReplyPreview detail={detail} onOpen={onOpen} onClose={onClose} openRef={createRef()} />);
-    fireEvent.click(screen.getByRole("button", { name: "Leer todo" }));
-    fireEvent.click(screen.getByRole("button", { name: "Cerrar respuesta" }));
-    expect(onOpen).toHaveBeenCalledOnce();
-    expect(onClose).toHaveBeenCalledOnce();
-  });
-
-  it("answers Jev's question from the preview without opening the sheet", () => {
+describe("reply sheet", () => {
+  it("answers Jev's question from inside the sheet", () => {
     const onAsk = vi.fn();
-    const onOpen = vi.fn();
     const asking: SpeechDetail = { ...detail, spoken: "¿Qué te atrae más?", blocks: [{ type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar"] }] };
-    render(<ReplyPreview detail={asking} onOpen={onOpen} onClose={vi.fn()} openRef={createRef()} onAsk={onAsk} />);
+    render(<ReplySheet detail={asking} onCollapse={vi.fn()} onAsk={onAsk} />);
     fireEvent.click(within(screen.getByRole("group", { name: "¿Qué te atrae más?" })).getByRole("button", { name: "Programar" }));
     expect(onAsk).toHaveBeenCalledWith("Programar");
-    expect(onOpen).not.toHaveBeenCalled();
-  });
-
-  it("shows no answers in the preview when Jev asked nothing", () => {
-    render(<ReplyPreview detail={detail} onOpen={vi.fn()} onClose={vi.fn()} openRef={createRef()} onAsk={vi.fn()} />);
-    expect(screen.queryByRole("group")).toBeNull();
   });
 
   it("is a modal dialog that takes focus and collapses with Escape", async () => {
@@ -88,7 +70,7 @@ describe("reply preview and sheet", () => {
   it("keeps Tab inside the sheet", () => {
     render(<ReplySheet detail={detail} onCollapse={vi.fn()} />);
     const dialog = screen.getByRole("dialog");
-    const close = screen.getByRole("button", { name: "Volver a la vista previa" });
+    const close = screen.getByRole("button", { name: "Cerrar respuesta" });
     const handle = screen.getByRole("button", { name: "Arrastra para ajustar el panel" });
     const region = screen.getByRole("region", { name: "Respuesta de Jev" });
     region.focus();

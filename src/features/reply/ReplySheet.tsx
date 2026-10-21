@@ -12,7 +12,7 @@ const FOCUSABLE = "button, [href], input, textarea, select, [tabindex]:not([tabi
 
 type Snap = "full" | "half" | "closed";
 
-/** Mobile: bottom sheet with two heights; dragging it down returns to the preview. */
+/** Mobile: the reply opens straight in a bottom sheet with two heights; dragging it down closes the reply. */
 export default function ReplySheet({ detail, onCollapse, onAsk }: { detail: SpeechDetail; onCollapse: () => void; onAsk?: Ask }) {
   const t = useTranslation();
   const transition = useUiMotion();
@@ -85,7 +85,7 @@ export default function ReplySheet({ detail, onCollapse, onAsk }: { detail: Spee
         </button>
         <header className="reply__head">
           <h2 ref={heading} id={headingId} className="reply__eyebrow" tabIndex={-1}>{t.replyEyebrow}</h2>
-          <button type="button" className="reply__close" onClick={() => snapTo("closed")} aria-label={t.replyCollapse}><CloseIcon /></button>
+          <button type="button" className="reply__close" onClick={() => snapTo("closed")} aria-label={t.replyClose}><CloseIcon /></button>
         </header>
         <ReplyScroll detail={detail} onAsk={onAsk} onScrolled={() => { if (!expanded) snapTo("full"); }} />
       </m.div>

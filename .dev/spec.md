@@ -43,7 +43,7 @@ En el quiz del 2026-10-21 eligió:
 
 - Nuevo bloque `{"type":"choices","question":"…","options":["…"]}`: pregunta de ≤120 caracteres, de 2 a 5 opciones de ≤40 caracteres, como máximo uno por respuesta y siempre al final.
 - Se muestra como un grupo de botones. Tocar uno envía su texto igual que el input; también se puede escribir otra respuesta. Las opciones quedan deshabilitadas cuando llega un mensaje nuevo.
-- **Móvil** (quiz de la fase 2, 2026-10-21): las opciones aparecen también en la vista previa, en una fila deslizable bajo la pregunta, para responder sin abrir el panel.
+- **Móvil** (quiz de la fase 2, 2026-10-21): las opciones aparecían también en la vista previa, en una fila deslizable. **Reemplazado en la revisión final (2026-10-21):** el usuario pidió quitar la vista previa («no quiero que aparezca eso, sino que directamente ese modal que aparece de abajo»). La respuesta con bloques se abre directamente en el panel, las opciones van dentro y cerrar el panel cierra la respuesta.
 - **Conversación abierta:** si la última respuesta de Jev terminó con `choices`, el siguiente mensaje (tocado o escrito) va directo a respuesta hablada, sin pasar por `/api/decide`. Jev hace la animación de habla y la decisión local registra TALK. Cualquier otro mensaje sigue el camino actual.
 - Prompt: ante preguntas abiertas de orientación («¿qué carrera estudio?»), Jev hace 1 o 2 preguntas con opciones antes de recomendar. Si la memoria ya responde lo necesario, no vuelve a preguntarlo y recomienda usándolo («Como te gusta la tecnología…»).
 - Voz: Jev dice la pregunta como frase hablada; las opciones solo se muestran.

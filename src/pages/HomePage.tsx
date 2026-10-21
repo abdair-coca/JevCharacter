@@ -22,7 +22,7 @@ import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewp
 import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
 import { jevVoice } from "../creature/voice/voiceEngine";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { ReplyCard, ReplyPreview } from "../features/reply/SpeechReply";
+import { ReplyCard } from "../features/reply/SpeechReply";
 import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -76,17 +76,15 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
   const enrollmentWasOpen = useRef(false);
   useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice), jevVoice, brain.onSpeechFinished);
-  // A reply with blocks becomes a card beside Jev on wide screens and a preview with a sheet otherwise.
+  // A reply with blocks becomes a card beside Jev on wide screens and opens straight in a sheet otherwise.
   const wide = useMediaQuery("(min-width: 64.001rem)");
   const reply = brain.speechDetail;
-  const [sheetGeneration, setSheetGeneration] = useState<number | null>(null);
-  const sheetOpen = !wide && reply !== null && sheetGeneration === reply.generation;
+  const sheetOpen = !wide && reply !== null;
   // Jev keeps her column until the closing card has faded, so the stage moves once.
   const [cardPresent, setCardPresent] = useState(false);
   if (wide && reply && !cardPresent) setCardPresent(true);
   const replyLayout = wide && (reply !== null || cardPresent);
   const stageLayout = `${enrollment.isOpen}-${enrollmentFocused}-${replyLayout}`;
-  const readAllRef = useRef<HTMLButtonElement | null>(null);
   const { dismissSpeechDetail } = brain;
   const dismissReply = useCallback(() => {
     if (reply) dismissSpeechDetail(reply.generation);
@@ -96,10 +94,11 @@ export default function HomePage({ active = true }: { active?: boolean }) {
     submitContext(question);
     if (wide) document.getElementById("creature-context")?.focus({ preventScroll: true });
   };
-  const collapseSheet = useCallback(() => {
-    setSheetGeneration(null);
-    requestAnimationFrame(() => readAllRef.current?.focus({ preventScroll: true }));
-  }, []);
+  // Closing the sheet closes the reply; focus returns to the input.
+  const closeSheet = useCallback(() => {
+    dismissReply();
+    requestAnimationFrame(() => document.getElementById("creature-context")?.focus({ preventScroll: true }));
+  }, [dismissReply]);
 
   useEffect(() => {
     if (enrollment.phase === "closed") {
@@ -181,9 +180,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
       <div className="home-controls" inert={enrollment.isOpen} aria-hidden={enrollment.isOpen}>
         <div className="speech-slot">
           {!brain.speechNotice && <AnimatePresence mode="wait">
-            {reply
-              ? !wide && <ReplyPreview key={`reply-${reply.generation}`} detail={reply} openRef={readAllRef} onOpen={() => setSheetGeneration(reply.generation)} onClose={dismissReply} onAsk={askFromReply} />
-              : brain.speechCaption && <SpeechCaption key={brain.speechCaption.generation} {...brain.speechCaption} onRevealed={brain.onSpeechCaptionRevealed} />}
+            {!reply && brain.speechCaption && <SpeechCaption key={brain.speechCaption.generation} {...brain.speechCaption} onRevealed={brain.onSpeechCaptionRevealed} />}
           </AnimatePresence>}
           {/* One live region: the sentence is announced once, whether it shows as a caption or a reply. */}
           <p className="sr-only" role="status">{!brain.speechNotice && brain.speechCaption?.complete ? brain.speechCaption.text : ""}</p>
@@ -197,7 +194,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
           <button type="button" onClick={() => setDebugActive((value) => !value)} aria-expanded={debugActive}>{t.diagnostics} <span aria-hidden="true">↗</span></button>
         </footer>
       </div>
-      {sheetOpen && reply && <Suspense fallback={null}><ReplySheet key={reply.generation} detail={reply} onCollapse={collapseSheet} onAsk={askFromReply} /></Suspense>}
+      {sheetOpen && reply && <Suspense fallback={null}><ReplySheet key={reply.generation} detail={reply} onCollapse={closeSheet} onAsk={askFromReply} /></Suspense>}
       {memoryOpen && <Suspense fallback={null}><MemoryPanel onClose={closeMemory} /></Suspense>}
       <DebugPanel active={debugActive && conversational} getSnapshot={sensors.getSnapshot} personality={brain.personality} decision={brain.decision} latencyMs={brain.apiLatencyMs} onState={brain.forceState} onClose={() => setDebugActive(false)} />
     </main>

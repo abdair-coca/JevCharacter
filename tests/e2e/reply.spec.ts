@@ -158,41 +158,40 @@ test.describe("desktop reply card", () => {
 test.describe("mobile reply sheet", () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
-  test("previews the reply above the input and opens it in a sheet", async ({ page }) => {
-    await mockTalk(page, [{ spoken: "Te cuento cómo funciona, paso a paso y con un ejemplo.", blocks: longBlocks }]);
+  test("opens a reply with blocks straight in the sheet, and closing it closes the reply", async ({ page }) => {
+    await mockTalk(page, [
+      { spoken: "Te cuento cómo funciona, paso a paso y con un ejemplo.", blocks: longBlocks },
+      { spoken: "Te cuento otra vez.", blocks: longBlocks.slice(0, 2) },
+    ]);
     await open(page);
     await send(page, "explícame la fotosíntesis");
 
-    const readAll = page.getByRole("button", { name: "Leer todo" });
-    await expect(readAll).toBeVisible();
-    await expect(page.locator(".reply-preview")).toContainText("Te cuento cómo funciona");
-    await expect(page.locator(".reply-card")).toHaveCount(0);
-    await stageIsSingleScreen(page);
-    await capture(page, "mobile-preview-light");
-
-    await readAll.click();
     const sheet = page.getByRole("dialog", { name: "Jev responde" });
     await expect(sheet).toBeVisible();
     await expect(sheet).toContainText("El ciclo de Calvin fija el CO₂ en glucosa.");
     await expect(page.locator(".reply-sheet .reply__eyebrow")).toBeFocused();
-    await expect(page.locator(INPUT)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Leer todo" })).toHaveCount(0);
+    await expect(page.locator(".reply-card")).toHaveCount(0);
+    await stageIsSingleScreen(page);
     await page.waitForTimeout(500);
     await capture(page, "mobile-sheet-half-light");
 
     await page.keyboard.press("Escape");
     await expect(sheet).toHaveCount(0);
-    await expect(readAll).toBeFocused();
+    await expect(page.locator(INPUT)).toBeFocused();
+    // Nothing is left above the input.
+    await expect(page.locator(".speech-caption")).toHaveCount(0);
 
-    // The preview's own close discards the reply.
+    await send(page, "otra vez");
+    await expect(sheet).toBeVisible();
     await page.getByRole("button", { name: "Cerrar respuesta" }).click();
-    await expect(page.locator(".reply-preview")).toHaveCount(0);
+    await expect(sheet).toHaveCount(0);
   });
 
-  test("the handle expands the sheet and dragging it down returns to the preview", async ({ page }) => {
+  test("the handle expands the sheet and dragging it down closes the reply", async ({ page }) => {
     await mockTalk(page, [{ spoken: "Te cuento cómo funciona.", blocks: longBlocks }]);
     await open(page, "dark");
     await send(page, "explícame la fotosíntesis");
-    await page.getByRole("button", { name: "Leer todo" }).click();
 
     const handle = page.getByRole("button", { name: "Arrastra para ajustar el panel" });
     await expect(handle).toHaveAttribute("aria-expanded", "false");
@@ -210,7 +209,7 @@ test.describe("mobile reply sheet", () => {
     await page.mouse.move(box.x + box.width / 2, box.y + 650, { steps: 12 });
     await page.mouse.up();
     await expect(page.getByRole("dialog")).toHaveCount(0);
-    await expect(page.locator(".reply-preview")).toBeVisible();
+    await expect(page.locator(INPUT)).toBeFocused();
   });
 });
 
@@ -221,19 +220,15 @@ test.describe("narrow and short viewports", () => {
       await mockTalk(page, [{ spoken: "Te cuento cómo funciona, paso a paso y con un ejemplo.", blocks: longBlocks }]);
       await open(page);
       await send(page, "explícame la fotosíntesis");
-      await expect(page.getByRole("button", { name: "Leer todo" })).toBeVisible();
-      await expect(page.locator(INPUT)).toBeInViewport();
-      await stageIsSingleScreen(page);
-      await capture(page, `preview-${viewport.width}x${viewport.height}`);
-      await page.getByRole("button", { name: "Leer todo" }).click();
       const sheet = page.getByRole("dialog", { name: "Jev responde" });
       await expect(sheet).toBeVisible();
-      await page.getByRole("button", { name: "Más" }).or(page.getByRole("button", { name: "Volver a la vista previa" })).first().waitFor();
+      await page.getByRole("button", { name: "Más" }).or(page.getByRole("button", { name: "Cerrar respuesta" })).first().waitFor();
       await stageIsSingleScreen(page);
       await page.waitForTimeout(500);
       await capture(page, `sheet-${viewport.width}x${viewport.height}`);
-      await page.getByRole("button", { name: "Volver a la vista previa" }).click();
+      await page.getByRole("button", { name: "Cerrar respuesta" }).click();
       await expect(sheet).toHaveCount(0);
+      await expect(page.locator(INPUT)).toBeInViewport();
     });
   }
 });

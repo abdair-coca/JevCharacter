@@ -51,7 +51,7 @@ function WarningIcon() {
 type ChoicesBlock = Extract<SpeechBlock, { type: "choices" }>;
 
 /** Answers to Jev's question; each one is sent like a typed message. */
-export function ChoiceButtons({ block, onAsk, labelledBy }: { block: ChoicesBlock; onAsk?: (answer: string) => void; labelledBy: string }) {
+function ChoiceButtons({ block, onAsk, labelledBy }: { block: ChoicesBlock; onAsk?: (answer: string) => void; labelledBy: string }) {
   return (
     <ul className="reply-choices__options" role="group" aria-labelledby={labelledBy}>
       {block.options.map((option, index) => (

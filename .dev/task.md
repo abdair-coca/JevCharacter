@@ -9,6 +9,28 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Ajuste de la revisión final — panel directo en móvil, 2026-10-21
+
+Pedido del usuario, con capturas: «no quiero que aparezca eso [la vista previa con «Leer todo»], sino que directamente ese modal que aparece de abajo».
+
+- [x] `HomePage`: en pantallas de 64rem o menos, una respuesta con bloques abre `ReplySheet` directamente, sin vista previa. Cerrar el panel (✕, arrastrar, tocar fuera o `Esc`) descarta la respuesta y devuelve el foco al input. Las opciones de Jev van dentro del panel.
+- [x] Retirados `ReplyPreview`, sus estilos y las claves `replyReadAll` y `replyCollapse`. El ✕ del panel usa «Cerrar respuesta».
+- [x] Docs y contrato: `design.md`, `architecture.md`, `interaction.md`; en `spec.md` queda anotada la decisión reemplazada.
+- [x] Tests actualizados: `speechReply` (las opciones se responden dentro del panel), `reply.spec` (abre solo, Escape y ✕ cierran la respuesta, arrastrar hacia abajo la cierra, viewports cortos), `reply-blocks` (la matriz móvil ya no pulsa «Leer todo»), `choices` y `companion`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc --noEmit -p` app / node / api / tests | PASS. |
+| ESLint (sin `playwright-report`) | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 317 tests (salen 2 de la vista previa). |
+| `npm run build` | PASS: `index` 346,48 kB, gzip 110,84 kB (−0,3 kB). |
+| `npx playwright test` | PASS: 45/45. |
+| `git diff --check` | PASS. |
+
+Capturas regeneradas en `evidence/long-reply/` (panel móvil y viewports cortos) y `evidence/companion/` (opciones en el panel). Las capturas antiguas de la vista previa (`mobile-preview-light.png`, `preview-*.png`) se conservan como antecedente.
+
+**Nota:** con el panel abierto, el input queda detrás del modal. Para escribir otra respuesta a una pregunta de Jev hay que cerrar el panel; la conversación sigue abierta, así que el mensaje escrito va directo al habla.
+
 ## Fase 3 — entrega para revisión final, 2026-10-21
 
 - [x] `memoryStore.ts`: `removeMemory(id)` y `clearMemory()`.

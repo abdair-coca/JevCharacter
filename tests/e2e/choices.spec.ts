@@ -80,24 +80,20 @@ test("desktop: an option and a typed answer both continue the conversation witho
 test.describe("mobile", () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
-  test("answers from the preview row without opening the sheet", async ({ page }) => {
+  test("answers from the sheet that opens on its own", async ({ page }) => {
     const calls = await mockConversation(page);
     await open(page);
     await send(page, "¿qué carrera puedo estudiar?");
 
-    const preview = page.locator(".reply-preview");
-    const options = preview.getByRole("group", { name: "¡Te ayudo a elegir! ¿Qué te atrae más?" });
+    const sheet = page.getByRole("dialog", { name: "Jev responde" });
+    const options = sheet.getByRole("group", { name: "¿Qué te atrae más de la tecnología?" });
     await expect(options.getByRole("button")).toHaveCount(4);
-    // One row that scrolls sideways: every option shares the first one's top edge.
-    const tops = await options.getByRole("button").evaluateAll(buttons => buttons.map(button => Math.round(button.getBoundingClientRect().top)));
-    expect(new Set(tops).size).toBe(1);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(1);
     if (EVIDENCE) { await page.waitForTimeout(2_000); await page.screenshot({ path: `${EVIDENCE}/choices-mobile.png` }); }
 
     await options.getByRole("button", { name: "Programar" }).click();
-    await expect(page.getByRole("dialog")).toHaveCount(0);
-    await expect(preview.getByRole("button", { name: "Corta" })).toBeVisible();
+    await expect(sheet.getByRole("button", { name: "Corta" })).toBeVisible();
     expect(calls.talk).toEqual(["¿qué carrera puedo estudiar?", "Programar"]);
     expect(calls.decide).toBe(1);
   });

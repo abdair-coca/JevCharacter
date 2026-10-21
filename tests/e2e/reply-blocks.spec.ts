@@ -37,8 +37,8 @@ const replies = {
 } as const;
 
 const labels = {
-  es: { region: "Respuesta de Jev", readAll: "Leer todo", dialog: "Jev responde", followUp: "Preguntas para seguir", unavailable: "El habla no está disponible" },
-  en: { region: "Jev's reply", readAll: "Read all", dialog: "Jev says", followUp: "Follow-up questions", unavailable: "Speech is unavailable" },
+  es: { region: "Respuesta de Jev", dialog: "Jev responde", followUp: "Preguntas para seguir", unavailable: "El habla no está disponible" },
+  en: { region: "Jev's reply", dialog: "Jev says", followUp: "Follow-up questions", unavailable: "Speech is unavailable" },
 } as const;
 
 type Language = keyof typeof replies;
@@ -104,7 +104,6 @@ for (const language of ["es", "en"] as const) {
       await page.setViewportSize({ width: 390, height: 844 });
       await open(page, language, theme);
       await send(page, language === "es" ? "compara gatos y perros" : "compare cats and dogs");
-      await page.getByRole("button", { name: labels[language].readAll }).click();
       const dialog = page.getByRole("dialog", { name: labels[language].dialog });
       await expect(dialog).toBeVisible();
       await settled(page, ".reply-sheet");

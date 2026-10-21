@@ -79,12 +79,17 @@ for (const language of ["es", "en"] as const) {
 
         await page.locator(INPUT).fill(text.ask);
         await page.locator(INPUT).press("Enter");
-        const scope = device === "desktop" ? ".reply-card" : ".reply-preview";
+        const scope = device === "desktop" ? ".reply-card" : ".reply-sheet";
         await expect(page.locator(scope).getByRole("button", { name: text.choices.options[0] })).toBeVisible();
         await settled(page, scope);
         await noPageOverflow(page);
         if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/choices-${device}-${language}-${theme}.png` });
 
+        // On phones the reply is a modal sheet: close it to reach the footer.
+        if (device === "mobile") {
+          await page.keyboard.press("Escape");
+          await expect(page.locator(".reply-sheet")).toHaveCount(0);
+        }
         await page.getByRole("button", { name: text.memory, exact: true }).click();
         const dialog = page.getByRole("dialog", { name: text.title });
         await expect(dialog).toBeVisible();

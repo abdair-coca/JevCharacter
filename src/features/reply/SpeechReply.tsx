@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { m } from "motion/react";
 import type { SpeechDetail } from "../../hooks/useSpeechSession";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotionPreference";
 import { useTranslation } from "../../i18n/useTranslation";
 import { useUiMotion } from "../../lib/motionTokens";
-import { ChoiceButtons, ReplyBlocks, Words } from "./ReplyBlocks";
+import { ReplyBlocks, Words } from "./ReplyBlocks";
 import "./reply.css";
 
 export function CloseIcon() {
@@ -91,23 +91,5 @@ export function ReplyCard({ detail, onClose, onAsk }: { detail: SpeechDetail; on
       </header>
       <ReplyScroll detail={detail} onAsk={onAsk} />
     </m.section>
-  );
-}
-
-/** Mobile: the spoken sentence above the input, opening the full reply in a sheet. Jev's question can be answered here. */
-export function ReplyPreview({ detail, onOpen, onClose, openRef, onAsk }: { detail: SpeechDetail; onOpen: () => void; onClose: () => void; openRef: RefObject<HTMLButtonElement | null>; onAsk?: Ask }) {
-  const t = useTranslation();
-  const transition = useUiMotion();
-  const textId = useId();
-  const choices = detail.blocks.find(block => block.type === "choices");
-  return (
-    <m.div className="reply-preview" lang={detail.language} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition}>
-      <p id={textId} className="reply-preview__text">{detail.spoken}</p>
-      {choices && <ChoiceButtons block={choices} onAsk={onAsk} labelledBy={textId} />}
-      <div className="reply-preview__actions">
-        <button ref={openRef} type="button" className="reply-preview__open" onClick={onOpen} aria-haspopup="dialog">{t.replyReadAll}</button>
-        <button type="button" className="reply__close" onClick={onClose} aria-label={t.replyClose}><CloseIcon /></button>
-      </div>
-    </m.div>
   );
 }
