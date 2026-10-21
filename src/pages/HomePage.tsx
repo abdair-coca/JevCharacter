@@ -72,6 +72,11 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const reply = brain.speechDetail;
   const [sheetGeneration, setSheetGeneration] = useState<number | null>(null);
   const sheetOpen = !wide && reply !== null && sheetGeneration === reply.generation;
+  // Jev keeps her column until the closing card has faded, so the stage moves once.
+  const [cardPresent, setCardPresent] = useState(false);
+  if (wide && reply && !cardPresent) setCardPresent(true);
+  const replyLayout = wide && (reply !== null || cardPresent);
+  const stageLayout = `${enrollment.isOpen}-${enrollmentFocused}-${replyLayout}`;
   const readAllRef = useRef<HTMLButtonElement | null>(null);
   const { dismissSpeechDetail } = brain;
   const dismissReply = useCallback(() => {
@@ -150,18 +155,19 @@ export default function HomePage({ active = true }: { active?: boolean }) {
 
   const style: StageStyle = { "--intensity": brain.decision.intensity, "--attention": brain.decision.wantsAttention };
   return (
-    <main className="home-page" ref={stageRef} style={style} data-active={running} data-enrollment={enrollment.phase} data-enrollment-focused={enrollmentFocused} data-reply={wide && reply ? "open" : undefined} onPointerDown={handleStagePointerDown}>
+    <main className="home-page" ref={stageRef} style={style} data-active={running} data-enrollment={enrollment.phase} data-enrollment-focused={enrollmentFocused} data-reply={replyLayout ? "open" : undefined} onPointerDown={handleStagePointerDown}>
       <section className="intro-copy" aria-hidden={enrollment.isOpen} inert={enrollment.isOpen}>
         <h1 id={active && !enrollment.isOpen ? "page-title" : "home-title"} data-page-route="/" tabIndex={-1}>{t.title} <em>{t.titleAccent}</em></h1>
       </section>
-      <m.section className="creature-zone" aria-label={t.creature} layout={!enrollmentMotion.reduced} layoutDependency={`${enrollment.isOpen}-${enrollmentFocused}-${wide && reply !== null}`} transition={enrollmentMotion.scene}>
-        <div className="creature-presence" ref={creatureShellRef}>
+      <m.section className="creature-zone" aria-label={t.creature} layout={!enrollmentMotion.reduced} layoutDependency={stageLayout} transition={enrollmentMotion.scene}>
+        {/* Jev's own layout corrects the zone's stretch: she only glides and scales evenly. */}
+        <m.div className="creature-presence" ref={creatureShellRef} layout={!enrollmentMotion.reduced} layoutDependency={stageLayout} transition={enrollmentMotion.scene}>
           <Suspense fallback={null}><Character ref={characterRef} onReady={wakeCharacter} onPainted={revealCharacter} onError={characterFailed} active={running} voice /></Suspense>
-        </div>
+        </m.div>
         <CreatureLoader visible={!characterRevealed && characterStatus !== "error"} active={running} reduced={reducedMotion} />
         {running && (enrollment.phase === "editing" || enrollment.phase === "confirmed") && <EnrollmentParticles key={enrollment.phase} duration={enrollmentMotion.burst} celebrate={enrollment.phase === "confirmed"} />}
       </m.section>
-      <AnimatePresence>{wide && reply && <ReplyCard key={reply.generation} detail={reply} onClose={dismissReply} onAsk={askFromReply} />}</AnimatePresence>
+      <AnimatePresence onExitComplete={() => setCardPresent(false)}>{wide && reply && <ReplyCard key={reply.generation} detail={reply} onClose={dismissReply} onAsk={askFromReply} />}</AnimatePresence>
       {enrollment.isOpen && <EnrollmentExperience session={enrollment} language={language} characterFailed={characterStatus === "error"} onFieldFocus={setEnrollmentFocused} />}
       <div className="home-controls" inert={enrollment.isOpen} aria-hidden={enrollment.isOpen}>
         <div className="speech-slot">

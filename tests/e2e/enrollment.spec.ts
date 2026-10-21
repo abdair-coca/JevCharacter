@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
+import { characterAspectsDuring, expect, test } from "./fixtures";
 
 const INPUT = "#creature-context";
 
@@ -56,4 +56,13 @@ test("closes back to Jev and starts empty the next time", async ({ page }) => {
 
   await send(page, "quiero inscribirme");
   await expect(page.locator("#enrollment-name")).toHaveValue("");
+});
+
+test("Jev keeps her round shape while the form opens and closes", async ({ page }) => {
+  const opening = await characterAspectsDuring(page, () => send(page, "quiero inscribirme"));
+  await expect(page.locator("#enrollment-name")).toBeVisible();
+  const closing = await characterAspectsDuring(page, () => page.locator(".enrollment__close").click());
+  await expect(page.locator("#enrollment-name")).toHaveCount(0, { timeout: 15_000 });
+  expect(closing.length).toBeGreaterThan(10);
+  for (const aspect of [...opening, ...closing]) expect(aspect).toBeCloseTo(1, 1);
 });

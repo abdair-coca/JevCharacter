@@ -7,7 +7,30 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Fase activa:** fase 3 (bloques visuales y entrada animada), implementada y verificada el 2026-10-20; **entregada para revisión final**.
 - **Aprobaciones:** spec y plan aprobados el 2026-10-20 («aprobado»). Fase 1 aprobada («continua con el plan y reduce los tokens de respuesta, pero no mucho»). Fase 2 aprobada («continua con la fase 3»).
 - **Siguiente acción exacta:** revisión final del usuario en escritorio y móvil. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
-- **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
+- **Estado del código:** las tres fases y la corrección de la deformación al cerrar (2026-10-21) están commiteadas. Sin deploy ni push.
+
+## Corrección — Jev se deforma al cerrar, 2026-10-21
+
+Reporte del usuario durante la revisión final: al cerrar la tarjeta o el formulario Jev «se da la vuelta», y cerrar la respuesta larga «medio rompe todo».
+
+- **Causa 1:** el `layout` de Motion en `.creature-zone` anima el cambio de tamaño con escala no uniforme, y el canvas de Rive se deformaba con ella. Al cerrar el formulario, escala 0,40 × 1,29: Jev ovalado y comprimido de lado, como si girara. Ocurre desde la inscripción; la tarjeta lo heredó.
+- **Causa 2:** al cerrar la tarjeta, `data-reply` se quitaba mientras la tarjeta seguía en la rejilla durante su salida. La zona pasaba unos 300 ms por una caja de unos 401 × 42 px (escala de hasta 2,19 × 14,1) y después saltaba.
+- **Arreglo** (`HomePage.tsx`):
+  - `.creature-presence` pasa a ser `m.div` con su propio `layout`, de modo que Motion corrige la escala del hijo y Jev solo se desliza y escala de forma uniforme.
+  - `data-reply` se mantiene hasta `onExitComplete` de la tarjeta, así que Jev vuelve en un solo movimiento cuando la tarjeta ya se desvaneció.
+- **Panel móvil:** en la reproducción (390 × 844, con Rive cargado), cerrarlo no mueve la zona ni deforma a Jev. No se encontró un fallo propio del móvil.
+- **Seguimiento del cursor:** que Jev se incline hacia el cursor después de moverse es el seguimiento interno de Rive; no cambia.
+
+| Comprobación | Resultado |
+|---|---|
+| Tests nuevos (`round shape` en `reply.spec.ts` y `enrollment.spec.ts`): proporción del canvas por fotograma al abrir y cerrar | FAIL antes del arreglo (0,32 y 1,34); PASS después. |
+| Reproducción con GPU y Rive (script temporal retirado) | Antes: zona escalada 2,19 × 14,1 y 0,40 × 1,29. Después: canvas 1450 × 1450 en todos los fotogramas y un solo desplazamiento. |
+| `tsc --noEmit -p` app / node / api / tests | PASS. |
+| `eslint . --max-warnings=0 --ignore-pattern "playwright-report/**"` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 39 archivos / 279 tests. |
+| `npm run build` | PASS: `index` 342,52 kB, gzip 109,39 kB. |
+| `npx playwright test` | PASS: 32 tests. |
+| `git diff --check` | PASS. |
 
 ## Fase 3 — entrega para revisión final, 2026-10-20
 

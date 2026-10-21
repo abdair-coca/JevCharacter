@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
+import { characterAspectsDuring, expect, test } from "./fixtures";
 
 const INPUT = "#creature-context";
 const EVIDENCE = process.env.REPLY_EVIDENCE;
@@ -88,6 +88,18 @@ test.describe("desktop reply card", () => {
     await page.getByRole("button", { name: "Cerrar respuesta" }).click();
     await expect(card).toHaveCount(0);
     await expect.poll(async () => Math.abs(await center() - centered)).toBeLessThan(4);
+  });
+
+  test("Jev keeps her round shape while stepping aside and back", async ({ page }) => {
+    await mockTalk(page, [{ spoken: "Te cuento cómo funciona.", blocks: longBlocks }]);
+    await open(page);
+    const card = page.getByRole("region", { name: "Respuesta de Jev" });
+    const opening = await characterAspectsDuring(page, () => send(page, "explícame la fotosíntesis"));
+    await expect(card).toBeVisible();
+    const closing = await characterAspectsDuring(page, () => page.getByRole("button", { name: "Cerrar respuesta" }).click());
+    await expect(card).toHaveCount(0);
+    expect(closing.length).toBeGreaterThan(10);
+    for (const aspect of [...opening, ...closing]) expect(aspect).toBeCloseTo(1, 1);
   });
 
   test("starts reading at the top and offers More for hidden content", async ({ page }) => {
