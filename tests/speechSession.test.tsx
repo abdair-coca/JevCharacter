@@ -61,6 +61,32 @@ describe("speech session memory", () => {
   });
 });
 
+describe("speech session open question", () => {
+  it("opens after a finished reply with choices and closes on the next message or a cancel", async () => {
+    const { result } = mountSpeech();
+    expect(result.current.hasOpenQuestion()).toBe(false);
+    act(() => result.current.start("¿Qué estudio?", "Talk"));
+    await complete(requests[0], "¿Qué te atrae más?", [{ type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar"] }]);
+    expect(result.current.hasOpenQuestion()).toBe(true);
+    act(() => result.current.start("Programar", "Talk"));
+    expect(result.current.hasOpenQuestion()).toBe(false);
+    await complete(requests[1], "¿Y prefieres algo corto?", [{ type: "choices", question: "¿Duración?", options: ["Corta", "Larga"] }]);
+    act(() => result.current.cancel(true));
+    expect(result.current.hasOpenQuestion()).toBe(false);
+  });
+
+  it("stays closed after a reply without choices, a failure or a suspension", async () => {
+    const { result, rerender } = mountSpeech();
+    act(() => result.current.start("Hola", "Talk"));
+    await complete(requests[0], "Hola.", [{ type: "paragraph", text: "Nada que preguntar." }]);
+    expect(result.current.hasOpenQuestion()).toBe(false);
+    act(() => result.current.start("¿Qué estudio?", "Talk"));
+    await complete(requests[1], "¿Qué te atrae?", [{ type: "choices", question: "¿Qué te atrae?", options: ["A", "B"] }]);
+    rerender({ language: "es", active: false });
+    expect(result.current.hasOpenQuestion()).toBe(false);
+  });
+});
+
 describe("speech session talk hold", () => {
   it("holds the talk state from the spoken sentence until the voice reports the end", async () => {
     const { result, character } = mountSpeech();

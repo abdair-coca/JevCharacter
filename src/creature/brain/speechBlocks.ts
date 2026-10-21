@@ -26,6 +26,10 @@ const HIGHLIGHT_LABEL_MAX_CHARS = 80;
 const CALLOUT_MAX_CHARS = 200;
 const CHIPS_MAX = 3;
 const CHIP_MAX_CHARS = 60;
+const QUESTION_MAX_CHARS = 120;
+const OPTIONS_MIN = 2;
+const OPTIONS_MAX = 5;
+const OPTION_MAX_CHARS = 40;
 const OBJECT_MAX_CHARS = 4_000;
 // Seven or more digits, even with spaces, dots or dashes: phone, ID or account numbers.
 const LONG_NUMBER = /\d(?:[\s.-]?\d){6,}/u;
@@ -39,7 +43,9 @@ export type SpeechBlock =
   | { type: "compare"; columns: CompareColumn[] }
   | { type: "highlight"; value: string; label: string }
   | { type: "callout"; tone: CalloutTone; text: string }
-  | { type: "chips"; items: string[] };
+  | { type: "chips"; items: string[] }
+  // Jev asks the user and offers answers; it always closes the reply.
+  | { type: "choices"; question: string; options: string[] };
 export type SpeechReply = { spoken: string; blocks: SpeechBlock[] };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -108,6 +114,11 @@ function normalizeKnown(value: Record<string, unknown>): SpeechBlock | null {
       const items = cleanItems(value.items, CHIPS_MAX, CHIP_MAX_CHARS);
       return items.length > 0 ? { type: "chips", items } : null;
     }
+    case "choices": {
+      const question = clampText(value.question, QUESTION_MAX_CHARS);
+      const options = cleanItems(value.options, OPTIONS_MAX, OPTION_MAX_CHARS);
+      return question && options.length >= OPTIONS_MIN ? { type: "choices", question, options } : null;
+    }
     default:
       return null;
   }
@@ -119,7 +130,7 @@ function collectText(value: unknown, depth = 0): string[] {
   if (depth > 3) return [];
   if (Array.isArray(value)) return value.flatMap(item => collectText(item, depth + 1));
   if (!isRecord(value)) return [];
-  return ["title", "value", "label", "text", "items", "points", "columns"].flatMap(key => collectText(value[key], depth + 1));
+  return ["title", "value", "label", "text", "question", "items", "options", "points", "columns"].flatMap(key => collectText(value[key], depth + 1));
 }
 
 /** Normalizes one block. A malformed block with readable text becomes a paragraph. */
@@ -154,6 +165,8 @@ function blockStrings(block: SpeechBlock): string[] {
     case "steps":
     case "chips":
       return block.items;
+    case "choices":
+      return [block.question, ...block.options];
     case "compare":
       return block.columns.flatMap(column => [column.title, ...column.points]);
     case "highlight":
@@ -161,14 +174,14 @@ function blockStrings(block: SpeechBlock): string[] {
   }
 }
 
-/** Whether a reply still has room for this block. */
+/** Whether a reply still has room for this block; nothing follows Jev's question. */
 export function acceptsBlock(accepted: SpeechBlock[], block: SpeechBlock) {
-  if (accepted.length >= SPEECH_BLOCKS_MAX) return false;
+  if (accepted.length >= SPEECH_BLOCKS_MAX || accepted.some(item => item.type === "choices")) return false;
   const used = accepted.flatMap(blockStrings).reduce((total, text) => total + length(text), 0);
   return used + blockStrings(block).reduce((total, text) => total + length(text), 0) <= SPEECH_BLOCKS_MAX_CHARS;
 }
 
-/** Plain-text digest of the visible blocks; suggestions are left out. */
+/** Plain-text digest of the visible blocks; suggestions are left out, Jev's question is kept. */
 export function summarizeBlocks(blocks: SpeechBlock[]): string {
   return blocks.flatMap(block => {
     switch (block.type) {
@@ -182,6 +195,8 @@ export function summarizeBlocks(blocks: SpeechBlock[]): string {
         return [block.columns.map(column => `${column.title}: ${column.points.join(", ")}`).join(" | ")];
       case "highlight":
         return [`${block.label}: ${block.value}`];
+      case "choices":
+        return [`${block.question} (${block.options.join(" / ")})`];
       case "chips":
         return [];
     }

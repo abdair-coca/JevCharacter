@@ -20,7 +20,7 @@ La aplicación separa percepción local, decisión conductual y presentación. L
 | Área | Responsabilidad |
 |---|---|
 | `creature/sensors/pointerSensor.ts` | Mide pointer, actividad, proximidad, clicks y ausencia en cliente; actualiza variables CSS para seguimiento visual. |
-| `hooks/useCreatureBrain.ts` | Reúne estado de mundo/persona, aplica acciones Jev, conserva el scheduler y coordina suspensión. |
+| `hooks/useCreatureBrain.ts` | Reúne estado de mundo/persona, aplica acciones Jev, conserva el scheduler y coordina suspensión. Si la última respuesta terminó con una pregunta de Jev (`choices`), el siguiente mensaje va directo al habla con una decisión TALK local, sin `/api/decide`. |
 | `hooks/useSpeechSession.ts` | Posee generación, idioma, caption (frase hablada), bloques de la respuesta, avisos y hasta dos intercambios completos en memoria; envía las notas de memoria relevantes y guarda la nota de una respuesta terminada; regenera por idioma, cancela al ocultar y descarta resultados obsoletos. |
 | `creature/memory/memoryStore.ts` | Notas persistentes de Jev en `jevling.memory` (hasta 40, sin duplicados ni números largos) y selección de las que viajan con cada mensaje: las 2 más recientes y las que comparten palabras, hasta 8 notas y 1000 caracteres. Sin storage, duran la sesión. |
 | `creature/brain/decisionScheduler.ts` | Controla causas de solicitud, espera, deduplicación, caché, límites, validación y fallback. |

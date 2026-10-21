@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SpeechDetail } from "../src/hooks/useSpeechSession";
@@ -59,6 +59,21 @@ describe("reply preview and sheet", () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
+  it("answers Jev's question from the preview without opening the sheet", () => {
+    const onAsk = vi.fn();
+    const onOpen = vi.fn();
+    const asking: SpeechDetail = { ...detail, spoken: "¿Qué te atrae más?", blocks: [{ type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar"] }] };
+    render(<ReplyPreview detail={asking} onOpen={onOpen} onClose={vi.fn()} openRef={createRef()} onAsk={onAsk} />);
+    fireEvent.click(within(screen.getByRole("group", { name: "¿Qué te atrae más?" })).getByRole("button", { name: "Programar" }));
+    expect(onAsk).toHaveBeenCalledWith("Programar");
+    expect(onOpen).not.toHaveBeenCalled();
+  });
+
+  it("shows no answers in the preview when Jev asked nothing", () => {
+    render(<ReplyPreview detail={detail} onOpen={vi.fn()} onClose={vi.fn()} openRef={createRef()} onAsk={vi.fn()} />);
+    expect(screen.queryByRole("group")).toBeNull();
+  });
+
   it("is a modal dialog that takes focus and collapses with Escape", async () => {
     const onCollapse = vi.fn();
     render(<ReplySheet detail={detail} onCollapse={onCollapse} />);
@@ -111,6 +126,16 @@ describe("reply blocks", () => {
     expect(group).toBeTruthy();
     rerender(<ReplyBlocks blocks={[chips]} />);
     expect((screen.getByRole("button", { name: "¿Y de noche?" }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it("shows Jev's question as a named group of answers that are sent like messages", () => {
+    const onAsk = vi.fn();
+    render(<ReplyBlocks blocks={[{ type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar"] }]} onAsk={onAsk} />);
+    const group = screen.getByRole("group", { name: "¿Qué te atrae más?" });
+    expect(group.querySelectorAll("button")).toHaveLength(2);
+    fireEvent.click(screen.getByRole("button", { name: "Diseñar" }));
+    expect(onAsk).toHaveBeenCalledWith("Diseñar");
+    expect(screen.getByText("O escríbeme tu respuesta.")).toBeTruthy();
   });
 
   it("orders the cascade after the spoken lead", () => {

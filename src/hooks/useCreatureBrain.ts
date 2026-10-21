@@ -81,7 +81,7 @@ export function useCreatureBrain(
   const [personality, setPersonality] = useState(loadPersonality);
   const [userContext, setUserContext] = useState("");
   const speech = useSpeechSession(characterRef, language, active);
-  const { start: startSpeech, cancel: cancelSpeech } = speech;
+  const { start: startSpeech, cancel: cancelSpeech, hasOpenQuestion } = speech;
   const [decisionInterrupted, setDecisionInterrupted] = useState(false);
   const activeRef = useRef(active);
   const [history, setHistory] = useState<ReactionHistoryEntry[]>([]);
@@ -242,6 +242,8 @@ export function useCreatureBrain(
     if (!activeRef.current || document.visibilityState !== "visible") return;
     const safeContext = context.trim().slice(0, BRAIN_CONFIG.contextMaxLength);
     if (!safeContext) return;
+    // An answer to Jev's own question continues the conversation without a new decision.
+    const answering = hasOpenQuestion();
     cancelSpeech();
     setDecisionInterrupted(false);
     if (!thinkingShownRef.current) {
@@ -252,7 +254,18 @@ export function useCreatureBrain(
     setUserContext(safeContext);
     contextEventRef.current += 1;
     sensors.markContextInteraction();
-    schedulerRef.current?.requestContextDecision();
+    if (!answering) {
+      schedulerRef.current?.requestContextDecision();
+      return;
+    }
+    // No decision will clear the thinking pose; the spoken reply replaces it.
+    schedulerRef.current?.cancelPending();
+    thinkingShownRef.current = false;
+    const next: BrainDecision = { ...decisionRef.current, action: { kind: "talk", state: "Talk" }, actionConfidence: 1 };
+    decisionRef.current = next;
+    setDecision(next);
+    setStatus("observing");
+    startSpeech(safeContext, "Talk");
   };
 
   const clearContext = useCallback(() => {

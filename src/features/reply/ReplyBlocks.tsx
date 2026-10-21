@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useId, type CSSProperties, type ReactNode } from "react";
 import type { SpeechBlock } from "../../creature/brain/speechBlocks";
 import { useTranslation } from "../../i18n/useTranslation";
 
@@ -48,6 +48,31 @@ function WarningIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3zM12 10v4M12 17.5v.01" /></svg>;
 }
 
+type ChoicesBlock = Extract<SpeechBlock, { type: "choices" }>;
+
+/** Answers to Jev's question; each one is sent like a typed message. */
+export function ChoiceButtons({ block, onAsk, labelledBy }: { block: ChoicesBlock; onAsk?: (answer: string) => void; labelledBy: string }) {
+  return (
+    <ul className="reply-choices__options" role="group" aria-labelledby={labelledBy}>
+      {block.options.map((option, index) => (
+        <li key={index}><button type="button" className="reply-choice" onClick={() => onAsk?.(option)} disabled={!onAsk}>{option}</button></li>
+      ))}
+    </ul>
+  );
+}
+
+function Choices({ block, onAsk }: { block: ChoicesBlock; onAsk?: (answer: string) => void }) {
+  const t = useTranslation();
+  const questionId = useId();
+  return (
+    <div className="reply-choices">
+      <p id={questionId} className="reply-choices__question"><Words text={block.question} /></p>
+      <ChoiceButtons block={block} onAsk={onAsk} labelledBy={questionId} />
+      <p className="reply-choices__hint">{t.replyChoicesHint}</p>
+    </div>
+  );
+}
+
 function ReplyBlock({ block, onAsk }: { block: SpeechBlock; onAsk?: (question: string) => void }) {
   const t = useTranslation();
   switch (block.type) {
@@ -92,6 +117,8 @@ function ReplyBlock({ block, onAsk }: { block: SpeechBlock; onAsk?: (question: s
           </ul>
         </nav>
       );
+    case "choices":
+      return <Choices block={block} onAsk={onAsk} />;
   }
 }
 

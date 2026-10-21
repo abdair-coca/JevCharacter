@@ -4,10 +4,61 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 1 (memoria persistente por fragmentos), implementada y verificada el 2026-10-21; **entregada para revisión**.
-- **Aprobaciones:** spec y plan aprobados el 2026-10-21 en el quiz («Aprobado»). «Borrar conversación» conserva la memoria (mismo quiz).
-- **Siguiente acción exacta:** revisión del usuario de la fase 1. Tras su aprobación, implementar solo la fase 2 (preguntas con opciones).
-- **Estado del código:** fase 1 commiteada. Sin deploy ni push.
+- **Fase activa:** fase 2 (Jev pregunta con opciones), implementada y verificada el 2026-10-21; **entregada para revisión**.
+- **Aprobaciones:** spec y plan aprobados el 2026-10-21 en el quiz («Aprobado»). «Borrar conversación» conserva la memoria (mismo quiz). Fase 1 aprobada el 2026-10-21 («continua con la siguiente fase»).
+- **Siguiente acción exacta:** revisión del usuario de la fase 2. Tras su aprobación, implementar solo la fase 3 (panel «Lo que Jev recuerda» y cierre).
+- **Estado del código:** fases 1 y 2 commiteadas. Sin deploy ni push.
+
+## Fase 2 — entrega para revisión, 2026-10-21
+
+**Quiz de la fase:** en móvil, las opciones van también en la vista previa, en una fila deslizable («En la vista previa»).
+
+- [x] `speechBlocks.ts`:
+  - Bloque `choices` (pregunta ≤120, de 2 a 5 opciones ≤40); con menos de 2 opciones pasa a párrafo.
+  - No se acepta ningún bloque después de la pregunta.
+  - El resumen de historial conserva la pregunta y sus opciones, para que el modelo sepa qué preguntó.
+- [x] `api/talk.ts`:
+  - Catálogo y pauta de orientación: preguntar con `choices` si falta un dato clave, como máximo 2 preguntas seguidas, y después recomendar explicando por qué encaja; no repreguntar lo que ya sabe.
+  - La nota de memoria pasa a ser **obligatoria** tras la frase, con `"text":""` si no hay nada nuevo (el servidor descarta las vacías).
+  - El historial reconstruido incluye `{"type":"memory","text":""}`.
+- [x] Conversación abierta:
+  - `useSpeechSession.hasOpenQuestion()` es verdadero tras una respuesta terminada que contiene `choices`. Se cierra con el siguiente mensaje, una cancelación, «Borrar conversación», un fallo o la suspensión.
+  - `useCreatureBrain.submitContext` responde en ese caso con una decisión TALK local: cancela decisiones pendientes y arranca el habla sin `/api/decide`.
+- [x] UI:
+  - `ReplyBlocks`: `Choices` (pregunta, `role=group` con nombre, botones y aviso «O escríbeme tu respuesta.» / «Or type your own answer.»).
+  - `ChoiceButtons` se reutiliza en la vista previa móvil (fila deslizable de una línea; en pantallas bajas, debajo del texto).
+  - Estilos con tokens en `reply.css`.
+- [x] Docs de estado actual: `architecture.md`, `interaction.md`.
+- [ ] Aprobación del usuario.
+
+**Prueba real con Groq** (servidor dev temporal en 5199 detenido; scripts en el scratchpad, sin commitear):
+- **Orientación:** 3 conversaciones, respondiendo siempre con la primera opción: «¿Qué carreras puedo estudiar?», «No sé qué estudiar, me gusta ayudar a la gente» y «What career should I study?».
+  - Jev pregunta 2 veces y luego recomienda (en la última ronda; en una anterior, la conversación EN preguntó 3 veces).
+  - Las recomendaciones usan lo elegido («Crear personajes» → diseño de personajes, ilustración…).
+  - Hubo 1 evento de error en 1 de 11 turnos en una ronda intermedia; no se repitió en las siguientes.
+- **Regresión de memoria detectada y corregida:** al añadir `choices`, las notas casi desaparecieron.
+  - Con la memoria condicional, 2 de 6 respuestas traían nota y ninguna cuando Jev preguntaba.
+  - Con historial, 0 de 8: el modelo copia el formato de sus turnos previos, que no tenían nota.
+  - Con la nota obligatoria, 12 de 12 sin historial: nota con contenido cuando había algo que recordar y vacía en el saludo y ante el teléfono.
+  - Con la nota vacía en el historial, 7 de 8 la incluyen y 6 de 8 tienen contenido.
+  - En la ronda final, las 3 conversaciones terminan con una nota que resume lo decidido («Prefiere leer y escribir, le gusta escribir ficción.»).
+- **Consumo** (medido llamando a Groq directo con el mismo prompt): 38–182 tokens de completado (tope 384) y unos 800–860 tokens de prompt de sistema con historial corto.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc --noEmit -p` app / node / api / tests | PASS. |
+| `eslint . --max-warnings=0 --ignore-pattern "playwright-report/**"` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 313 tests. Nuevos: `choices` (4), conversación abierta en sesión (2), respuesta directa sin `/api/decide` en el cerebro (1), grupo de opciones y vista previa (3), API (nota vacía y pregunta como bloque final). |
+| `npm run build` | PASS: `index` 346,14 kB, gzip 110,65 kB (+0,4 kB). |
+| `npx playwright test` | PASS: 35 tests. Nuevo `choices.spec.ts`: en escritorio, una opción y una respuesta escrita continúan sin decisión nueva y el mensaje siguiente vuelve a decidirse; en móvil, la fila de opciones es de una línea, sin overflow, y responde sin abrir el panel. |
+| `git diff --check` | PASS. |
+
+Capturas: `evidence/companion/choices-desktop.png` y `choices-mobile.png`.
+
+**Límites:**
+- El modelo no siempre respeta «máximo 2 preguntas»: en una ronda hizo 3.
+- Las notas de turnos cortos («Arte y diseño») a veces salen vacías; la conversación suele resumirse en la nota del turno de la recomendación.
+- La matriz completa ES/EN × claro/oscuro de opciones queda para la fase 3, como dice el plan.
 
 ## Fase 1 — entrega para revisión, 2026-10-21
 

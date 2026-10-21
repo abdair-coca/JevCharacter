@@ -25,6 +25,8 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
   const activeRef = useRef(active);
   const fadeTimerRef = useRef<number | null>(null);
   const talkingRef = useRef(false);
+  // Jev's last finished reply ended with a question: the next message answers it.
+  const openQuestionRef = useRef(false);
 
   // Returns Jev to Base only when this session is the one holding the talk state.
   const releaseTalk = useCallback(() => {
@@ -35,6 +37,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
 
   const invalidate = useCallback(() => {
     generationRef.current++;
+    openQuestionRef.current = false;
     const previous = pendingRef.current;
     pendingRef.current = null;
     if (previous?.timeout !== null && previous?.timeout !== undefined) window.clearTimeout(previous.timeout);
@@ -111,6 +114,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       historyRef.current = [...historyRef.current, { user: request.message, assistant: historyReply(reply) }].slice(-SPEECH_HISTORY_LIMIT);
       // Only a finished reply is remembered; cancelled or failed ones leave no note.
       if (reply.memory) addMemory(reply.memory);
+      openQuestionRef.current = reply.blocks.some(block => block.type === "choices");
       setStatus("idle");
       if (!request.dismissed) setDetail(reply.blocks.length > 0 ? { spoken: reply.spoken, blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
     }).catch(fail);
@@ -158,5 +162,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     invalidate();
   }, [invalidate]);
 
-  return { caption, detail, notice, status, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk };
+  const hasOpenQuestion = useCallback(() => openQuestionRef.current, []);
+
+  return { caption, detail, notice, status, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
 }

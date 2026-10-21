@@ -86,6 +86,33 @@ describe("speech blocks", () => {
   });
 });
 
+describe("Jev's questions", () => {
+  it("normaliza la pregunta con 2 a 5 opciones cortas", () => {
+    expect(parseBlock({ type: "choices", question: "¿Qué te atrae más?", options: ["1. Programar", "- Diseñar", "Analizar datos", "Enseñar", "Investigar", "Vender"] }))
+      .toEqual({ type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar", "Analizar datos", "Enseñar", "Investigar"] });
+    const clamped = parseBlock({ type: "choices", question: "¿Cuál?", options: ["x ".repeat(40), "Corta"] });
+    expect(clamped?.type === "choices" && chars(clamped.options[0])).toBeLessThanOrEqual(40);
+  });
+
+  it("convierte en párrafo una pregunta con menos de dos opciones", () => {
+    expect(parseBlock({ type: "choices", question: "¿Te gusta?", options: ["Sí"] })).toEqual({ type: "paragraph", text: "¿Te gusta? Sí" });
+    expect(parseBlock({ type: "choices", question: "", options: [] })).toBeNull();
+  });
+
+  it("no acepta bloques después de la pregunta", () => {
+    const choices: SpeechBlock = { type: "choices", question: "¿Cuál?", options: ["A", "B"] };
+    const short: SpeechBlock = { type: "paragraph", text: "Corto." };
+    expect(acceptsBlock([short], choices)).toBe(true);
+    expect(acceptsBlock([choices], short)).toBe(false);
+    expect(acceptsBlock([choices], choices)).toBe(false);
+  });
+
+  it("guarda la pregunta y sus opciones en el historial", () => {
+    expect(summarizeBlocks([{ type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar"] }]))
+      .toBe("¿Qué te atrae más? (Programar / Diseñar)");
+  });
+});
+
 describe("JSON object scanner", () => {
   it("extrae objetos pegados, partidos entre chunks y con llaves dentro de cadenas", () => {
     const scanner = createJsonObjectScanner();

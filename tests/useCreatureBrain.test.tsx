@@ -48,6 +48,39 @@ function mountBrain(fetchMock: ReturnType<typeof vi.fn>) {
 }
 
 describe("useCreatureBrain talk flow", () => {
+  it("answers Jev's own question straight to speech, without a new decision", async () => {
+    const talkBodies: string[] = [];
+    const replies = [
+      'event: spoken\ndata: {"text":"¿Qué te atrae más?"}\n\nevent: block\ndata: {"block":{"type":"choices","question":"¿Qué te atrae más?","options":["Programar","Diseñar"]}}\n\nevent: done\ndata: {}\n\n',
+      'event: spoken\ndata: {"text":"Entonces mira Informática."}\n\nevent: done\ndata: {}\n\n',
+      'event: spoken\ndata: {"text":"Claro."}\n\nevent: done\ndata: {}\n\n',
+    ];
+    const fetchMock = vi.fn((url: RequestInfo | URL, init?: RequestInit) => {
+      if (String(url) === "/api/decide") return Promise.resolve(jsonResponse(decision({ kind: "talk", state: "talkb" })));
+      talkBodies.push(String(init?.body));
+      return Promise.resolve(new Response(replies[talkBodies.length - 1]));
+    });
+    const { result, character, unmount } = mountBrain(fetchMock);
+    window.localStorage.clear();
+
+    act(() => result.current.submitContext("¿Qué carrera estudio?"));
+    await waitFor(() => expect(result.current.speechDetail?.complete).toBe(true));
+    const decisions = () => fetchMock.mock.calls.filter(([url]) => String(url) === "/api/decide").length;
+    expect(decisions()).toBe(1);
+
+    act(() => result.current.submitContext("Programar"));
+    await waitFor(() => expect(result.current.speechCaption?.text).toBe("Entonces mira Informática."));
+    expect(decisions()).toBe(1);
+    expect(JSON.parse(talkBodies[1]).message).toBe("Programar");
+    expect(result.current.decision.action).toEqual({ kind: "talk", state: "Talk" });
+    expect(character.speak).toHaveBeenLastCalledWith("Talk");
+
+    // That reply asked nothing, so the next message is decided again.
+    act(() => result.current.submitContext("Gracias"));
+    await waitFor(() => expect(decisions()).toBe(2));
+    unmount();
+  });
+
   it("uses the latest language if it changes while the decision is still pending", async () => {
     let resolveDecision: (response: Response) => void = () => {};
     const fetchMock = vi.fn((url: RequestInfo | URL) => {

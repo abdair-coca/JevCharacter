@@ -173,7 +173,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
         <div className="speech-slot">
           {!brain.speechNotice && <AnimatePresence mode="wait">
             {reply
-              ? !wide && <ReplyPreview key={`reply-${reply.generation}`} detail={reply} openRef={readAllRef} onOpen={() => setSheetGeneration(reply.generation)} onClose={dismissReply} />
+              ? !wide && <ReplyPreview key={`reply-${reply.generation}`} detail={reply} openRef={readAllRef} onOpen={() => setSheetGeneration(reply.generation)} onClose={dismissReply} onAsk={askFromReply} />
               : brain.speechCaption && <SpeechCaption key={brain.speechCaption.generation} {...brain.speechCaption} onRevealed={brain.onSpeechCaptionRevealed} />}
           </AnimatePresence>}
           {/* One live region: the sentence is announced once, whether it shows as a caption or a reply. */}

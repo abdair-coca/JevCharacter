@@ -111,7 +111,7 @@ describe("/api/talk", () => {
     const payload = JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body)) as { messages: { role: string; content: string }[] };
     expect(payload.messages[0].content).toContain(instruction);
     expect(payload.messages[1]).toEqual({ role: "user", content: "hola" });
-    expect(payload.messages[2]).toEqual({ role: "assistant", content: '{"type":"spoken","text":"Hola."}' });
+    expect(payload.messages[2]).toEqual({ role: "assistant", content: '{"type":"spoken","text":"Hola."}\n{"type":"memory","text":""}' });
     expect(payload.messages.at(-1)?.content).toBe(validBody.message);
   });
 
@@ -325,7 +325,7 @@ describe("/api/talk", () => {
     await handler(request({ ...validBody, history: [{ user: "pasos", assistant: "Te cuento.\nUno; Dos" }] }), apiResponse().response);
 
     const payload = JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body)) as { messages: { role: string; content: string }[] };
-    expect(payload.messages[2].content).toBe('{"type":"spoken","text":"Te cuento."}\n{"type":"paragraph","text":"Uno; Dos"}');
+    expect(payload.messages[2].content).toBe('{"type":"spoken","text":"Te cuento."}\n{"type":"memory","text":""}\n{"type":"paragraph","text":"Uno; Dos"}');
   });
 
   it("emite la nota de memoria tras la frase, aunque llegue antes, y nunca como bloque", async () => {
@@ -348,6 +348,38 @@ describe("/api/talk", () => {
       'event: block\ndata: {"block":{"type":"paragraph","text":"Hay varias opciones."}}',
       "event: done\ndata: {}",
     ]);
+  });
+
+  it("ignora la nota vacía de una respuesta sin nada que recordar", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([
+      content('{"type":"spoken","text":"¡Hola!"}{"type":"memory","text":""}'),
+      "data: [DONE]\n\n",
+    ])));
+    const response = apiResponse();
+
+    await handler(request(validBody), response.response);
+
+    const events = response.writes.join("").split("\n\n").filter(Boolean).map((event) => event.split("\n")[0]);
+    expect(events).toEqual(["event: spoken", "event: done"]);
+  });
+
+  it("transmite la pregunta de Jev como bloque final", async () => {
+    vi.stubEnv("GROQ_API_KEY", "test-key");
+    const choices = { type: "choices", question: "¿Qué te atrae más?", options: ["Programar", "Diseñar"] };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([
+      spoken("¿Qué te atrae más?"),
+      content(JSON.stringify(choices)),
+      content(JSON.stringify({ type: "paragraph", text: "Después de la pregunta." })),
+      "data: [DONE]\n\n",
+    ])));
+    const response = apiResponse();
+
+    await handler(request(validBody), response.response);
+
+    const output = response.writes.join("");
+    expect(output).toContain(`event: block\ndata: ${JSON.stringify({ block: choices })}`);
+    expect(output).not.toContain("Después de la pregunta.");
   });
 
   it("descarta una nota con números largos sin mostrarla", async () => {
