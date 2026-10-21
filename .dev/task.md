@@ -9,6 +9,11 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Corrección de CI — 2026-10-21
+
+- GitHub Actions falló en los runs `39611507233` y `39666575605`. En ambos, solo fallaban los dos tests «round shape»: en el runner, sin GPU, se pintaron 5–8 fotogramas en el segundo medido y la guarda exigía más de 10. Ningún fotograma medido mostró deformación.
+- La guarda pasa a exigir al menos 3 fotogramas, con un comentario que explica por qué. Se comprobó localmente que los tests siguen fallando sin el arreglo (`layout={false}` temporal: proporciones 1,19 y 1,28) y pasan con él.
+
 ## Ajuste de la revisión final — panel directo en móvil, 2026-10-21
 
 Pedido del usuario, con capturas: «no quiero que aparezca eso [la vista previa con «Leer todo»], sino que directamente ese modal que aparece de abajo».
