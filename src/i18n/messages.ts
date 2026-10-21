@@ -24,6 +24,9 @@ const es = {
   YES: "Sí", NO: "No", STAR: "Estrella", SQUARE: "Cuadrado", TRIANGLE: "Triángulo",
   notFoundBody: "Esta dirección no lleva a ninguna vista de JEVLING.", backHome: "Volver a Jev", notFound: "Página no encontrada",
   footer: "Una interfaz con personalidad.", diagnostics: "Diagnóstico", close: "Cerrar diagnóstico",
+  memory: "Memoria", memoryTitle: "Lo que Jev recuerda", memoryLocal: "Se guarda solo en este navegador.",
+  memoryEmpty: "Todavía no recuerdo nada de ti.", memoryForget: "Olvidar", memoryForgetAll: "Olvidar todo",
+  memoryConfirm: "¿Olvido todo lo que recuerdo de ti?", memoryCancel: "Cancelar", memoryClose: "Cerrar memoria",
   debugSignal: "Señales en vivo", distance: "Distancia", speed: "Velocidad", near: "Cerca", idle: "Inactividad",
   clicks: "Toques", absence: "Ausencia", source: "Origen", latency: "Latencia", reactionConfidence: "Confianza de reacción",
 } satisfies Record<string, string>;
@@ -53,6 +56,9 @@ const en: Record<MessageKey, string> = {
   YES: "Yes", NO: "No", STAR: "Star", SQUARE: "Square", TRIANGLE: "Triangle",
   notFoundBody: "This address doesn't lead to any JEVLING view.", backHome: "Back to Jev", notFound: "Page not found",
   footer: "An interface with personality.", diagnostics: "Diagnostics", close: "Close diagnostics",
+  memory: "Memory", memoryTitle: "What Jev remembers", memoryLocal: "Stored only in this browser.",
+  memoryEmpty: "I don't remember anything about you yet.", memoryForget: "Forget", memoryForgetAll: "Forget everything",
+  memoryConfirm: "Should I forget everything I remember about you?", memoryCancel: "Cancel", memoryClose: "Close memory",
   debugSignal: "Live signals", distance: "Distance", speed: "Speed", near: "Nearby", idle: "Idle",
   clicks: "Clicks", absence: "Absence", source: "Source", latency: "Latency", reactionConfidence: "Reaction confidence",
 };

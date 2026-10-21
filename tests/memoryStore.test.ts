@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SPEECH_MEMORY_NOTE_MAX_CHARS, SPEECH_MEMORY_SEND_MAX, SPEECH_MEMORY_SEND_MAX_CHARS } from "../src/creature/brain/speechBlocks";
-import { addMemory, MEMORY_NOTES_MAX, readMemory, selectRelevant, type MemoryNote } from "../src/creature/memory/memoryStore";
+import { addMemory, clearMemory, MEMORY_NOTES_MAX, readMemory, removeMemory, selectRelevant, type MemoryNote } from "../src/creature/memory/memoryStore";
 
 beforeEach(() => window.localStorage.clear());
 afterEach(() => vi.restoreAllMocks());
@@ -34,6 +34,15 @@ describe("memory store", () => {
     const notes = readMemory();
     expect(notes.map(item => item.text)).toHaveLength(2);
     expect([...notes[1].text].length).toBeLessThanOrEqual(SPEECH_MEMORY_NOTE_MAX_CHARS);
+  });
+
+  it("forgets one note or all of them", () => {
+    addMemory("Uno.", 1);
+    const [first] = addMemory("Dos.", 2);
+    expect(removeMemory(first.id).map(item => item.text)).toEqual(["Dos."]);
+    clearMemory();
+    expect(readMemory()).toEqual([]);
+    expect(JSON.parse(window.localStorage.getItem("jevling.memory") ?? "null")).toEqual({ version: 1, notes: [] });
   });
 
   it("ignores corrupt storage and keeps working for the session when storage fails", () => {

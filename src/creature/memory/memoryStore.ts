@@ -74,6 +74,17 @@ export function addMemory(text: string, now = Date.now()): MemoryNote[] {
   return next;
 }
 
+/** Forgets one note; the panel is the only place where notes are removed. */
+export function removeMemory(id: string): MemoryNote[] {
+  const next = readMemory().filter(note => note.id !== id);
+  saveMemory(next);
+  return next;
+}
+
+export function clearMemory() {
+  saveMemory([]);
+}
+
 function stems(text: string): Set<string> {
   return new Set(comparable(text)
     .split(/[^\p{L}\p{N}]+/u)

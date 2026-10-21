@@ -97,6 +97,9 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 .whisper__send svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .whisper__meta { position: absolute; top: 100%; left: 0; right: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-3); margin-top: var(--space-3); padding-inline: var(--space-4); font-size: var(--text-caption); color: var(--color-muted); line-height: var(--line-body); }
 .whisper__meta:empty { display: none; }
+/* The row overlays the footer on narrow screens: only its own content takes taps. */
+.whisper__meta { pointer-events: none; }
+.whisper__meta > * { pointer-events: auto; }
 .whisper__count { font-family: var(--font-mono); }
 .whisper__meta button { padding-block: var(--space-2); color: var(--color-muted); border: 0; background: transparent; font-size: inherit; }
 .whisper__meta button span { text-decoration: underline; text-underline-offset: var(--space-1); }

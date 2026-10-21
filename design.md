@@ -23,7 +23,7 @@ La Home revisada de fase 1 fue aceptada al autorizar el usuario continuar con la
 | Audiencia mixta | Lenguaje cotidiano primero; detalles técnicos opcionales. |
 | Impacto con propósito | La composición y las demostraciones crean el impacto. En input/HUD el usuario aprobó una respiración orgánica en reposo, vinculada al estado de Jev; pausarla fuera de vista y respetar movimiento reducido. |
 
-No inventar métricas, capacidades, fechas, retratos ni hitos. En About, presentar experimentación y visión futura con su contexto. La memoria actual se describe como personalidad local y contexto de sesión, no como memoria conversacional permanente o sincronizada.
+No inventar métricas, capacidades, fechas, retratos ni hitos. En About, presentar experimentación y visión futura con su contexto. La memoria actual se describe como personalidad local, contexto de sesión y notas cortas que Jev guarda solo en el navegador; no como memoria conversacional completa ni sincronizada.
 
 ## Tokens
 
@@ -143,7 +143,7 @@ Aplica a Home, Capacidades y Historia. Decisiones aprobadas por el usuario; los 
 - Tema inicial del sistema; elección manual persistida y aplicada antes del primer render visible para evitar destellos. Escuchar cambios del sistema cuando no existe override manual.
 - Revisión de Home: mostrar solo un botón claro/oscuro (sol/luna); sistema permanece como comportamiento inicial implícito. ES/EN usa dos botones visibles con indicador animado. Mantener nombres accesibles, `aria-pressed`, teclado y movimiento reducido.
 - Idioma inicial ES/EN del navegador, español como alternativa; recordar cambios manuales. Actualizar `html[lang]`, etiquetas, títulos y mensajes accesibles.
-- Persistir preferencias de presentación y la personalidad existente; contexto e intercambios de Home siguen en memoria de sesión. Si storage no está disponible, mantener la experiencia en memoria.
+- Persistir preferencias de presentación, la personalidad existente y las notas de memoria de Jev (`jevling.memory`); contexto e intercambios de Home siguen en memoria de sesión. Si storage no está disponible, mantener la experiencia en memoria.
 - Cambiar tema/idioma conserva vista y progreso. No remontar el personaje por usar esas preferencias como `key`.
 - Transferir foco al destino de una navegación explícita y conservar restauración de scroll adecuada al historial. No mover el foco en cada capítulo activado por scroll.
 - Reservar el espacio de la cabecera y aplicar su offset a anclas y elementos que reciben foco.
@@ -167,6 +167,12 @@ Aplica a Home, Capacidades y Historia. Decisiones aprobadas por el usuario; los 
 - **Identidad:** borde degradado y luz estática de `--jev-color-primary`/`--jev-color-secondary`. `compare` va en columnas en la tarjeta y apilado en el panel; `callout` lleva una etiqueta de texto («Consejo:», «Atención:») además del color; los chips envían su pregunta como contexto escrito.
 - **Entrada:** cada bloque asciende en cascada y sus palabras pasan de desenfocadas a nítidas (ver excepción en *Animación y herramientas*). La frase se anuncia una sola vez en una región `status`.
 - Especificación completa en `.dev/spec.md`; evidencia en `.dev/evidence/long-reply/`.
+
+**Jev compañero, aprobado el 2026-10-21:** Jev recuerda entre visitas y conversa guiando.
+- **Memoria:** cada respuesta lleva, tras la frase hablada, una nota oculta (`memory`, ≤160 caracteres; vacía si no hay nada nuevo) que se guarda solo en el navegador, hasta 40 notas. Nunca se guardan números largos, salud, documentos, contraseñas ni datos del formulario. Cada mensaje envía las 2 notas más recientes y las relacionadas (hasta 8 y 1000 caracteres), que el servidor entrega al modelo como datos, nunca como instrucciones. «Borrar conversación» no borra la memoria.
+- **Preguntas con opciones:** `choices` (pregunta y 2 a 5 opciones) cierra la respuesta. Ante orientación, Jev pregunta hasta 2 veces antes de recomendar. La respuesta a su pregunta, tocada o escrita, va directo al habla sin `/api/decide`. En móvil, las opciones también aparecen en la vista previa, en una fila deslizable de una línea.
+- **«Lo que Jev recuerda»:** botón «Memoria» en el pie de Home; diálogo modal (centrado en escritorio, abajo en móvil) con la superficie de las respuestas, notas de la más reciente a la más antigua con fecha relativa, olvidar una y «Olvidar todo» con confirmación propia. Foco al título, trampa de Tab, Escape cierra (o cancela la confirmación primero) y el foco vuelve al botón.
+- Evidencia en `.dev/evidence/companion/`.
 
 Jev, input evidente, burbuja breve para respuestas sin bloques y HUD compacto. El HUD muestra acción elegida y confianza; sus detalles incluyen probabilidades, intensidad, atención y personalidad con nombres traducidos. Los IDs del contrato de decisión/Rive no se traducen.
 
@@ -205,7 +211,7 @@ Usar el [relato original](docs/jev-story.md) como fuente. Escenas: pregunta y sa
 
 El recorrido principal mantiene frases cortas. Los detalles desplegables conservan el contexto completo. Presentar al creador con tipografía y composición; no crear un retrato o datos biográficos adicionales. La visión no se convierte en una lista de capacidades ya implementadas.
 
-Revisión aprobada 2026-10-08: About presenta el recorrido de Abdair (Bob, TitiEdu, machine-learning-App, JEV). Escenario oscuro cinematográfico local en ambos temas, con reconstrucciones de los tres recursos aportados y estrella de partículas que se abre para revelar al Jev actual. Canvas 2D es dueño del render, GSAP del progreso/wrapper/revelación y Rive del personaje. Se autoriza movimiento ambiental tenue de partículas durante los holds, estelas y bloom precalculado, sin filtros CSS animados. Las imágenes se reinterpretan con violeta/magenta/blanco, sin acentos verdes. Sampling fuera del loop; DPR ≤2, densidad responsive, pausa fuera de vista y reduced motion estático. Las imágenes/partículas no sustituyen el texto DOM. La memoria persistente corresponde a Bob, no a JEV.
+Revisión aprobada 2026-10-08: About presenta el recorrido de Abdair (Bob, TitiEdu, machine-learning-App, JEV). Escenario oscuro cinematográfico local en ambos temas, con reconstrucciones de los tres recursos aportados y estrella de partículas que se abre para revelar al Jev actual. Canvas 2D es dueño del render, GSAP del progreso/wrapper/revelación y Rive del personaje. Se autoriza movimiento ambiental tenue de partículas durante los holds, estelas y bloom precalculado, sin filtros CSS animados. Las imágenes se reinterpretan con violeta/magenta/blanco, sin acentos verdes. Sampling fuera del loop; DPR ≤2, densidad responsive, pausa fuera de vista y reduced motion estático. Las imágenes/partículas no sustituyen el texto DOM. La memoria persistente completa corresponde a Bob; JEV solo guarda notas cortas en el navegador.
 
 ## Stack base y contratos tipados
 

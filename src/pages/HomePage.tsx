@@ -27,6 +27,7 @@ import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
 const ReplySheet = lazy(() => import("../features/reply/ReplySheet"));
+const MemoryPanel = lazy(() => import("../features/memory/MemoryPanel"));
 
 type StageStyle = CSSProperties & { "--intensity": number; "--attention": number };
 type SpeechCaptionProps = Caption & { onRevealed: (generation: number) => void };
@@ -62,6 +63,14 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const characterRef = useRef<CharacterController | null>(null);
   useEnrollmentViewport(stageRef, enrollment.isOpen);
   const [debugActive, setDebugActive] = useState(false);
+  const [memoryOpen, setMemoryOpen] = useState(false);
+  // Leaving Home closes the panel; it does not reopen on return.
+  if (!active && memoryOpen) setMemoryOpen(false);
+  const memoryButtonRef = useRef<HTMLButtonElement | null>(null);
+  const closeMemory = useCallback(() => {
+    setMemoryOpen(false);
+    requestAnimationFrame(() => memoryButtonRef.current?.focus({ preventScroll: true }));
+  }, []);
   const wakePlayedRef = useRef(false);
   const sensors = usePointerSensor(stageRef, creatureShellRef, conversational, active && !enrollment.isOpen);
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
@@ -183,9 +192,13 @@ export default function HomePage({ active = true }: { active?: boolean }) {
           <ContextWhisper context={brain.userContext} onSubmit={submitContext} onClear={brain.clearContext} status={brain.status} />
           <BrainHUD decision={brain.decision} status={brain.status} personality={brain.personality} speechNotice={brain.speechNotice} decisionInterrupted={brain.decisionInterrupted} />
         </m.div>
-        <footer className="home-footer"><button type="button" onClick={() => setDebugActive((value) => !value)} aria-expanded={debugActive}>{t.diagnostics} <span aria-hidden="true">↗</span></button></footer>
+        <footer className="home-footer">
+          <button ref={memoryButtonRef} type="button" onClick={() => setMemoryOpen(true)} aria-haspopup="dialog">{t.memory}</button>
+          <button type="button" onClick={() => setDebugActive((value) => !value)} aria-expanded={debugActive}>{t.diagnostics} <span aria-hidden="true">↗</span></button>
+        </footer>
       </div>
       {sheetOpen && reply && <Suspense fallback={null}><ReplySheet key={reply.generation} detail={reply} onCollapse={collapseSheet} onAsk={askFromReply} /></Suspense>}
+      {memoryOpen && <Suspense fallback={null}><MemoryPanel onClose={closeMemory} /></Suspense>}
       <DebugPanel active={debugActive && conversational} getSnapshot={sensors.getSnapshot} personality={brain.personality} decision={brain.decision} latencyMs={brain.apiLatencyMs} onState={brain.forceState} onClose={() => setDebugActive(false)} />
     </main>
   );

@@ -4,10 +4,46 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 2 (Jev pregunta con opciones), implementada y verificada el 2026-10-21; **entregada para revisión**.
-- **Aprobaciones:** spec y plan aprobados el 2026-10-21 en el quiz («Aprobado»). «Borrar conversación» conserva la memoria (mismo quiz). Fase 1 aprobada el 2026-10-21 («continua con la siguiente fase»).
-- **Siguiente acción exacta:** revisión del usuario de la fase 2. Tras su aprobación, implementar solo la fase 3 (panel «Lo que Jev recuerda» y cierre).
-- **Estado del código:** fases 1 y 2 commiteadas. Sin deploy ni push.
+- **Fase activa:** fase 3 (panel «Lo que Jev recuerda» y cierre), implementada y verificada el 2026-10-21; **entregada para revisión final**.
+- **Aprobaciones:** spec y plan aprobados el 2026-10-21 en el quiz («Aprobado»). «Borrar conversación» conserva la memoria (mismo quiz). Fases 1 y 2 aprobadas el 2026-10-21 («continua con la siguiente fase», dos veces).
+- **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
+- **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
+
+## Fase 3 — entrega para revisión final, 2026-10-21
+
+- [x] `memoryStore.ts`: `removeMemory(id)` y `clearMemory()`.
+- [x] `features/memory/MemoryPanel.tsx` y `memory.css` (chunk `lazy` de 3,5 kB JS + 3,6 kB CSS):
+  - Diálogo modal portalado a `body`, centrado en escritorio y abajo en móvil, con la superficie de las respuestas.
+  - Muestra las notas de la más reciente a la más antigua con fecha relativa (`Intl.RelativeTimeFormat`, ES/EN).
+  - Permite olvidar una nota (el foco pasa a la siguiente) y «Olvidar todo» con confirmación propia (el foco empieza en «Cancelar»; Escape cancela primero).
+  - Tiene estado vacío y el aviso «Se guarda solo en este navegador».
+  - Foco al título, trampa de Tab, y los atajos de Home (`d`, Escape) no actúan detrás del modal.
+- [x] Home: botón «Memoria» en el pie (`aria-haspopup="dialog"`). Al cerrar, el foco vuelve al botón; salir de Inicio cierra el panel.
+- [x] **Corrección encontrada por la matriz:** en móvil, la fila de «Borrar conversación» (`.whisper__meta`, absoluta y a todo el ancho) tapaba el pie, así que «Memoria» no recibía toques. Probablemente también tapaba «Diagnóstico» cuando había contexto. Ahora la fila deja pasar los toques y solo su contenido los recibe.
+- [x] Reglas y textos:
+  - `AGENTS.md`: la única memoria persistente son las notas acotadas de `jevling.memory`.
+  - `design.md`: principios de About, persistencia, contrato «Jev compañero» en Home y nota de Bob.
+  - `docs/README.md`, `architecture.md` e `interaction.md`.
+  - Copia de Historia ES/EN: «Hoy conserva personalidad local y notas cortas sobre ti en tu navegador, aún lejos de la memoria persistente de Bob.»
+- [ ] Aprobación final del usuario.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc --noEmit -p` app / node / api / tests | PASS. |
+| `eslint . --max-warnings=0 --ignore-pattern "playwright-report/**"` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 319 tests. Nuevos: `memoryPanel.test.tsx` (5: modal y orden, olvidar una con foco, confirmación y Escape, cierre y atajos bloqueados, inglés) y el store (olvidar una y todas). |
+| `npm run build` | PASS: `index` 347,48 kB, gzip 111,12 kB (+0,5 kB); `MemoryPanel` 3,46 kB JS / 3,60 kB CSS aparte. |
+| `npx playwright test` | 44 PASS y 1 FAIL (`routes` `/`: Rive no llegó a `data-ready` en 45 s, la misma variabilidad sin GPU de la fase 1). Reejecutado aparte: 4/4 PASS. |
+| Nuevo `companion.spec.ts` | PASS 10/10: matriz ES/EN × claro/oscuro × escritorio/móvil (opciones visibles, sin overflow, panel dentro del viewport, más reciente primero), teclado completo (olvidar, trampa de Tab, confirmación, Escape devuelve el foco y lo olvidado sigue olvidado tras recargar) y movimiento reducido. |
+| `git diff --check` | PASS. |
+
+Capturas en `evidence/companion/`: `choices-{desktop,mobile}-{es,en}-{light,dark}.png` y `memory-{desktop,mobile}-{es,en}-{light,dark}.png`, tomadas al terminar las animaciones. `choices-desktop.png` y `choices-mobile.png` son de la fase 2.
+
+**Límites de la feature completa:**
+- Sin celular real, Safari ni lector de pantalla.
+- La memoria vive en un solo navegador: no se sincroniza ni sobrevive a borrar los datos del sitio.
+- La selección de notas no entiende sinónimos.
+- El modelo a veces hace 3 preguntas o deja vacía la nota de una respuesta corta.
 
 ## Fase 2 — entrega para revisión, 2026-10-21
 

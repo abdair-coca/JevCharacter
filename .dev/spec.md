@@ -1,6 +1,6 @@
 # Spec: Jev compañero con memoria persistente
 
-**Estado:** aprobada el 2026-10-21 («Aprobado»). Fase 1 aprobada; fase 2 entregada para revisión.
+**Estado:** aprobada el 2026-10-21 («Aprobado»). Fases 1 y 2 aprobadas; fase 3 entregada para revisión final.
 
 **Fuentes:** [contrato visual](../design.md), [arquitectura](../docs/architecture.md), [interacción](../docs/interaction.md), [plan](plan.md), [tarea activa](task.md).
 
