@@ -20,7 +20,7 @@
 - Mantener separados UI, decisiones reales y demostraciones. Features usa secuencias/datos predefinidos y no modifica la sesión de Home.
 - Verificar `package.json` antes de asumir herramientas disponibles. El stack objetivo y ESLint no se consideran instalados por estar documentados.
 - Preservar trabajo previo del usuario; revisar status/diff antes de editar archivos ya modificados. Mantener las modificaciones dentro del alcance solicitado.
-- Mantener claves y variables de entorno de proveedores en servidor; conservar los límites del contrato de decisión y el contexto conversacional en memoria de sesión. La única memoria persistente son las notas acotadas de Jev en el navegador (`jevling.memory`, ver `design.md`): no ampliarla a mensajes completos, servidor ni sincronización sin aprobación. No incluir secretos en documentación o bundles.
+- Mantener claves y variables de entorno de proveedores en servidor, salvo la clave Groq que el visitante escribe en Ajustes: se guarda solo en su navegador (`jevling.groqKey`), viaja únicamente en la cabecera `X-Groq-Api-Key` de `/api/talk` y el servidor no la guarda ni la registra. Conservar los límites del contrato de decisión y el contexto conversacional en memoria de sesión. Lo persistente en el navegador son las notas acotadas de Jev (`jevling.memory`) y esa clave (ver `design.md`): no ampliarlo a mensajes completos, servidor ni sincronización sin aprobación. No incluir secretos en documentación o bundles.
 
 ## Verificación y cierre
 

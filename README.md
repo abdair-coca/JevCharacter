@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Vite reads `TYPESAFE_API_KEY`, `JEV_MODEL`, `GROQ_API_KEY`, and optional `GROQ_MODEL` from the root `.env` on the server only, then runs the real `api/decide.ts` and `api/talk.ts` handlers locally. Groq is called only after Jev selects a contextual talk action; credentials are never exposed to the browser bundle.
+Vite reads `TYPESAFE_API_KEY`, `JEV_MODEL`, and optional `GROQ_MODEL` from the root `.env` on the server only, then runs the real `api/decide.ts` and `api/talk.ts` handlers locally. Groq is called only after Jev selects a contextual talk action, with the Groq key that each visitor saves in Ajustes; that key stays in their browser and reaches `/api/talk` only in a request header. Credentials are never exposed to the browser bundle.
 
 Use `npm run dev` to try real API-backed interaction locally. `npm run preview` serves the production frontend only; the automated browser harness supplies its own local HTTP/SSE fixtures for API tests.
 
@@ -33,7 +33,7 @@ To use Vercel's local function runtime instead, link the project and run:
 npx vercel dev
 ```
 
-Never use a `VITE_` prefix for credentials. `TYPESAFE_API_KEY` and `GROQ_API_KEY` must remain server-side.
+Never use a `VITE_` prefix for credentials. `TYPESAFE_API_KEY` must remain server-side. The Groq key is never read from the environment: visitors enter their own in Ajustes.
 
 Optional model pinning:
 
@@ -80,7 +80,7 @@ npm run build
 Published at **[jev-bot-sigma.vercel.app](https://jev-bot-sigma.vercel.app)** with a verified real remote decision. [Production checks and screenshot](.dev/evidence/decision-production/README.md).
 
 1. Add `TYPESAFE_API_KEY` to the project's Production environment. `JEV_MODEL` defaults to `jev-latest`.
-2. For generated speech, also configure `GROQ_API_KEY` and optionally `GROQ_MODEL`.
+2. Generated speech needs no server key: each visitor adds a Groq key in Ajustes. `GROQ_MODEL` remains optional.
 3. Use the regular build (`npm run build`, output `dist`) and create a new deployment:
 
 ```bash

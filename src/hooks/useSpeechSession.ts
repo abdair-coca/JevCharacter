@@ -2,6 +2,7 @@ import { useCallback, useLayoutEffect, useRef, useState, type RefObject } from "
 import type { CharacterController } from "../character/useCharacterController";
 import type { TalkState } from "../creature/brain/brain.types";
 import { historyReply, type SpeechBlock } from "../creature/brain/speechBlocks";
+import { readGroqKey } from "../creature/brain/groqKeyStore";
 import { streamSpeechReply } from "../creature/brain/speechClient";
 import { addMemory, readMemory, selectRelevant } from "../creature/memory/memoryStore";
 import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage } from "../creature/brain/speechProtocol";
@@ -87,6 +88,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       language: request.language,
       history: historyRef.current.slice(-SPEECH_HISTORY_LIMIT),
       memory: selectRelevant(readMemory(), request.message),
+      apiKey: readGroqKey(),
       signal: request.controller.signal,
       // The spoken sentence arrives whole: Jev talks while the blocks keep streaming.
       onSpoken: text => {

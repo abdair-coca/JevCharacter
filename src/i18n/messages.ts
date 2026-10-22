@@ -27,6 +27,10 @@ const es = {
   memory: "Memoria", memoryTitle: "Lo que Jev recuerda", memoryLocal: "Se guarda solo en este navegador.",
   memoryEmpty: "Todavía no recuerdo nada de ti.", memoryForget: "Olvidar", memoryForgetAll: "Olvidar todo",
   memoryConfirm: "¿Olvido todo lo que recuerdo de ti?", memoryCancel: "Cancelar", memoryClose: "Cerrar memoria",
+  settings: "Ajustes", settingsTitle: "Ajustes", settingsClose: "Cerrar ajustes",
+  groqTitle: "Clave de Groq", groqHelp: "Groq escribe lo que Jev dice cuando habla. La clave se guarda solo en este navegador y viaja al servidor únicamente cuando Jev habla.",
+  groqLabel: "Clave API", groqSave: "Guardar clave", groqRemove: "Borrar clave", groqSaved: "Clave guardada en este navegador.",
+  groqMissing: "Sin clave, Jev no puede generar respuestas habladas.", groqInvalid: "Revisa la clave: debe tener entre 20 y 200 caracteres, sin espacios.",
   debugSignal: "Señales en vivo", distance: "Distancia", speed: "Velocidad", near: "Cerca", idle: "Inactividad",
   clicks: "Toques", absence: "Ausencia", source: "Origen", latency: "Latencia", reactionConfidence: "Confianza de reacción",
 } satisfies Record<string, string>;
@@ -59,6 +63,10 @@ const en: Record<MessageKey, string> = {
   memory: "Memory", memoryTitle: "What Jev remembers", memoryLocal: "Stored only in this browser.",
   memoryEmpty: "I don't remember anything about you yet.", memoryForget: "Forget", memoryForgetAll: "Forget everything",
   memoryConfirm: "Should I forget everything I remember about you?", memoryCancel: "Cancel", memoryClose: "Close memory",
+  settings: "Settings", settingsTitle: "Settings", settingsClose: "Close settings",
+  groqTitle: "Groq key", groqHelp: "Groq writes what Jev says when it speaks. The key is stored only in this browser and reaches the server only when Jev speaks.",
+  groqLabel: "API key", groqSave: "Save key", groqRemove: "Remove key", groqSaved: "Key saved in this browser.",
+  groqMissing: "Without a key, Jev can't generate spoken replies.", groqInvalid: "Check the key: it must be 20 to 200 characters, without spaces.",
   debugSignal: "Live signals", distance: "Distance", speed: "Speed", near: "Nearby", idle: "Idle",
   clicks: "Clicks", absence: "Absence", source: "Source", latency: "Latency", reactionConfidence: "Reaction confidence",
 };

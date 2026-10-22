@@ -8,3 +8,14 @@ export type SpeechExchange = {
   user: string;
   assistant: string;
 };
+
+/** Carries the visitor's own Groq key to `/api/talk`; the server uses it for that request and never stores it. */
+export const GROQ_KEY_HEADER = "x-groq-api-key";
+const GROQ_KEY_PATTERN = /^[\x21-\x7E]{20,200}$/;
+
+/** The trimmed key when it is visible ASCII of plausible length, else null. Shared by the browser and the API. */
+export function parseGroqKey(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const key = value.trim();
+  return GROQ_KEY_PATTERN.test(key) ? key : null;
+}

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SiteHeader from "../src/components/SiteHeader";
 import { preferencesStore } from "../src/stores/preferencesStore";
@@ -25,26 +25,30 @@ describe("header preference controls", () => {
     expect(preferencesStore.getState()).toMatchObject({ theme: "dark", themePreference: "dark" });
   });
 
-  it("keeps both language choices visible and updates accessible selection without changing theme", () => {
+  it("keeps only theme and the settings gear in the header; sound and language live in Ajustes", () => {
     render(<SiteHeader route="/features" />);
-    fireEvent.click(screen.getByRole("button", { name: "English" }));
-    expect(screen.getByRole("button", { name: "English" }).getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByRole("button", { name: "Español" }).getAttribute("aria-pressed")).toBe("false");
-    expect(screen.getByRole("button", { name: "Theme" })).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Features" }).getAttribute("aria-current")).toBe("page");
-    expect(preferencesStore.getState().themePreference).toBe("system");
+    expect(screen.queryByRole("button", { name: "Sonido de Jev" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "English" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Tema" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Ajustes" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Capacidades" }).getAttribute("aria-current")).toBe("page");
   });
 
-  it("toggles Jev's sound with an accessible pressed state and keeps the other preferences", () => {
+  it("opens Ajustes from the gear and returns focus to it when closed", async () => {
     render(<SiteHeader route="/" />);
-    const button = screen.getByRole("button", { name: "Sonido de Jev" });
-    expect(button.getAttribute("aria-pressed")).toBe("true");
-    expect(button.getAttribute("title")).toBe("Silenciar a Jev");
-    fireEvent.click(button);
-    expect(button.getAttribute("aria-pressed")).toBe("false");
-    expect(button.getAttribute("title")).toBe("Activar el sonido de Jev");
-    expect(preferencesStore.getState()).toMatchObject({ sound: false, theme: "light", language: "es" });
-    fireEvent.click(button);
-    expect(preferencesStore.getState().sound).toBe(true);
+    const gear = screen.getByRole("button", { name: "Ajustes" });
+    fireEvent.click(gear);
+    const dialog = await screen.findByRole("dialog", { name: "Ajustes" });
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    await waitFor(() => expect(document.activeElement).toBe(gear));
+  });
+
+  it("closes Ajustes when the route changes", async () => {
+    const { rerender } = render(<SiteHeader route="/" />);
+    fireEvent.click(screen.getByRole("button", { name: "Ajustes" }));
+    await screen.findByRole("dialog", { name: "Ajustes" });
+    rerender(<SiteHeader route="/about" />);
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
   });
 });

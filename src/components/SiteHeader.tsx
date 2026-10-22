@@ -1,28 +1,29 @@
+import { lazy, Suspense, useCallback, useRef, useState } from "react";
 import { useTranslation } from "../i18n/useTranslation";
 import { navigate, type PageRoute, type Route } from "../navigation/routes";
 import { usePreferences } from "../stores/preferencesStore";
 import { Button } from "./ui/button";
 import { m } from "motion/react";
 import { useThemeIconMotion, useUiMotion } from "../lib/motionTokens";
-import { appAudio } from "../lib/audioCore";
+
+// Loaded only when the settings open.
+const SettingsPanel = lazy(() => import("../features/settings/SettingsPanel"));
 
 export default function SiteHeader({ route }: { route: PageRoute }) {
   const t = useTranslation();
-  const language = usePreferences((state) => state.language);
-  const setLanguage = usePreferences((state) => state.setLanguage);
   const theme = usePreferences((state) => state.theme);
   const setThemePreference = usePreferences((state) => state.setThemePreference);
-  const sound = usePreferences((state) => state.sound);
-  const setSound = usePreferences((state) => state.setSound);
-  const toggleSound = () => {
-    setSound(!sound);
-    if (sound) return;
-    // Turning sound on is itself a gesture, so audio can start right away.
-    appAudio.setEnabled(true);
-    appAudio.unlock();
-  };
   const transition = useUiMotion();
   const iconMotion = useThemeIconMotion();
+  // The panel belongs to the page it opened on: changing route closes it, with no effect needed.
+  const [settingsRoute, setSettingsRoute] = useState<PageRoute | null>(null);
+  const settingsOpen = settingsRoute === route;
+  const settingsButton = useRef<HTMLButtonElement | null>(null);
+  // Focus goes back to the gear that opened the panel.
+  const closeSettings = useCallback(() => {
+    setSettingsRoute(null);
+    requestAnimationFrame(() => settingsButton.current?.focus({ preventScroll: true }));
+  }, []);
   const links: { route: Route; label: string }[] = [
     { route: "/", label: t.home }, { route: "/features", label: t.features }, { route: "/about", label: t.about },
   ];
@@ -43,14 +44,6 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
             ))}
           </nav>
           <div className="preferences">
-            <Button className="theme-toggle sound-toggle" variant="ghost" size="icon" aria-label={t.sound} aria-pressed={sound} title={sound ? t.mute : t.unmute} onClick={toggleSound}>
-              <span className="theme-toggle__icons" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
-                  {sound ? <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /> : <path d="m16 9.5 5 5m0-5-5 5" />}
-                </svg>
-              </span>
-            </Button>
             <Button className="theme-toggle" variant="ghost" size="icon" aria-label={t.theme} aria-pressed={theme === "dark"} title={theme === "dark" ? t.light : t.dark} onClick={() => setThemePreference(theme === "dark" ? "light" : "dark")}>
               <span className="theme-toggle__icons" aria-hidden="true">
                 <m.svg className="theme-toggle__sun" viewBox="0 0 24 24" initial={false} animate={{ opacity: theme === "light" ? 1 : 0, rotate: theme === "light" ? 0 : iconMotion.turn, scale: theme === "light" ? 1 : iconMotion.scale }} transition={transition}>
@@ -61,14 +54,18 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
                 </m.svg>
               </span>
             </Button>
-            <div className="language-switch" data-language={language} role="group" aria-label={t.language}>
-              <m.span className="language-switch__indicator" aria-hidden="true" initial={false} animate={{ x: language === "en" ? "100%" : "0%" }} transition={transition} />
-              <Button variant="ghost" size="small" aria-pressed={language === "es"} aria-label="Español" onClick={() => setLanguage("es")}>ES</Button>
-              <Button variant="ghost" size="small" aria-pressed={language === "en"} aria-label="English" onClick={() => setLanguage("en")}>EN</Button>
-            </div>
+            <Button ref={settingsButton} className="theme-toggle" variant="ghost" size="icon" aria-label={t.settings} aria-haspopup="dialog" title={t.settings} onClick={() => setSettingsRoute(route)}>
+              <span className="theme-toggle__icons" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+              </span>
+            </Button>
           </div>
         </div>
       </header>
+      {settingsOpen && <Suspense fallback={null}><SettingsPanel onClose={closeSettings} /></Suspense>}
     </>
   );
 }

@@ -13,7 +13,9 @@ import {
   type SpeechBlock,
 } from "../src/creature/brain/speechBlocks.js";
 import {
+  GROQ_KEY_HEADER,
   isSpeechLanguage,
+  parseGroqKey,
   SPEECH_HISTORY_LIMIT,
   SPEECH_MESSAGE_MAX_CHARS,
   type SpeechExchange,
@@ -176,8 +178,9 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   const body = parseBody(request.body);
   if (!body) return response.status(400).json({ error: "Invalid speech request" });
 
-  const apiKey = process.env.GROQ_API_KEY?.trim();
-  if (!apiKey) return response.status(503).json({ error: "Speech unavailable" });
+  // The visitor's own key arrives per request and is only forwarded upstream, never logged or stored.
+  const apiKey = parseGroqKey(request.headers[GROQ_KEY_HEADER]);
+  if (!apiKey) return response.status(401).json({ error: "Speech key required" });
 
   const abortController = new AbortController();
   let clientDisconnected = false;

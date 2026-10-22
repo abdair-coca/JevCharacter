@@ -40,6 +40,27 @@ describe("streamSpeechReply", () => {
     expect(handlers.onBlock).toHaveBeenCalledExactlyOnceWith({ type: "steps", items: ["Uno", "Dos"] });
   });
 
+  it("manda la clave del visitante solo como cabecera, nunca en el cuerpo", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response([event("spoken", { text: "Hola." }), event("done", {})].join(""), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await streamSpeechReply({ message: "hola", language: "es", history: [], apiKey: "gsk_test_visible_key_1234567890", signal: new AbortController().signal, ...callbacks() });
+
+    const init = fetchMock.mock.calls[0][1] as RequestInit;
+    expect(init.headers).toMatchObject({ "x-groq-api-key": "gsk_test_visible_key_1234567890" });
+    expect(String(init.body)).not.toContain("gsk_test_visible_key");
+  });
+
+  it("no envía cabecera de clave cuando el visitante no ha guardado ninguna", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response([event("spoken", { text: "Hola." }), event("done", {})].join(""), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await streamSpeechReply({ message: "hola", language: "es", history: [], apiKey: null, signal: new AbortController().signal, ...callbacks() });
+
+    const init = fetchMock.mock.calls[0][1] as RequestInit;
+    expect(init.headers).not.toHaveProperty("x-groq-api-key");
+  });
+
   it("envía las notas elegidas y devuelve solo la primera nota válida, sin mostrarla", async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response([
       event("spoken", { text: "Te cuento." }),

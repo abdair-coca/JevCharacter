@@ -1,0 +1,42 @@
+:root { --settings-width: 32rem; --settings-max-height: 40rem; }
+
+/* Centered dialog over the page, with Jev's reply surface; a bottom sheet on phones. */
+.settings-layer { position: fixed; inset: 0; z-index: var(--layer-dialog); display: grid; place-items: center; padding: var(--space-4); }
+.settings__backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--color-background) 60%, transparent); }
+.settings {
+  position: relative; display: flex; flex-direction: column; gap: var(--space-4);
+  width: min(100%, var(--settings-width)); max-height: min(var(--settings-max-height), 100%); min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--space-6); border: var(--border-thin) solid transparent; border-radius: var(--radius-lg);
+  background: var(--reply-surface); box-shadow: var(--shadow-elevated), var(--shadow-organic); color: var(--color-foreground);
+}
+.settings__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.settings__head h2 { margin: 0; font: var(--weight-title) var(--text-lead)/var(--line-title) var(--font-display); letter-spacing: var(--tracking-title); }
+.settings__head h2:focus { outline: none; }
+
+.settings__switch { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
+.settings__track { position: relative; flex: none; width: calc(var(--size-icon) * 2); height: var(--size-icon); border-radius: var(--radius-pill); background: var(--color-surface-raised); }
+.settings__track::after { content: ""; position: absolute; top: 0.125rem; left: 0.125rem; width: calc(var(--size-icon) - 0.25rem); height: calc(var(--size-icon) - 0.25rem); border-radius: var(--radius-pill); background: var(--color-muted); }
+.settings__switch[aria-pressed="true"] .settings__track { background: var(--color-accent); }
+.settings__switch[aria-pressed="true"] .settings__track::after { left: calc(100% - var(--size-icon) + 0.125rem); background: var(--color-accent-foreground); }
+
+.settings__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); }
+.settings__label { font-size: var(--text-small); font-weight: var(--weight-label); }
+
+.settings__group { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: var(--border-thin) solid var(--color-border); }
+.settings__group h3 { margin: 0; font-size: var(--text-small); font-weight: var(--weight-label); }
+.settings__help, .settings__status, .settings__error { margin: 0; font-size: var(--text-small); line-height: var(--line-body); }
+.settings__help, .settings__status { color: var(--color-muted); }
+.settings__error { color: var(--color-status-error); }
+.settings__key { display: grid; gap: var(--space-2); }
+.settings__key label { color: var(--color-muted); font-size: var(--text-caption); }
+.settings__key input { min-height: var(--size-target); padding-inline: var(--space-3); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-foreground); font: inherit; font-size: var(--text-small); }
+.settings__key input[aria-invalid="true"] { border-color: var(--color-status-error); }
+.settings__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.settings__actions button { min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
+.settings__actions button[type="submit"] { border-color: transparent; background: var(--color-accent); color: var(--color-accent-foreground); }
+.settings__actions button:disabled { opacity: 0.5; }
+
+@media (max-width: 40rem) {
+  .settings-layer { align-items: end; padding: var(--space-2) var(--space-2) max(var(--space-2), env(safe-area-inset-bottom)); }
+  .settings { padding: var(--space-4); }
+}

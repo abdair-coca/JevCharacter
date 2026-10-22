@@ -24,3 +24,13 @@ export function writeStorage(key: string, value: unknown) {
     // Storage can be unavailable in private or restricted browsing contexts.
   }
 }
+
+export function removeStorage(key: string) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Same as writeStorage: without storage there is nothing persisted to remove.
+  }
+}

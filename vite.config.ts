@@ -131,7 +131,7 @@ const localDevApi = (): Plugin => ({
 
 export default defineConfig(({ mode }) => {
   const localEnv = loadEnv(mode, process.cwd(), '')
-  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_API_KEY', 'GROQ_MODEL'] as const) {
+  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL'] as const) {
     if (!process.env[name] && localEnv[name]) process.env[name] = localEnv[name]
   }
 

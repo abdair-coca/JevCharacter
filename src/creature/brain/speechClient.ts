@@ -1,5 +1,6 @@
 import { acceptsBlock, clampText, parseBlock, parseMemoryNote, SPEECH_SPOKEN_MAX_CHARS, type SpeechBlock, type SpeechReply } from "./speechBlocks";
 import {
+  GROQ_KEY_HEADER,
   isSpeechLanguage,
   SPEECH_HISTORY_LIMIT,
   SPEECH_MESSAGE_MAX_CHARS,
@@ -13,6 +14,8 @@ type StreamSpeechOptions = {
   history: SpeechExchange[];
   /** Persistent notes chosen for this message; the server bounds them again. */
   memory: string[];
+  /** The visitor's own Groq key, sent only as a request header. */
+  apiKey?: string | null;
   signal: AbortSignal;
   onSpoken: (text: string) => void;
   onBlock: (block: SpeechBlock) => void;
@@ -25,12 +28,16 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
 /** Streams one reply: the spoken sentence first, then each block the client also validates. */
-export async function streamSpeechReply({ message, language, history, memory: notes, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechResult> {
+export async function streamSpeechReply({ message, language, history, memory: notes, apiKey, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechResult> {
   if (!isSpeechLanguage(language)) throw new Error("Invalid speech language");
   signal.throwIfAborted();
   const response = await fetch("/api/talk", {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "text/event-stream",
+      ...(apiKey ? { [GROQ_KEY_HEADER]: apiKey } : {}),
+    },
     body: JSON.stringify({
       message: message.slice(0, SPEECH_MESSAGE_MAX_CHARS),
       language,

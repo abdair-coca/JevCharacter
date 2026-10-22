@@ -26,11 +26,11 @@ El usuario declaró terminado JEV Lab y pidió reemplazar su plan activo, aclara
 - React compone la experiencia; TypeScript define contratos; Vite sirve el desarrollo y prepara el build. Rive presenta el personaje. Jev puede producir decisiones estructuradas mediante `POST /api/decide`; existe también una ruta de fallback local.
 - Decisión describe reacción, confianza, probabilidades, intensidad ambiental e intención de atención. No genera una respuesta textual para mostrar como chat.
 - Pointer-follow y lecturas de sensor ocurren localmente. No confundir movimiento del cursor con una solicitud al modelo ni con el `CreatureWorldState` enviado al endpoint.
-- El contexto y hasta dos intercambios completos viven solo en memoria de sesión (`SPEECH_HISTORY_LIMIT=2`). Navegar dentro de la web los conserva; recargar o borrar la conversación los elimina. La personalidad y las notas cortas de memoria de Jev (`jevling.memory`, visibles y borrables en «Lo que Jev recuerda») sí se guardan en `localStorage`; nada se sincroniza entre dispositivos.
+- El contexto y hasta dos intercambios completos viven solo en memoria de sesión (`SPEECH_HISTORY_LIMIT=2`). Navegar dentro de la web los conserva; recargar o borrar la conversación los elimina. La personalidad y las notas cortas de memoria de Jev (`jevling.memory`, visibles y borrables en «Lo que Jev recuerda») sí se guardan en `localStorage`, junto con la clave Groq que el visitante guarda en Ajustes (`jevling.groqKey`); nada se sincroniza entre dispositivos.
 
 ## Límites de evidencia
 
-- Vite ejecuta `api/decide.ts` y `api/talk.ts` como middleware local. Carga las claves Jev/Groq solo en el servidor; `/api/talk` llama a Groq únicamente tras una acción contextual `talk`.
+- Vite ejecuta `api/decide.ts` y `api/talk.ts` como middleware local. Carga `TYPESAFE_API_KEY` solo en el servidor. La clave Groq la pone cada visitante en Ajustes y llega a `/api/talk` en una cabecera; `/api/talk` llama a Groq únicamente tras una acción contextual `talk`.
 - `Character` depende de un asset Rive propiedad del usuario, cargado desde la ruta configurada en la fuente. No duplicar bytes, extraer, incrustar ni describir contenido propietario de Rive o de otros medios en documentación o exports. La ruta y los archivos locales pueden cambiar.
 - No incluir valores de `.env`, claves ni secretos.
 
