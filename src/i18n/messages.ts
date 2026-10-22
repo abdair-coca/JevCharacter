@@ -3,7 +3,7 @@ import type { Language } from "../stores/preferencesStore";
 const es = {
   home: "Inicio", features: "Capacidades", about: "Historia", navigation: "Navegación principal",
   skip: "Ir al contenido", theme: "Tema", system: "Sistema", light: "Claro", dark: "Oscuro",
-  sound: "Sonido de Jev", mute: "Silenciar a Jev", unmute: "Activar el sonido de Jev",
+  sound: "Sonido de Jev",
   language: "Idioma", title: "Pequeña criatura.", titleAccent: "Grandes decisiones.",
   intro: "Mueve el cursor. Acércate. Dile algo.", creature: "Jev, tu criatura digital interactiva",
   input: "Dale contexto a Jev", placeholder: "¿Qué quieres contarle a Jev?", send: "Enviar a Jev",
@@ -39,7 +39,7 @@ export type MessageKey = keyof typeof es;
 const en: Record<MessageKey, string> = {
   home: "Home", features: "Features", about: "About", navigation: "Main navigation",
   skip: "Skip to content", theme: "Theme", system: "System", light: "Light", dark: "Dark",
-  sound: "Jev's sound", mute: "Mute Jev", unmute: "Turn on Jev's sound",
+  sound: "Jev's sound",
   language: "Language", title: "Tiny creature.", titleAccent: "Big decisions.",
   intro: "Move your cursor. Come closer. Say something.", creature: "Jev, your interactive digital creature",
   input: "Give Jev context", placeholder: "What would you like to tell Jev?", send: "Send to Jev",
