@@ -126,6 +126,8 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 .brain-hud__chevron svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .brain-hud__details { position: absolute; right: 0; bottom: calc(100% + var(--space-3)); z-index: var(--layer-popover); width: min(var(--size-hud-panel), calc(100vw - var(--space-8))); padding: var(--space-4); border: var(--border-thin) solid var(--color-control-edge); border-radius: var(--radius-md); background: var(--color-background-secondary); box-shadow: var(--shadow-elevated); transform-origin: bottom right; }
 .brain-hud__notice { margin: 0; padding: 0 var(--space-4) var(--space-4); color: var(--color-muted); font-size: var(--text-caption); line-height: var(--line-body); }
+/* Follows the notice that names the missing setting; sits flush under its text. */
+.brain-hud__notice-action { display: inline-flex; align-items: center; min-height: var(--space-6); margin: calc(var(--space-3) * -1) var(--space-4) var(--space-3); padding: 0; border: 0; background: transparent; color: var(--color-accent); font-size: var(--text-caption); font-weight: var(--weight-label); text-decoration: underline; text-underline-offset: 0.2em; }
 .brain-hud__eyebrow { margin: 0 0 var(--space-4); color: var(--color-muted); font-size: var(--text-caption); font-weight: var(--weight-label); }
 .brain-hud__probabilities, .brain-hud__personality { display: grid; gap: var(--space-3); }
 .brain-hud__metric { display: grid; grid-template-columns: minmax(0, 1fr) 1fr var(--space-8); align-items: center; gap: var(--space-2); font-size: var(--text-caption); color: var(--color-muted); }

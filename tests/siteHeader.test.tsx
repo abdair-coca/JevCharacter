@@ -3,10 +3,14 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-libra
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SiteHeader from "../src/components/SiteHeader";
 import { preferencesStore } from "../src/stores/preferencesStore";
+import { openSettings, settingsDialogStore } from "../src/stores/settingsDialogStore";
 
 vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useThemeIconMotion: () => ({ turn: 0, scale: 1 }) }));
 afterEach(cleanup);
-beforeEach(() => preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true }));
+beforeEach(() => {
+  preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true });
+  settingsDialogStore.setState({ open: false, opener: null });
+});
 
 describe("header preference controls", () => {
   it("keeps automatic system selection until the user toggles the resolved theme", () => {
@@ -44,11 +48,23 @@ describe("header preference controls", () => {
     await waitFor(() => expect(document.activeElement).toBe(gear));
   });
 
-  it("closes Ajustes when the route changes", async () => {
+  it("closes Ajustes on navigation and does not reopen it when coming back", async () => {
     const { rerender } = render(<SiteHeader route="/" />);
     fireEvent.click(screen.getByRole("button", { name: "Ajustes" }));
     await screen.findByRole("dialog", { name: "Ajustes" });
+    act(() => window.dispatchEvent(new PopStateEvent("popstate")));
     rerender(<SiteHeader route="/about" />);
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    act(() => window.dispatchEvent(new PopStateEvent("popstate")));
+    rerender(<SiteHeader route="/" />);
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("returns focus to whatever control opened Ajustes, not only the gear", async () => {
+    render(<><SiteHeader route="/" /><button type="button">Abrir Ajustes</button></>);
+    const opener = screen.getByRole("button", { name: "Abrir Ajustes" });
+    act(() => openSettings(opener));
+    fireEvent.keyDown(await screen.findByRole("dialog", { name: "Ajustes" }), { key: "Escape" });
+    await waitFor(() => expect(document.activeElement).toBe(opener));
   });
 });

@@ -3,11 +3,12 @@ import type { CharacterController } from "../character/useCharacterController";
 import type { TalkState } from "../creature/brain/brain.types";
 import { historyReply, type SpeechBlock } from "../creature/brain/speechBlocks";
 import { readGroqKey } from "../creature/brain/groqKeyStore";
-import { streamSpeechReply } from "../creature/brain/speechClient";
+import { SpeechKeyRequiredError, streamSpeechReply } from "../creature/brain/speechClient";
 import { addMemory, readMemory, selectRelevant } from "../creature/memory/memoryStore";
 import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage } from "../creature/brain/speechProtocol";
 
-export type SpeechNotice = "unavailable" | "regenerating" | "interrupted" | null;
+/** `needsKey`: Jev could not speak because this browser has no valid Groq key saved in Ajustes. */
+export type SpeechNotice = "unavailable" | "needsKey" | "regenerating" | "interrupted" | null;
 export type SpeechCaption = { text: string; complete: boolean; generation: number; language: SpeechLanguage };
 /** A reply with blocks, kept until dismissed or replaced; `complete` once the stream has ended. */
 export type SpeechDetail = { spoken: string; blocks: SpeechBlock[]; complete: boolean; generation: number; language: SpeechLanguage };
@@ -73,16 +74,16 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     if (regenerating) void characterRef.current?.think();
 
     const isCurrent = () => pendingRef.current === request && activeRef.current && !request.controller.signal.aborted;
-    const fail = () => {
+    const fail = (notice: "unavailable" | "needsKey" = "unavailable") => {
       if (!isCurrent()) return;
       invalidate();
       setCaption(null);
       setDetail(null);
-      setNotice("unavailable");
+      setNotice(notice);
       setStatus("idle");
       void characterRef.current?.idle();
     };
-    request.timeout = window.setTimeout(fail, SPEECH_REQUEST_TIMEOUT_MS);
+    request.timeout = window.setTimeout(() => fail(), SPEECH_REQUEST_TIMEOUT_MS);
     void streamSpeechReply({
       message: request.message,
       language: request.language,
@@ -119,7 +120,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       openQuestionRef.current = reply.blocks.some(block => block.type === "choices");
       setStatus("idle");
       if (!request.dismissed) setDetail(reply.blocks.length > 0 ? { spoken: reply.spoken, blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
-    }).catch(fail);
+    }).catch((error: unknown) => fail(error instanceof SpeechKeyRequiredError ? "needsKey" : "unavailable"));
   }, [characterRef, invalidate]);
 
   // Closing a reply hides it without cancelling the voice; its late blocks are ignored.

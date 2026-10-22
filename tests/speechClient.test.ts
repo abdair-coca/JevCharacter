@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { streamSpeechReply } from "../src/creature/brain/speechClient";
+import { SpeechKeyRequiredError, streamSpeechReply } from "../src/creature/brain/speechClient";
 
 function event(name: string, data: unknown) {
   return `event: ${name}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -49,6 +49,17 @@ describe("streamSpeechReply", () => {
     const init = fetchMock.mock.calls[0][1] as RequestInit;
     expect(init.headers).toMatchObject({ "x-groq-api-key": "gsk_test_visible_key_1234567890" });
     expect(String(init.body)).not.toContain("gsk_test_visible_key");
+  });
+
+  it("distingue la falta de clave (401) de cualquier otro fallo del servidor", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response('{"error":"Speech key required"}', { status: 401 })));
+    await expect(streamSpeechReply({ message: "hola", language: "es", history: [], signal: new AbortController().signal, ...callbacks() }))
+      .rejects.toBeInstanceOf(SpeechKeyRequiredError);
+
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response('{"error":"Speech unavailable"}', { status: 503 })));
+    const failure = streamSpeechReply({ message: "hola", language: "es", history: [], signal: new AbortController().signal, ...callbacks() });
+    await expect(failure).rejects.toThrow("Speech response unavailable");
+    await expect(failure).rejects.not.toBeInstanceOf(SpeechKeyRequiredError);
   });
 
   it("no envía cabecera de clave cuando el visitante no ha guardado ninguna", async () => {

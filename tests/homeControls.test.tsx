@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ContextWhisper from "../src/components/ContextWhisper";
 import BrainHUD from "../src/components/BrainHUD";
 import { preferencesStore } from "../src/stores/preferencesStore";
+import { settingsDialogStore } from "../src/stores/settingsDialogStore";
 import { decision } from "./helpers";
 
 vi.mock("../src/lib/motionTokens", () => ({
@@ -52,6 +53,18 @@ describe("Home HUD", () => {
     act(() => preferencesStore.getState().setLanguage("en"));
     expect(screen.getByRole("status").textContent).toBe("Speech is unavailable. Please try again.");
     expect(document.querySelector(".speech-caption")).toBeNull();
+  });
+  it("names the missing Groq key and opens Ajustes from the notice", () => {
+    settingsDialogStore.setState({ open: false, opener: null });
+    render(<BrainHUD decision={decision()} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} speechNotice="needsKey" />);
+    expect(screen.getByRole("status").textContent).toBe("Para que Jev hable, guarda tu clave de Groq en Ajustes.");
+    const action = screen.getByRole("button", { name: "Abrir Ajustes" });
+    fireEvent.click(action);
+    expect(settingsDialogStore.getState()).toEqual({ open: true, opener: action });
+  });
+  it("offers no settings action for other speech failures", () => {
+    render(<BrainHUD decision={decision()} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} speechNotice="unavailable" />);
+    expect(screen.queryByRole("button", { name: "Abrir Ajustes" })).toBeNull();
   });
   it("shows the selected action, actual confidence and fallback source, with details absent when collapsed", () => {
     render(<BrainHUD decision={decision({ kind: "morph", form: "triangle" })} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} />);

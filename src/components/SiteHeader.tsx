@@ -1,7 +1,8 @@
-import { lazy, Suspense, useCallback, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useRef } from "react";
 import { useTranslation } from "../i18n/useTranslation";
 import { navigate, type PageRoute, type Route } from "../navigation/routes";
 import { usePreferences } from "../stores/preferencesStore";
+import { closeSettings, openSettings, useSettingsOpen } from "../stores/settingsDialogStore";
 import { Button } from "./ui/button";
 import { m } from "motion/react";
 import { useThemeIconMotion, useUiMotion } from "../lib/motionTokens";
@@ -15,14 +16,12 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
   const setThemePreference = usePreferences((state) => state.setThemePreference);
   const transition = useUiMotion();
   const iconMotion = useThemeIconMotion();
-  // The panel belongs to the page it opened on: changing route closes it, with no effect needed.
-  const [settingsRoute, setSettingsRoute] = useState<PageRoute | null>(null);
-  const settingsOpen = settingsRoute === route;
+  const settingsOpen = useSettingsOpen();
   const settingsButton = useRef<HTMLButtonElement | null>(null);
-  // Focus goes back to the gear that opened the panel.
-  const closeSettings = useCallback(() => {
-    setSettingsRoute(null);
-    requestAnimationFrame(() => settingsButton.current?.focus({ preventScroll: true }));
+  // Focus goes back to whatever opened the panel, or to the gear when that control is gone.
+  const onSettingsClose = useCallback(() => {
+    const opener = closeSettings();
+    requestAnimationFrame(() => (opener ?? settingsButton.current)?.focus({ preventScroll: true }));
   }, []);
   const links: { route: Route; label: string }[] = [
     { route: "/", label: t.home }, { route: "/features", label: t.features }, { route: "/about", label: t.about },
@@ -54,7 +53,7 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
                 </m.svg>
               </span>
             </Button>
-            <Button ref={settingsButton} className="theme-toggle" variant="ghost" size="icon" aria-label={t.settings} aria-haspopup="dialog" title={t.settings} onClick={() => setSettingsRoute(route)}>
+            <Button ref={settingsButton} className="theme-toggle" variant="ghost" size="icon" aria-label={t.settings} aria-haspopup="dialog" title={t.settings} onClick={(event) => openSettings(event.currentTarget)}>
               <span className="theme-toggle__icons" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="3" />
@@ -65,7 +64,7 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
           </div>
         </div>
       </header>
-      {settingsOpen && <Suspense fallback={null}><SettingsPanel onClose={closeSettings} /></Suspense>}
+      {settingsOpen && <Suspense fallback={null}><SettingsPanel onClose={onSettingsClose} /></Suspense>}
     </>
   );
 }

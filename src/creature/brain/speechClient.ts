@@ -24,6 +24,14 @@ type StreamSpeechOptions = {
 /** A finished reply, with the note Jev chose to remember, if any. */
 export type SpeechResult = SpeechReply & { memory?: string };
 
+/** The server refused the request because the visitor's Groq key is missing or malformed. */
+export class SpeechKeyRequiredError extends Error {
+  constructor() {
+    super("Speech key required");
+    this.name = "SpeechKeyRequiredError";
+  }
+}
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
@@ -52,6 +60,7 @@ export async function streamSpeechReply({ message, language, history, memory: no
     signal.throwIfAborted();
   }
 
+  if (response.status === 401) throw new SpeechKeyRequiredError();
   if (!response.ok) throw new Error("Speech response unavailable");
   if (!response.body) throw new Error("Speech stream unavailable");
 

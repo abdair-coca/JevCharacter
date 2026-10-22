@@ -5,6 +5,11 @@ import { useTranslation } from "../i18n/useTranslation";
 import { useOrganicMotion, useUiMotion } from "../lib/motionTokens";
 import type { MessageKey } from "../i18n/messages";
 import type { SpeechNotice } from "../hooks/useSpeechSession";
+import { openSettings } from "../stores/settingsDialogStore";
+
+const NOTICES: Record<NonNullable<SpeechNotice>, MessageKey> = {
+  unavailable: "speechUnavailable", needsKey: "speechNeedsKey", regenerating: "speechRegenerating", interrupted: "speechInterrupted",
+};
 
 type Props = { decision: BrainDecision; status: BrainStatus; personality: Personality; speechNotice?: SpeechNotice; decisionInterrupted?: boolean };
 
@@ -65,7 +70,7 @@ export default function BrainHUD({ decision, status, personality, speechNotice, 
   const motion = useOrganicMotion();
   const confidence = Math.round(decision.actionConfidence * 100);
   const headline = status === "deciding" ? t.deciding : actionLabel(decision, t);
-  const notice = speechNotice ? t[speechNotice === "unavailable" ? "speechUnavailable" : speechNotice === "regenerating" ? "speechRegenerating" : "speechInterrupted"] : decisionInterrupted ? t.decisionInterrupted : null;
+  const notice = speechNotice ? t[NOTICES[speechNotice]] : decisionInterrupted ? t.decisionInterrupted : null;
   return (
     <aside className="brain-hud" aria-label={t.details} data-expanded={expanded} data-activity={status}
       onKeyDown={(event) => { if (event.key === "Escape") setExpanded(false); }}>
@@ -91,6 +96,9 @@ export default function BrainHUD({ decision, status, personality, speechNotice, 
         </span>
       </m.button>
       {notice && <p className="brain-hud__notice" role="status">{notice}</p>}
+      {speechNotice === "needsKey" && (
+        <button type="button" className="brain-hud__notice-action" aria-haspopup="dialog" onClick={(event) => openSettings(event.currentTarget)}>{t.openSettings}</button>
+      )}
       <AnimatePresence initial={false}>
         {expanded && <HudDetails decision={decision} personality={personality} />}
       </AnimatePresence>

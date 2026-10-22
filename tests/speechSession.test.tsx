@@ -5,11 +5,15 @@ import { StrictMode, type ReactNode } from "react";
 import type { CharacterController } from "../src/character/useCharacterController";
 import { useSpeechSession } from "../src/hooks/useSpeechSession";
 import type { SpeechBlock } from "../src/creature/brain/speechBlocks";
-import { streamSpeechReply, type SpeechResult } from "../src/creature/brain/speechClient";
+import { SpeechKeyRequiredError, streamSpeechReply, type SpeechResult } from "../src/creature/brain/speechClient";
 import { addMemory, readMemory } from "../src/creature/memory/memoryStore";
 import { SPEECH_REQUEST_TIMEOUT_MS, type SpeechLanguage } from "../src/creature/brain/speechProtocol";
 
-vi.mock("../src/creature/brain/speechClient", () => ({ streamSpeechReply: vi.fn() }));
+// Only the network call is replaced; the session still needs the real error classes.
+vi.mock("../src/creature/brain/speechClient", async (importOriginal) => ({
+  ...await importOriginal<typeof import("../src/creature/brain/speechClient")>(),
+  streamSpeechReply: vi.fn(),
+}));
 type Request = { options: Parameters<typeof streamSpeechReply>[0]; resolve: (reply: SpeechResult) => void; reject: (error: Error) => void };
 let requests: Request[];
 beforeEach(() => {
@@ -198,6 +202,15 @@ describe("speech session generations", () => {
     expect(character.idle).toHaveBeenCalled();
     act(() => result.current.start("Otra", "Talk"));
     expect(requests[1].options.history).toEqual([]);
+  });
+
+  it("asks for the Groq key instead of reporting a generic failure when the server needs it", async () => {
+    const { result, character } = mountSpeech();
+    act(() => result.current.start("Pregunta", "Talk"));
+    await act(async () => requests[0].reject(new SpeechKeyRequiredError()));
+    expect(result.current.notice).toBe("needsKey");
+    expect(result.current.caption).toBeNull();
+    expect(character.idle).toHaveBeenCalled();
   });
 
   it("times out unresponsive speech and cancels every timer on teardown", async () => {

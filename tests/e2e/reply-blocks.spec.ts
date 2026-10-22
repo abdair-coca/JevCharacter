@@ -148,3 +148,35 @@ test("a failed reply shows the localized notice and no card", async ({ page }) =
   await expect(page.getByText(labels.es.unavailable)).toBeVisible();
   await expect(page.locator(".reply-card")).toHaveCount(0);
 });
+
+test("without a Groq key, the notice says so and opens Ajustes", async ({ page }) => {
+  await open(page, "es", "light");
+  await page.route("**/api/talk", route => route.fulfill({ status: 401, contentType: "application/json", body: '{"error":"Speech key required"}' }));
+  await send(page, "compara gatos y perros");
+  await expect(page.getByText("Para que Jev hable, guarda tu clave de Groq en Ajustes.")).toBeVisible();
+  await expect(page.getByText(labels.es.unavailable)).toHaveCount(0);
+  if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/needs-key-desktop-es-light.png` });
+
+  const action = page.getByRole("button", { name: "Abrir Ajustes" });
+  await action.click();
+  const dialog = page.getByRole("dialog", { name: "Ajustes" });
+  await expect(dialog.getByLabel("Clave API")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(action).toBeFocused();
+});
+
+test("the missing-key notice fits a phone in English and dark", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "en", "dark");
+  await page.route("**/api/talk", route => route.fulfill({ status: 401, contentType: "application/json", body: '{"error":"Speech key required"}' }));
+  await send(page, "compare cats and dogs");
+  const action = page.getByRole("button", { name: "Open Settings" });
+  await expect(action).toBeVisible();
+  const box = await action.boundingBox();
+  if (!box) throw new Error("settings action has no box");
+  expect(box.height).toBeGreaterThanOrEqual(24);
+  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  await noPageOverflow(page);
+  if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/needs-key-mobile-en-dark.png` });
+});
