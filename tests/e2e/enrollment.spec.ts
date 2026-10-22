@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { characterAspectsDuring, expect, test } from "./fixtures";
+import { characterAspectsDuring, expect, jevAtRest, test } from "./fixtures";
 
 const INPUT = "#creature-context";
 
@@ -59,6 +59,8 @@ test("closes back to Jev and starts empty the next time", async ({ page }) => {
 });
 
 test("Jev keeps her round shape while the form opens and closes", async ({ page }) => {
+  // Frames are only counted once Jev is painted; a slow Rive load is not a broken shape.
+  await jevAtRest(page);
   const opening = await characterAspectsDuring(page, () => send(page, "quiero inscribirme"));
   await expect(page.locator("#enrollment-name")).toBeVisible();
   const closing = await characterAspectsDuring(page, () => page.locator(".enrollment__close").click());

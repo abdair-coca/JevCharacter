@@ -21,6 +21,8 @@ import {
   Fit,
   Alignment,
 } from "@rive-app/react-webgl2";
+// Points the runtime at the self-hosted rive.wasm before the first useRive call.
+import "../creature/rive/riveRuntime";
 
 import {
   useCharacterController,

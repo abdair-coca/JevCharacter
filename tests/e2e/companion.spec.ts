@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
+import { expect, restingBox, test } from "./fixtures";
 
 const INPUT = "#creature-context";
 const EVIDENCE = process.env.REPLY_EVIDENCE;
@@ -96,11 +96,12 @@ for (const language of ["es", "en"] as const) {
         await expect(dialog.getByRole("listitem")).toHaveCount(3);
         // Newest first.
         await expect(dialog.getByRole("listitem").first()).toContainText(text.notes[2]);
-        const box = (await dialog.boundingBox())!;
+        // The sheet slides up on entry: measure where it comes to rest, never mid-animation.
+        await settled(page, ".memory");
+        const box = await restingBox(dialog);
         expect(box.x).toBeGreaterThanOrEqual(0);
         expect(box.x + box.width).toBeLessThanOrEqual(viewports[device].width);
         expect(box.y + box.height).toBeLessThanOrEqual(viewports[device].height);
-        await settled(page, ".memory");
         if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/memory-${device}-${language}-${theme}.png` });
 
         await dialog.getByRole("button", { name: text.close }).click();

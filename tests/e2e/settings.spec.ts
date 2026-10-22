@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
+import { expect, restingBox, test } from "./fixtures";
 
 const EVIDENCE = process.env.SETTINGS_EVIDENCE;
 const viewports = { desktop: { width: 1440, height: 900 }, mobile: { width: 390, height: 844 } } as const;
@@ -38,8 +38,8 @@ for (const language of ["es", "en"] as const) {
         await page.getByRole("button", { name: text.gear, exact: true }).click();
         const dialog = page.getByRole("dialog", { name: text.gear });
         await expect(dialog).toBeVisible();
-        const box = await dialog.boundingBox();
-        if (!box) throw new Error("settings dialog has no box");
+        // The panel slides up on entry: measure where it comes to rest, never mid-animation.
+        const box = await restingBox(dialog);
         expect(box.x).toBeGreaterThanOrEqual(0);
         expect(box.x + box.width).toBeLessThanOrEqual(viewports[device].width);
         expect(box.y).toBeGreaterThanOrEqual(0);

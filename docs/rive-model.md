@@ -7,6 +7,7 @@ Referencia para planificar una integración más interactiva. Resume el informe 
 ## Identidad y alcance
 
 - Ruta del asset documentado originalmente: `public/rive/prove1.riv`; `src/components/Character.tsx` consume actualmente `/rive/prove2.riv`.
+- Runtime: `src/creature/rive/riveRuntime.ts` sirve `rive.wasm` desde el propio sitio (asset de Vite) en lugar de unpkg. Antes, una descarga lenta o colgada del CDN, sin timeout, dejaba a Jev en «Preparando a Jev…». El respaldo de jsdelivr del runtime sigue activo si el archivo propio falla. `tests/riveRuntime.test.ts` comprueba que la versión empaquetada coincide con la que fija `@rive-app/react-webgl2`.
 - El archivo local coincide con el informe: 78.380 bytes; SHA-256 `98AA68170540D448DEAED0DB6FA57C11B062CEBF9036DC1CFADA4376254A8DAF`.
 - Binario Rive; dos artboards, dos ViewModels y sin audio, según el informe.
 - Es un asset creativo propiedad del usuario. Esta documentación no incluye ni transforma sus bytes; no agregar el `.riv` a commits, exports ni despliegues sin autorización explícita para ese destino.

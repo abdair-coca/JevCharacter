@@ -21,6 +21,7 @@ vi.mock("@rive-app/react-webgl2", () => {
     useViewModelInstanceNumber: () => ({ value: 0, setValue: runtime.shape }),
     useViewModelInstanceTrigger: () => ({ trigger: runtime.trigger }),
     Layout: class {}, Fit: { Contain: "contain" }, Alignment: { Center: "center" },
+    RuntimeLoader: { setWasmUrl: () => {} },
   };
 });
 afterEach(cleanup);

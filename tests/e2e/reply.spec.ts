@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { characterAspectsDuring, expect, test } from "./fixtures";
+import { characterAspectsDuring, expect, jevAtRest, restingBox, test } from "./fixtures";
 
 const INPUT = "#creature-context";
 const EVIDENCE = process.env.REPLY_EVIDENCE;
@@ -52,8 +52,11 @@ async function stageIsSingleScreen(page: Page) {
   expect(overflow.horizontal).toBeLessThanOrEqual(1);
 }
 
+// Evidence only: the pause lets entrance animations finish for the picture and never runs in plain test runs.
 async function capture(page: Page, name: string) {
-  if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/${name}.png` });
+  if (!EVIDENCE) return;
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: `${EVIDENCE}/${name}.png` });
 }
 
 async function open(page: Page, theme: "light" | "dark" = "light") {
@@ -68,7 +71,9 @@ test.describe("desktop reply card", () => {
     await open(page);
     const presence = page.locator(".creature-presence");
     const center = async () => { const box = (await presence.boundingBox())!; return box.x + box.width / 2; };
-    const centered = await center();
+    // Measured from rest: a reading taken while Jev still arrives would be a false reference.
+    const rest = await jevAtRest(page);
+    const centered = rest.x + rest.width / 2;
     await send(page, "explícame la fotosíntesis");
 
     const card = page.getByRole("region", { name: "Respuesta de Jev" });
@@ -93,6 +98,8 @@ test.describe("desktop reply card", () => {
   test("Jev keeps her round shape while stepping aside and back", async ({ page }) => {
     await mockTalk(page, [{ spoken: "Te cuento cómo funciona.", blocks: longBlocks }]);
     await open(page);
+    // Frames are only counted once Jev is painted; a slow Rive load is not a broken shape.
+    await jevAtRest(page);
     const card = page.getByRole("region", { name: "Respuesta de Jev" });
     const opening = await characterAspectsDuring(page, () => send(page, "explícame la fotosíntesis"));
     await expect(card).toBeVisible();
@@ -174,7 +181,6 @@ test.describe("mobile reply sheet", () => {
     await expect(page.getByRole("button", { name: "Leer todo" })).toHaveCount(0);
     await expect(page.locator(".reply-card")).toHaveCount(0);
     await stageIsSingleScreen(page);
-    await page.waitForTimeout(500);
     await capture(page, "mobile-sheet-half-light");
 
     await page.keyboard.press("Escape");
@@ -199,11 +205,10 @@ test.describe("mobile reply sheet", () => {
     await handle.click();
     await expect(handle).toHaveAttribute("aria-expanded", "true");
     await expect.poll(async () => (await page.locator(".reply-sheet").boundingBox())!.y).toBeLessThan(120);
-    // Measure the handle only once the sheet has settled at full height.
-    await page.waitForTimeout(500);
+    // Drag from where the handle comes to rest at full height, not from a mid-spring position.
+    const box = await restingBox(handle);
     await capture(page, "mobile-sheet-full-dark");
 
-    const box = (await handle.boundingBox())!;
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
     await page.mouse.move(box.x + box.width / 2, box.y + 300, { steps: 12 });
@@ -225,7 +230,6 @@ test.describe("narrow and short viewports", () => {
       await expect(sheet).toBeVisible();
       await page.getByRole("button", { name: "Más" }).or(page.getByRole("button", { name: "Cerrar respuesta" })).first().waitFor();
       await stageIsSingleScreen(page);
-      await page.waitForTimeout(500);
       await capture(page, `sheet-${viewport.width}x${viewport.height}`);
       await page.getByRole("button", { name: "Cerrar respuesta" }).click();
       await expect(sheet).toHaveCount(0);
