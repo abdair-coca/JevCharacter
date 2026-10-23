@@ -18,7 +18,7 @@ Pedido: «quiero que memoria y diagnóstico también se muevan a ajustes, y que 
 - [x] `SiteHeader`: renderiza `MemoryPanel` (lazy) y pasa a Ajustes `onOpenMemory` y, solo en `/`, `diagnostics`. Los enlaces llevan icono SVG (casa, destellos, libro) y la etiqueta en `<span>`.
 - [x] `SettingsPanel`: sección «Jev» con «Memoria» (`aria-haspopup="dialog"`) y «Diagnóstico» (`aria-pressed`). En móvil, «Color de Jev» pasa a etiqueta arriba y muestras debajo: en la captura a 390 px la sexta muestra saltaba de línea (fallo del cambio anterior).
 - [x] `HomePage`: sin pie («Memoria», «Diagnóstico») ni estado propio de memoria; el diagnóstico sale de `diagnosticsStore`.
-- [x] CSS: a ≤ 40rem, una sola fila (`--size-header` pasa de 7,5rem a 4rem; se retira la regla de 6rem para pantallas bajas), enlaces de icono de `--size-nav-icon` (2,5rem, para caber a 360 px) y etiqueta visualmente oculta. Se retiraron todas las reglas `.home-footer`.
+- [x] CSS: a ≤ 40rem, una sola fila (`--size-header` pasa de 7,5rem a 4rem; se retira la regla de 6rem para pantallas bajas), enlaces de icono con la etiqueta visualmente oculta. **Ajuste posterior (pedido: «oculta JEVLING en móvil y deja solo el logo»):** la marca queda solo como logo, así que los iconos vuelven a `--size-target` (3rem) y se retira el token provisional `--size-nav-icon` (2,5rem). Verificado con capturas a 360/390 px en claro y oscuro (cabecera de 65 px, sin desborde) y con `settings.spec` + `navigation.spec`: 15/15. El e2e comprueba que el nombre está oculto, que el enlace sigue llamándose «Jevling» y que los iconos miden al menos 48 px. Se retiraron todas las reglas `.home-footer`.
 - [x] Docs: `design.md`, `docs/architecture.md`, `docs/interaction.md` y `docs/README.md`.
 
 | Comprobación | Resultado |

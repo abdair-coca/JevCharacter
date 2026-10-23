@@ -172,12 +172,12 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 }
 @media (max-width: 40rem) {
   :root { --size-header: 4rem; --size-character: min(100vw, 28rem); --size-stage-max: 20rem; --size-stage-min: 13rem; --size-home-chrome: 27rem; }
-  /* One row: brand, the three views as icons, then theme and Ajustes. */
+  /* One row: the logo alone (the link keeps its «Jevling» name), the three views as icons, then theme and Ajustes. */
   .site-header__inner { gap: var(--space-1); }
-  .brand-mark { gap: var(--space-2); font-size: var(--text-caption); }
+  .brand-mark__name { display: none; }
   .preferences { gap: var(--space-1); }
   .site-header nav { gap: var(--space-1); }
-  .site-header nav a { width: var(--size-nav-icon); min-height: var(--size-nav-icon); padding: 0; }
+  .site-header nav a { width: var(--size-target); min-height: var(--size-target); padding: 0; }
   .site-header__icon { display: block; }
   .site-header__label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .home-page { padding-top: var(--space-6); }

@@ -70,12 +70,16 @@ for (const theme of ["light", "dark"] as const) {
     await page.setViewportSize({ width: 360, height: 760 });
     await open(page, "es", theme);
     const header = (await page.locator(".site-header").boundingBox())!;
+    // Only the logo: the name is hidden, the link keeps its accessible name.
+    await expect(page.locator(".brand-mark__name")).toBeHidden();
+    await expect(page.getByRole("link", { name: "Jevling" })).toBeVisible();
     const gear = (await page.getByRole("button", { name: "Ajustes", exact: true }).boundingBox())!;
     for (const name of ["Inicio", "Capacidades", "Historia"]) {
       const link = page.getByRole("link", { name });
       await expect(link.locator(".site-header__icon")).toBeVisible();
       await expect(link.locator(".site-header__label")).toHaveCSS("clip-path", "inset(50%)");
       const box = (await link.boundingBox())!;
+      expect(box.width).toBeGreaterThanOrEqual(48);
       // Same row as the gear, between the brand and the theme button.
       expect(Math.abs(box.y + box.height / 2 - (gear.y + gear.height / 2))).toBeLessThanOrEqual(2);
     }

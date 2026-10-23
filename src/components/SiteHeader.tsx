@@ -53,7 +53,7 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
         <div className="site-header__inner">
           <a className="brand-mark" href="/" onClick={(event) => navigate(event, "/")} aria-label="Jevling">
             <span className="brand-mark__glyph" aria-hidden="true">••</span>
-            <span>JEVLING<span className="brand-mark__dot">.</span></span>
+            <span className="brand-mark__name">JEVLING<span className="brand-mark__dot">.</span></span>
           </a>
           <nav aria-label={t.navigation}>
             {links.map(({ route: destination, label }) => (
