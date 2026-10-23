@@ -65,6 +65,43 @@ for (const language of ["es", "en"] as const) {
   }
 }
 
+for (const theme of ["light", "dark"] as const) {
+  test(`phones show the views as icons in a single header row (${theme})`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 760 });
+    await open(page, "es", theme);
+    const header = (await page.locator(".site-header").boundingBox())!;
+    const gear = (await page.getByRole("button", { name: "Ajustes", exact: true }).boundingBox())!;
+    for (const name of ["Inicio", "Capacidades", "Historia"]) {
+      const link = page.getByRole("link", { name });
+      await expect(link.locator(".site-header__icon")).toBeVisible();
+      await expect(link.locator(".site-header__label")).toHaveCSS("clip-path", "inset(50%)");
+      const box = (await link.boundingBox())!;
+      // Same row as the gear, between the brand and the theme button.
+      expect(Math.abs(box.y + box.height / 2 - (gear.y + gear.height / 2))).toBeLessThanOrEqual(2);
+    }
+    expect(header.height).toBeLessThanOrEqual(72);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+    // The current view's icon takes the text color: white on dark, near-black on light.
+    const icon = await page.getByRole("link", { name: "Inicio" }).evaluate(link => getComputedStyle(link).color);
+    expect(icon).toBe(await page.evaluate(() => getComputedStyle(document.body).color));
+  });
+}
+
+test("Diagnóstico opens from Ajustes on Home only", async ({ page }) => {
+  await open(page, "es", "dark");
+  await page.getByRole("button", { name: "Ajustes", exact: true }).click();
+  await page.getByRole("dialog", { name: "Ajustes" }).getByRole("button", { name: "Diagnóstico" }).click();
+  await expect(page.getByRole("dialog", { name: "Ajustes" })).toBeHidden();
+  await expect(page.getByRole("complementary", { name: "Diagnóstico" })).toBeVisible();
+  await expect(page.locator(".home-footer")).toHaveCount(0);
+
+  await page.getByRole("link", { name: "Historia" }).click();
+  await page.getByRole("button", { name: "Ajustes", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Ajustes" });
+  await expect(dialog.getByRole("button", { name: "Memoria" })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Diagnóstico" })).toHaveCount(0);
+});
+
 for (const device of ["desktop", "mobile"] as const) {
   test(`Jev's color stays inside the panel and survives a reload on ${device}`, async ({ page }) => {
     await page.setViewportSize(viewports[device]);

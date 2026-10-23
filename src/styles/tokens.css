@@ -42,6 +42,8 @@
   --size-composer: 3.5rem; --size-presence: 2.25rem; --size-send: 2.75rem;
   --size-eye: 0.1875rem; --size-hud-eye: 0.25rem;
   --size-hud-toggle: 1.75rem; --text-reading: 1.5rem;
+  /* Icon-only view links on phones; smaller than --size-target so the bar fits one 360px row. */
+  --size-nav-icon: 2.5rem;
   --control-halo-blur: 1.125rem; --control-aura-inset: -0.5rem;
   /* Direct-render integration; user requested ~10% more size after testing prove2. */
   --character-canvas-scale: 1.9;

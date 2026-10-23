@@ -55,12 +55,12 @@ describe("Home HUD", () => {
     expect(document.querySelector(".speech-caption")).toBeNull();
   });
   it("names the missing Groq key and opens Ajustes from the notice", () => {
-    settingsDialogStore.setState({ open: false, opener: null });
+    settingsDialogStore.setState({ open: false, memory: false, opener: null });
     render(<BrainHUD decision={decision()} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} speechNotice="needsKey" />);
     expect(screen.getByRole("status").textContent).toBe("Para que Jev hable, guarda tu clave de Groq en Ajustes.");
     const action = screen.getByRole("button", { name: "Abrir Ajustes" });
     fireEvent.click(action);
-    expect(settingsDialogStore.getState()).toEqual({ open: true, opener: action });
+    expect(settingsDialogStore.getState()).toEqual({ open: true, memory: false, opener: action });
   });
   it("offers no settings action for other speech failures", () => {
     render(<BrainHUD decision={decision()} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} speechNotice="unavailable" />);

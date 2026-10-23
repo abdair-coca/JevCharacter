@@ -22,7 +22,7 @@ El usuario declaró terminado JEV Lab y pidió reemplazar su plan activo, aclara
 
 ## Contexto del proyecto
 
-- `src/main.tsx` monta `App`, que gobierna cabecera, preferencias y rutas; `HomePage` reúne criatura, indicadores y controles de contexto/diagnóstico.
+- `src/main.tsx` monta `App`, que gobierna cabecera, preferencias y rutas; `HomePage` reúne criatura, indicadores, controles de contexto y el panel de diagnóstico (que se abre desde Ajustes o con `d`).
 - React compone la experiencia; TypeScript define contratos; Vite sirve el desarrollo y prepara el build. Rive presenta el personaje. Jev puede producir decisiones estructuradas mediante `POST /api/decide`; existe también una ruta de fallback local.
 - Decisión describe reacción, confianza, probabilidades, intensidad ambiental e intención de atención. No genera una respuesta textual para mostrar como chat.
 - Pointer-follow y lecturas de sensor ocurren localmente. No confundir movimiento del cursor con una solicitud al modelo ni con el `CreatureWorldState` enviado al endpoint.

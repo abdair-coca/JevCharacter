@@ -36,6 +36,10 @@
 
 .settings__group { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: var(--border-thin) solid var(--color-border); }
 .settings__group h3 { margin: 0; font-size: var(--text-small); font-weight: var(--weight-label); }
+/* Rows that leave Ajustes for another panel (memory, Home's diagnostics). */
+.settings__link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
+.settings__link > span:last-child { color: var(--color-muted); }
+.settings__link[aria-pressed="true"] { border-color: var(--color-accent); }
 .settings__help, .settings__status, .settings__error { margin: 0; font-size: var(--text-small); line-height: var(--line-body); }
 .settings__help, .settings__status { color: var(--color-muted); }
 .settings__error { color: var(--color-status-error); }
@@ -51,4 +55,7 @@
 @media (max-width: 40rem) {
   .settings-layer { align-items: end; padding: var(--space-2) var(--space-2) max(var(--space-2), env(safe-area-inset-bottom)); }
   .settings { padding: var(--space-4); }
+  /* Six swatches and the label don't fit one phone row: the swatches go under it, spread edge to edge. */
+  .settings__row--colors { flex-direction: column; align-items: stretch; gap: var(--space-1); }
+  .settings__row--colors .settings__swatches { flex-wrap: nowrap; justify-content: space-between; }
 }

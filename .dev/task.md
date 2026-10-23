@@ -9,6 +9,27 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Memoria y Diagnóstico en Ajustes; cabecera móvil con iconos — 2026-10-23
+
+Pedido: «quiero que memoria y diagnóstico también se muevan a ajustes, y que cuando estemos en móvil inicio capacidades y historia, se vuelvan iconos minimalistas en blanco que se coloquen entre jevling y el cambio de tema». Quiz: botones en Ajustes que abren lo de siempre (Diagnóstico solo en Inicio), iconos con el color del texto del tema (blancos en oscuro, casi negros en claro), solo a ≤ 40rem.
+
+- [x] `settingsDialogStore`: `memory`, `openMemory()` y `closeMemory()`. «Memoria» cambia Ajustes por el panel y, al cerrar, devuelve el foco a quien abrió Ajustes (el engranaje). Navegar cierra ambos.
+- [x] `diagnosticsStore` (nuevo): estado del panel de señales, compartido por Ajustes, la tecla `d`, `Esc` y el ✕ del panel.
+- [x] `SiteHeader`: renderiza `MemoryPanel` (lazy) y pasa a Ajustes `onOpenMemory` y, solo en `/`, `diagnostics`. Los enlaces llevan icono SVG (casa, destellos, libro) y la etiqueta en `<span>`.
+- [x] `SettingsPanel`: sección «Jev» con «Memoria» (`aria-haspopup="dialog"`) y «Diagnóstico» (`aria-pressed`). En móvil, «Color de Jev» pasa a etiqueta arriba y muestras debajo: en la captura a 390 px la sexta muestra saltaba de línea (fallo del cambio anterior).
+- [x] `HomePage`: sin pie («Memoria», «Diagnóstico») ni estado propio de memoria; el diagnóstico sale de `diagnosticsStore`.
+- [x] CSS: a ≤ 40rem, una sola fila (`--size-header` pasa de 7,5rem a 4rem; se retira la regla de 6rem para pantallas bajas), enlaces de icono de `--size-nav-icon` (2,5rem, para caber a 360 px) y etiqueta visualmente oculta. Se retiraron todas las reglas `.home-footer`.
+- [x] Docs: `design.md`, `docs/architecture.md`, `docs/interaction.md` y `docs/README.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| ESLint | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 360 tests (nuevos en `settingsPanel` y `siteHeader`; `homeControls` actualizado a la nueva forma del store). |
+| `npm run build` | PASS: `index` 350,32 kB (gzip 112,34 kB), CSS 55,67 kB; `MemoryPanel` sigue en su propio chunk. |
+| Capturas manuales (Playwright, 360 y 390 px, claro/oscuro) | Cabecera de 65 px en una fila, sin desborde horizontal. El canvas de Jev mantiene 886 × 886 durante 8 s. |
+| `npx playwright test` | PASS: 61/61. Nuevos: cabecera móvil en una fila con iconos (claro y oscuro, 360 px) y «Diagnóstico» desde Ajustes solo en Inicio. `companion.spec` abre la memoria desde Ajustes, y el foco vuelve al engranaje. |
+
 ## Color de Jev en Ajustes — 2026-10-23
 
 Pedido aparte de la feature de memoria: «como podemos hacer que el character pueda cambiar de color desde la app». Quiz: propiedad Color en Rive (no filtro CSS) y paleta fija. El usuario creó `colorBody` en el editor y pidió que el resto se hiciera desde su navegador («Hazlo tú»; exportar confirmado en quiz).

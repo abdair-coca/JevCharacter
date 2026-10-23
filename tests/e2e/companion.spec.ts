@@ -17,14 +17,14 @@ const copy = {
     spoken: "¡Te ayudo a elegir! ¿Qué te atrae más?",
     choices: { type: "choices", question: "¿Qué te atrae más de la tecnología?", options: ["Programar", "Diseñar interfaces", "Analizar datos", "Redes y seguridad"] },
     notes: ["Le gusta programar y los videojuegos.", "Necesita una carrera corta para trabajar pronto.", "Vive en Potosí y prefiere estudiar cerca de casa."],
-    memory: "Memoria", title: "Lo que Jev recuerda", close: "Cerrar memoria", forget: "Olvidar", forgetAll: "Olvidar todo", empty: "Todavía no recuerdo nada de ti.",
+    settings: "Ajustes", memory: "Memoria", title: "Lo que Jev recuerda", close: "Cerrar memoria", forget: "Olvidar", forgetAll: "Olvidar todo", empty: "Todavía no recuerdo nada de ti.",
   },
   en: {
     ask: "what career should I study?",
     spoken: "Let me help you choose! What draws you most?",
     choices: { type: "choices", question: "What draws you most to technology?", options: ["Coding", "Designing interfaces", "Analyzing data", "Networks and security"] },
     notes: ["User loves coding and video games.", "Needs a short degree to start working soon.", "Lives in Potosí and prefers to study close to home."],
-    memory: "Memory", title: "What Jev remembers", close: "Close memory", forget: "Forget", forgetAll: "Forget everything", empty: "I don't remember anything about you yet.",
+    settings: "Settings", memory: "Memory", title: "What Jev remembers", close: "Close memory", forget: "Forget", forgetAll: "Forget everything", empty: "I don't remember anything about you yet.",
   },
 } as const;
 
@@ -51,6 +51,12 @@ async function open(page: Page, language: Language, theme: "light" | "dark") {
   await page.route("**/api/talk", route => route.fulfill({ status: 200, contentType: "text/event-stream", body }));
   await page.goto("/");
   await expect(page.locator(INPUT)).toBeVisible({ timeout: 45_000 });
+}
+
+/** Memory lives in Ajustes: open the gear, then «Memoria». */
+async function openMemory(page: Page, language: Language) {
+  await page.getByRole("button", { name: copy[language].settings, exact: true }).click();
+  await page.getByRole("dialog", { name: copy[language].settings }).getByRole("button", { name: copy[language].memory }).click();
 }
 
 async function settled(page: Page, scope: string) {
@@ -85,12 +91,12 @@ for (const language of ["es", "en"] as const) {
         await noPageOverflow(page);
         if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/choices-${device}-${language}-${theme}.png` });
 
-        // On phones the reply is a modal sheet: close it to reach the footer.
+        // On phones the reply is a modal sheet: close it to reach the header.
         if (device === "mobile") {
           await page.keyboard.press("Escape");
           await expect(page.locator(".reply-sheet")).toHaveCount(0);
         }
-        await page.getByRole("button", { name: text.memory, exact: true }).click();
+        await openMemory(page, language);
         const dialog = page.getByRole("dialog", { name: text.title });
         await expect(dialog).toBeVisible();
         await expect(dialog.getByRole("listitem")).toHaveCount(3);
@@ -114,8 +120,10 @@ for (const language of ["es", "en"] as const) {
 test("the memory panel works from the keyboard and what it forgets stays forgotten", async ({ page }) => {
   await open(page, "es", "light");
   const text = copy.es;
-  const memoryButton = page.getByRole("button", { name: text.memory, exact: true });
-  await memoryButton.focus();
+  const gear = page.getByRole("button", { name: text.settings, exact: true });
+  await gear.focus();
+  await page.keyboard.press("Enter");
+  await page.getByRole("dialog", { name: text.settings }).getByRole("button", { name: text.memory }).focus();
   await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: text.title });
   await expect(dialog.getByRole("heading", { name: text.title })).toBeFocused();
@@ -135,18 +143,18 @@ test("the memory panel works from the keyboard and what it forgets stays forgott
 
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
-  await expect(memoryButton).toBeFocused();
+  await expect(gear).toBeFocused();
 
   await page.reload();
   await expect(page.locator(INPUT)).toBeVisible({ timeout: 45_000 });
-  await page.getByRole("button", { name: text.memory, exact: true }).click();
+  await openMemory(page, "es");
   await expect(page.getByText(text.empty)).toBeVisible();
 });
 
 test("reduced motion opens the memory panel without animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await open(page, "es", "light");
-  await page.getByRole("button", { name: copy.es.memory, exact: true }).click();
+  await openMemory(page, "es");
   const dialog = page.getByRole("dialog", { name: copy.es.title });
   await expect(dialog).toBeVisible();
   expect(await dialog.evaluate(element => getComputedStyle(element).opacity)).toBe("1");

@@ -15,8 +15,16 @@ import "./settings.css";
 
 const FOCUSABLE = "button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])";
 
-/** Ajustes: Jev's sound and color, the interface language and the visitor's own Groq key. Modal over the page. */
-export default function SettingsPanel({ onClose }: { onClose: () => void }) {
+type Props = {
+  onClose: () => void;
+  /** Swaps Ajustes for «What Jev remembers». */
+  onOpenMemory: () => void;
+  /** Home's live-signal panel; absent on views that have no signals to show. */
+  diagnostics?: { active: boolean; onToggle: () => void };
+};
+
+/** Ajustes: Jev's sound, color, memory and diagnostics, the interface language and the visitor's own Groq key. Modal over the page. */
+export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Props) {
   const t = useTranslation();
   const language = usePreferences(state => state.language);
   const setLanguage = usePreferences(state => state.setLanguage);
@@ -26,6 +34,7 @@ export default function SettingsPanel({ onClose }: { onClose: () => void }) {
   const setJevColor = usePreferences(state => state.setJevColor);
   const transition = useUiMotion();
   const headingId = useId();
+  const jevTitleId = useId();
   const keyTitleId = useId();
   const keyInputId = useId();
   const keyHelpId = useId();
@@ -103,7 +112,7 @@ export default function SettingsPanel({ onClose }: { onClose: () => void }) {
           <span className="settings__track" aria-hidden="true" />
         </button>
 
-        <div className="settings__row">
+        <div className="settings__row settings__row--colors">
           <span className="settings__label">{t.jevColor}</span>
           <div className="settings__swatches" role="group" aria-label={t.jevColor}>
             {JEV_COLOR_IDS.map(id => (
@@ -120,6 +129,18 @@ export default function SettingsPanel({ onClose }: { onClose: () => void }) {
             <Button variant="ghost" size="small" aria-pressed={language === "en"} aria-label="English" onClick={() => setLanguage("en")}>EN</Button>
           </div>
         </div>
+
+        <section className="settings__group" aria-labelledby={jevTitleId}>
+          <h3 id={jevTitleId}>{t.settingsJev}</h3>
+          <button type="button" className="settings__link" aria-haspopup="dialog" onClick={onOpenMemory}>
+            <span>{t.memory}</span><span aria-hidden="true">›</span>
+          </button>
+          {diagnostics && (
+            <button type="button" className="settings__link" aria-pressed={diagnostics.active} onClick={diagnostics.onToggle}>
+              <span>{t.diagnostics}</span><span aria-hidden="true">›</span>
+            </button>
+          )}
+        </section>
 
         <section className="settings__group" aria-labelledby={keyTitleId}>
           <h3 id={keyTitleId}>{t.groqTitle}</h3>

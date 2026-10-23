@@ -9,6 +9,7 @@ import { usePointerSensor } from "../creature/sensors/pointerSensor";
 import { useTranslation } from "../i18n/useTranslation";
 import { useUiMotion } from "../lib/motionTokens";
 import { usePreferences } from "../stores/preferencesStore";
+import { setDiagnostics, toggleDiagnostics, useDiagnosticsActive } from "../stores/diagnosticsStore";
 import { usePageVisibility } from "../hooks/usePageVisibility";
 import { useReducedMotionPreference } from "../hooks/useReducedMotionPreference";
 import { executeDecisionAction } from "../creature/rive/riveReactionAdapter";
@@ -27,7 +28,6 @@ import "../features/enrollment/enrollment.css";
 
 const Character = lazy(() => import("../components/Character"));
 const ReplySheet = lazy(() => import("../features/reply/ReplySheet"));
-const MemoryPanel = lazy(() => import("../features/memory/MemoryPanel"));
 
 type StageStyle = CSSProperties & { "--intensity": number; "--attention": number };
 type SpeechCaptionProps = Caption & { onRevealed: (generation: number) => void };
@@ -62,15 +62,8 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const creatureShellRef = useRef<HTMLDivElement | null>(null);
   const characterRef = useRef<CharacterController | null>(null);
   useEnrollmentViewport(stageRef, enrollment.isOpen);
-  const [debugActive, setDebugActive] = useState(false);
-  const [memoryOpen, setMemoryOpen] = useState(false);
-  // Leaving Home closes the panel; it does not reopen on return.
-  if (!active && memoryOpen) setMemoryOpen(false);
-  const memoryButtonRef = useRef<HTMLButtonElement | null>(null);
-  const closeMemory = useCallback(() => {
-    setMemoryOpen(false);
-    requestAnimationFrame(() => memoryButtonRef.current?.focus({ preventScroll: true }));
-  }, []);
+  // Opened from Ajustes or the `d` key; Memory now lives in Ajustes too.
+  const debugActive = useDiagnosticsActive();
   const wakePlayedRef = useRef(false);
   const sensors = usePointerSensor(stageRef, creatureShellRef, conversational, active && !enrollment.isOpen);
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
@@ -126,7 +119,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
 
   const submitContext = (message: string) => {
     if (!running || enrollment.isOpen) return;
-    if (enrollment.tryOpen(message)) setDebugActive(false);
+    if (enrollment.tryOpen(message)) setDiagnostics(false);
     else brain.submitContext(message);
   };
 
@@ -154,8 +147,8 @@ export default function HomePage({ active = true }: { active?: boolean }) {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       if (target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']")) return;
-      if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key.toLowerCase() === "d") setDebugActive((value) => !value);
-      if (event.key === "Escape") setDebugActive(false);
+      if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key.toLowerCase() === "d") toggleDiagnostics();
+      if (event.key === "Escape") setDiagnostics(false);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -189,14 +182,9 @@ export default function HomePage({ active = true }: { active?: boolean }) {
           <ContextWhisper context={brain.userContext} onSubmit={submitContext} onClear={brain.clearContext} status={brain.status} />
           <BrainHUD decision={brain.decision} status={brain.status} personality={brain.personality} speechNotice={brain.speechNotice} decisionInterrupted={brain.decisionInterrupted} />
         </m.div>
-        <footer className="home-footer">
-          <button ref={memoryButtonRef} type="button" onClick={() => setMemoryOpen(true)} aria-haspopup="dialog">{t.memory}</button>
-          <button type="button" onClick={() => setDebugActive((value) => !value)} aria-expanded={debugActive}>{t.diagnostics} <span aria-hidden="true">↗</span></button>
-        </footer>
       </div>
       {sheetOpen && reply && <Suspense fallback={null}><ReplySheet key={reply.generation} detail={reply} onCollapse={closeSheet} onAsk={askFromReply} /></Suspense>}
-      {memoryOpen && <Suspense fallback={null}><MemoryPanel onClose={closeMemory} /></Suspense>}
-      <DebugPanel active={debugActive && conversational} getSnapshot={sensors.getSnapshot} personality={brain.personality} decision={brain.decision} latencyMs={brain.apiLatencyMs} onState={brain.forceState} onClose={() => setDebugActive(false)} />
+      <DebugPanel active={debugActive && conversational} getSnapshot={sensors.getSnapshot} personality={brain.personality} decision={brain.decision} latencyMs={brain.apiLatencyMs} onState={brain.forceState} onClose={() => setDiagnostics(false)} />
     </main>
   );
 }

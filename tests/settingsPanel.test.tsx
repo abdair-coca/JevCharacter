@@ -20,7 +20,7 @@ beforeEach(() => {
 describe("settings panel", () => {
   it("is a modal dialog named Ajustes, focuses its title and closes with Escape", () => {
     const onClose = vi.fn();
-    render(<SettingsPanel onClose={onClose} />);
+    render(<SettingsPanel onClose={onClose} onOpenMemory={vi.fn()} />);
     expect(screen.getByRole("dialog", { name: "Ajustes" }).getAttribute("aria-modal")).toBe("true");
     expect(document.activeElement?.textContent).toBe("Ajustes");
     fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
@@ -28,7 +28,7 @@ describe("settings panel", () => {
   });
 
   it("turns Jev's sound off and on without changing the other preferences", () => {
-    render(<SettingsPanel onClose={vi.fn()} />);
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     const sound = screen.getByRole("button", { name: "Sonido de Jev" });
     expect(sound.getAttribute("aria-pressed")).toBe("true");
     fireEvent.click(sound);
@@ -39,7 +39,7 @@ describe("settings panel", () => {
   });
 
   it("picks Jev's color from the fixed palette and remembers it in this browser", () => {
-    render(<SettingsPanel onClose={vi.fn()} />);
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     const group = screen.getByRole("group", { name: "Color de Jev" });
     expect(group.querySelectorAll("button")).toHaveLength(6);
     expect(screen.getByRole("button", { name: "Morado" }).getAttribute("aria-pressed")).toBe("true");
@@ -50,8 +50,28 @@ describe("settings panel", () => {
     expect(window.localStorage.getItem("jevling.jevColor")).toBe(JSON.stringify("cyan"));
   });
 
+  it("opens Jev's memory from Ajustes", () => {
+    const onOpenMemory = vi.fn();
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={onOpenMemory} />);
+    const memory = screen.getByRole("button", { name: "Memoria" });
+    expect(memory.getAttribute("aria-haspopup")).toBe("dialog");
+    fireEvent.click(memory);
+    expect(onOpenMemory).toHaveBeenCalledOnce();
+  });
+
+  it("offers diagnostics only where there are signals to show, as a toggle", () => {
+    const { rerender } = render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    expect(screen.queryByRole("button", { name: "Diagnóstico" })).toBeNull();
+    const onToggle = vi.fn();
+    rerender(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} diagnostics={{ active: true, onToggle }} />);
+    const diagnostics = screen.getByRole("button", { name: "Diagnóstico" });
+    expect(diagnostics.getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(diagnostics);
+    expect(onToggle).toHaveBeenCalledOnce();
+  });
+
   it("changes the interface language and the dialog follows it", () => {
-    render(<SettingsPanel onClose={vi.fn()} />);
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     fireEvent.click(screen.getByRole("button", { name: "English" }));
     expect(screen.getByRole("button", { name: "English" }).getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByRole("button", { name: "Español" }).getAttribute("aria-pressed")).toBe("false");
@@ -60,7 +80,7 @@ describe("settings panel", () => {
   });
 
   it("saves a well-formed Groq key in this browser, empties the field and keeps focus inside", async () => {
-    render(<SettingsPanel onClose={vi.fn()} />);
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     expect(screen.getByRole("status").textContent).toBe(NO_KEY);
     const input = screen.getByLabelText("Clave API") as HTMLInputElement;
     expect(input.type).toBe("password");
@@ -76,7 +96,7 @@ describe("settings panel", () => {
   });
 
   it("rejects a malformed key, saves nothing and points the error at the field", () => {
-    render(<SettingsPanel onClose={vi.fn()} />);
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     const input = screen.getByLabelText("Clave API");
     fireEvent.change(input, { target: { value: "corta" } });
     fireEvent.click(screen.getByRole("button", { name: "Guardar clave" }));
@@ -87,7 +107,7 @@ describe("settings panel", () => {
   });
 
   it("removes the saved key and reports that Jev has none again", () => {
-    render(<SettingsPanel onClose={vi.fn()} />);
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     fireEvent.change(screen.getByLabelText("Clave API"), { target: { value: KEY } });
     fireEvent.click(screen.getByRole("button", { name: "Guardar clave" }));
     fireEvent.click(screen.getByRole("button", { name: "Borrar clave" }));
