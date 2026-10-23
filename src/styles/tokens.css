@@ -46,6 +46,9 @@
   /* Direct-render integration; user requested ~10% more size after testing prove2. */
   --character-canvas-scale: 1.9;
   --character-mask-span: 0.86;
+  /* Jev's selectable body colors; same values as src/character/jevColors.ts. */
+  --jev-skin-violet: #D044FF; --jev-skin-cyan: #00C8FF; --jev-skin-pink: #FF3D9A;
+  --jev-skin-orange: #FF8A00; --jev-skin-green: #2EE06F; --jev-skin-red: #FF3B3B;
   /* Fixed presentation holds, separate from Home's real decision scheduler. */
   --presentation-ready-timeout: 45000ms;
   --presentation-pose-warmup: 3000ms;

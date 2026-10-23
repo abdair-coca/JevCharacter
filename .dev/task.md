@@ -9,6 +9,30 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Color de Jev en Ajustes — 2026-10-23
+
+Pedido aparte de la feature de memoria: «como podemos hacer que el character pueda cambiar de color desde la app». Quiz: propiedad Color en Rive (no filtro CSS) y paleta fija. El usuario creó `colorBody` en el editor y pidió que el resto se hiciera desde su navegador («Hazlo tú»; exportar confirmado en quiz).
+
+- [x] Rive (archivo `WIP01` en el editor web): `colorBody` (Color, por defecto `D044FF`) enlazado a la parada `D044FF` de Fill 6 y la `C145F4` de Fill 5 en `Sphere`, al relleno de `Light` (`F300FF`) y al halo `BACKGROUND > Gradient` (`8200FF`). Probado en la vista previa con `00C8FF`: cambia todo Jev, salvo ojos, sombras y brillos blancos.
+  - Incidentes en el editor, deshechos: se activó por error el *Feather* de Fill 6 (apagado de nuevo; la regla de relleno quedó en «Clockwise», igual que Fill 5), y un texto escrito sin foco disparó atajos (herramienta, *Freeze*, panel de dependencias). Problemas del editor: los mismos 6 de antes.
+- [x] Export para runtime → `public/rive/prove3.riv` (93.361 bytes). `prove2.riv` intacto. Sus cadenas solo difieren de `prove2` en `colorBody`. **Sin commitear:** el `.riv` es un asset del usuario.
+- [x] `src/character/jevColors.ts`: paleta (`violet`, `cyan`, `pink`, `orange`, `green`, `red`) en ARGB, más el guard `isJevColor`. Las muestras usan los tokens `--jev-skin-*`, y un test comprueba que coinciden con los valores de Rive.
+- [x] `preferencesStore`: `jevColor` y `setJevColor`, persistidos en `jevling.jevColor`, con morado por defecto y valores inválidos ignorados.
+- [x] `Character`: carga `prove3.riv` y escribe `colorBody` al estar listo y en cada cambio, en Home, Features y About.
+- [x] `SettingsPanel`: fila «Color de Jev» / «Jev's color» con seis muestras (`role="group"`, `aria-pressed`, nombre ES/EN). El anillo de la elegida usa `--color-background-secondary`: `--reply-surface` es un degradado y anulaba la sombra.
+- [x] Docs: `design.md` (Ajustes, persistencia, asset actual), `docs/rive-model.md` y `docs/interaction.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0 --ignore-pattern "playwright-report/**"` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 355 tests en 45 archivos (nuevos: `jevColors`, casos en `preferences`, `settingsPanel` y `characterVisibility`). |
+| `npm run build` | PASS: `index` 349,71 kB (gzip 112,08 kB), CSS 56,28 kB. |
+| `npx playwright test` | PASS: 58/58, incluidos 2 nuevos en `settings.spec` (las muestras caben en el panel en escritorio y móvil; el color sobrevive a recargar). |
+| Manual (dev en 5199, Chrome) | Cian aplicado a Jev al instante y conservado tras recargar. |
+
+**Pendiente/limitación:** en la primera carga de la prueba manual se vio unos segundos un logo «RIVE» antes de Jev. No se repitió al recargar, y `prove2` y `prove3` comparten estructura. Probablemente es la pantalla de presentación de las exportaciones del plan gratuito de Rive (el modal de exportar ofrece quitarla al pagar). No se comparó con `prove2` en una primera carga sin caché.
+
 ## Corrección de CI — 2026-10-21
 
 - GitHub Actions falló en los runs `39611507233` y `39666575605`. En ambos, solo fallaban los dos tests «round shape»: en el runner, sin GPU, se pintaron 5–8 fotogramas en el segundo medido y la guarda exigía más de 10. Ningún fotograma medido mostró deformación.

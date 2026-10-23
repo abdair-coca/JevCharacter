@@ -38,7 +38,7 @@ describe("first paint preferences", () => {
 describe("presentation preferences", () => {
   it("tracks system changes only without a manual override and can return to system mode", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true }, persist, () => true);
+    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true, jevColor: "violet" }, persist, () => true);
     store.getState().syncSystemTheme(true);
     expect(store.getState().theme).toBe("dark");
     store.getState().setThemePreference("light");
@@ -50,21 +50,28 @@ describe("presentation preferences", () => {
   });
   it("changes language without resetting theme and persists only presentation fields", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "es", sound: true }, persist);
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "es", sound: true, jevColor: "violet" }, persist);
     store.getState().setLanguage("en");
     expect(store.getState()).toMatchObject({ theme: "dark", themePreference: "dark", language: "en" });
     expect(persist.mock.calls).toEqual([["jevling.language", "en"]]);
   });
   it("persists Jev's sound choice without touching theme or language", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true }, persist);
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true, jevColor: "violet" }, persist);
     store.getState().setSound(false);
     expect(store.getState()).toMatchObject({ theme: "dark", language: "en", sound: false });
     expect(persist.mock.calls).toEqual([["jevling.sound", false]]);
   });
+  it("persists Jev's body color without touching the other preferences", () => {
+    const persist = vi.fn();
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true, jevColor: "violet" }, persist);
+    store.getState().setJevColor("cyan");
+    expect(store.getState()).toMatchObject({ theme: "dark", language: "en", sound: true, jevColor: "cyan" });
+    expect(persist.mock.calls).toEqual([["jevling.jevColor", "cyan"]]);
+  });
   it("keeps manual choices in memory when storage writes fail", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("Denied"); });
-    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true });
+    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true, jevColor: "violet" });
     store.getState().setThemePreference("dark");
     store.getState().setLanguage("en");
     expect(store.getState()).toMatchObject({ theme: "dark", language: "en" });

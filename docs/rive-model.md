@@ -1,12 +1,14 @@
 # Ficha técnica del modelo Rive `prove1`
 
-**Actualización de integración:** Home usa ahora `/rive/prove2.riv`, exportación aportada por el usuario para corregir el fondo. Se comprobó su carga mediante `Character` y se ejercitaron los controles existentes, incluyendo estrella/cuadrado/triángulo; evidencia en [prueba de prove2](../.dev/evidence/phase-1/prove2/README.md). La ficha y el hash siguientes documentan `prove1`, no una inspección ni hash de `prove2`. Las fuentes originales permanecen intactas.
+**Color de Jev (2026-10-23):** `Character` consume `/rive/prove3.riv`, exportado desde el archivo `WIP01` del editor. Es `prove2` más la propiedad Color `colorBody` en `ViewModel1` (valor por defecto `D044FF`), enlazada a cuatro capas: las paradas moradas de dos degradados de `Sphere` (Fill 6 `D044FF` y Fill 5 `C145F4`), el brillo `Light` (`F300FF`) y el halo `BACKGROUND > Gradient` (`8200FF`). Ojos, sombras negras y brillos blancos no cambian. La app escribe el color elegido en Ajustes en cuanto el modelo está listo, sin depender del valor guardado en el archivo. Las cadenas del binario solo difieren de `prove2` en `colorBody`.
+
+**Actualización de integración:** Home usaba `/rive/prove2.riv`, exportación aportada por el usuario para corregir el fondo. Se comprobó su carga mediante `Character` y se ejercitaron los controles existentes, incluyendo estrella/cuadrado/triángulo; evidencia en [prueba de prove2](../.dev/evidence/phase-1/prove2/README.md). La ficha y el hash siguientes documentan `prove1`, no una inspección ni hash de `prove2`. Las fuentes originales permanecen intactas.
 
 Referencia para planificar una integración más interactiva. Resume el informe de inspección que compartió el usuario desde otro proyecto; no reemplaza la verificación en el editor Rive ni afirma que sus hallazgos de integración pertenezcan a este repositorio.
 
 ## Identidad y alcance
 
-- Ruta del asset documentado originalmente: `public/rive/prove1.riv`; `src/components/Character.tsx` consume actualmente `/rive/prove2.riv`.
+- Ruta del asset documentado originalmente: `public/rive/prove1.riv`; `src/components/Character.tsx` consume actualmente `/rive/prove3.riv`.
 - Runtime: `src/creature/rive/riveRuntime.ts` sirve `rive.wasm` desde el propio sitio (asset de Vite) en lugar de unpkg. Antes, una descarga lenta o colgada del CDN, sin timeout, dejaba a Jev en «Preparando a Jev…». El respaldo de jsdelivr del runtime sigue activo si el archivo propio falla. `tests/riveRuntime.test.ts` comprueba que la versión empaquetada coincide con la que fija `@rive-app/react-webgl2`.
 - El archivo local coincide con el informe: 78.380 bytes; SHA-256 `98AA68170540D448DEAED0DB6FA57C11B062CEBF9036DC1CFADA4376254A8DAF`.
 - Binario Rive; dos artboards, dos ViewModels y sin audio, según el informe.

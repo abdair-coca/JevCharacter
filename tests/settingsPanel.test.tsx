@@ -14,7 +14,7 @@ afterEach(cleanup);
 beforeEach(() => {
   window.localStorage.clear();
   clearGroqKey();
-  preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true });
+  preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true, jevColor: "violet" });
 });
 
 describe("settings panel", () => {
@@ -36,6 +36,18 @@ describe("settings panel", () => {
     expect(preferencesStore.getState()).toMatchObject({ sound: false, theme: "light", language: "es" });
     fireEvent.click(sound);
     expect(preferencesStore.getState().sound).toBe(true);
+  });
+
+  it("picks Jev's color from the fixed palette and remembers it in this browser", () => {
+    render(<SettingsPanel onClose={vi.fn()} />);
+    const group = screen.getByRole("group", { name: "Color de Jev" });
+    expect(group.querySelectorAll("button")).toHaveLength(6);
+    expect(screen.getByRole("button", { name: "Morado" }).getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(screen.getByRole("button", { name: "Cian" }));
+    expect(screen.getByRole("button", { name: "Cian" }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("button", { name: "Morado" }).getAttribute("aria-pressed")).toBe("false");
+    expect(preferencesStore.getState()).toMatchObject({ jevColor: "cyan", sound: true, language: "es" });
+    expect(window.localStorage.getItem("jevling.jevColor")).toBe(JSON.stringify("cyan"));
   });
 
   it("changes the interface language and the dialog follows it", () => {

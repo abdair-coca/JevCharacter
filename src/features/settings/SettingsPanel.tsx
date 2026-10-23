@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent 
 import { createPortal } from "react-dom";
 import { m } from "motion/react";
 import { Button } from "../../components/ui/button";
+import { JEV_COLOR_IDS } from "../../character/jevColors";
 import { clearGroqKey, readGroqKey, saveGroqKey } from "../../creature/brain/groqKeyStore";
 import { useTranslation } from "../../i18n/useTranslation";
 import { appAudio } from "../../lib/audioCore";
@@ -14,13 +15,15 @@ import "./settings.css";
 
 const FOCUSABLE = "button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])";
 
-/** Ajustes: Jev's sound, the interface language and the visitor's own Groq key. Modal over the page. */
+/** Ajustes: Jev's sound and color, the interface language and the visitor's own Groq key. Modal over the page. */
 export default function SettingsPanel({ onClose }: { onClose: () => void }) {
   const t = useTranslation();
   const language = usePreferences(state => state.language);
   const setLanguage = usePreferences(state => state.setLanguage);
   const sound = usePreferences(state => state.sound);
   const setSound = usePreferences(state => state.setSound);
+  const jevColor = usePreferences(state => state.jevColor);
+  const setJevColor = usePreferences(state => state.setJevColor);
   const transition = useUiMotion();
   const headingId = useId();
   const keyTitleId = useId();
@@ -99,6 +102,15 @@ export default function SettingsPanel({ onClose }: { onClose: () => void }) {
           <span>{t.sound}</span>
           <span className="settings__track" aria-hidden="true" />
         </button>
+
+        <div className="settings__row">
+          <span className="settings__label">{t.jevColor}</span>
+          <div className="settings__swatches" role="group" aria-label={t.jevColor}>
+            {JEV_COLOR_IDS.map(id => (
+              <button key={id} type="button" className="settings__swatch" data-color={id} aria-pressed={jevColor === id} aria-label={t[id]} title={t[id]} onClick={() => setJevColor(id)} />
+            ))}
+          </div>
+        </div>
 
         <div className="settings__row">
           <span className="settings__label">{t.language}</span>

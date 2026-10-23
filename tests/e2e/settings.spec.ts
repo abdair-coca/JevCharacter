@@ -64,3 +64,27 @@ for (const language of ["es", "en"] as const) {
     }
   }
 }
+
+for (const device of ["desktop", "mobile"] as const) {
+  test(`Jev's color stays inside the panel and survives a reload on ${device}`, async ({ page }) => {
+    await page.setViewportSize(viewports[device]);
+    await open(page, "es", "dark");
+    await page.getByRole("button", { name: "Ajustes", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "Ajustes" });
+    const panel = await restingBox(dialog);
+    const swatches = dialog.getByRole("group", { name: "Color de Jev" }).getByRole("button");
+    await expect(swatches).toHaveCount(6);
+    for (const swatch of await swatches.all()) {
+      const box = (await swatch.boundingBox())!;
+      expect(box.x).toBeGreaterThanOrEqual(panel.x);
+      expect(box.x + box.width).toBeLessThanOrEqual(panel.x + panel.width);
+    }
+
+    await dialog.getByRole("button", { name: "Cian" }).click();
+    await expect(dialog.getByRole("button", { name: "Cian" })).toHaveAttribute("aria-pressed", "true");
+    await page.reload();
+    await expect(page.locator("#creature-context")).toBeVisible({ timeout: 45_000 });
+    await page.getByRole("button", { name: "Ajustes", exact: true }).click();
+    await expect(page.getByRole("dialog", { name: "Ajustes" }).getByRole("button", { name: "Cian" })).toHaveAttribute("aria-pressed", "true");
+  });
+}

@@ -2,10 +2,11 @@
 import { act, cleanup, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Character from "../src/components/Character";
+import { preferencesStore } from "../src/stores/preferencesStore";
 
 const runtime = vi.hoisted(() => ({
   rive: { pause: vi.fn(), stopRendering: vi.fn(), startRendering: vi.fn(), play: vi.fn(), resizeDrawingSurfaceToCanvas: vi.fn() },
-  state: vi.fn(), trigger: vi.fn(), shape: vi.fn(),
+  state: vi.fn(), trigger: vi.fn(), shape: vi.fn(), color: vi.fn(),
   load: vi.fn(), reduced: false,
 }));
 vi.mock("../src/hooks/useReducedMotionPreference", () => ({ useReducedMotionPreference: () => runtime.reduced }));
@@ -19,6 +20,7 @@ vi.mock("@rive-app/react-webgl2", () => {
     useViewModelInstance: () => instance,
     useViewModelInstanceEnum: () => ({ value: "Base", setValue: runtime.state }),
     useViewModelInstanceNumber: () => ({ value: 0, setValue: runtime.shape }),
+    useViewModelInstanceColor: () => ({ value: 0, setValue: runtime.color }),
     useViewModelInstanceTrigger: () => ({ trigger: runtime.trigger }),
     Layout: class {}, Fit: { Contain: "contain" }, Alignment: { Center: "center" },
     RuntimeLoader: { setWasmUrl: () => {} },
@@ -82,6 +84,14 @@ describe("Character visibility", () => {
     expect(runtime.rive.stopRendering).toHaveBeenCalled();
     expect(onReady).not.toHaveBeenCalled();
     clear.mockRestore();
+  });
+  it("paints Jev's body with the chosen color and follows later changes", () => {
+    preferencesStore.setState({ jevColor: "violet" });
+    render(<Character active />);
+    expect(runtime.color).toHaveBeenLastCalledWith(0xffd044ff);
+    act(() => preferencesStore.getState().setJevColor("cyan"));
+    expect(runtime.color).toHaveBeenLastCalledWith(0xff00c8ff);
+    act(() => preferencesStore.setState({ jevColor: "violet" }));
   });
   it("preserves the same layout instance across presentation updates", () => {
     const onReady = vi.fn();

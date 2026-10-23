@@ -14,6 +14,7 @@ import {
   useRive,
   useViewModel,
   useViewModelInstance,
+  useViewModelInstanceColor,
   useViewModelInstanceEnum,
   useViewModelInstanceNumber,
   useViewModelInstanceTrigger,
@@ -29,6 +30,8 @@ import {
   type CharacterController,
 } from "../character/useCharacterController";
 import { jevVoice } from "../creature/voice/voiceEngine";
+import { JEV_COLORS } from "../character/jevColors";
+import { usePreferences } from "../stores/preferencesStore";
 
 const STATE_MACHINE = "State Machine 1";
 // Keep in sync with the data-ready transition delay in App.css: Jev stays hidden for this long.
@@ -56,7 +59,7 @@ const Character = forwardRef<CharacterController, Props>(
     // Keep immutable layout stable across unrelated React updates while paused.
     const layout = useMemo(() => new Layout({ fit: Fit.Contain, alignment: Alignment.Center }), []);
     const { rive, RiveComponent } = useRive({
-      src: "/rive/prove2.riv",
+      src: "/rive/prove3.riv",
       stateMachine: STATE_MACHINE,
       autoplay: active && !reducedMotion,
       autoBind: true,
@@ -91,8 +94,16 @@ const Character = forwardRef<CharacterController, Props>(
     const { value: shapeTypeValue, setValue: setShapeType } =
       useViewModelInstanceNumber("shapeType", viewModelInstance);
 
+    const { setValue: setBodyColor } = useViewModelInstanceColor("colorBody", viewModelInstance);
+    const jevColor = usePreferences(state => state.jevColor);
+
     const ready = Boolean(rive && viewModelInstance && typeof stateValue === "string");
     const resetShape = shapeTypeValue === null ? undefined : setShapeType;
+
+    // Always written once ready, so the color never depends on the instance values stored in the .riv.
+    useEffect(() => {
+      if (ready) setBodyColor(JEV_COLORS[jevColor]);
+    }, [jevColor, ready, setBodyColor]);
 
     const character =
       useCharacterController(

@@ -22,6 +22,18 @@
 .settings__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); }
 .settings__label { font-size: var(--text-small); font-weight: var(--weight-label); }
 
+/* Jev's body color: one round swatch per palette entry; the chosen one gets a ring. */
+.settings__swatches { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-1); }
+.settings__swatch { display: grid; place-items: center; width: var(--size-target); height: var(--size-target); padding: 0; border: 0; border-radius: var(--radius-pill); background: transparent; }
+.settings__swatch::before { content: ""; width: var(--size-icon); height: var(--size-icon); border-radius: var(--radius-pill); background: var(--swatch); box-shadow: 0 0 0 var(--border-thin) var(--color-border); }
+.settings__swatch[aria-pressed="true"]::before { box-shadow: 0 0 0 0.125rem var(--color-background-secondary), 0 0 0 0.25rem var(--swatch); }
+.settings__swatch[data-color="violet"] { --swatch: var(--jev-skin-violet); }
+.settings__swatch[data-color="cyan"] { --swatch: var(--jev-skin-cyan); }
+.settings__swatch[data-color="pink"] { --swatch: var(--jev-skin-pink); }
+.settings__swatch[data-color="orange"] { --swatch: var(--jev-skin-orange); }
+.settings__swatch[data-color="green"] { --swatch: var(--jev-skin-green); }
+.settings__swatch[data-color="red"] { --swatch: var(--jev-skin-red); }
+
 .settings__group { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: var(--border-thin) solid var(--color-border); }
 .settings__group h3 { margin: 0; font-size: var(--text-small); font-weight: var(--weight-label); }
 .settings__help, .settings__status, .settings__error { margin: 0; font-size: var(--text-small); line-height: var(--line-body); }
