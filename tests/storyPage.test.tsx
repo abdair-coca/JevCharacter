@@ -68,12 +68,11 @@ describe("About narrative and presentation boundary", () => {
     expect(intro.textContent).toContain("Aprendo construyendo");
     expect(intro.compareDocumentPosition(screen.getByRole("heading", { name: "Tiny creature. Big decisions." })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const links = screen.getByRole("list", { name: "Me encuentras en" }).querySelectorAll("a");
-    expect([...links].map(link => link.getAttribute("aria-label"))).toEqual(["GitHub"]);
+    // X has no address yet, so it is not drawn.
+    expect([...links].map(link => link.getAttribute("aria-label"))).toEqual(["GitHub", "LinkedIn", "Instagram", "TikTok"]);
     expect(links[0].getAttribute("href")).toBe("https://github.com/abdair-coca");
-    expect(links[0].getAttribute("rel")).toBe("noopener noreferrer");
-    // No photo yet: the initials stand in, hidden from assistive technology.
-    expect(intro.querySelector("img")).toBeNull();
-    expect(intro.querySelector(".story-intro__portrait")?.getAttribute("aria-hidden")).toBe("true");
+    for (const link of links) expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+    expect(screen.getByRole("img", { name: "Abdair Coca" }).getAttribute("src")).toBe("/story/Abdair.jpg");
     act(() => preferencesStore.getState().setLanguage("en"));
     expect(screen.getByRole("region", { name: "Hi, I'm Abdair." })).toBeTruthy();
   });

@@ -18,7 +18,7 @@ export function StoryIntro({ language }: { language: Language }) {
   return (
     <section className="story-intro" aria-labelledby="story-intro-title">
       {STORY_PORTRAIT
-        ? <img className="story-intro__portrait" src={STORY_PORTRAIT} alt={copy.portrait} />
+        ? <img className="story-intro__portrait" src={STORY_PORTRAIT} alt={copy.portrait} loading="lazy" />
         : <span className="story-intro__portrait" aria-hidden="true">AC</span>}
       <div className="story-intro__copy">
         <h2 id="story-intro-title">{copy.introTitle}</h2>

@@ -51,13 +51,13 @@ type Contact = { id: ContactId; name: string; url: string | null };
 // Where to find the author. A null url is still pending from the author and is not shown.
 export const STORY_CONTACTS: readonly Contact[] = [
   { id: "github", name: "GitHub", url: "https://github.com/abdair-coca" },
-  { id: "linkedin", name: "LinkedIn", url: null },
-  { id: "instagram", name: "Instagram", url: null },
-  { id: "tiktok", name: "TikTok", url: null },
+  { id: "linkedin", name: "LinkedIn", url: "https://www.linkedin.com/in/abdair-coca-18113b259" },
+  { id: "instagram", name: "Instagram", url: "https://www.instagram.com/abdaircoca" },
+  { id: "tiktok", name: "TikTok", url: "https://www.tiktok.com/@abdaircoca" },
   { id: "x", name: "X", url: null },
 ];
-// The author's photo, also pending: until then the initials stand in.
-export const STORY_PORTRAIT: string | null = null;
+// The author's photo; with null the initials stand in.
+export const STORY_PORTRAIT: string | null = "/story/Abdair.jpg";
 
 type StoryCopyKey = "navigation" | "previous" | "next" | "detail" | "scroll" | "scene"
   | "loading" | "error" | "retry" | "experiment" | "vision" | "back" | "features" | "end"

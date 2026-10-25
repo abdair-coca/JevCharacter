@@ -31,7 +31,9 @@ Pedido: «quiero que añadas microinteracciones con toda la app, y al final de a
 | Manual (Playwright sobre la build, 1440 y 390 px) | Un solo resaltado y se mueve a Capacidades; hover y engranaje responden; bolita a 20 px encendida y en reposo apagada; anillo elegido opacidad 1, los demás 0; halo del input opacidad 1 al enfocar. Bus `ui`: 4 conexiones tras dos pulsaciones del tema en Inicio, 0 en Historia. Presentación sin desbordes horizontales en escritorio y móvil; cabecera móvil de 65 px; sin errores de consola. |
 | `npx playwright test` | PASS: 61/61 (14,6 min), sobre la misma build. |
 
-**Pendiente del usuario:** foto (va en `public/` y en `STORY_PORTRAIT`) y usuarios de LinkedIn, Instagram, TikTok y X (`STORY_CONTACTS`).
+**2026-10-25:** el usuario pasó la foto (`public/story/Abdair.jpg`, 400 × 400, 28 KB) y LinkedIn, Instagram y TikTok; quedan en `STORY_PORTRAIT` y `STORY_CONTACTS`. Commit `f13e94d` subido a `origin/main` a pedido («pushea»).
+
+**Pendiente del usuario:** usuario de X (`STORY_CONTACTS`).
 
 ## Memoria y Diagnóstico en Ajustes; cabecera móvil con iconos — 2026-10-23
 
