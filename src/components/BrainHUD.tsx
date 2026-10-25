@@ -79,7 +79,7 @@ export default function BrainHUD({ decision, status, personality, speechNotice, 
         onClick={() => setExpanded((value) => !value)} transition={motion.spring}>
         <span className="brain-hud__topline">
           <span className="brain-hud__source"><span className={`brain-hud__signal ${decision.source === "jev" ? "brain-hud__signal--online" : ""}`} aria-hidden="true" /><span className="brain-hud__source-label">{decision.source === "jev" ? t.online : t.local}</span></span>
-          <m.span className="brain-hud__chevron" aria-hidden="true" initial={false} animate={{ rotate: expanded ? 0 : 180 }} transition={transition}>
+          <m.span className="brain-hud__chevron" aria-hidden="true" initial={false} animate={{ rotate: expanded ? 0 : 180 }} transition={motion.spring}>
             <svg viewBox="0 0 20 20"><path d="m6 8 4 4 4-4" /></svg>
           </m.span>
         </span>

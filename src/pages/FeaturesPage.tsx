@@ -107,7 +107,7 @@ export default function FeaturesPage() {
                 <p className="showcase-sample-note">{copy.sample}</p>
               </div>}
               {item.id === "adapts" && <div className="showcase-personality"><p>{copy.personality}</p><dl><div><dt>{copy.energy}</dt><dd>72</dd></div><div><dt>{copy.trust}</dt><dd>58</dd></div><div><dt>{copy.curiosity}</dt><dd>80</dd></div></dl></div>}
-              <Button variant="ghost" onClick={() => choose(index)} aria-label={`${copy.play}: ${item.title[language]}`}>{copy.play} <span aria-hidden="true">↗</span></Button>
+              <Button variant="ghost" onClick={() => choose(index)} aria-label={`${copy.play}: ${item.title[language]}`}>{copy.play} <span className="ui-button__arrow" aria-hidden="true">↗</span></Button>
               </div>
             </section>
           ))}
@@ -117,7 +117,7 @@ export default function FeaturesPage() {
         <p className={phase === "error" || phase === "loading" ? "showcase-status" : "sr-only"} data-phase={String(phase)} role="status">{stateText}</p>
         {phase === "error" && <Button variant="ghost" onClick={retry}>{copy.retry}</Button>}
       </div>
-      <footer className="features-outro"><h2>{copy.conclusion}</h2><p>{copy.end}</p><a className="ui-button ui-button--primary ui-button--default" href="/" onClick={event => navigate(event, "/")}>{copy.back} <span aria-hidden="true">↗</span></a></footer>
+      <footer className="features-outro"><h2>{copy.conclusion}</h2><p>{copy.end}</p><a className="ui-button ui-button--primary ui-button--default" href="/" onClick={event => navigate(event, "/")}>{copy.back} <span className="ui-button__arrow" aria-hidden="true">↗</span></a></footer>
     </main>
   );
 }

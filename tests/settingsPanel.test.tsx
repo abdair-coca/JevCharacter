@@ -5,7 +5,7 @@ import SettingsPanel from "../src/features/settings/SettingsPanel";
 import { clearGroqKey, readGroqKey } from "../src/creature/brain/groqKeyStore";
 import { preferencesStore } from "../src/stores/preferencesStore";
 
-vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }) }));
+vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useOrganicMotion: () => ({ spring: { duration: 0 } }) }));
 
 const KEY = "gsk_test_visible_key_1234567890";
 const NO_KEY = "Sin clave, Jev no puede generar respuestas habladas.";

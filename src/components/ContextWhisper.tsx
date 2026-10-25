@@ -54,7 +54,9 @@ export default function ContextWhisper({ context, onSubmit, onClear, status = "o
           <m.div className="whisper__send-wrap" tabIndex={-1} whileTap={{ scale: motion.reduced ? 1 : motion.pressScale }} transition={motion.spring}>
             <Button className="whisper__send" type="submit" size="icon" disabled={!hasText} aria-label={t.send}>
               <AnimatePresence mode="wait" initial={false}>
-                <m.span key={sent ? "received" : "send"} initial={{ opacity: 0, scale: motion.reduced ? 1 : motion.revealScale }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={transition}>
+                {/* On send the arrow shoots off the way it points, then the check settles in. */}
+                <m.span key={sent ? "received" : "send"} initial={{ opacity: 0, scale: motion.reduced ? 1 : motion.revealScale }} animate={{ opacity: 1, scale: 1 }}
+                  exit={sent || motion.reduced ? { opacity: 0 } : { opacity: 0, x: "var(--motion-fly)", y: "var(--motion-fly-up)" }} transition={transition}>
                   <svg viewBox="0 0 24 24" aria-hidden="true">{sent ? <path d="m6 12 4 4 8-8" /> : <path d="M6 17 17 6M6 6h11v11" />}</svg>
                 </m.span>
               </AnimatePresence>

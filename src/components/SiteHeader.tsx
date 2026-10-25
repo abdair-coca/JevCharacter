@@ -6,17 +6,18 @@ import { closeMemory, closeSettings, openMemory, openSettings, useMemoryOpen, us
 import { toggleDiagnostics, useDiagnosticsActive } from "../stores/diagnosticsStore";
 import { Button } from "./ui/button";
 import { m } from "motion/react";
-import { useThemeIconMotion, useUiMotion } from "../lib/motionTokens";
+import { useOrganicMotion, useThemeIconMotion, useUiMotion } from "../lib/motionTokens";
 
 // Loaded only when they open.
 const SettingsPanel = lazy(() => import("../features/settings/SettingsPanel"));
 const MemoryPanel = lazy(() => import("../features/memory/MemoryPanel"));
 
-// Shown instead of the labels on phones, so the whole bar fits in one row.
-const NAV_ICONS: Record<Route, string> = {
-  "/": "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z",
-  "/features": "M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8Z",
-  "/about": "M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2Z M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7Z",
+// Shown instead of the labels on phones, so the whole bar fits in one row. Each part is its own
+// path so it can move alone: the big and small sparkles, the book's two pages.
+const NAV_ICONS: Record<Route, readonly string[]> = {
+  "/": ["M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z"],
+  "/features": ["M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z", "M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8Z"],
+  "/about": ["M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2Z", "M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7Z"],
 };
 
 export default function SiteHeader({ route }: { route: PageRoute }) {
@@ -25,6 +26,7 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
   const setThemePreference = usePreferences((state) => state.setThemePreference);
   const transition = useUiMotion();
   const iconMotion = useThemeIconMotion();
+  const { spring } = useOrganicMotion();
   const settingsOpen = useSettingsOpen();
   const memoryOpen = useMemoryOpen();
   const diagnosticsActive = useDiagnosticsActive();
@@ -52,13 +54,15 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
       <header className="site-header">
         <div className="site-header__inner">
           <a className="brand-mark" href="/" onClick={(event) => navigate(event, "/")} aria-label="Jevling">
-            <span className="brand-mark__glyph" aria-hidden="true">••</span>
+            <span className="brand-mark__glyph" aria-hidden="true"><span className="brand-mark__eyes">••</span></span>
             <span className="brand-mark__name">JEVLING<span className="brand-mark__dot">.</span></span>
           </a>
           <nav aria-label={t.navigation}>
             {links.map(({ route: destination, label }) => (
-              <a key={destination} href={destination} onClick={(event) => navigate(event, destination)} aria-current={route === destination ? "page" : undefined}>
-                <svg className="site-header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d={NAV_ICONS[destination]} /></svg>
+              <a key={destination} href={destination} data-route={destination} onClick={(event) => navigate(event, destination)} aria-current={route === destination ? "page" : undefined}>
+                {/* One highlight shared by the three links: it slides to the view you open. */}
+                {route === destination && <m.span className="site-header__current" layoutId="site-header-current" transition={spring} aria-hidden="true" />}
+                <svg className="site-header__icon" viewBox="0 0 24 24" aria-hidden="true">{NAV_ICONS[destination].map(path => <path key={path} d={path} />)}</svg>
                 <span className="site-header__label">{label}</span>
               </a>
             ))}
@@ -74,7 +78,7 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
                 </m.svg>
               </span>
             </Button>
-            <Button ref={settingsButton} className="theme-toggle" variant="ghost" size="icon" aria-label={t.settings} aria-haspopup="dialog" title={t.settings} onClick={(event) => openSettings(event.currentTarget)}>
+            <Button ref={settingsButton} className="theme-toggle settings-toggle" variant="ghost" size="icon" aria-label={t.settings} aria-haspopup="dialog" title={t.settings} onClick={(event) => openSettings(event.currentTarget)}>
               <span className="theme-toggle__icons" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="3" />

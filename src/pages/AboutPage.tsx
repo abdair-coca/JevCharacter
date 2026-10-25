@@ -12,6 +12,7 @@ import { STORY_SCENES, storyCopy } from "../features/story/catalog";
 import { useStoryScroll } from "../features/story/useStoryScroll";
 import { ParticleVortex } from "../features/story/ParticleVortex";
 import { StillImage } from "../features/story/StillImage";
+import { StoryIntro } from "../features/story/StoryIntro";
 import { useStoryMusic } from "../features/story/useStoryMusic";
 import "../features/story/story.css";
 
@@ -91,10 +92,10 @@ export default function AboutPage() {
                 <p className="story-eyebrow">{scene.label[language]}</p>
                 {index === 0 ? <h1 id="page-title" data-page-route="/about" tabIndex={-1}><span id={`story-title-${scene.id}`}>{scene.title[language]}</span></h1> : <h2 id={`story-title-${scene.id}`}>{scene.title[language]}</h2>}
                 <p className="story-lead">{scene.lead[language]}</p>
-                {"projectUrl" in scene && <p className="story-project"><a className="ui-button ui-button--ghost ui-button--default" href={scene.projectUrl} target="_blank" rel="noopener noreferrer">{copy.project} <span aria-hidden="true">↗</span></a></p>}
+                {"projectUrl" in scene && <p className="story-project"><a className="ui-button ui-button--ghost ui-button--default" href={scene.projectUrl} target="_blank" rel="noopener noreferrer">{copy.project} <span className="ui-button__arrow" aria-hidden="true">↗</span></a></p>}
                 {scene.id === "vision" && <p className="story-vision-note">{copy.vision}</p>}
                 {index === 0 && <p className="story-scroll-cue"><span aria-hidden="true">↓</span> {copy.scroll}</p>}
-                {scene.id === "vision" && <div className="story-reveal-cue"><Button variant="ghost" onClick={reveal}><span aria-hidden="true">✧</span> {copy.revealAction}</Button></div>}
+                {scene.id === "vision" && <div className="story-reveal-cue"><Button variant="ghost" onClick={reveal}><span className="story-sparkle" aria-hidden="true">✧</span> {copy.revealAction}</Button></div>}
               </div>
               <figure className="story-static-media">
                 {scene.image && ("animated" in scene && reduced ? <StillImage src={scene.image} alt={scene.caption[language]} /> : <img src={scene.image} alt={scene.caption[language]} loading="lazy" />)}
@@ -110,11 +111,12 @@ export default function AboutPage() {
         </AnimatePresence>
       </div>
       {particleError && <p className="story-particle-error" role="status">{copy.particleError}</p>}
+      <StoryIntro language={language} />
       <footer className="story-outro">
         <p className="story-eyebrow">JEVLING — {copy.experiment}</p>
         <h2 lang="en">Tiny creature. <br /><em>Big decisions.</em></h2>
         <p>{copy.end}</p>
-        <div className="story-links"><a className="ui-button ui-button--primary ui-button--default" href="/" onClick={event => navigate(event, "/")}>{copy.back} <span aria-hidden="true">↗</span></a><a className="ui-button ui-button--ghost ui-button--default" href="/features" onClick={event => navigate(event, "/features")}>{copy.features} <span aria-hidden="true">↗</span></a></div>
+        <div className="story-links"><a className="ui-button ui-button--primary ui-button--default" href="/" onClick={event => navigate(event, "/")}>{copy.back} <span className="ui-button__arrow" aria-hidden="true">↗</span></a><a className="ui-button ui-button--ghost ui-button--default" href="/features" onClick={event => navigate(event, "/features")}>{copy.features} <span className="ui-button__arrow" aria-hidden="true">↗</span></a></div>
       </footer>
     </main>
   );

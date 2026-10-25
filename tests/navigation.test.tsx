@@ -5,7 +5,7 @@ import App from "../src/App";
 import { savedScroll } from "../src/navigation/routes";
 import { preferencesStore } from "../src/stores/preferencesStore";
 
-vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useThemeIconMotion: () => ({ turn: 0, scale: 1 }) }));
+vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useThemeIconMotion: () => ({ turn: 0, scale: 1 }), useOrganicMotion: () => ({ spring: { duration: 0 } }) }));
 vi.mock("../src/pages/HomePage", () => ({ default: () => <main><h1 data-page-route="/" tabIndex={-1}>Inicio</h1></main> }));
 vi.mock("../src/pages/FeaturesPage", () => ({ default: () => <main><h1 data-page-route="/features" tabIndex={-1}>Capacidades</h1></main> }));
 vi.mock("../src/pages/AboutPage", () => ({ default: () => <main><h1 data-page-route="/about" tabIndex={-1}>Historia</h1></main> }));

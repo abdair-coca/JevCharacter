@@ -6,7 +6,7 @@ import { JEV_COLOR_IDS } from "../../character/jevColors";
 import { clearGroqKey, readGroqKey, saveGroqKey } from "../../creature/brain/groqKeyStore";
 import { useTranslation } from "../../i18n/useTranslation";
 import { appAudio } from "../../lib/audioCore";
-import { useUiMotion } from "../../lib/motionTokens";
+import { useOrganicMotion, useUiMotion } from "../../lib/motionTokens";
 import { usePreferences } from "../../stores/preferencesStore";
 import { CloseIcon } from "../reply/SpeechReply";
 import "./settings.css";
@@ -33,6 +33,7 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
   const jevColor = usePreferences(state => state.jevColor);
   const setJevColor = usePreferences(state => state.setJevColor);
   const transition = useUiMotion();
+  const { spring } = useOrganicMotion();
   const headingId = useId();
   const jevTitleId = useId();
   const keyTitleId = useId();
@@ -124,7 +125,7 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
         <div className="settings__row">
           <span className="settings__label">{t.language}</span>
           <div className="language-switch" data-language={language} role="group" aria-label={t.language}>
-            <m.span className="language-switch__indicator" aria-hidden="true" initial={false} animate={{ x: language === "en" ? "100%" : "0%" }} transition={transition} />
+            <m.span className="language-switch__indicator" aria-hidden="true" initial={false} animate={{ x: language === "en" ? "100%" : "0%" }} transition={spring} />
             <Button variant="ghost" size="small" aria-pressed={language === "es"} aria-label="Español" onClick={() => setLanguage("es")}>ES</Button>
             <Button variant="ghost" size="small" aria-pressed={language === "en"} aria-label="English" onClick={() => setLanguage("en")}>EN</Button>
           </div>

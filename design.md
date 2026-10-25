@@ -117,6 +117,8 @@ Grid/flex, safe areas y espacio disponible gobiernan el responsive. Nunca conser
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)`, transiciones de escena simétricas. |
 | `--motion-distance-sm` / `--motion-distance-md` | `0.375rem` / `1rem`, desplazamientos de interfaz. |
 | `--motion-scale-press` | `0.98`, feedback de pulsación. |
+| `--ease-spring` / `--duration-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` / `420ms`: resorte CSS (se pasa y vuelve) de las microinteracciones. |
+| `--motion-hop`, `--motion-nudge`, `--motion-icon-*`, `--motion-*-turn`, `--motion-knob-stretch`, `--motion-page-open`, `--motion-fly*` | Saltos, empujes, giros y escalas pequeñas de las microinteracciones (2026-10-24). |
 
 Las duraciones específicas de demostración, holds y amplitudes de escena se definen como tokens semánticos adicionales al validar los clips. El catálogo referencia esos tokens; no guarda otra escala de diseño.
 
@@ -155,7 +157,8 @@ Aplica a Home, Capacidades y Historia. Decisiones aprobadas por el usuario; los 
 - Sonido sintetizado con Web Audio, carismático y fluido, acorde con la cara redonda de Jev. Nunca palabras ni voz humana.
 - **Habla (segunda revisión del 2026-10-17, juguetona y seca):** una curva por palabra que rebota por sus sílabas escritas: cada sílaba entra con un pequeño salto ascendente, sobre una melodía pentatónica con la tónica acentuada, ritmo alterno largo-corto y color de vocal. Sin eco ni sala. Pausas en comas y fin de frase; subida en preguntas, realce y risita en exclamaciones, caída al cerrar. **Acciones:** un motivo corto y distinto por acción, con el mismo rebote y sin ondas cuadradas. El regreso a `Base` no suena.
 - **Banda sonora de Historia (épica cinematográfica):** arco Am(add9) → F(add9) → C(add9) → G6 → Fmaj9, Gsus4 mientras se abre la estrella y un Do mayor amplio en la revelación. Cada escena suma energía: arpegio a 104 bpm, bombo, bajo pulsante, tema heroico de metales desde machine learning y palmas en el clímax. Al deslizar hacia la siguiente escena sube un barrido; al llegar, un golpe grave cae en el tiempo fuerte con el acorde nuevo. Los golpes muy seguidos se funden, salvo que el nuevo sea más fuerte, así que el clímax nunca se pierde. Jev no habla en Historia.
-- Encendido por defecto; empieza con el primer gesto. Un interruptor «Sonido de Jev» dentro de Ajustes para voz y música, con `aria-pressed`, nombre accesible y elección persistida (`jevling.sound`).
+- **Clics de interfaz (aprobados 2026-10-24):** cada pulsación de un control suena con un blip senoidal breve y suave (tocar, navegar, activar/desactivar, elegir), por un bus seco propio por debajo de la voz. Se oyen en Inicio y Capacidades; en Historia no, para no pisar la música. Sin sonido al pasar el cursor.
+- Encendido por defecto; empieza con el primer gesto. Un interruptor «Sonido de Jev» dentro de Ajustes para voz, clics y música, con `aria-pressed`, nombre accesible y elección persistida (`jevling.sound`).
 - Voz en Inicio y Capacidades; música solo en Historia. Todo se detiene con la pestaña oculta y al silenciar; la voz, además, al cancelar el habla o cambiar de ruta. Un contexto compartido con compresor; solo la música pasa por la sala de reverberación. Sin archivos de audio ni dependencias.
 
 ### Home
@@ -210,7 +213,9 @@ Dirección visual de fase 3 confirmada por el usuario: escenario libre, sin cont
 
 Usar el [relato original](docs/jev-story.md) como fuente. Escenas: pregunta y salida de la caja de chat; experimento; capas de percepción/comportamiento/cuerpo; Abdair Coca y las iteraciones; visión futura y cierre.
 
-El recorrido principal mantiene frases cortas. Los detalles desplegables conservan el contexto completo. Presentar al creador con tipografía y composición; no crear un retrato o datos biográficos adicionales. La visión no se convierte en una lista de capacidades ya implementadas.
+El recorrido principal mantiene frases cortas. Los detalles desplegables conservan el contexto completo. No inventar datos biográficos.
+
+**Presentación y contacto, aprobados el 2026-10-24:** antes del cierre, un bloque «Hola, soy Abdair.» con dos frases de introducción (quién es, sin tono de venta), la foto del autor y «Me encuentras en» con iconos de GitHub, LinkedIn, Instagram, TikTok y X. El autor aprobó incluir su foto, que reemplaza la regla anterior de no mostrar retrato. Foto y usuarios de redes están pendientes: mientras tanto se muestran las iniciales «AC» y solo GitHub; un contacto sin URL no se dibuja. La visión no se convierte en una lista de capacidades ya implementadas.
 
 Revisión aprobada 2026-10-08: About presenta el recorrido de Abdair (Bob, TitiEdu, machine-learning-App, JEV). Escenario oscuro cinematográfico local en ambos temas, con reconstrucciones de los tres recursos aportados y estrella de partículas que se abre para revelar al Jev actual. Canvas 2D es dueño del render, GSAP del progreso/wrapper/revelación y Rive del personaje. Se autoriza movimiento ambiental tenue de partículas durante los holds, estelas y bloom precalculado, sin filtros CSS animados. Las imágenes se reinterpretan con violeta/magenta/blanco, sin acentos verdes. Sampling fuera del loop; DPR ≤2, densidad responsive, pausa fuera de vista y reduced motion estático. Las imágenes/partículas no sustituyen el texto DOM. La memoria persistente completa corresponde a Bob; JEV solo guarda notas cortas en el navegador.
 
@@ -235,6 +240,8 @@ Los IDs de ruta, capítulo e idioma son estables y tipados. Las traducciones ES/
 Animar solo `transform` y `opacity` en la web. Para cambios de tamaño usar `layout` de Motion; si el contenedor cambia de proporción, el hijo que debe conservar su forma (Jev) lleva su propio `layout` para corregir la escala. No animar `width`, `height`, `top`, `left`, `margin`, colores, sombras o filtros. Las animaciones existentes internas de Rive se conservan; esta regla gobierna los elementos de la web que se rediseñan.
 
 **Excepción aprobada el 2026-10-20 — entrada de respuestas:** las palabras de una respuesta con bloques pasan de `filter: blur(var(--reply-blur))` a nítidas, con opacidad y un leve ascenso. La animación ocurre una vez por bloque, con keyframes CSS (dueño único) y tokens `--reply-block-stagger`/`--reply-word-stagger`, con la cascada limitada a 40 palabras por texto. Movimiento reducido entrega el texto estático. Medido con GPU real: en móvil con CPU 4×, el 23–25 % de los frames supera 33 ms durante 1–2 s, frente al 9–11 % sin bloques. El usuario eligió conservar el efecto palabra por palabra frente a la alternativa por bloque, que rinde como la base.
+
+**Microinteracciones expresivas, aprobadas el 2026-10-24:** feedback breve con resorte en toda la app, siempre con `transform`/`opacity`. Lo que antes cambiaba de golpe (anillo de color, fondo hover, brillo del input) es ahora una capa propia que aparece con opacidad y escala: no se animan sombras ni colores. El hover solo actúa con `(hover: hover)`; con movimiento reducido no hay transformaciones ni animaciones. El inventario vigente está en [interacción](docs/interaction.md).
 
 Cada elemento tiene un único dueño de animación. GSAP puede gobernar el wrapper de una escena; Motion, sus controles independientes; Rive, el dibujo del personaje. Registrar esta separación junto a la composición cuando no resulte obvia.
 

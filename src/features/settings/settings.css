@@ -15,9 +15,10 @@
 
 .settings__switch { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
 .settings__track { position: relative; flex: none; width: calc(var(--size-icon) * 2); height: var(--size-icon); border-radius: var(--radius-pill); background: var(--color-surface-raised); }
-.settings__track::after { content: ""; position: absolute; top: 0.125rem; left: 0.125rem; width: calc(var(--size-icon) - 0.25rem); height: calc(var(--size-icon) - 0.25rem); border-radius: var(--radius-pill); background: var(--color-muted); }
+.settings__track::after { content: ""; position: absolute; top: 0.125rem; left: 0.125rem; width: calc(var(--size-icon) - 0.25rem); height: calc(var(--size-icon) - 0.25rem); border-radius: var(--radius-pill); background: var(--color-muted); transform-origin: left center; transition: transform var(--duration-spring) var(--ease-spring); }
 .settings__switch[aria-pressed="true"] .settings__track { background: var(--color-accent); }
-.settings__switch[aria-pressed="true"] .settings__track::after { left: calc(100% - var(--size-icon) + 0.125rem); background: var(--color-accent-foreground); }
+/* The knob travels by transform, so it can spring across and stretch while pressed. */
+.settings__switch[aria-pressed="true"] .settings__track::after { transform: translateX(var(--size-icon)); transform-origin: right center; background: var(--color-accent-foreground); }
 
 .settings__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); }
 .settings__label { font-size: var(--text-small); font-weight: var(--weight-label); }
@@ -25,8 +26,10 @@
 /* Jev's body color: one round swatch per palette entry; the chosen one gets a ring. */
 .settings__swatches { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-1); }
 .settings__swatch { display: grid; place-items: center; width: var(--size-target); height: var(--size-target); padding: 0; border: 0; border-radius: var(--radius-pill); background: transparent; }
-.settings__swatch::before { content: ""; width: var(--size-icon); height: var(--size-icon); border-radius: var(--radius-pill); background: var(--swatch); box-shadow: 0 0 0 var(--border-thin) var(--color-border); }
-.settings__swatch[aria-pressed="true"]::before { box-shadow: 0 0 0 0.125rem var(--color-background-secondary), 0 0 0 0.25rem var(--swatch); }
+.settings__swatch::before { content: ""; grid-area: 1 / 1; width: var(--size-icon); height: var(--size-icon); border-radius: var(--radius-pill); background: var(--swatch); box-shadow: 0 0 0 var(--border-thin) var(--color-border); transition: transform var(--duration-spring) var(--ease-spring); }
+/* The ring is its own layer, so it draws in (grows and fades) without animating a shadow. */
+.settings__swatch::after { content: ""; grid-area: 1 / 1; width: calc(var(--size-icon) + var(--space-2)); height: calc(var(--size-icon) + var(--space-2)); border: var(--focus-width) solid var(--swatch); border-radius: var(--radius-pill); opacity: 0; transform: scale(var(--motion-reveal-scale)); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-spring) var(--ease-spring); }
+.settings__swatch[aria-pressed="true"]::after { opacity: 1; transform: none; }
 .settings__swatch[data-color="violet"] { --swatch: var(--jev-skin-violet); }
 .settings__swatch[data-color="cyan"] { --swatch: var(--jev-skin-cyan); }
 .settings__swatch[data-color="pink"] { --swatch: var(--jev-skin-pink); }
@@ -38,7 +41,7 @@
 .settings__group h3 { margin: 0; font-size: var(--text-small); font-weight: var(--weight-label); }
 /* Rows that leave Ajustes for another panel (memory, Home's diagnostics). */
 .settings__link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
-.settings__link > span:last-child { color: var(--color-muted); }
+.settings__link > span:last-child { color: var(--color-muted); transition: transform var(--duration-spring) var(--ease-spring); }
 .settings__link[aria-pressed="true"] { border-color: var(--color-accent); }
 .settings__help, .settings__status, .settings__error { margin: 0; font-size: var(--text-small); line-height: var(--line-body); }
 .settings__help, .settings__status { color: var(--color-muted); }
@@ -51,6 +54,21 @@
 .settings__actions button { min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }
 .settings__actions button[type="submit"] { border-color: transparent; background: var(--color-accent); color: var(--color-accent-foreground); }
 .settings__actions button:disabled { opacity: 0.5; }
+
+/* Microinteractions: springy presses, a stretching knob and swatches that pop; none with reduced motion. */
+@keyframes swatch-pop { 50% { transform: scale(var(--motion-icon-pop)); } }
+.settings__switch, .settings__link, .settings__actions button { transition: transform var(--duration-spring) var(--ease-spring); }
+@media (prefers-reduced-motion: no-preference) {
+  .settings__switch:active, .settings__link:active, .settings__actions button:active:not(:disabled) { transform: scale(var(--motion-scale-press)); }
+  .settings__switch:active .settings__track::after { transform: scaleX(var(--motion-knob-stretch)); }
+  .settings__switch[aria-pressed="true"]:active .settings__track::after { transform: translateX(var(--size-icon)) scaleX(var(--motion-knob-stretch)); }
+  .settings__swatch:active::before { transform: scale(var(--motion-icon-press)); }
+  .settings__swatch[aria-pressed="true"]::before { animation: swatch-pop var(--duration-spring) var(--ease-spring); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .settings__swatch:hover::before { transform: scale(var(--motion-icon-pop)); }
+  .settings__link:hover > span:last-child { transform: translateX(var(--motion-nudge)); }
+}
 
 @media (max-width: 40rem) {
   .settings-layer { align-items: end; padding: var(--space-2) var(--space-2) max(var(--space-2), env(safe-area-inset-bottom)); }

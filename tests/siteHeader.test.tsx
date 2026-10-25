@@ -6,7 +6,7 @@ import { preferencesStore } from "../src/stores/preferencesStore";
 import { openSettings, settingsDialogStore } from "../src/stores/settingsDialogStore";
 import { diagnosticsStore } from "../src/stores/diagnosticsStore";
 
-vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useThemeIconMotion: () => ({ turn: 0, scale: 1 }) }));
+vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useThemeIconMotion: () => ({ turn: 0, scale: 1 }), useOrganicMotion: () => ({ spring: { duration: 0 } }) }));
 afterEach(cleanup);
 beforeEach(() => {
   preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true });

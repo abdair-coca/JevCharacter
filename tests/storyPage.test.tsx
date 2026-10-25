@@ -48,7 +48,7 @@ describe("About narrative and presentation boundary", () => {
     // Jev loads at the first particle change, so the test enters Bob before expecting the character.
     act(() => mocks.selectScene(1));
     await screen.findByTestId("story-character");
-    expect(screen.getAllByRole("region")).toHaveLength(5);
+    expect(document.querySelectorAll("section[data-story-scene]")).toHaveLength(5);
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Ideas que\ncobran vida.");
     expect(screen.getByText(/Soy Abdair Coca/)).toBeTruthy();
     expect(screen.getByText(/Soy Abdair Coca/).textContent).toContain("Ingeniería Informática");
@@ -60,6 +60,22 @@ describe("About narrative and presentation boundary", () => {
     expect(document.querySelectorAll("details, .story-navigation")).toHaveLength(0);
     expect(latest().presentation).toBe(true);
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("introduces Abdair before the closing line, with only the contact links already supplied", () => {
+    render(view());
+    const intro = screen.getByRole("region", { name: "Hola, soy Abdair." });
+    expect(intro.textContent).toContain("Aprendo construyendo");
+    expect(intro.compareDocumentPosition(screen.getByRole("heading", { name: "Tiny creature. Big decisions." })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const links = screen.getByRole("list", { name: "Me encuentras en" }).querySelectorAll("a");
+    expect([...links].map(link => link.getAttribute("aria-label"))).toEqual(["GitHub"]);
+    expect(links[0].getAttribute("href")).toBe("https://github.com/abdair-coca");
+    expect(links[0].getAttribute("rel")).toBe("noopener noreferrer");
+    // No photo yet: the initials stand in, hidden from assistive technology.
+    expect(intro.querySelector("img")).toBeNull();
+    expect(intro.querySelector(".story-intro__portrait")?.getAttribute("aria-hidden")).toBe("true");
+    act(() => preferencesStore.getState().setLanguage("en"));
+    expect(screen.getByRole("region", { name: "Hi, I'm Abdair." })).toBeTruthy();
   });
 
   it("retains the scrolled scene and character while switching language and theme", async () => {
@@ -85,7 +101,7 @@ describe("About narrative and presentation boundary", () => {
     act(() => previous.onError?.());
     await act(async () => previous.onReady?.());
     expect(document.querySelector(".story-page")?.getAttribute("data-story-status")).toBe("error");
-    expect(screen.getAllByRole("region")).toHaveLength(5);
+    expect(document.querySelectorAll("section[data-story-scene]")).toHaveLength(5);
     fireEvent.click(await screen.findByRole("button", { name: "Reintentar carga" }));
     expect(screen.getByTestId("story-character")).not.toBe(character);
     await act(async () => { previous.onError?.(); previous.onReady?.(); });
@@ -112,7 +128,7 @@ describe("About narrative and presentation boundary", () => {
       document.dispatchEvent(new Event("visibilitychange"));
     });
     expect(latest().active).toBe(false);
-    expect(screen.getAllByRole("region")).toHaveLength(5);
+    expect(document.querySelectorAll("section[data-story-scene]")).toHaveLength(5);
   });
 
   it("reveals Jev through the scroll action while keeping a single character", async () => {

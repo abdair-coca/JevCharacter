@@ -30,7 +30,7 @@
 .reply__eyebrow:focus { outline: none; }
 .reply__close { display: grid; place-items: center; flex-shrink: 0; width: var(--size-target); height: var(--size-target); color: var(--color-muted); background: transparent; border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); }
 .reply__close:hover { color: var(--color-foreground); background: var(--color-surface-raised); }
-.reply__close svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.reply__close svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; transition: transform var(--duration-spring) var(--ease-spring); }
 .reply__body { position: relative; display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .reply__scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-3) var(--space-4) var(--space-4) 0; scrollbar-width: thin; }
 .reply__scroll:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); border-radius: var(--radius-sm); }
@@ -74,7 +74,7 @@
 .reply-callout strong { font-weight: var(--weight-label); }
 
 .reply-chips ul { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.reply-chip { min-height: calc(var(--size-target) - var(--space-2)); padding: var(--space-2) var(--space-4); border: var(--border-thin) solid var(--color-control-edge); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); text-align: left; transition: transform var(--duration-fast) var(--ease-out); }
+.reply-chip { min-height: calc(var(--size-target) - var(--space-2)); padding: var(--space-2) var(--space-4); border: var(--border-thin) solid var(--color-control-edge); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); text-align: left; transition: transform var(--duration-spring) var(--ease-spring); }
 .reply-chip:hover:not(:disabled) { transform: translateY(calc(var(--motion-distance-sm) * -0.5)); }
 .reply-chip:active:not(:disabled) { transform: scale(var(--motion-scale-press)); }
 .reply-chip:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); }
@@ -83,7 +83,7 @@
 .reply-choices { display: grid; gap: var(--space-3); padding: var(--space-4); border: var(--border-thin) solid var(--color-control-edge); border-radius: var(--radius-md); background: color-mix(in srgb, var(--jev-color-primary) 6%, var(--color-surface)); }
 .reply-choices__question { color: var(--color-foreground); font-weight: var(--weight-label); }
 .reply-choices__options { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
-.reply-choice { min-height: var(--size-target); padding: var(--space-2) var(--space-4); border: var(--border-thin) solid var(--color-accent); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); text-align: left; transition: transform var(--duration-fast) var(--ease-out); }
+.reply-choice { min-height: var(--size-target); padding: var(--space-2) var(--space-4); border: var(--border-thin) solid var(--color-accent); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); text-align: left; transition: transform var(--duration-spring) var(--ease-spring); }
 .reply-choice:hover:not(:disabled) { transform: translateY(calc(var(--motion-distance-sm) * -0.5)); }
 .reply-choice:active:not(:disabled) { transform: scale(var(--motion-scale-press)); }
 .reply-choice:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); }
@@ -96,6 +96,14 @@
 @keyframes reply-word { from { opacity: 0; filter: blur(var(--reply-blur)); transform: translateY(var(--motion-distance-sm)); } }
 @media (prefers-reduced-motion: reduce) {
   .reply-block, .reply-word { animation: none; }
+}
+/* The ✕ shared by replies, Ajustes and the memory turns a quarter as you reach it, and gives on press. */
+.reply__close { transition: transform var(--duration-spring) var(--ease-spring); }
+@media (prefers-reduced-motion: no-preference) {
+  .reply__close:active { transform: scale(var(--motion-icon-press)); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .reply__close:hover svg { transform: rotate(var(--motion-quarter-turn)); }
 }
 
 /* Mobile: the sheet over the stage. */

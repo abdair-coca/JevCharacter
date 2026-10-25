@@ -43,7 +43,7 @@ export function EnrollmentExperience({ session, language, characterFailed, onFie
       {confirmed ? <m.div className="enrollment__success" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={motion.ui}>
         <span className="enrollment__check" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m8 16 5 5 11-11" /></svg></span>
         <p role="status">{copy.successBody}</p>
-        <Button type="button" className="enrollment__submit" onClick={close}>{copy.back}<span aria-hidden="true">↗</span></Button>
+        <Button type="button" className="enrollment__submit" onClick={close}>{copy.back}<span className="ui-button__arrow" aria-hidden="true">↗</span></Button>
       </m.div> : <>
         <p className="enrollment__intro">{copy.intro}</p>
         <form noValidate autoComplete="off" onSubmit={event => {
@@ -71,7 +71,7 @@ export function EnrollmentExperience({ session, language, characterFailed, onFie
               aria-invalid={Boolean(session.errors.phone)} aria-describedby={session.errors.phone ? "enrollment-phone-error" : "enrollment-phone-hint"} />
             {session.errors.phone ? <p className="enrollment__error" id="enrollment-phone-error" role="alert">{copy[session.errors.phone]}</p> : <p className="enrollment__hint" id="enrollment-phone-hint">{copy.phoneHint}</p>}
           </div>
-          <Button type="submit" className="enrollment__submit">{copy.confirm}<span aria-hidden="true">↗</span></Button>
+          <Button type="submit" className="enrollment__submit">{copy.confirm}<span className="ui-button__arrow" aria-hidden="true">↗</span></Button>
         </form>
       </>}
       {characterFailed && <p className="enrollment__hint" role="status">{copy.fallback}</p>}

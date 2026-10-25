@@ -11,12 +11,20 @@
 .brand-mark { display: flex; align-items: center; gap: var(--space-3); color: var(--color-foreground); text-decoration: none; font-size: var(--text-small); font-weight: var(--weight-title); letter-spacing: var(--tracking-label); }
 .brand-mark__dot { color: var(--color-accent); }
 .brand-mark__glyph { display: grid; place-items: center; width: var(--size-brand); height: var(--size-brand); border-radius: var(--radius-pill); background: var(--color-accent); color: var(--color-accent-foreground); letter-spacing: var(--tracking-label); }
+.brand-mark__eyes { display: block; }
 .site-header nav { display: flex; gap: var(--space-2); }
-.site-header nav a { display: grid; place-items: center; min-height: var(--size-target); padding-inline: var(--space-4); border-radius: var(--radius-pill); color: var(--color-muted); text-decoration: none; font-size: var(--text-small); font-weight: var(--weight-label); }
-.site-header nav a:hover { background: var(--color-surface); color: var(--color-foreground); }
-.site-header nav a[aria-current="page"] { color: var(--color-foreground); background: var(--color-surface-raised); }
+.site-header nav a { position: relative; isolation: isolate; display: grid; place-items: center; min-height: var(--size-target); padding-inline: var(--space-4); border-radius: var(--radius-pill); color: var(--color-muted); text-decoration: none; font-size: var(--text-small); font-weight: var(--weight-label); }
+/* Hover wash that fades and grows in; the current view has its own highlight, which slides between links. */
+.site-header nav a::before { content: ""; position: absolute; inset: 0; z-index: -2; border-radius: inherit; background: var(--color-surface); opacity: 0; transform: scale(var(--motion-icon-press)); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-spring) var(--ease-spring); }
+.site-header nav a:hover::before { opacity: 1; transform: none; }
+.site-header nav a:hover, .site-header nav a[aria-current="page"] { color: var(--color-foreground); }
+.site-header__current { position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--color-surface-raised); }
 /* Phones swap the labels for these; they take the text color, so white in dark and near-black in light. */
 .site-header__icon { display: none; width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.site-header__icon path { transform-box: fill-box; transform-origin: center; }
+/* The book's pages turn on the spine. */
+.site-header nav a[data-route="/about"] .site-header__icon path:first-child { transform-origin: right bottom; }
+.site-header nav a[data-route="/about"] .site-header__icon path:last-child { transform-origin: left bottom; }
 .preferences, .language-switch { display: flex; align-items: center; gap: var(--space-1); }
 .preferences { gap: var(--space-3); }
 .theme-toggle.ui-button { border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-accent); box-shadow: var(--shadow-control); }
@@ -35,8 +43,10 @@
 .ui-button--small { min-height: calc(var(--size-target) - var(--space-2)); min-width: calc(var(--size-target) - var(--space-2)); padding: var(--space-2); }
 .ui-button--icon { width: var(--size-target); height: var(--size-target); flex-shrink: 0; }
 .ui-button:hover:not(:disabled) { transform: translateY(calc(var(--space-1) * -0.5)); }
-.ui-button { transition: transform var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out); }
+.ui-button { transition: transform var(--duration-spring) var(--ease-spring), opacity var(--duration-fast) var(--ease-out); }
 .ui-button:active:not(:disabled) { transform: scale(var(--motion-scale-press)); }
+/* The ↗ of a link button leans toward where it goes. */
+.ui-button__arrow { display: inline-block; transition: transform var(--duration-spring) var(--ease-spring); }
 .skip-link { position: fixed; z-index: var(--layer-dialog); top: var(--space-3); left: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: var(--color-accent); color: var(--color-accent-foreground); transform: translateY(-200%); }
 .skip-link:focus { transform: translateY(0); }
 
@@ -90,13 +100,16 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 .whisper__thinking { color: var(--color-accent); }
 .whisper__pulse { position: absolute; inset: 0; border: var(--focus-width) solid var(--color-accent); border-radius: inherit; pointer-events: none; }
 .whisper:focus-within { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); }
+/* Focus glow: a fixed halo that only fades in, so the shadow itself never animates. */
+.whisper::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: 0 0 0 var(--space-1) color-mix(in srgb, var(--color-accent) 16%, transparent), 0 0 var(--space-6) color-mix(in srgb, var(--color-accent) 32%, transparent); opacity: 0; transition: opacity var(--duration-ui) var(--ease-out); }
+.whisper:focus-within::before { opacity: 1; }
 .whisper input { width: 100%; min-width: 0; min-height: var(--space-8); padding: var(--space-1) 0; color: var(--color-foreground); background: transparent; border: 0; font-size: var(--text-body); outline: none; text-overflow: ellipsis; }
 .whisper input::placeholder { color: var(--color-muted); }
 .whisper__send-wrap { flex-shrink: 0; }
 .whisper__send.ui-button { width: var(--size-send); height: var(--size-send); border-radius: var(--radius-pill); background: var(--color-accent); }
 .whisper__send:disabled { opacity: 1; background: var(--color-surface-raised); color: var(--color-muted); box-shadow: none; }
 .whisper__send > span { display: grid; place-items: center; }
-.whisper__send svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.whisper__send svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform var(--duration-spring) var(--ease-spring); }
 .whisper__meta { position: absolute; top: 100%; left: 0; right: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-3); margin-top: var(--space-3); padding-inline: var(--space-4); font-size: var(--text-caption); color: var(--color-muted); line-height: var(--line-body); }
 .whisper__meta:empty { display: none; }
 /* The row overlays what sits below it on narrow screens: only its own content takes taps. */
@@ -154,6 +167,31 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 .pending-page h1 { font: var(--weight-title) var(--text-title)/var(--line-title) var(--font-display); letter-spacing: var(--tracking-title); }
 .pending-page p { margin-block: var(--space-6); color: var(--color-muted); }
 .pending-page a { display: inline-block; padding-block: var(--space-3); color: var(--color-accent); text-underline-offset: var(--space-1); }
+
+/* Microinteractions: transform and opacity only, with the spring tokens; none with reduced motion. */
+@keyframes brand-blink { 45%, 55% { transform: scaleY(0.1); } }
+@keyframes nav-hop { 40% { transform: translateY(var(--motion-hop)); } }
+@keyframes nav-twirl { 50% { transform: rotate(var(--motion-icon-turn)) scale(var(--motion-icon-pop)); } }
+@keyframes nav-pop { 50% { transform: scale(calc(var(--motion-icon-pop) * var(--motion-icon-pop))); } }
+@keyframes nav-page-left { 50% { transform: rotate(calc(var(--motion-page-open) * -1)); } }
+@keyframes nav-page-right { 50% { transform: rotate(var(--motion-page-open)); } }
+@media (prefers-reduced-motion: no-preference) {
+  /* Jev's eyes on the logo blink. */
+  .brand-mark:is(:hover, :active) .brand-mark__eyes { animation: brand-blink var(--duration-ui) var(--ease-in-out); }
+  /* A view's icon plays its move when you arrive there, and on each press. */
+  .site-header nav a[data-route="/"]:is([aria-current="page"], :active) .site-header__icon { animation: nav-hop var(--duration-spring) var(--ease-spring); }
+  .site-header nav a[data-route="/features"]:is([aria-current="page"], :active) .site-header__icon path:first-child { animation: nav-twirl var(--duration-spring) var(--ease-spring); }
+  .site-header nav a[data-route="/features"]:is([aria-current="page"], :active) .site-header__icon path:last-child { animation: nav-pop var(--duration-spring) var(--ease-spring) var(--duration-stagger); }
+  .site-header nav a[data-route="/about"]:is([aria-current="page"], :active) .site-header__icon path:first-child { animation: nav-page-left var(--duration-spring) var(--ease-spring); }
+  .site-header nav a[data-route="/about"]:is([aria-current="page"], :active) .site-header__icon path:last-child { animation: nav-page-right var(--duration-spring) var(--ease-spring); }
+  .settings-toggle .theme-toggle__icons svg { transition: transform var(--duration-spring) var(--ease-spring); }
+  .settings-toggle:active .theme-toggle__icons svg { transform: rotate(var(--motion-gear-turn)); }
+  .whisper__send:active:not(:disabled) svg { transform: translate(var(--motion-nudge), calc(var(--motion-nudge) * -1)); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .settings-toggle:hover .theme-toggle__icons svg { transform: rotate(var(--motion-gear-turn)); }
+  .ui-button:hover .ui-button__arrow, .whisper__send:hover:not(:disabled) svg { transform: translate(var(--motion-nudge), calc(var(--motion-nudge) * -1)); }
+}
 
 /* Breakpoints correspond to --breakpoint-sm/lg in tokens.css. */
 @media (max-width: 64rem) {

@@ -6,6 +6,7 @@ import { rememberScroll, savedScroll, useRoute } from "./navigation/routes";
 import { preferencesStore, usePreferences } from "./stores/preferencesStore";
 import { useTranslation } from "./i18n/useTranslation";
 import { useSoundRuntime } from "./lib/useSoundRuntime";
+import { useUiSounds } from "./lib/uiSound";
 import "./App.css";
 
 const PendingPage = lazy(() => import("./pages/PendingPage"));
@@ -22,6 +23,7 @@ export default function App() {
   const previousRoute = useRef(route);
   const [homeVisited, setHomeVisited] = useState(route === "/");
   useSoundRuntime();
+  useUiSounds(route !== "/about");
 
   useEffect(() => { if (route === "/") setHomeVisited(true); }, [route]);
 

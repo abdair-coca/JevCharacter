@@ -9,6 +9,30 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Microinteracciones y presentación en Historia — 2026-10-24
+
+Pedido: «quiero que añadas microinteracciones con toda la app, y al final de about quiero que pongas también mi contacto y como una pequeña introducción hacia mí. Antes de modificar algo quiero que me hagas preguntas». Quiz: microinteracciones expresivas con resortes; feedback visual más clics sutiles al pulsar y alternar, salvo en Historia; contactos GitHub, LinkedIn, Instagram, TikTok y X; introducción redactada a partir de `jev-story.md`, sin «Sobre mí» y sin tono de venta («no me quiero vender»), con el título «Hola, soy Abdair.»; con foto; bloque antes del cierre; mientras falten datos, solo GitHub e iniciales «AC»; sin datos nuevos («Así está bien»); todo en una entrega. Después: «aplícalo nomás».
+
+- [x] Tokens: `--ease-spring`, `--duration-spring` y distancias, giros y escalas de microinteracción en `tokens.css`.
+- [x] Cabecera: resaltado único con `layoutId` que se desliza a la vista abierta, fondo hover que aparece con opacidad/escala, ojos del logo que parpadean, engranaje que gira; en móvil cada icono hace su gesto al llegar a su vista o al pulsarlo (casa, destellos, libro con páginas separadas en dos `path`).
+- [x] Botones `ui-button` con resorte y `↗` (`.ui-button__arrow`) que se inclina; ✕ compartido (respuestas, Ajustes, Memoria) e inscripción giran un cuarto; papelera de Memoria se balancea; chips y opciones con resorte.
+- [x] Ajustes: bolita del interruptor por `transform` con resorte y estiramiento al pulsar; anillo de la muestra elegida como capa propia que se dibuja (antes era una sombra) y muestra que late; indicador ES/EN con el resorte orgánico; `›` que avanza.
+- [x] Inicio: halo del input al enfocar (capa con opacidad), flecha de enviar que sale disparada antes del ✓, chevron del HUD con resorte.
+- [x] Sonido: bus `ui` en `audioCore` y `lib/uiSound.ts` (`uiSoundFor`, `createUiSound`, `useUiSounds`), desactivado en `/about`.
+- [x] Historia: `StoryIntro` antes del cierre, con `STORY_CONTACTS` y `STORY_PORTRAIT` en el catálogo; iconos que saltan y retrato que se inclina.
+- [x] Docs: `design.md` (tokens, clics de interfaz, presentación y regla de retrato reemplazada, microinteracciones), `docs/interaction.md`, `docs/architecture.md` y `docs/jev-story.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0 --ignore-pattern "playwright-report/**"` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 365 tests en 46 archivos (nuevo `uiSound`; `storyPage` cuenta las escenas por `data-story-scene` y prueba la presentación; los mocks de `motionTokens` de cabecera y Ajustes añaden el resorte). |
+| `npm run build` | PASS: `index` 352,61 kB (gzip 113,06 kB, +0,7 kB), CSS 60,07 kB; Ajustes y Memoria siguen en sus chunks. |
+| Manual (Playwright sobre la build, 1440 y 390 px) | Un solo resaltado y se mueve a Capacidades; hover y engranaje responden; bolita a 20 px encendida y en reposo apagada; anillo elegido opacidad 1, los demás 0; halo del input opacidad 1 al enfocar. Bus `ui`: 4 conexiones tras dos pulsaciones del tema en Inicio, 0 en Historia. Presentación sin desbordes horizontales en escritorio y móvil; cabecera móvil de 65 px; sin errores de consola. |
+| `npx playwright test` | PASS: 61/61 (14,6 min), sobre la misma build. |
+
+**Pendiente del usuario:** foto (va en `public/` y en `STORY_PORTRAIT`) y usuarios de LinkedIn, Instagram, TikTok y X (`STORY_CONTACTS`).
+
 ## Memoria y Diagnóstico en Ajustes; cabecera móvil con iconos — 2026-10-23
 
 Pedido: «quiero que memoria y diagnóstico también se muevan a ajustes, y que cuando estemos en móvil inicio capacidades y historia, se vuelvan iconos minimalistas en blanco que se coloquen entre jevling y el cambio de tema». Quiz: botones en Ajustes que abren lo de siempre (Diagnóstico solo en Inicio), iconos con el color del texto del tema (blancos en oscuro, casi negros en claro), solo a ≤ 40rem.

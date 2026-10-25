@@ -21,7 +21,8 @@
 .enrollment__topline > span > span { padding-inline: var(--space-2); color: var(--color-accent); }
 .enrollment__close { display: grid; place-items: center; flex-shrink: 0; width: var(--size-target); height: var(--size-target); color: var(--color-muted); background: transparent; border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); }
 .enrollment__close:hover { color: var(--color-foreground); background: var(--color-surface-raised); }
-.enrollment__close svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.enrollment__close svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; transition: transform var(--duration-spring) var(--ease-spring); }
+.enrollment__close { transition: transform var(--duration-spring) var(--ease-spring); }
 .enrollment__body { padding-block: var(--space-8) var(--space-4); }
 .enrollment__eyebrow { margin: 0 0 var(--space-4); color: var(--color-accent); font-size: var(--text-caption); font-weight: var(--weight-label); letter-spacing: var(--tracking-label); }
 .enrollment h2 { margin: 0; font: var(--weight-title) var(--enrollment-title)/var(--line-title) var(--font-display); letter-spacing: var(--tracking-title); text-wrap: balance; }
@@ -66,4 +67,11 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .enrollment-particles { display: none; }
+}
+/* The close ✕ turns a quarter as you reach it and gives on press, like the reply's. */
+@media (prefers-reduced-motion: no-preference) {
+  .enrollment__close:active { transform: scale(var(--motion-icon-press)); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .enrollment__close:hover svg { transform: rotate(var(--motion-quarter-turn)); }
 }

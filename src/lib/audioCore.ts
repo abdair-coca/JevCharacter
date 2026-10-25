@@ -1,9 +1,10 @@
-export type AudioBus = "voice" | "music";
+export type AudioBus = "voice" | "music" | "ui";
 type CoreOptions = { createContext?: () => AudioContext | null };
 
 const MASTER_GAIN = 0.22;
-const BUS_GAIN: Record<AudioBus, number> = { voice: 1, music: 0.75 };
-// Only the music sits in the hall; Jev's voice stays dry and close, with no echo.
+// Interface clicks sit under Jev's voice: they confirm a touch, they never speak over Jev.
+const BUS_GAIN: Record<AudioBus, number> = { voice: 1, music: 0.75, ui: 0.5 };
+// Only the music sits in the hall; Jev's voice and the interface clicks stay dry and close, with no echo.
 const MUSIC_ROOM_SEND = 0.45;
 const ROOM_SECONDS = 2.6;
 // The hall's tail is darkened so it adds warmth, not hiss.
@@ -32,7 +33,7 @@ function room(context: AudioContext) {
 }
 
 /**
- * Owns the single AudioContext shared by Jev's voice and the story's music: it is
+ * Owns the single AudioContext shared by Jev's voice, the interface clicks and the story's music: it is
  * created on the first user gesture, follows the sound preference and suspends
  * with the tab. Listeners hear every change so each player can start or stop.
  */
@@ -55,7 +56,7 @@ export function createAudioCore({ createContext = defaultContext }: CoreOptions 
       node.connect(master);
       return node;
     };
-    buses = { voice: bus("voice"), music: bus("music") };
+    buses = { voice: bus("voice"), music: bus("music"), ui: bus("ui") };
     const reverb = audio.createConvolver();
     reverb.buffer = room(audio);
     reverb.connect(master);

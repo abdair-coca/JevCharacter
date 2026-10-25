@@ -23,6 +23,16 @@
 .memory-note__forget:hover { color: var(--color-status-error); background: var(--color-surface-raised); }
 .memory-note__forget svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
+/* Microinteractions: the bin tips as you reach it; every button gives on press. None with reduced motion. */
+@keyframes memory-tip { 30% { transform: rotate(calc(var(--motion-icon-turn) * -1)); } 65% { transform: rotate(var(--motion-icon-turn)); } }
+.memory-note__forget, .memory__forget-all, .memory__confirm button { transition: transform var(--duration-spring) var(--ease-spring); }
+@media (prefers-reduced-motion: no-preference) {
+  .memory-note__forget:active, .memory__forget-all:active, .memory__confirm button:active { transform: scale(var(--motion-scale-press)); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .memory-note__forget:hover svg { animation: memory-tip var(--duration-spring) var(--ease-in-out); }
+}
+
 .memory__forget-all { align-self: flex-start; min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: transparent; color: var(--color-status-error); font-size: var(--text-small); font-weight: var(--weight-label); }
 .memory__forget-all:hover { background: var(--color-surface-raised); }
 .memory__confirm { display: grid; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-status-error) 9%, var(--color-surface)); }
