@@ -9,6 +9,25 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Tarjetas «Ver proyecto» en Historia — 2026-10-25
+
+Pedido: «quiero que los botones de ver proyecto de about sean mas bonitos e impresionantes». Quiz: mini tarjeta, efecto magnético, icono de destino.
+
+- [x] `ProjectLink` (nuevo): icono (GitHub para Bob, web para TitiEdu y ML), «Ver proyecto», dominio derivado de la URL y ↗ en un círculo. Imán con `useSpring` (solo `(hover: hover) and (pointer: fine)`, nunca con movimiento reducido); se apaga al salir.
+- [x] CSS: borde degradado estático, halo en capa propia (opacidad/escala) al hover y al foco de teclado, la tarjeta se eleva, el icono salta y la ↗ gira 45°. Tokens `--story-project-*`, `--story-arrow-turn` y `--story-magnet-pull`.
+- [x] `icons.tsx` (nuevo): iconos de contacto movidos desde `StoryIntro` + globo web.
+- [x] Docs: `design.md`, `docs/interaction.md`, `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run tests/storyPage.test.tsx` | PASS: 8/8 (nuevo test de las tarjetas; el mock de `motionTokens` añade `useOrganicMotion`). |
+| `npm run build` | PASS: `index` 352,74 kB (gzip 113,12 kB). |
+| Manual (Playwright sobre la build, 1440 y 360 px) | Hover: imán 11,7 px, tarjeta −6 px, halo opacidad 1, ↗ a 45°; al salir vuelve a `none`. Dominio largo de ML parte en dos líneas a 360 px; sin desborde horizontal ni errores de consola. |
+| `vitest run --maxWorkers=1` | PASS: 366 tests en 46 archivos. |
+| `npx playwright test` | Pendiente (no se corrió en esta entrega). |
+
 ## Microinteracciones y presentación en Historia — 2026-10-24
 
 Pedido: «quiero que añadas microinteracciones con toda la app, y al final de about quiero que pongas también mi contacto y como una pequeña introducción hacia mí. Antes de modificar algo quiero que me hagas preguntas». Quiz: microinteracciones expresivas con resortes; feedback visual más clics sutiles al pulsar y alternar, salvo en Historia; contactos GitHub, LinkedIn, Instagram, TikTok y X; introducción redactada a partir de `jev-story.md`, sin «Sobre mí» y sin tono de venta («no me quiero vender»), con el título «Hola, soy Abdair.»; con foto; bloque antes del cierre; mientras falten datos, solo GitHub e iniciales «AC»; sin datos nuevos («Así está bien»); todo en una entrega. Después: «aplícalo nomás».
