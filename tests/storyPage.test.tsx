@@ -18,7 +18,7 @@ vi.mock("../src/features/story/useStoryScroll", () => ({ useStoryScroll: (_root:
 vi.mock("../src/features/story/ParticleVortex", () => ({ ParticleVortex: () => <canvas data-testid="particles" /> }));
 vi.mock("../src/features/presentation/useStageVisibility", () => ({ useStageVisibility: () => mocks.inView }));
 vi.mock("../src/hooks/useReducedMotionPreference", () => ({ useReducedMotionPreference: () => mocks.reduced }));
-vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), cssDurationSeconds: () => 0.2, useOrganicMotion: () => ({ reduced: false, stiffness: 340, damping: 26 }) }));
+vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), cssDurationSeconds: () => 0.2 }));
 vi.mock("../src/components/Character", async () => {
   const { forwardRef, useImperativeHandle } = await import("react");
   const noop = async () => {};
@@ -77,20 +77,15 @@ describe("About narrative and presentation boundary", () => {
     expect(screen.getByRole("region", { name: "Hi, I'm Abdair." })).toBeTruthy();
   });
 
-  it("shows each project as a card that names where it goes and opens it apart", () => {
+  it("links each project as plain text that opens apart", () => {
     render(view());
-    const cards = [...document.querySelectorAll<HTMLAnchorElement>(".story-project a")];
-    expect(cards.map(card => card.textContent)).toEqual([
-      "Ver proyectogithub.com/abdair-coca/Robotsito↗",
-      "Ver proyectotitiedu.vercel.app↗",
-      "Ver proyectomachine-learning-app-gilt.vercel.app↗",
-    ]);
-    for (const card of cards) {
-      expect(card.target).toBe("_blank");
-      expect(card.rel).toBe("noopener noreferrer");
-      expect(card.querySelector("[aria-hidden='true'] svg")).toBeTruthy();
+    const links = screen.getAllByRole("link", { name: "Ver proyecto" });
+    expect(links.map(link => link.getAttribute("href"))).toEqual(["https://github.com/abdair-coca/Robotsito", "https://titiedu.vercel.app", "https://machine-learning-app-gilt.vercel.app"]);
+    for (const link of links) {
+      expect(link.getAttribute("target")).toBe("_blank");
+      expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+      expect(link.textContent).toBe("Ver proyecto");
     }
-    expect(cards[0].href).toBe("https://github.com/abdair-coca/Robotsito");
   });
 
   it("retains the scrolled scene and character while switching language and theme", async () => {

@@ -9,7 +9,27 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## «Ver proyecto» minimalista en Historia — 2026-10-25
+
+Pedido: «no me gusta mucho, quiero que lo hagas mas minimalista, menos llamativo pero que si tenga un microanimacion». Quiz: enlace con subrayado sin flecha, subrayado que se dibuja, sin icono, dominio ni imán.
+
+- [x] `AboutPage`: «Ver proyecto» pasa a enlace de texto (`story-project__link`), sin clases de botón ni ↗.
+- [x] CSS: línea tenue (`--color-control-edge`) fija; al hover, una línea violeta crece de izquierda a derecha con `scaleX` y al salir se retira hacia la derecha. Solo `(hover: hover)` y sin movimiento reducido. Mantiene `--size-target` de alto.
+- [x] Se retiran `ProjectLink.tsx`, `icons.tsx` y los tokens `--story-project-*`/`--story-magnet-pull`; `StoryIntro` vuelve a sus iconos propios.
+- [x] Docs: `docs/interaction.md`; `design.md` y `docs/architecture.md` vuelven al texto anterior a las tarjetas.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 366 tests en 46 archivos (nuevo test de los enlaces en `storyPage`). |
+| `npm run build` | PASS: `index` 352,61 kB (gzip 113,06 kB), CSS 60,07 kB. |
+| Manual (Playwright sobre la build, 1440 y 360 px) | Línea violeta en reposo `scaleX(0)`; a 120 ms de hover va por 0,56 (480 ms, `--ease-in-out`; con 280 ms y `--ease-out` ya estaba completa a 120 ms y no se percibía) y termina en `none`; al salir vuelve a 0. Enlace de 48 px de alto; sin desborde horizontal ni errores de consola. |
+| `npx playwright test` | Pendiente (no se corrió en esta entrega). |
+
 ## Tarjetas «Ver proyecto» en Historia — 2026-10-25
+
+**Reemplazado el mismo día** por [«Ver proyecto» minimalista](#ver-proyecto-minimalista-en-historia--2026-10-25): el usuario pidió algo menos llamativo. Se conserva como antecedente (commit `0373e44`).
 
 Pedido: «quiero que los botones de ver proyecto de about sean mas bonitos e impresionantes». Quiz: mini tarjeta, efecto magnético, icono de destino.
 

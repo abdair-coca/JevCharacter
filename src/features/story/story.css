@@ -8,7 +8,6 @@
   --story-flight-size: min(54vw, 44rem); --story-flight-top: 50%; --story-scene-height: 115dvh;
   --story-copy-size: 31rem; --story-title: clamp(2.75rem, 5vw, 5.25rem); --story-author-title: clamp(3.5rem, 8vw, 7rem);
   --story-intro-size: 44rem; --story-intro-title: clamp(2rem, 4vw, 3.25rem); --story-portrait-size: 6rem; --story-portrait-tilt: -6deg;
-  --story-project-icon: 2.5rem; --story-project-arrow: 2rem; --story-arrow-turn: 45deg; --story-magnet-pull: 0.08;
   --story-ready-timeout: var(--presentation-ready-timeout); --story-reveal: 0;
   --particle-count: 11000; --particle-mobile-count: 5500; --particle-orbits: 420; --particle-sample-size: 300;
   --particle-dot: 1.45; --particle-glow: 9; --particle-drift: 0.0018; --particle-speed: 0.2;
@@ -52,18 +51,13 @@
 .story-scroll-cue > span { color: var(--color-accent); font-size: var(--text-lead); }
 .story-reveal-cue { flex-wrap: wrap; }
 .story-reveal-cue .ui-button { color: var(--color-accent); border: var(--border-thin) solid var(--color-control-edge); }
-/* A project card: gradient edge, where it goes, and an arrow in a ring. Motion owns the link (magnet); CSS owns the card. */
 .story-project { margin: var(--space-6) 0 0; }
-.story-project__link { position: relative; isolation: isolate; display: inline-flex; max-width: 100%; border-radius: var(--radius-md); color: var(--color-foreground); text-decoration: none; }
-.story-project__link::before { content: ""; position: absolute; z-index: -1; inset: calc(var(--space-6) * -1); border-radius: inherit; background: radial-gradient(closest-side, color-mix(in srgb, var(--color-accent) 45%, transparent) 55%, transparent); opacity: 0; transform: scale(var(--motion-reveal-scale)); transition: opacity var(--duration-ui) var(--ease-out), transform var(--duration-spring) var(--ease-spring); }
-.story-project__card { display: flex; align-items: center; gap: var(--space-4); min-width: 0; padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3); border: var(--border-thin) solid transparent; border-radius: inherit; background: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 60%) padding-box, linear-gradient(var(--color-surface), var(--color-surface)) padding-box, linear-gradient(135deg, var(--color-accent), var(--color-control-edge) 50%, var(--particle-pink)) border-box; transition: transform var(--duration-spring) var(--ease-spring); }
-.story-project__icon { display: grid; place-items: center; flex: none; width: var(--story-project-icon); height: var(--story-project-icon); border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--color-accent), var(--particle-pink)); color: var(--color-accent-foreground); transition: transform var(--duration-spring) var(--ease-spring); }
-.story-project__icon svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-.story-project__text { display: grid; gap: var(--space-1); min-width: 0; }
-.story-project__label { font-weight: var(--weight-label); }
-.story-project__url { color: var(--color-muted); font: var(--text-caption)/var(--line-body) var(--font-mono); overflow-wrap: anywhere; }
-.story-project__arrow { display: grid; place-items: center; flex: none; width: var(--story-project-arrow); height: var(--story-project-arrow); margin-left: var(--space-2); border: var(--border-thin) solid var(--color-control-edge); border-radius: var(--radius-pill); color: var(--color-accent); transition: transform var(--duration-spring) var(--ease-spring); }
-.story-project__link:focus-visible::before { opacity: 1; transform: none; }
+/* «Ver proyecto»: a quiet text link over a faint line; on hover the accent line draws in from the left and leaves to the right. */
+.story-project__link { display: inline-flex; align-items: center; min-height: var(--size-target); color: var(--color-accent); font-size: var(--text-small); font-weight: var(--weight-label); text-decoration: none; }
+.story-project__link span { position: relative; padding-bottom: var(--space-1); }
+.story-project__link span::before, .story-project__link span::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: var(--border-thin); }
+.story-project__link span::before { background: var(--color-control-edge); }
+.story-project__link span::after { background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform var(--duration-reveal) var(--ease-in-out); }
 .story-static-media { display: none; }
 .story-particle-error { position: relative; z-index: var(--layer-content); color: var(--color-muted); text-align: center; }
 .story-outro { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100dvh - var(--size-header)); max-width: var(--size-content); margin: var(--space-16) auto 0; text-align: center; padding-block: var(--space-12); }
@@ -84,17 +78,13 @@
 /* Microinteractions: icons hop, the portrait tilts hello, the sparkle turns; none with reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
   .story-contact a:active { transform: scale(var(--motion-scale-press)); }
-  .story-project__link:active .story-project__card { transform: scale(var(--motion-scale-press)); }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .story-contact a:hover { transform: translateY(var(--motion-hop)); }
   .story-contact a:hover svg { transform: scale(var(--motion-icon-pop)); }
   .story-intro:hover .story-intro__portrait { transform: rotate(var(--story-portrait-tilt)); }
   .story-reveal-cue .ui-button:hover .story-sparkle { transform: rotate(var(--motion-quarter-turn)) scale(var(--motion-icon-pop)); }
-  .story-project__link:hover::before { opacity: 1; transform: none; }
-  .story-project__link:hover .story-project__card { transform: translateY(calc(var(--motion-distance-sm) * -1)); }
-  .story-project__link:hover .story-project__icon { transform: rotate(calc(var(--motion-icon-turn) * -1)) scale(var(--motion-icon-pop)); }
-  .story-project__link:hover .story-project__arrow { transform: rotate(var(--story-arrow-turn)); }
+  .story-project__link:hover span::after { transform: none; transform-origin: left; }
 }
 @media (max-width: 64rem) {
   .story-page { --story-flight-size: min(94vw, 48svh, 29rem); --story-flight-top: 28%; --story-travel: 0.055; --story-lift: 0.025; --story-scene-height: 110svh; --story-title: clamp(2rem, 7vw, 3rem); --story-author-title: clamp(3.5rem, 12vw, 5rem); padding-inline: var(--space-6); }
