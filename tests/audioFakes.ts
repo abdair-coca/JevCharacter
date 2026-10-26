@@ -32,6 +32,7 @@ export class FakeOscillator extends FakeSource {
   type = "sine";
   frequency = new FakeParam();
   detune = new FakeParam();
+  setPeriodicWave() { this.type = "custom"; }
 }
 export class FakeNoise extends FakeSource {
   buffer: unknown = null;
@@ -55,6 +56,7 @@ export class FakeContext {
   createConvolver() { const convolver = Object.assign(new FakeNode(), { buffer: null as unknown }); this.convolvers.push(convolver); return convolver; }
   createBuffer(_channels: number, length: number) { return { getChannelData: () => new Float32Array(length) }; }
   createDynamicsCompressor() { return new FakeNode(); }
+  createPeriodicWave() { return {}; }
 }
 
 /** A real audio core over a fake context; `null` simulates a browser without Web Audio. */

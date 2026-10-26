@@ -9,6 +9,24 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Piano en la banda sonora de Historia — 2026-10-25
+
+Pedido: «no podrias hacer que la musica sea en piano?». Quiz: cambiar solo los instrumentos (el piano reemplaza el arpegio y las trompas; quedan cuerdas, batería, golpes y barridos), piano sintetizado sin archivos, y que siga creciendo hacia Jev.
+
+- [x] `storyMusic`: `piano()` sustituye a `pluck()` y `horn()`. Cada nota son dos osciladores con una `PeriodicWave` de ocho armónicos a ±2 cents (±3 en el tema), un pasa-bajos que se cierra mientras suena, caída rápida tras el martillo y decaimiento largo (más corto en agudos), golpe de fieltro de ruido y apagador al soltar la tecla. Arpegio sostenido un tiempo; octava alta y bajo, dos semicorcheas; tema, su duración. Las dos cuerdas se reparten el nivel de la nota.
+- [x] Tests: `audioFakes` admite `createPeriodicWave`/`setPeriodicWave`; `storyMusic` identifica el tema por ±3 cents y prueba que arpegio y tema usan el piano y que el apagador corta cada nota.
+- [x] Docs: `design.md` y `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 367 tests en 46 archivos. |
+| `npm run build` | PASS: `index` 352,61 kB (gzip 113,05 kB); `AboutPage` 36,06 kB. |
+| Render offline (Chromium, `OfflineAudioContext` con el núcleo real, 37 s de recorrido) | RMS por escena, original → piano: −39,2 → −38,8; −35,6 → −35,2; −33,3 → −32,9; −31,1 → −31,2; −30,9 → −31,2; revelación −28,6 → −29,3 dB. Picos 0,24 → 0,26. La primera versión sonaba ~3 dB más fuerte (las dos cuerdas sumaban el nivel), corregido. |
+| Escucha del usuario | Pendiente: WAV de antes y después entregados. |
+| `npx playwright test` | Pendiente (no se corrió en esta entrega). |
+
 ## «Ver proyecto» minimalista en Historia — 2026-10-25
 
 Pedido: «no me gusta mucho, quiero que lo hagas mas minimalista, menos llamativo pero que si tenga un microanimacion». Quiz: enlace con subrayado sin flecha, subrayado que se dibuja, sin icono, dominio ni imán.

@@ -7,9 +7,11 @@ let context: FakeContext;
 const hz = (note: number) => Math.round(440 * 2 ** ((note - 69) / 12));
 const pitches = (oscillators: FakeOscillator[]) => new Set(oscillators.map(oscillator => Math.round(oscillator.frequency.events[0]?.value ?? 0)));
 const first = (oscillator: FakeOscillator) => oscillator.frequency.events[0]?.value;
-// Strings are pairs of saws detuned by ±7 cents; the horn uses ±6.
-const strings = (from = 0) => context.oscillators.slice(from).filter(oscillator => Math.abs(oscillator.detune.events[0]?.value ?? 0) === 7);
-const horns = (from = 0) => context.oscillators.slice(from).filter(oscillator => Math.abs(oscillator.detune.events[0]?.value ?? 0) === 6);
+// Strings are pairs of saws detuned by ±7 cents; a piano note's two strings ±2, and ±3 in the theme.
+const detuned = (cents: number, from = 0) => context.oscillators.slice(from).filter(oscillator => Math.abs(oscillator.detune.events[0]?.value ?? 0) === cents);
+const strings = (from = 0) => detuned(7, from);
+const pianos = (from = 0) => detuned(2, from);
+const theme = (from = 0) => detuned(3, from);
 const booms = (from = 0) => context.oscillators.slice(from).filter(oscillator => first(oscillator) === 95);
 const kicks = (from = 0) => context.oscillators.slice(from).filter(oscillator => first(oscillator) === 150);
 const peak = (oscillator: FakeOscillator) => (oscillator.outputs[0] as FakeGain).gain.events[1].value;
@@ -130,13 +132,30 @@ describe("story soundtrack", () => {
     const bar = STEP_SECONDS * 16;
     advance(bar);
     expect(kicks()).toHaveLength(0);
-    expect(horns()).toHaveLength(0);
+    expect(theme()).toHaveLength(0);
     music.setScene(3);
     advance(0.3);
     const before = context.oscillators.length;
     advance(bar);
     expect(kicks(before).length).toBeGreaterThanOrEqual(3);
-    expect(horns(before).length).toBeGreaterThan(0);
+    expect(theme(before).length).toBeGreaterThan(0);
+  });
+
+  it("plays the arpeggio and the theme on a piano whose damper stops each note", () => {
+    const { core, music } = setup();
+    core.unlock();
+    music.start();
+    music.setScene(3);
+    advance(0.3);
+    advance(STEP_SECONDS * 32);
+    const notes = [...pianos(), ...theme()];
+    expect(pianos().length).toBeGreaterThan(0);
+    expect(theme().length).toBeGreaterThan(0);
+    for (const note of notes) {
+      expect(note.type).toBe("custom");
+      // Released within a phrase plus the damper, never left ringing.
+      expect(note.stops[0]! - note.startAt).toBeLessThanOrEqual(STEP_SECONDS * 8 + 0.4 + 1e-9);
+    }
   });
 
   it("blooms with bells as the star forms and resolves into the climax at the reveal", () => {
@@ -156,7 +175,7 @@ describe("story soundtrack", () => {
     expect(climax).toBeDefined();
     expect(peak(climax)).toBeGreaterThan(peak(booms()[0]));
     for (const note of REVEAL_CHORD.notes) expect(pitches(strings(before)).has(hz(note))).toBe(true);
-    expect(horns(before).length).toBeGreaterThan(0);
+    expect(theme(before).length).toBeGreaterThan(0);
   });
 
   it("fades out when the story leaves, stops on mute and returns on unmute", () => {

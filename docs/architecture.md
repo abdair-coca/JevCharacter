@@ -46,10 +46,12 @@ Todo se sintetiza con Web Audio, sin dependencias ni archivos de audio.
 - **Conexión con el personaje.** `useCharacterController` emite `onCue` justo después de cada trigger Rive, nunca en el regreso a `Base` ni en acciones canceladas. `Character` lo conecta solo con `voice`: Home y Features lo activan; About no, porque Jev no habla allí. `useSpeechVoice` enlaza el caption real de Home: uno cancelado sin terminar corta la frase y uno completo termina de sonar. Features entona la frase de «Habla».
 - **Música de Historia (`features/story/storyMusic.ts`, `useStoryMusic`).** Es un secuenciador de semicorcheas a 104 bpm que programa 100 ms por delante del reloj de audio con un temporizador de 25 ms. Hay un acorde por escena (Am(add9), F(add9), C(add9), G6, Fmaj9), Gsus4 mientras se abre la estrella y un Do mayor amplio en la revelación. La intensidad de cada acorde decide las capas:
   - cuerdas de sierras desafinadas en estéreo, con sub;
-  - arpegio que pasa de negras a corcheas y a semicorcheas, con octava alta;
-  - bombo, bajo pulsante y charles;
-  - tema heroico de metales desde intensidad 0,75;
+  - arpegio de piano que pasa de negras a corcheas y a semicorcheas, con octava alta; cada nota se sostiene un tiempo;
+  - bombo, bajo pulsante de piano y charles;
+  - tema heroico al piano desde intensidad 0,75;
   - palmas y redobles en el clímax.
+
+  El piano es sintetizado: cada nota son dos osciladores con una `PeriodicWave` de ocho armónicos, a ±2 cents (±3 en el tema). Pasan por un pasa-bajos que se cierra mientras la nota suena. El volumen cae rápido tras el martillo y después decae más despacio, menos en los agudos. Un golpe corto de ruido hace de fieltro y el apagador corta la nota al soltar la tecla.
 
   `storyCues` traduce el progreso en dos señales. `rise` sigue el viaje de partículas hacia la siguiente escena y la apertura de la estrella. `bloom` sigue la estrella y la revelación, y añade campanillas. Un cambio de escena encola un golpe (boom grave, golpe sordo y estela brillante) en la siguiente semicorchea: reinicia el compás, trae el acorde nuevo y calla el barrido hasta que el scroll vuelva a construir. Los golpes a menos de 0,9 s se funden, salvo que el nuevo sea más fuerte; retroceder suena más suave. La música entra en 2,5 s, sale en 1,2 s al dejar Historia y se corta al silenciar u ocultar la pestaña. `useStoryMusic` fija escena y señales antes de arrancar, así que entrar a mitad de la historia no dispara un golpe. La lectura estática no tiene barridos y su última escena abre el clímax.
 
