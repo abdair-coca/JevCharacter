@@ -67,6 +67,8 @@ Pedido: «quiero que muevas mi presentacion en about a otra seccion netamente pa
 | `npx playwright test` de `author`, `routes` y `settings` | 22 PASS y 1 FAIL por timeout: «single header row (dark)» tardó 48,8 min, el equipo se suspendió durante la corrida. Reejecutado aparte: 2/2 PASS. |
 | Revisión visual (Playwright sobre dev, 1440 y 390 px) | Galaxia → retrato reunido; disolución al bajar; frase encendida; tarjetas; contacto. Sin desborde horizontal ni errores de consola. Ajustes tras la primera ronda: contraste del retrato (percentil 97), encuadre de la tarjeta de ML y filas de contacto en móvil. Capturas en `evidence/author/`. |
 | `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+| Deploy a producción (2026-10-27, pedido «al final despliegalo») | Commits `63edeb3` (música) y `9778ace` (sección). `vercel deploy --prod` → `dpl_74J3M3WyuvpSL5wVGB4M4dDmHaWB`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 y 390 px) | PASS: `/`, `/features`, `/about` y `/abdair` responden 200; «Hola, soy Abdair.», retrato reunido, cuatro vistas en la cabecera y cuatro redes; sin desborde ni errores de consola. Historia sin el bloque antiguo y con su enlace a `/abdair`. El bundle publicado incluye la detección `pointer: coarse` del perfil de audio. |
 
 **Límites:** sin teléfono real ni Safari. El retrato depende de la foto actual (fondo oscuro); otra foto puede requerir ajustar `--portrait-min-light`.
 
