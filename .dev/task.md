@@ -9,6 +9,36 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Música de Historia más ligera en móvil — 2026-10-27
+
+Pedido: «optimices la musica de about porque en movil suena mal […] quiero que decidas todo tu». Sin quiz: el usuario delegó las decisiones.
+
+**Diagnóstico** (render offline en Chromium del recorrido completo, 40 s, con el núcleo y el motor reales; script en el scratchpad, sin commitear): el 49 % de la energía estaba bajo 120 Hz, lo que un altavoz de teléfono no reproduce (sub, boom de 95→30 Hz, bombo de 150→42 Hz). Además, cada nota de piano creaba 8 nodos, con un filtro automatizado por muestra; había hasta 93 fuentes a la vez y 1.185 filtros. El compresor solo trabaja fuerte en los primeros 0,5 s del render (estado inicial con la música entrando), así que no era la causa.
+
+- [x] `audioCore`: `compactAudio()` (`pointer: coarse`); en táctiles, sala de 1,4 s en lugar de 2,6 s y `latencyHint: "balanced"` en lugar de `"interactive"`.
+- [x] `storyMusic`, perfil compacto elegido al arrancar: una cuerda por nota con onda suavizada (sin filtro ni fieltro), una sierra por voz de cuerdas (×1,4), sin sub (bajo una octava arriba a 0,1), boom 160→65 Hz y bombo 180→75 Hz más cortos, pasa-altos de 110 Hz y 250 ms de anticipación.
+- [x] Todos los perfiles: un panoramizador compartido por posición (el paneo es lineal; escritorio suena igual). Un paso que el temporizador perdió más de 20 ms se descarta en vez de sonar tarde (antes solo se descartaba con más de 250 ms, y entre medias las notas salían amontonadas).
+- [x] Tests: `storyMusic` (perfil compacto; bloqueo de 0,3 s sin notas atrasadas, que falla con el motor anterior) y `audioCore` (sala corta).
+- [x] Docs: `design.md`, `docs/architecture.md` y `docs/interaction.md`.
+
+| Medición (mismo recorrido de 40 s) | Antes | Escritorio ahora | Móvil ahora |
+|---|---|---|---|
+| Render offline | 3,7–4,5 s | 4,4–5,0 s (ruido de la máquina) | 1,6–1,7 s |
+| Fuentes simultáneas máx. | 93 | 93 | 53 |
+| Filtros / panoramizadores / fuentes de ruido creados | 1.185 / 626 / 635 | 1.185 / 80 / 635 | 88 / 43 / 86 |
+| Energía bajo 120 Hz | 49 % | 49 % | 15 % |
+| Pico / RMS | −8,9 / −30,3 dB | −8,9 / −30,3 dB | −8,6 / −30,9 dB |
+| RMS por escena | −39,8 … −31,4 | igual | −38,3 … −30,8 |
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 398 tests en 49 archivos. |
+| `npm run build` | PASS. |
+| Perfil en el navegador (dev, Playwright) | `compactAudio()` es `true` con móvil emulado (táctil) y `false` en escritorio. |
+| Escucha en un teléfono real | Pendiente: no hay dispositivo físico ni se oyó el render; los WAV de antes/escritorio/móvil quedan en el scratchpad de la sesión. |
+
 ## Guía de la clave Groq e inscripción UATF en Supabase — 2026-10-26
 
 Pedido: «quiero que hagas un paso a paso para obtener la api de groq en ajustes, y tambien quiero que lo conectes a una base de datos de supabase. para que funcione el registro». Quiz: el registro es la inscripción UATF; conexión desde el servidor (función en Vercel con la clave secreta, sin dependencias); guía desplegable; aviso y casilla de consentimiento. Segundo quiz: enfoque «Aprobado»; guardar todas las inscripciones aunque se repita el celular; sin proyecto Supabase («no, crealo tu»).

@@ -29,9 +29,9 @@ function advance(seconds: number) {
   }
 }
 
-function setup() {
+function setup(compact = false) {
   const core = fakeCore(context);
-  return { core, music: createStoryMusic(core) };
+  return { core, music: createStoryMusic(core, { compact: () => compact }) };
 }
 
 beforeEach(() => {
@@ -198,6 +198,47 @@ describe("story soundtrack", () => {
     core.setHidden(true);
     core.setHidden(false);
     expect(music.playing()).toBe(false);
+  });
+
+  it("drops the steps a stalled timer missed instead of playing them late in a burst", () => {
+    const { core, music } = setup();
+    core.unlock();
+    music.start();
+    music.setScene(3);
+    advance(1);
+    const before = context.oscillators.length;
+    // A long frame while scrolling: the audio clock runs on, the timer does not.
+    context.currentTime += 0.3;
+    vi.advanceTimersByTime(25);
+    const scheduled = context.oscillators.slice(before);
+    expect(scheduled.length).toBeGreaterThan(0);
+    for (const oscillator of scheduled) expect(oscillator.startAt).toBeGreaterThanOrEqual(context.currentTime - 0.02);
+  });
+
+  it("on phones plays the same music lighter: one string per note, no sub and higher hits", () => {
+    const filters: { type: string; frequency: { events: { value: number }[] } }[] = [];
+    const createFilter = context.createBiquadFilter.bind(context);
+    context.createBiquadFilter = () => { const node = createFilter(); filters.push(node); return node; };
+    const { core, music } = setup(true);
+    core.unlock();
+    music.start();
+    advance(0.5);
+    music.setScene(3);
+    advance(STEP_SECONDS * 32);
+    // The pad keeps its chord with one saw per note, and nothing plays under what a phone can.
+    for (const note of SCENE_CHORDS[3].notes) expect(pitches(context.oscillators.filter(oscillator => oscillator.type === "sawtooth")).has(hz(note))).toBe(true);
+    expect(strings()).toHaveLength(0);
+    // The strings' slow filter sweep (under 1 Hz) is not a sound.
+    const audible = context.oscillators.map(oscillator => first(oscillator) ?? Infinity).filter(pitch => pitch > 1);
+    expect(Math.min(...audible)).toBeGreaterThanOrEqual(100);
+    expect(booms()).toHaveLength(0);
+    expect(context.oscillators.some(oscillator => first(oscillator) === 160)).toBe(true);
+    // Piano notes are single strings without a filter or a knock of their own.
+    const notes = context.oscillators.filter(oscillator => oscillator.type === "custom");
+    expect(notes.length).toBeGreaterThan(20);
+    expect(notes.every(note => note.detune.events.length === 0)).toBe(true);
+    expect(filters.filter(node => node.type === "lowpass").length).toBeLessThan(5);
+    expect(filters.some(node => node.type === "highpass" && node.frequency.events[0]?.value === 110)).toBe(true);
   });
 
   it("reads the scroll: risers in each transition and toward the reveal, bloom with the star", () => {

@@ -25,6 +25,17 @@ describe("shared audio core", () => {
     expect(reaches(core.bus("voice") as unknown as FakeNode, hall)).toBe(false);
   });
 
+  it("gives phones a shorter hall, the convolver being the costliest node for their audio thread", () => {
+    const lengths = (compact: boolean) => {
+      const context = new FakeContext();
+      const buffers = vi.spyOn(context, "createBuffer");
+      createAudioCore({ createContext: () => context as unknown as AudioContext, compact: () => compact }).unlock();
+      return buffers.mock.calls[0][1];
+    };
+    expect(lengths(false)).toBe(260);
+    expect(lengths(true)).toBe(140);
+  });
+
   it("does not create audio while sound is off, and notifies every change", () => {
     const create = vi.fn(() => new FakeContext() as unknown as AudioContext);
     const core = createAudioCore({ createContext: create });

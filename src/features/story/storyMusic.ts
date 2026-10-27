@@ -1,11 +1,33 @@
-import { appAudio, type AudioCore } from "../../lib/audioCore";
+import { appAudio, compactAudio, type AudioCore } from "../../lib/audioCore";
 import { clamp, particlePhase } from "./particleGeometry";
 
 type Chord = { bass: number; notes: readonly number[]; intensity: number };
 type Target = { key: string; chord: Chord };
 type Layer = Target & { release: GainNode; sources: OscillatorNode[] };
 type Riser = { noise: AudioBufferSourceNode; band: BiquadFilterNode; level: GainNode; tone: OscillatorNode; toneLevel: GainNode };
+/** A falling sine: start and end pitch, fall and decay in seconds, peak level. */
+type Hit = { from: number; to: number; fall: number; decay: number; level: number };
+/**
+ * How rich the sound is. The full profile is the approved soundtrack. The compact one (phones and
+ * tablets) plays the same music for a small speaker and a slower audio thread: one string per piano
+ * note and per pad voice, no felt knock, the bass an octave up instead of a sub, higher drums, a
+ * high-pass under what the speaker can play, and more lookahead so a busy frame does not stall it.
+ */
+type Profile = { compact: boolean; lookahead: number; highpass: number; bass: number; boom: Hit; kick: Hit };
+const FULL: Profile = {
+  compact: false, lookahead: 0.1, highpass: 0, bass: 0.06,
+  boom: { from: 95, to: 30, fall: 1.1, decay: 2.2, level: 0.85 }, kick: { from: 150, to: 42, fall: 0.14, decay: 0.45, level: 0.34 },
+};
+const COMPACT: Profile = {
+  compact: true, lookahead: 0.25, highpass: 110, bass: 0.1,
+  boom: { from: 160, to: 65, fall: 0.5, decay: 1.2, level: 0.55 }, kick: { from: 180, to: 75, fall: 0.1, decay: 0.3, level: 0.3 },
+};
+/** The fill before the climax's phrase turns. */
+const TOM: Hit = { from: 120, to: 70, fall: 0.14, decay: 0.4, level: 0.35 };
 type Session = {
+  profile: Profile;
+  /** One panner per position, shared by the piano notes. */
+  pans: Map<number, StereoPannerNode>;
   master: GainNode;
   out: GainNode;
   pad: BiquadFilterNode;
@@ -38,8 +60,9 @@ export const REVEAL_CHORD: Chord = { bass: 36, notes: [55, 60, 64, 67, 72, 76], 
 export const STEP_SECONDS = 60 / 104 / 4;
 const BAR = 16;
 const PHRASE = 32;
-const LOOKAHEAD = 0.1;
 const TICK_MS = 25;
+/** A step this late was missed by a stalled timer: it is skipped, not played out of time. */
+const LATE = 0.02;
 const ARP = [0, 1, 2, 3, 4, 5, 4, 3, 2, 3, 4, 5, 4, 3, 2, 1];
 /** The hero theme over two bars: [sixteenth, length, chord tone]. It follows each chord. */
 const THEME: readonly (readonly [number, number, number])[] = [[0, 6, 0], [6, 2, 1], [8, 8, 2], [16, 6, 3], [22, 2, 2], [24, 8, 1]];
@@ -58,6 +81,10 @@ const PAD_LEVEL = 0.045;
 const SUB_LEVEL = 0.075;
 /** Harmonics of a hammered string, fundamental first; the filter takes the top off as a note rings. */
 const PIANO_HARMONICS = [0, 1, 0.55, 0.3, 0.18, 0.11, 0.07, 0.045, 0.03];
+/** The compact piano has no filter, so its wave starts with the top already softened. */
+const SOFT_PIANO_HARMONICS = [0, 1, 0.4, 0.16, 0.07, 0.03];
+/** One saw stands in for a detuned pair at about the same loudness. */
+const SINGLE_STRING = 1.4;
 /** A piano note's two strings sit a few cents apart; the theme's a little wider, so it sings over the arpeggio. */
 const PIANO_CENTS = 2;
 const THEME_CENTS = 3;
@@ -113,7 +140,7 @@ function shot(source: AudioScheduledSourceNode, chain: readonly AudioNode[], des
  * lands an impact on the downbeat with the new chord. The star opens into a resolving
  * climax as Jev is revealed. It plays only while the shared audio core is audible.
  */
-export function createStoryMusic(core: AudioCore = appAudio) {
+export function createStoryMusic(core: AudioCore = appAudio, { compact = compactAudio }: { compact?: () => boolean } = {}) {
   let wanted = false;
   let scene = 0;
   let bloom = 0;
@@ -125,7 +152,7 @@ export function createStoryMusic(core: AudioCore = appAudio) {
   let lastStrength = 0;
   let session: Session | null = null;
   let noiseBuffer: { context: AudioContext; buffer: AudioBuffer } | null = null;
-  let pianoWave: { context: AudioContext; wave: PeriodicWave } | null = null;
+  let pianoWaves: { context: AudioContext; full: PeriodicWave; soft: PeriodicWave } | null = null;
 
   const target = (): Target => bloom >= 0.75 ? { key: "reveal", chord: REVEAL_CHORD }
     : scene === 4 && bloom > 0.55 ? { key: "lift", chord: LIFT_CHORD }
@@ -147,13 +174,28 @@ export function createStoryMusic(core: AudioCore = appAudio) {
     return source;
   }
 
-  function wave(context: AudioContext) {
-    if (pianoWave?.context !== context) pianoWave = { context, wave: context.createPeriodicWave(new Float32Array(PIANO_HARMONICS.length), Float32Array.from(PIANO_HARMONICS)) };
-    return pianoWave.wave;
+  function wave(context: AudioContext, soft: boolean) {
+    if (pianoWaves?.context !== context) {
+      const create = (harmonics: number[]) => context.createPeriodicWave(new Float32Array(harmonics.length), Float32Array.from(harmonics));
+      pianoWaves = { context, full: create(PIANO_HARMONICS), soft: create(SOFT_PIANO_HARMONICS) };
+    }
+    return soft ? pianoWaves.soft : pianoWaves.full;
+  }
+
+  /** Panning is linear, so notes summed into one shared panner sound as if each had its own. */
+  function panned(context: AudioContext, s: Session, pan: number) {
+    let node = s.pans.get(pan);
+    if (!node) {
+      node = context.createStereoPanner();
+      node.pan.setValueAtTime(pan, context.currentTime);
+      node.connect(s.out);
+      s.pans.set(pan, node);
+    }
+    return node;
   }
 
   /** Strings and low end for one chord: detuned saws spread wide, a sub and its octave. */
-  function layer(context: AudioContext, s: Pick<Session, "pad">, { key, chord }: Target, time: number, attack: number): Layer {
+  function layer(context: AudioContext, s: Pick<Session, "pad" | "profile">, { key, chord }: Target, time: number, attack: number): Layer {
     const fade = context.createGain();
     fade.gain.setValueAtTime(0.0001, time);
     fade.gain.linearRampToValueAtTime(1, time + attack);
@@ -177,13 +219,17 @@ export function createStoryMusic(core: AudioCore = appAudio) {
     const swell = 0.5 + 0.7 * chord.intensity;
     for (const [index, note] of chord.notes.entries()) {
       const spread = (index / (chord.notes.length - 1)) * 1.2 - 0.6;
-      voice(midi(note), "sawtooth", -7, PAD_LEVEL * swell, spread);
-      voice(midi(note), "sawtooth", 7, PAD_LEVEL * swell, -spread);
+      if (s.profile.compact) voice(midi(note), "sawtooth", 0, PAD_LEVEL * swell * SINGLE_STRING, spread);
+      else {
+        voice(midi(note), "sawtooth", -7, PAD_LEVEL * swell, spread);
+        voice(midi(note), "sawtooth", 7, PAD_LEVEL * swell, -spread);
+      }
     }
     // The climax adds high strings an octave above its top voices.
     if (chord.intensity >= 1) for (const note of chord.notes.slice(-3)) voice(midi(note + 12), "sawtooth", 4, PAD_LEVEL * 0.8, 0);
-    voice(midi(chord.bass), "sine", 0, SUB_LEVEL * swell, 0);
-    voice(midi(chord.bass + 12), "triangle", 0, 0.06 * swell, 0);
+    // A small speaker cannot play the sub: there the bass sounds an octave up, a little louder.
+    if (!s.profile.compact) voice(midi(chord.bass), "sine", 0, SUB_LEVEL * swell, 0);
+    voice(midi(chord.bass + 12), "triangle", 0, s.profile.bass * swell, 0);
     sources[0].addEventListener("ended", () => { release.disconnect(); });
     return { key, chord, release, sources };
   }
@@ -217,11 +263,13 @@ export function createStoryMusic(core: AudioCore = appAudio) {
   }
 
   /** A cinematic hit: a deep falling boom, a thud and a long bright wash. */
-  function impact(context: AudioContext, out: AudioNode, time: number, strength: number) {
+  function impact(context: AudioContext, s: Session, time: number, strength: number) {
+    const { out } = s;
+    const { from, to, fall, decay, level } = s.profile.boom;
     const boom = context.createOscillator();
-    boom.frequency.setValueAtTime(95, time);
-    boom.frequency.exponentialRampToValueAtTime(30, time + 1.1);
-    shot(boom, [envelope(context, 0.85 * strength, time, 0.006, 2.2)], out, time, time + 2.4);
+    boom.frequency.setValueAtTime(from, time);
+    boom.frequency.exponentialRampToValueAtTime(to, time + fall);
+    shot(boom, [envelope(context, level * strength, time, 0.006, decay)], out, time, time + decay + 0.2);
     shot(noise(context), [filter(context, "lowpass", 240, time), envelope(context, 0.5 * strength, time, 0.003, 0.5)], out, time, time + 0.7);
     shot(noise(context), [filter(context, "highpass", 4200, time), envelope(context, 0.12 * strength, time, 0.01, 2.6)], out, time, time + 2.8);
   }
@@ -229,14 +277,16 @@ export function createStoryMusic(core: AudioCore = appAudio) {
   /**
    * A piano note: two strings through a filter that closes as they ring, a felt knock,
    * a quick drop after the hammer and a long decay that is shorter up the keyboard.
-   * The damper stops it when the key is let go after `hold` seconds.
+   * The damper stops it when the key is let go after `hold` seconds. The compact
+   * profile plays one string with the top already softened, and no knock.
    */
-  function piano(context: AudioContext, out: AudioNode, hz: number, time: number, hold: number, level: number, pan: number, brightness: number, cents: number) {
+  function piano(context: AudioContext, s: Session, hz: number, time: number, hold: number, level: number, pan: number, brightness: number, cents: number) {
     const ring = clamp(2.6 - Math.log2(hz / 110) * 0.45, 0.6, 3);
-    const tone = filter(context, "lowpass", hz * brightness, time);
-    tone.frequency.exponentialRampToValueAtTime(Math.max(hz * 1.5, 300), time + ring);
-    // The two strings share the note's level.
-    const peak = level / 2;
+    const out = panned(context, s, pan);
+    const end = time + hold + 0.4;
+    const single = s.profile.compact;
+    // Two strings share the note's level; a single one carries it alone.
+    const peak = single ? level : level / 2;
     const amp = context.createGain();
     amp.gain.value = 0;
     amp.gain.setValueAtTime(0.0001, time);
@@ -244,11 +294,17 @@ export function createStoryMusic(core: AudioCore = appAudio) {
     amp.gain.setTargetAtTime(peak * 0.35, time + 0.004, 0.07);
     amp.gain.setTargetAtTime(0.0001, time + 0.12, ring / 3);
     amp.gain.setTargetAtTime(0.0001, time + hold, 0.06);
-    const panner = context.createStereoPanner();
-    panner.pan.setValueAtTime(pan, time);
-    const end = time + hold + 0.4;
+    if (single) {
+      const string = context.createOscillator();
+      string.setPeriodicWave(wave(context, true));
+      string.frequency.setValueAtTime(hz, time);
+      shot(string, [amp], out, time, end);
+      return;
+    }
+    const tone = filter(context, "lowpass", hz * brightness, time);
+    tone.frequency.exponentialRampToValueAtTime(Math.max(hz * 1.5, 300), time + ring);
     const second = context.createOscillator();
-    second.setPeriodicWave(wave(context));
+    second.setPeriodicWave(wave(context, false));
     second.frequency.setValueAtTime(hz, time);
     second.detune.setValueAtTime(cents, time);
     second.connect(tone);
@@ -256,17 +312,17 @@ export function createStoryMusic(core: AudioCore = appAudio) {
     second.start(time);
     second.stop(end);
     const first = context.createOscillator();
-    first.setPeriodicWave(wave(context));
+    first.setPeriodicWave(wave(context, false));
     first.frequency.setValueAtTime(hz, time);
     first.detune.setValueAtTime(-cents, time);
-    shot(first, [tone, amp, panner], out, time, end);
-    shot(noise(context), [filter(context, "bandpass", 1200, time, 0.7), envelope(context, peak * KNOCK, time, 0.001, 0.02)], out, time, time + 0.05);
+    shot(first, [tone, amp], out, time, end);
+    shot(noise(context), [filter(context, "bandpass", 1200, time, 0.7), envelope(context, peak * KNOCK, time, 0.001, 0.02)], s.out, time, time + 0.05);
   }
 
-  function drum(context: AudioContext, out: AudioNode, time: number, from: number, to: number, level: number, decay: number) {
+  function drum(context: AudioContext, out: AudioNode, time: number, { from, to, fall, decay, level }: Hit) {
     const oscillator = context.createOscillator();
     oscillator.frequency.setValueAtTime(from, time);
-    oscillator.frequency.exponentialRampToValueAtTime(to, time + 0.14);
+    oscillator.frequency.exponentialRampToValueAtTime(to, time + fall);
     shot(oscillator, [envelope(context, level, time, 0.003, decay)], out, time, time + decay + 0.1);
   }
 
@@ -293,7 +349,7 @@ export function createStoryMusic(core: AudioCore = appAudio) {
       lastImpact = time;
       lastStrength = strength;
       latched = true;
-      impact(context, s.out, time, strength);
+      impact(context, s, time, strength);
       swap(context, s, time, ARRIVAL, DEPARTURE);
       shape(time);
     }
@@ -310,16 +366,16 @@ export function createStoryMusic(core: AudioCore = appAudio) {
       const level = (beat % 4 === 0 ? 0.24 : 0.17) * (0.5 + 0.5 * energy);
       const pan = beat % 2 === 0 ? -0.35 : 0.35;
       // Each note is held for a beat, so the arpeggio rings into the next ones.
-      piano(context, s.out, arp[ARP[beat]], time, STEP_SECONDS * 4, level, pan, 2.5 + energy * 5, PIANO_CENTS);
+      piano(context, s, arp[ARP[beat]], time, STEP_SECONDS * 4, level, pan, 2.5 + energy * 5, PIANO_CENTS);
       // A high ostinato an octave up makes the groove shimmer as it grows.
-      if (energy >= 0.6) piano(context, s.out, arp[ARP[beat]] * 2, time, STEP_SECONDS * 2, level * 0.4, -pan, 2 + energy * 3, PIANO_CENTS);
+      if (energy >= 0.6) piano(context, s, arp[ARP[beat]] * 2, time, STEP_SECONDS * 2, level * 0.4, -pan, 2 + energy * 3, PIANO_CENTS);
     }
     const kick = intensity >= 0.75 ? beat % 4 === 0 : intensity >= 0.55 ? beat % 8 === 0 : intensity >= 0.4 && beat === 0;
-    if (kick) drum(context, s.out, time, 150, 42, 0.34, 0.45);
+    if (kick) drum(context, s.out, time, s.profile.kick);
     // The climax drives on with a backbeat.
     if (intensity >= 1 && beat % 8 === 4) clap(context, s.out, time, 0.2);
-    if (intensity >= 0.86 && FILL.includes(phrase)) drum(context, s.out, time, 120, 70, 0.35, 0.4);
-    if (intensity >= 0.55 && beat % 2 === 0) piano(context, s.out, midi(chord.bass + 12), time, STEP_SECONDS * 2, 0.045, 0, 3, PIANO_CENTS);
+    if (intensity >= 0.86 && FILL.includes(phrase)) drum(context, s.out, time, TOM);
+    if (intensity >= 0.55 && beat % 2 === 0) piano(context, s, midi(chord.bass + 12), time, STEP_SECONDS * 2, 0.045, 0, 3, PIANO_CENTS);
     if (energy >= 0.6 && (energy >= 0.95 ? beat % 2 === 1 : beat % 4 === 2)) hat(context, s.out, time, 0.09);
     if (intensity >= 0.75) {
       const tones = [...chord.notes].sort((a, b) => a - b).slice(0, 4).map(note => note + 12);
@@ -327,8 +383,8 @@ export function createStoryMusic(core: AudioCore = appAudio) {
         if (at !== phrase) continue;
         const brightness = 3 + intensity * 4;
         const level = intensity >= 1 ? 0.09 : 0.07;
-        piano(context, s.out, midi(tones[tone]), time, length * STEP_SECONDS, level, 0, brightness, THEME_CENTS);
-        if (intensity >= 1) piano(context, s.out, midi(tones[tone] + 12), time, length * STEP_SECONDS, level * 0.65, 0, brightness, THEME_CENTS);
+        piano(context, s, midi(tones[tone]), time, length * STEP_SECONDS, level, 0, brightness, THEME_CENTS);
+        if (intensity >= 1) piano(context, s, midi(tones[tone] + 12), time, length * STEP_SECONDS, level * 0.65, 0, brightness, THEME_CENTS);
       }
     }
     if (bloom > 0.15 && beat % (bloom > 0.5 ? 2 : 4) === 0) bell(context, s.out, arp[ARP[(beat + 5) % BAR]] * 2, time, 0.02 + bloom * 0.05);
@@ -337,9 +393,13 @@ export function createStoryMusic(core: AudioCore = appAudio) {
   function tick() {
     const context = core.context();
     if (!session || !context) return;
-    // After a stalled timer, skip what was missed instead of bursting it out.
-    if (session.next < context.currentTime - 0.25) session.next = context.currentTime + 0.02;
-    while (session.next < context.currentTime + LOOKAHEAD) {
+    // A stalled timer (a long frame while scrolling, mostly on phones) drops the steps it missed
+    // instead of playing them late in a burst; the grid keeps its place in the bar.
+    while (session.next < context.currentTime - LATE) {
+      session.next += STEP_SECONDS;
+      session.step++;
+    }
+    while (session.next < context.currentTime + session.profile.lookahead) {
       play(context, session, session.next);
       session.next += STEP_SECONDS;
       session.step++;
@@ -365,8 +425,10 @@ export function createStoryMusic(core: AudioCore = appAudio) {
     const output = core.bus("music");
     if (session || !context || !output) return;
     const now = context.currentTime;
+    const profile = compact() ? COMPACT : FULL;
     const master = context.createGain();
-    master.connect(output);
+    if (profile.highpass > 0) master.connect(filter(context, "highpass", profile.highpass, now, 0.7)).connect(output);
+    else master.connect(output);
     const out = context.createGain();
     out.gain.setValueAtTime(0.0001, now);
     out.gain.linearRampToValueAtTime(1, now + FADE_IN);
@@ -396,7 +458,7 @@ export function createStoryMusic(core: AudioCore = appAudio) {
     const riser = { noise: riserNoise, band, level, tone, toneLevel };
     pending = 0;
     latched = false;
-    session = { master, out, pad, sweep, riser, layer: layer(context, { pad }, target(), now, FADE_IN), retired: new Set(), timer: 0, next: now + 0.05, step: 0 };
+    session = { profile, pans: new Map(), master, out, pad, sweep, riser, layer: layer(context, { pad, profile }, target(), now, FADE_IN), retired: new Set(), timer: 0, next: now + 0.05, step: 0 };
     shape(now);
     session.timer = window.setInterval(tick, TICK_MS);
     tick();

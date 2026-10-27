@@ -1,5 +1,5 @@
 export type AudioBus = "voice" | "music" | "ui";
-type CoreOptions = { createContext?: () => AudioContext | null };
+type CoreOptions = { createContext?: () => AudioContext | null; compact?: () => boolean };
 
 const MASTER_GAIN = 0.22;
 // Interface clicks sit under Jev's voice: they confirm a touch, they never speak over Jev.
@@ -7,16 +7,28 @@ const BUS_GAIN: Record<AudioBus, number> = { voice: 1, music: 0.75, ui: 0.5 };
 // Only the music sits in the hall; Jev's voice and the interface clicks stay dry and close, with no echo.
 const MUSIC_ROOM_SEND = 0.45;
 const ROOM_SECONDS = 2.6;
+// A phone's convolver tail costs its audio thread the most; a shorter hall keeps the warmth.
+const COMPACT_ROOM_SECONDS = 1.4;
 // The hall's tail is darkened so it adds warmth, not hiss.
 const ROOM_TONE_HZ = 3200;
 
+/**
+ * Phones and tablets: small speakers that cannot play deep bass and an audio thread with less room,
+ * so the sound takes a lighter path there.
+ */
+export function compactAudio() {
+  return typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
+}
+
 function defaultContext() {
-  return typeof AudioContext === "undefined" ? null : new AudioContext({ latencyHint: "interactive" });
+  if (typeof AudioContext === "undefined") return null;
+  // A slightly larger output buffer on phones trades a few milliseconds for no dropouts.
+  return new AudioContext({ latencyHint: compactAudio() ? "balanced" : "interactive" });
 }
 
 /** A generated room: decaying stereo noise, so no impulse file is downloaded. */
-function room(context: AudioContext) {
-  const length = Math.floor(context.sampleRate * ROOM_SECONDS);
+function room(context: AudioContext, seconds: number) {
+  const length = Math.floor(context.sampleRate * seconds);
   const buffer = context.createBuffer(2, length, context.sampleRate);
   const smoothing = 1 - Math.exp(-2 * Math.PI * ROOM_TONE_HZ / context.sampleRate);
   let seed = 7;
@@ -37,7 +49,7 @@ function room(context: AudioContext) {
  * created on the first user gesture, follows the sound preference and suspends
  * with the tab. Listeners hear every change so each player can start or stop.
  */
-export function createAudioCore({ createContext = defaultContext }: CoreOptions = {}) {
+export function createAudioCore({ createContext = defaultContext, compact = compactAudio }: CoreOptions = {}) {
   let context: AudioContext | null = null;
   let buses: Record<AudioBus, GainNode> | null = null;
   let enabled = true;
@@ -58,7 +70,7 @@ export function createAudioCore({ createContext = defaultContext }: CoreOptions 
     };
     buses = { voice: bus("voice"), music: bus("music"), ui: bus("ui") };
     const reverb = audio.createConvolver();
-    reverb.buffer = room(audio);
+    reverb.buffer = room(audio, compact() ? COMPACT_ROOM_SECONDS : ROOM_SECONDS);
     reverb.connect(master);
     const send = audio.createGain();
     send.gain.setValueAtTime(MUSIC_ROOM_SEND, now);
