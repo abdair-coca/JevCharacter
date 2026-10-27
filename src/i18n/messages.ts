@@ -1,7 +1,7 @@
 import type { Language } from "../stores/preferencesStore";
 
 const es = {
-  home: "Inicio", features: "Capacidades", about: "Historia", navigation: "Navegación principal",
+  home: "Inicio", features: "Capacidades", about: "Historia", author: "Abdair", navigation: "Navegación principal",
   skip: "Ir al contenido", theme: "Tema", system: "Sistema", light: "Claro", dark: "Oscuro",
   sound: "Sonido de Jev",
   language: "Idioma", title: "Pequeña criatura.", titleAccent: "Grandes decisiones.",
@@ -42,7 +42,7 @@ const es = {
 
 export type MessageKey = keyof typeof es;
 const en: Record<MessageKey, string> = {
-  home: "Home", features: "Features", about: "About", navigation: "Main navigation",
+  home: "Home", features: "Features", about: "About", author: "Abdair", navigation: "Main navigation",
   skip: "Skip to content", theme: "Theme", system: "System", light: "Light", dark: "Dark",
   sound: "Jev's sound",
   language: "Language", title: "Tiny creature.", titleAccent: "Big decisions.",

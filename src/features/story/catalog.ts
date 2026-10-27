@@ -46,22 +46,9 @@ export const STORY_SCENES = [
 
 export type StorySceneId = (typeof STORY_SCENES)[number]["id"];
 
-export type ContactId = "github" | "linkedin" | "instagram" | "tiktok" | "x";
-type Contact = { id: ContactId; name: string; url: string | null };
-// Where to find the author. A null url is still pending from the author and is not shown.
-export const STORY_CONTACTS: readonly Contact[] = [
-  { id: "github", name: "GitHub", url: "https://github.com/abdair-coca" },
-  { id: "linkedin", name: "LinkedIn", url: "https://www.linkedin.com/in/abdair-coca-18113b259" },
-  { id: "instagram", name: "Instagram", url: "https://www.instagram.com/abdaircoca" },
-  { id: "tiktok", name: "TikTok", url: "https://www.tiktok.com/@abdaircoca" },
-  { id: "x", name: "X", url: null },
-];
-// The author's photo; with null the initials stand in.
-export const STORY_PORTRAIT: string | null = "/story/Abdair.jpg";
-
 type StoryCopyKey = "navigation" | "previous" | "next" | "detail" | "scroll" | "scene"
   | "loading" | "error" | "retry" | "experiment" | "vision" | "back" | "features" | "end"
-  | "particleError" | "reveal" | "revealAction" | "project" | "introTitle" | "intro" | "contact" | "portrait";
+  | "particleError" | "reveal" | "revealAction" | "project" | "author";
 export const storyCopy = {
   es: {
     navigation: "Escenas de la historia", previous: "Escena anterior", next: "Escena siguiente",
@@ -70,10 +57,7 @@ export const storyCopy = {
     experiment: "Un recorrido de Abdair Coca.", vision: "Un experimento. La visión: evolucionar contigo.",
     back: "Interactuar con Jev", features: "Ver sus capacidades", end: "La historia sigue en cada interacción.",
     particleError: "Una imagen no pudo prepararse. Puedes seguir leyendo la historia.", reveal: "O sigue deslizando", revealAction: "Revelar a Jev", project: "Ver proyecto",
-    // Approved by the author on 2026-10-24: an introduction, not a pitch.
-    introTitle: "Hola, soy Abdair.",
-    intro: "Estudio Ingeniería Informática y me interesan la inteligencia artificial, el desarrollo de software y las interfaces interactivas. Aprendo construyendo: un robot de cartón, plataformas para enseñar y personajes como Jev.",
-    contact: "Me encuentras en", portrait: "Abdair Coca",
+    author: "Conocer a Abdair",
   },
   en: {
     navigation: "Story scenes", previous: "Previous scene", next: "Next scene",
@@ -82,8 +66,6 @@ export const storyCopy = {
     experiment: "A journey by Abdair Coca.", vision: "An experiment. The vision: to evolve with you.",
     back: "Interact with Jev", features: "Explore its capabilities", end: "The story continues with every interaction.",
     particleError: "An image could not be prepared. You can still read the story.", reveal: "Or keep scrolling", revealAction: "Reveal Jev", project: "View project",
-    introTitle: "Hi, I'm Abdair.",
-    intro: "I study Computer Engineering and I'm interested in artificial intelligence, software development and interactive interfaces. I learn by building: a cardboard robot, teaching platforms and characters like Jev.",
-    contact: "You can find me on", portrait: "Abdair Coca",
+    author: "Meet Abdair",
   },
 } satisfies Record<Language, Record<StoryCopyKey, string>>;

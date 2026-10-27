@@ -13,11 +13,12 @@ const SettingsPanel = lazy(() => import("../features/settings/SettingsPanel"));
 const MemoryPanel = lazy(() => import("../features/memory/MemoryPanel"));
 
 // Shown instead of the labels on phones, so the whole bar fits in one row. Each part is its own
-// path so it can move alone: the big and small sparkles, the book's two pages.
+// path so it can move alone: the big and small sparkles, the book's two pages, the person's head.
 const NAV_ICONS: Record<Route, readonly string[]> = {
   "/": ["M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z"],
   "/features": ["M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z", "M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8Z"],
   "/about": ["M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2Z", "M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7Z"],
+  "/abdair": ["M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z", "M4 21a8 8 0 0 1 16 0"],
 };
 
 export default function SiteHeader({ route }: { route: PageRoute }) {
@@ -46,7 +47,7 @@ export default function SiteHeader({ route }: { route: PageRoute }) {
     onSettingsClose();
   }, [onSettingsClose]);
   const links: { route: Route; label: string }[] = [
-    { route: "/", label: t.home }, { route: "/features", label: t.features }, { route: "/about", label: t.about },
+    { route: "/", label: t.home }, { route: "/features", label: t.features }, { route: "/about", label: t.about }, { route: "/abdair", label: t.author },
   ];
   return (
     <>

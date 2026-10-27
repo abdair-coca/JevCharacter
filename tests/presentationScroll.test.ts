@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   triggers: { getAll: vi.fn(() => [] as unknown[]), disable: vi.fn(), enable: vi.fn(), update: vi.fn() },
 }));
 vi.mock("lenis", () => ({ default: class { constructor(options: unknown) { mocks.create(options); return mocks.lenis; } } }));
-vi.mock("gsap", () => ({ gsap: { ticker: mocks.ticker, globalTimeline: { getChildren: () => [] } } }));
+vi.mock("gsap", () => ({ gsap: { ticker: mocks.ticker, globalTimeline: { getChildren: () => [] }, registerPlugin: vi.fn() } }));
 vi.mock("gsap/ScrollTrigger", () => ({ ScrollTrigger: mocks.triggers }));
 const leases: ReturnType<typeof acquirePresentationScroll>[] = [];
 const acquire = () => { const lease = acquirePresentationScroll(0.12); leases.push(lease); return lease; };

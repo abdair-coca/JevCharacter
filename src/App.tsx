@@ -12,6 +12,7 @@ import "./App.css";
 const PendingPage = lazy(() => import("./pages/PendingPage"));
 const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
+const AuthorPage = lazy(() => import("./pages/AuthorPage"));
 const loadMotionFeatures = () => import("./lib/motionFeatures").then((module) => module.default);
 const SCROLL_RESTORE_MS = 2500;
 
@@ -43,7 +44,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.title = `JEVLING — ${route === "/" ? `${t.title} ${t.titleAccent}` : route === "/features" ? t.features : route === "/about" ? t.about : t.notFound}`;
+    document.title = `JEVLING — ${route === "/" ? `${t.title} ${t.titleAccent}` : route === "/features" ? t.features : route === "/about" ? t.about : route === "/abdair" ? t.author : t.notFound}`;
   }, [route, t]);
 
   useEffect(() => {
@@ -97,7 +98,7 @@ export default function App() {
           </div>
         )}
         <Suspense fallback={<main className="pending-page" aria-busy="true" />}>
-          {route === "/features" ? <FeaturesPage /> : route === "/about" ? <AboutPage /> : route !== "/" && <PendingPage route={route} />}
+          {route === "/features" ? <FeaturesPage /> : route === "/about" ? <AboutPage /> : route === "/abdair" ? <AuthorPage /> : route !== "/" && <PendingPage route={route} />}
         </Suspense>
       </LazyMotion>
     </MotionConfig>

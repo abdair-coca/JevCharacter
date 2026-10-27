@@ -6,7 +6,7 @@ JEVLING is a digital creature that watches cursor, touch, activity, absence, and
 
 ## Rediseño y documentación
 
-Home y Features fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN, sin IA ni cambios en la sesión de Home. `/about` presenta el recorrido de Abdair Coca: Bob, TitiEdu, machine learning y JEV/visión futura, con partículas 2D y lectura lineal adaptada a móvil/movimiento reducido. En Inicio, «quiero inscribirme» abre la inscripción UATF, que guarda cada registro en Supabase. Las entregas de About y UATF esperan revisión visual.
+Home y Features fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN, sin IA ni cambios en la sesión de Home. `/about` presenta el recorrido de Abdair Coca: Bob, TitiEdu, machine learning y JEV/visión futura, con partículas 2D y lectura lineal adaptada a móvil/movimiento reducido. `/abdair` es la presentación de su autor: retrato de partículas, intereses, proyectos y contacto. En Inicio, «quiero inscribirme» abre la inscripción UATF, que guarda cada registro en Supabase. Las entregas de About y UATF esperan revisión visual.
 
 - [Spec de producto](.dev/spec.md), [plan por fases](.dev/plan.md) y [tarea/handoff activo](.dev/task.md).
 - [Contrato de diseño y tokens](design.md).
@@ -108,4 +108,4 @@ npm run build:frontend
 vercel deploy --prebuilt --prod
 ```
 
-`build:frontend` selects Vite's `frontend` mode and generates `.vercel/output` with static files and direct-route support for `/features` and `/about`. The prebuilt deployment uploads only that artifact, without `api/*` or serverless functions. Use `--prebuilt` only for that alternative. To activate APIs or use changed server environment variables, create a regular new deployment instead of trying to redeploy the prebuilt artifact.
+`build:frontend` selects Vite's `frontend` mode and generates `.vercel/output` with static files and direct-route support for `/features`, `/about` and `/abdair`. The prebuilt deployment uploads only that artifact, without `api/*` or serverless functions. Use `--prebuilt` only for that alternative. To activate APIs or use changed server environment variables, create a regular new deployment instead of trying to redeploy the prebuilt artifact.

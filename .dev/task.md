@@ -39,6 +39,37 @@ Pedido: «optimices la musica de about porque en movil suena mal […] quiero qu
 | Perfil en el navegador (dev, Playwright) | `compactAudio()` es `true` con móvil emulado (táctil) y `false` en escritorio. |
 | Escucha en un teléfono real | Pendiente: no hay dispositivo físico ni se oyó el render; los WAV de antes/escritorio/móvil quedan en el scratchpad de la sesión. |
 
+## Sección propia de Abdair — 2026-10-27
+
+Pedido: «quiero que muevas mi presentacion en about a otra seccion netamente para mi presentacion, que sea espectacular también […] quiero que decidas todo tu […] al final despliegalo y dame un resumen». Sin quiz: el usuario delegó las decisiones. Textos solo de la introducción aprobada el 2026-10-24 y del relato (sin datos biográficos nuevos).
+
+- [x] Ruta `/abdair` («Abdair» en ES/EN; icono de persona en móvil): `routes.ts`, `App` (lazy `AuthorPage`, título «JEVLING — Abdair»), `SiteHeader`, `vercel.json` y `prepare-vercel-frontend.mjs`.
+- [x] `features/author/`:
+  - `catalog.ts`: copia ES/EN, contactos (movidos desde Historia, con usuario), foto y proyectos por id de escena.
+  - `PortraitParticles`: retrato de partículas que gira como galaxia, se reúne, responde al ratón o al toque y se disuelve al bajar.
+  - `AuthorStatement`: la frase de intereses se enciende palabra por palabra.
+  - `AuthorWork`: tarjetas que se inclinan hacia el ratón.
+  - `AuthorContact`: foto con anillo y filas grandes por red.
+  - `author.css`, con tokens propios.
+- [x] `story/particleAssets.ts`: `loadImage` y `glowSprite` salen de `ParticleVortex` para compartirlos.
+- [x] `scrollRuntime` registra ScrollTrigger al crear Lenis (la página usa el scroll suave sin triggers propios).
+- [x] Historia: se retiran `StoryIntro`, sus estilos y textos; el cierre suma «Conocer a Abdair».
+- [x] Cabecera móvil con cuatro iconos: sin hueco entre enlaces y 0,75rem de margen (352 px a 360 px de ancho). Por debajo de 22,4rem, los objetivos bajan a `--size-target-tight` (2,625rem) para caber en 320 px.
+- [x] Tests: `authorPage` (6), `portraitParticles` (4), `storyPage` (el cierre enlaza con la sección), `siteHeader`, `presentationScroll` (mock de `registerPlugin`). E2E: nuevo `author.spec.ts` (4: escritorio, móvil, 320 px, movimiento reducido); `routes` y `settings` con la cuarta vista.
+- [x] Docs: `design.md`, `docs/architecture.md`, `docs/interaction.md`, `docs/jev-story.md`, `README.md` y `AGENTS.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 398 tests en 49 archivos. |
+| `npm run build` | PASS: `index` 356,57 kB (gzip 114,45 kB, +0,7 kB); `AuthorPage` 23,07 kB JS + 15,50 kB CSS aparte. |
+| `npx playwright test` de `author`, `routes` y `settings` | 22 PASS y 1 FAIL por timeout: «single header row (dark)» tardó 48,8 min, el equipo se suspendió durante la corrida. Reejecutado aparte: 2/2 PASS. |
+| Revisión visual (Playwright sobre dev, 1440 y 390 px) | Galaxia → retrato reunido; disolución al bajar; frase encendida; tarjetas; contacto. Sin desborde horizontal ni errores de consola. Ajustes tras la primera ronda: contraste del retrato (percentil 97), encuadre de la tarjeta de ML y filas de contacto en móvil. Capturas en `evidence/author/`. |
+| `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+
+**Límites:** sin teléfono real ni Safari. El retrato depende de la foto actual (fondo oscuro); otra foto puede requerir ajustar `--portrait-min-light`.
+
 ## Guía de la clave Groq e inscripción UATF en Supabase — 2026-10-26
 
 Pedido: «quiero que hagas un paso a paso para obtener la api de groq en ajustes, y tambien quiero que lo conectes a una base de datos de supabase. para que funcione el registro». Quiz: el registro es la inscripción UATF; conexión desde el servidor (función en Vercel con la clave secreta, sin dependencias); guía desplegable; aviso y casilla de consentimiento. Segundo quiz: enfoque «Aprobado»; guardar todas las inscripciones aunque se repita el celular; sin proyecto Supabase («no, crealo tu»).

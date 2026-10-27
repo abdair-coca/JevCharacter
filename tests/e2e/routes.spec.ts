@@ -4,6 +4,7 @@ const READY = {
   "/": ".home-page .character-rive[data-ready='true']",
   "/features": ".features-page .character-rive[data-ready='true']",
   "/about": ".story-particles[data-prepared='true']",
+  "/abdair": ".author-particles[data-prepared='true']",
 } as const;
 
 for (const path of Object.keys(READY) as (keyof typeof READY)[]) {

@@ -74,7 +74,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.locator(".brand-mark__name")).toBeHidden();
     await expect(page.getByRole("link", { name: "Jevling" })).toBeVisible();
     const gear = (await page.getByRole("button", { name: "Ajustes", exact: true }).boundingBox())!;
-    for (const name of ["Inicio", "Capacidades", "Historia"]) {
+    for (const name of ["Inicio", "Capacidades", "Historia", "Abdair"]) {
       const link = page.getByRole("link", { name });
       await expect(link.locator(".site-header__icon")).toBeVisible();
       await expect(link.locator(".site-header__label")).toHaveCSS("clip-path", "inset(50%)");

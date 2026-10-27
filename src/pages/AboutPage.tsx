@@ -12,7 +12,6 @@ import { STORY_SCENES, storyCopy } from "../features/story/catalog";
 import { useStoryScroll } from "../features/story/useStoryScroll";
 import { ParticleVortex } from "../features/story/ParticleVortex";
 import { StillImage } from "../features/story/StillImage";
-import { StoryIntro } from "../features/story/StoryIntro";
 import { useStoryMusic } from "../features/story/useStoryMusic";
 import "../features/story/story.css";
 
@@ -111,12 +110,11 @@ export default function AboutPage() {
         </AnimatePresence>
       </div>
       {particleError && <p className="story-particle-error" role="status">{copy.particleError}</p>}
-      <StoryIntro language={language} />
       <footer className="story-outro">
         <p className="story-eyebrow">JEVLING — {copy.experiment}</p>
         <h2 lang="en">Tiny creature. <br /><em>Big decisions.</em></h2>
         <p>{copy.end}</p>
-        <div className="story-links"><a className="ui-button ui-button--primary ui-button--default" href="/" onClick={event => navigate(event, "/")}>{copy.back} <span className="ui-button__arrow" aria-hidden="true">↗</span></a><a className="ui-button ui-button--ghost ui-button--default" href="/features" onClick={event => navigate(event, "/features")}>{copy.features} <span className="ui-button__arrow" aria-hidden="true">↗</span></a></div>
+        <div className="story-links"><a className="ui-button ui-button--primary ui-button--default" href="/" onClick={event => navigate(event, "/")}>{copy.back} <span className="ui-button__arrow" aria-hidden="true">↗</span></a><a className="ui-button ui-button--ghost ui-button--default" href="/features" onClick={event => navigate(event, "/features")}>{copy.features} <span className="ui-button__arrow" aria-hidden="true">↗</span></a><a className="ui-button ui-button--ghost ui-button--default" href="/abdair" onClick={event => navigate(event, "/abdair")}>{copy.author} <span className="ui-button__arrow" aria-hidden="true">↗</span></a></div>
       </footer>
     </main>
   );

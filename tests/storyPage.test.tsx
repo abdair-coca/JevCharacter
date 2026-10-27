@@ -62,19 +62,15 @@ describe("About narrative and presentation boundary", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it("introduces Abdair before the closing line, with only the contact links already supplied", () => {
+  it("leaves Abdair's introduction to his own section and links to it from the closing", () => {
     render(view());
-    const intro = screen.getByRole("region", { name: "Hola, soy Abdair." });
-    expect(intro.textContent).toContain("Aprendo construyendo");
-    expect(intro.compareDocumentPosition(screen.getByRole("heading", { name: "Tiny creature. Big decisions." })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    const links = screen.getByRole("list", { name: "Me encuentras en" }).querySelectorAll("a");
-    // X has no address yet, so it is not drawn.
-    expect([...links].map(link => link.getAttribute("aria-label"))).toEqual(["GitHub", "LinkedIn", "Instagram", "TikTok"]);
-    expect(links[0].getAttribute("href")).toBe("https://github.com/abdair-coca");
-    for (const link of links) expect(link.getAttribute("rel")).toBe("noopener noreferrer");
-    expect(screen.getByRole("img", { name: "Abdair Coca" }).getAttribute("src")).toBe("/story/Abdair.jpg");
+    expect(screen.queryByRole("region", { name: "Hola, soy Abdair." })).toBeNull();
+    expect(screen.queryByRole("list", { name: "Me encuentras en" })).toBeNull();
+    const link = screen.getByRole("link", { name: /Conocer a Abdair/ });
+    expect(link.getAttribute("href")).toBe("/abdair");
+    expect(link.closest("footer")?.textContent).toContain("Tiny creature.");
     act(() => preferencesStore.getState().setLanguage("en"));
-    expect(screen.getByRole("region", { name: "Hi, I'm Abdair." })).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Meet Abdair/ })).toBeTruthy();
   });
 
   it("links each project as plain text that opens apart", () => {

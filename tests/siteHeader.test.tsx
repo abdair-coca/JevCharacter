@@ -89,7 +89,7 @@ describe("header preference controls", () => {
 
   it("keeps each view's name on its link while phones show only the icon", () => {
     render(<SiteHeader route="/" />);
-    for (const name of ["Inicio", "Capacidades", "Historia"]) {
+    for (const name of ["Inicio", "Capacidades", "Historia", "Abdair"]) {
       const link = screen.getByRole("link", { name });
       expect(link.querySelector("svg.site-header__icon")?.getAttribute("aria-hidden")).toBe("true");
     }

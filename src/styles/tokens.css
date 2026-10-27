@@ -15,7 +15,7 @@
   --radius-sm: 0.75rem; --radius-md: 1.125rem; --radius-lg: 1.75rem; --radius-pill: 9999px;
   --border-thin: 1px; --focus-width: 2px; --focus-offset: 3px;
   --size-content: 72rem; --size-input: 35rem; --size-header: 4.5rem;
-  --size-target: 3rem; --size-character: clamp(22rem, 46vw, 38rem);
+  --size-target: 3rem; --size-target-tight: 2.625rem; --size-character: clamp(22rem, 46vw, 38rem);
   --size-stage-min: 13rem; --size-stage-max: 28rem; --size-hud: 22rem;
   --size-hud-compact: 13rem; --size-hud-panel: 22rem;
   --size-home-chrome: 22rem;

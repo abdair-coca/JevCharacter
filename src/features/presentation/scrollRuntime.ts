@@ -39,6 +39,8 @@ function sync(value: Runtime) {
 /** Shared, reference-counted global scroll. No route can create a second Lenis. */
 export function acquirePresentationScroll(lerp: number) {
   if (!runtime) {
+    // Lenis reports every scroll to ScrollTrigger; a page without its own triggers still needs it registered.
+    gsap.registerPlugin(ScrollTrigger);
     const lenis = new Lenis({ autoRaf: false, lerp, prevent: node => Boolean(node.closest("[data-lenis-prevent], input, textarea, select")) });
     lenis.on("scroll", ScrollTrigger.update);
     runtime = { lenis, clients: new Map(), tick: seconds => lenis.raf(seconds * 1000), ticking: false };

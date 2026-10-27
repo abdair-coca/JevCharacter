@@ -1,10 +1,10 @@
 import { useSyncExternalStore, type MouseEvent } from "react";
 
-export type Route = "/" | "/features" | "/about";
+export type Route = "/" | "/features" | "/about" | "/abdair";
 export type PageRoute = Route | "not-found";
 function currentRoute(): PageRoute {
   const path = window.location.pathname;
-  return path === "/" || path === "/features" || path === "/about" ? path : "not-found";
+  return path === "/" || path === "/features" || path === "/about" || path === "/abdair" ? path : "not-found";
 }
 function subscribe(listener: () => void) {
   window.addEventListener("popstate", listener);

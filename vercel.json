@@ -2,7 +2,8 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/features", "destination": "/index.html" },
-    { "source": "/about", "destination": "/index.html" }
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/abdair", "destination": "/index.html" }
   ],
   "functions": {
     "api/decide.ts": {

@@ -13,7 +13,7 @@ await writeFile(new URL("config.json", output), JSON.stringify({
   version: 3,
   routes: [
     { handle: "filesystem" },
-    { src: "^/(features|about)/?$", dest: "/index.html" },
+    { src: "^/(features|about|abdair)/?$", dest: "/index.html" },
   ],
 }, null, 2) + "\n");
 console.log("Vercel frontend ready: static files only, no functions.");

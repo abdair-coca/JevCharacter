@@ -1,0 +1,160 @@
+.author-page {
+  /* A dark stage in both global themes, like Historia: the particle portrait glows on black. */
+  --color-background: #050608; --color-foreground: #F7F7FA; --color-muted: #A3A3B5;
+  --color-accent: #A78BFA; --color-focus: #C4B5FD; --color-control-edge: #62517E;
+  --color-border: #292C38; --color-surface: #0E1016; --color-surface-raised: #191C26; --color-accent-foreground: #050608;
+  --particle-violet: #A78BFA; --particle-pink: #D946EF; --particle-white: #F7F7FA;
+  --author-scroll-lerp: 0.12;
+  --author-title: clamp(3.75rem, 9vw, 8.75rem); --author-section-title: clamp(2.5rem, 5vw, 4.5rem);
+  --author-statement-size: clamp(2rem, 4.4vw, 4.25rem); --author-statement-height: 260dvh;
+  --author-link-size: clamp(1.75rem, 3.6vw, 3rem); --author-quote: clamp(1.75rem, 3.6vw, 3.25rem);
+  --author-portrait-size: min(46vw, 40rem, calc(100dvh - var(--size-header) - var(--space-16)));
+  --author-photo-size: clamp(12rem, 24vw, 18rem);
+  /* Unlit words stay faint and a little low; each rises as it lights. */
+  --author-dim: 0.14; --author-word-rise: 0.3em;
+  --author-rise: 2rem; --author-slide: -1.5rem;
+  --author-title-rise: 110%; --author-title-duration: 1100ms; --author-title-stagger: 120ms; --author-intro-delay: 150ms;
+  --author-card-lean: 7deg; --author-card-lift: -0.375rem; --author-card-zoom: 1.06; --author-ring-turn: 140deg;
+  --author-aura: radial-gradient(circle, rgb(124 58 237 / 0.28), rgb(217 70 239 / 0.08) 45%, transparent 70%);
+  --author-name-gradient: linear-gradient(100deg, var(--particle-white) 0%, var(--particle-violet) 40%, var(--particle-pink) 100%);
+  /* Particle portrait (PortraitParticles reads these once). */
+  --portrait-count: 12000; --portrait-mobile-count: 6500; --portrait-min-count: 3500; --portrait-budget-ms: 9;
+  --portrait-sample-size: 240; --portrait-min-light: 0.22; --portrait-extent: 0.94; --portrait-vignette: 0.34;
+  --portrait-dot: 1.5; --portrait-glow: 9; --portrait-drift: 0.0016; --portrait-speed: 0.25; --portrait-spin: 0.35;
+  --portrait-turns: 1.25; --portrait-gather: 1.8; --portrait-stagger: 1.1; --portrait-highlight: 0.74; --portrait-contrast: 0.9;
+  --portrait-scan: 0.35; --portrait-scan-period: 7; --portrait-exit-span: 0.9; --portrait-bleed: 0.3;
+  --portrait-pointer-radius: 0.2; --portrait-pointer-force: 0.12; --portrait-spring: 0.06; --portrait-damping: 0.84;
+  color-scheme: dark; position: relative; margin-top: var(--size-header);
+  background: var(--color-background); color: var(--color-foreground);
+  overflow-x: clip;
+}
+.author-eyebrow { margin: 0; color: var(--color-accent); font: var(--weight-label) var(--text-caption)/var(--line-body) var(--font-mono); letter-spacing: var(--tracking-label); }
+
+/* Hero: the title rises word by word beside the particle portrait. */
+.author-hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-8); min-height: calc(100dvh - var(--size-header)); max-width: var(--size-content); margin-inline: auto; padding: var(--space-8); }
+.author-hero__copy { position: relative; z-index: var(--layer-content); }
+.author-title { margin: var(--space-6) 0; font: var(--weight-title) var(--author-title)/0.95 var(--font-display); letter-spacing: var(--tracking-title); }
+.author-title:focus { outline: none; }
+.author-title__word { display: inline-block; overflow: clip; padding-bottom: 0.12em; margin-bottom: -0.12em; vertical-align: bottom; }
+.author-title__word > span { display: inline-block; }
+.author-title__word[data-last="true"] { display: block; width: fit-content; }
+.author-title__word[data-last="true"] > span { background-image: var(--author-name-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.author-lead { max-width: 28rem; margin: 0; color: var(--color-muted); font-size: var(--text-lead); line-height: var(--line-body); }
+.author-scroll-cue { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-12) 0 0; color: var(--color-muted); font-size: var(--text-caption); }
+.author-scroll-cue > span { color: var(--color-accent); font-size: var(--text-lead); }
+.author-portrait { position: relative; width: var(--author-portrait-size); aspect-ratio: 1; }
+.author-portrait__halo { position: absolute; inset: 0; z-index: 0; border-radius: var(--radius-pill); background: var(--author-aura); pointer-events: none; }
+.author-particles { position: absolute; z-index: 1; left: calc(var(--portrait-bleed) * -100%); top: calc(var(--portrait-bleed) * -100%); width: calc((1 + 2 * var(--portrait-bleed)) * 100%); height: calc((1 + 2 * var(--portrait-bleed)) * 100%); pointer-events: none; }
+.author-portrait[data-particles="true"] { touch-action: pan-y; }
+.author-portrait__photo { position: relative; z-index: 1; display: block; width: 72%; margin: 14%; border-radius: var(--radius-pill); }
+
+/* Interests: the sentence holds on screen while each word lights with the scroll. */
+.author-statement { --statement: 0; position: relative; height: var(--author-statement-height); max-width: var(--size-content); margin-inline: auto; padding-inline: var(--space-8); }
+.author-statement__pin { position: sticky; top: var(--size-header); display: flex; flex-direction: column; justify-content: center; gap: var(--space-8); min-height: calc(100dvh - var(--size-header)); }
+.author-statement__text { max-width: 22ch; margin: 0; font: var(--weight-title) var(--author-statement-size)/1.12 var(--font-display); letter-spacing: var(--tracking-title); }
+.author-word { --lit: clamp(0, calc(var(--statement) * (var(--statement-count) + 3) - var(--i) - 1), 1); display: inline-block; opacity: calc(var(--author-dim) + (1 - var(--author-dim)) * var(--lit)); transform: translateY(calc((1 - var(--lit)) * var(--author-word-rise))); }
+.author-word--key { background-image: var(--author-name-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Projects: cards that lean toward the mouse, with a light that follows it. */
+.author-work { max-width: var(--size-content); margin-inline: auto; padding: var(--space-24) var(--space-8); }
+.author-work h2, .author-contact h2 { margin: var(--space-4) 0; font: var(--weight-title) var(--author-section-title)/var(--line-title) var(--font-display); letter-spacing: var(--tracking-title); }
+.author-section-lead { max-width: 34rem; margin: 0 0 var(--space-12); color: var(--color-muted); font-size: var(--text-lead); line-height: var(--line-body); }
+.author-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin: 0; padding: 0; list-style: none; }
+.author-cards > li { display: flex; }
+.author-card { --lean-x: 0; --lean-y: 0; position: relative; isolation: isolate; display: flex; flex-direction: column; width: 100%; overflow: hidden; border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); transition: transform var(--duration-ui) var(--ease-out); }
+/* The edge lights up as its own layer: no animated border or shadow. */
+.author-card::before { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; padding: var(--border-thin); background: linear-gradient(135deg, var(--particle-violet), transparent 40%, transparent 60%, var(--particle-pink)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: 0; transition: opacity var(--duration-ui) var(--ease-out); pointer-events: none; }
+.author-card:has(.author-card__link:focus-visible) { outline: var(--focus-width) solid var(--color-focus); outline-offset: var(--focus-offset); }
+.author-card:has(.author-card__link:focus-visible)::before { opacity: 1; }
+.author-card__media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--author-aura), var(--color-background); }
+.author-card__media :is(img, canvas) { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--duration-scene) var(--ease-out); }
+.author-card[data-project="bob"] .author-card__media img { object-position: 50% 30%; }
+.author-card[data-project="learning"] .author-card__media img { object-position: 95% 50%; }
+.author-card__glare { position: absolute; inset: -50%; background: radial-gradient(circle, rgb(255 255 255 / 0.16), transparent 35%); opacity: 0; transform: translate(calc(var(--lean-x) * 25%), calc(var(--lean-y) * 25%)); transition: opacity var(--duration-ui) var(--ease-out); pointer-events: none; }
+.author-card__body { display: flex; flex: 1; flex-direction: column; gap: var(--space-3); padding: var(--space-6); }
+.author-card h3 { margin: 0; font: var(--weight-title) var(--text-lead)/var(--line-title) var(--font-display); letter-spacing: var(--tracking-title); }
+.author-card p { margin: 0; color: var(--color-muted); line-height: var(--line-body); }
+.author-card__link { display: inline-flex; align-items: center; align-self: flex-start; gap: var(--space-2); min-height: var(--size-target); margin-top: auto; color: var(--color-accent); font-size: var(--text-small); font-weight: var(--weight-label); text-decoration: none; }
+.author-card__link:focus-visible { outline: none; }
+/* The whole card opens its project. */
+.author-card__link::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
+.author-card__link span { display: inline-block; transition: transform var(--duration-spring) var(--ease-spring); }
+/* Jev's card draws Jev: a glowing body with the logo's eyes. */
+.author-jev { position: absolute; inset: 0; display: grid; place-items: center; }
+.author-jev::before { content: ""; position: absolute; width: 36%; aspect-ratio: 1; border-radius: var(--radius-pill); background: radial-gradient(circle at 35% 30%, var(--particle-white), var(--jev-skin-violet) 35%, var(--particle-pink) 70%, var(--jev-color-primary)); box-shadow: 0 0 4rem rgb(208 68 255 / 0.45); }
+.author-jev__eyes { position: relative; display: block; color: var(--color-accent-foreground); font: var(--weight-title) clamp(1.5rem, 3vw, 2.5rem)/1 var(--font-display); letter-spacing: var(--tracking-label); }
+
+/* Contact: the photo beside a large row per network. */
+.author-contact { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-16); max-width: var(--size-content); margin-inline: auto; padding: var(--space-24) var(--space-8); }
+.author-contact__portrait { position: relative; width: var(--author-photo-size); aspect-ratio: 1; }
+.author-contact__portrait img { position: relative; display: block; width: 100%; height: 100%; border-radius: var(--radius-pill); object-fit: cover; }
+.author-contact__ring { position: absolute; inset: calc(var(--space-3) * -1); border-radius: var(--radius-pill); background: conic-gradient(from 200deg, var(--particle-violet), var(--particle-pink), transparent 55%, var(--particle-violet)); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px)); mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px)); transition: transform var(--duration-scene) var(--ease-out); }
+.author-links { margin: var(--space-8) 0 0; padding: 0; list-style: none; border-top: var(--border-thin) solid var(--color-border); }
+.author-links li { border-bottom: var(--border-thin) solid var(--color-border); }
+.author-link { position: relative; isolation: isolate; display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: var(--space-4); min-height: calc(var(--size-target) * 1.75); padding: var(--space-4) var(--space-3); color: var(--color-foreground); text-decoration: none; }
+.author-link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(139 92 246 / 0.16), transparent 75%); opacity: 0; transform: scaleX(0.6); transform-origin: left; transition: opacity var(--duration-ui) var(--ease-out), transform var(--duration-reveal) var(--ease-out); }
+.author-link__icon { display: grid; place-items: center; width: var(--size-target); height: var(--size-target); border: var(--border-thin) solid var(--color-control-edge); border-radius: var(--radius-pill); color: var(--color-accent); transition: transform var(--duration-spring) var(--ease-spring); }
+.author-link__icon svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.author-link__name { font: var(--weight-title) var(--author-link-size)/1 var(--font-display); letter-spacing: var(--tracking-title); transition: transform var(--duration-spring) var(--ease-spring); }
+.author-link__handle { color: var(--color-muted); font: var(--text-small)/var(--line-body) var(--font-mono); }
+.author-link__arrow { color: var(--color-accent); font-size: var(--text-lead); transition: transform var(--duration-spring) var(--ease-spring); }
+
+/* Closing: the question Jev was born from, and the way back. */
+.author-outro { display: flex; flex-direction: column; align-items: center; max-width: var(--size-content); margin-inline: auto; padding: var(--space-24) var(--space-8); text-align: center; }
+.author-outro blockquote { max-width: 24ch; margin: 0; font: var(--weight-title) var(--author-quote)/var(--line-title) var(--font-display); letter-spacing: var(--tracking-title); }
+.author-outro blockquote p { margin: 0; }
+.author-outro__source { margin: var(--space-6) 0 var(--space-8); color: var(--color-muted); font: var(--text-small)/var(--line-body) var(--font-mono); }
+.author-outro__links { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-4); }
+.author-outro__links a { display: inline-flex; align-items: center; text-decoration: none; }
+
+@keyframes author-rise { from { transform: translateY(var(--author-title-rise)); } }
+@keyframes author-fade { from { opacity: 0; transform: translateY(var(--motion-distance-md)); } }
+@media (prefers-reduced-motion: no-preference) {
+  .author-title__word > span { animation: author-rise var(--author-title-duration) var(--ease-out) both; animation-delay: calc(var(--author-intro-delay) + var(--i) * var(--author-title-stagger)); }
+  .author-hero__eyebrow { animation: author-fade var(--duration-scene) var(--ease-out) both; }
+  .author-lead { animation: author-fade var(--duration-scene) var(--ease-out) both; animation-delay: calc(var(--author-intro-delay) + var(--duration-reveal)); }
+  .author-scroll-cue { animation: author-fade var(--duration-scene) var(--ease-out) both; animation-delay: calc(var(--author-intro-delay) + var(--duration-scene)); }
+  .author-link:active { transform: scale(var(--motion-scale-press)); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .author-card { transform: perspective(60rem) rotateX(calc(var(--lean-y) * var(--author-card-lean) * -1)) rotateY(calc(var(--lean-x) * var(--author-card-lean))); }
+  .author-card:hover { transform: perspective(60rem) translateY(var(--author-card-lift)) rotateX(calc(var(--lean-y) * var(--author-card-lean) * -1)) rotateY(calc(var(--lean-x) * var(--author-card-lean))); }
+  .author-card:hover::before, .author-card:hover .author-card__glare { opacity: 1; }
+  .author-card:hover .author-card__media :is(img, canvas) { transform: scale(var(--author-card-zoom)); }
+  .author-card:hover .author-card__link span { transform: translate(var(--motion-nudge), calc(var(--motion-nudge) * -1)); }
+  .author-card:hover .author-jev__eyes { animation: brand-blink var(--duration-ui) var(--ease-in-out); }
+  .author-link:hover::before { opacity: 1; transform: none; }
+  .author-link:hover .author-link__name { transform: translateX(var(--space-2)); }
+  .author-link:hover .author-link__icon { transform: translateY(var(--motion-hop)) scale(var(--motion-icon-pop)); }
+  .author-link:hover .author-link__arrow { transform: translate(var(--motion-nudge), calc(var(--motion-nudge) * -1)) scale(var(--motion-icon-pop)); }
+  .author-contact__portrait:hover .author-contact__ring { transform: rotate(var(--author-ring-turn)); }
+}
+
+/* Breakpoints correspond to --breakpoint-sm/lg in tokens.css. */
+@media (max-width: 64rem) {
+  .author-page { --author-portrait-size: min(84vw, 26rem, 52svh); --author-statement-height: 220svh; }
+  .author-hero { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: var(--space-4); padding: var(--space-6); text-align: center; }
+  .author-hero .author-portrait { order: -1; }
+  .author-title__word[data-last="true"] { margin-inline: auto; }
+  .author-lead { margin-inline: auto; }
+  .author-scroll-cue { justify-content: center; margin-top: var(--space-6); }
+  .author-statement, .author-work, .author-contact, .author-outro { padding-inline: var(--space-6); }
+  .author-work, .author-contact, .author-outro { padding-block: var(--space-16); }
+  .author-contact { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: var(--space-8); }
+  .author-contact__body { width: 100%; text-align: center; }
+  .author-link { grid-template-columns: auto minmax(0, 1fr) auto; row-gap: var(--space-1); text-align: left; }
+  .author-link__icon { grid-column: 1; grid-row: 1 / span 2; }
+  .author-link__name { grid-column: 2; grid-row: 1; }
+  .author-link__handle { grid-column: 2; grid-row: 2; }
+  .author-link__arrow { grid-column: 3; grid-row: 1 / span 2; }
+}
+@media (max-width: 40rem) {
+  .author-cards { grid-template-columns: minmax(0, 1fr); }
+  .author-hero { min-height: auto; padding-block: var(--space-4) var(--space-12); }
+}
+
+/* Static reading: no pin, everything lit and still. */
+.author-page[data-static="true"] .author-statement { height: auto; }
+.author-page[data-static="true"] .author-statement__pin { position: static; min-height: auto; padding-block: var(--space-24); }
+.author-page[data-static="true"] .author-word { opacity: 1; transform: none; }
+.author-page[data-static="true"] .author-scroll-cue { display: none; }

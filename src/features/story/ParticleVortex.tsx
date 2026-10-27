@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { particlePhase, samplePixels, scatter, starGeometry, vortexPoint, type ParticleGeometry, type StoryProgress } from "./particleGeometry";
+import { glowSprite, loadImage } from "./particleAssets";
 
 type Props = { progress: StoryProgress; active: boolean; reduced: boolean; onError: () => void };
 type Config = { count: number; mobileCount: number; orbitCount: number; sampleSize: number; dot: number; glow: number; drift: number; speed: number; parallax: number; turns: number; trail: number; highlight: number; contrast: number; budget: number; minCount: number; pointerRadius: number; pointerForce: number; spring: number; damping: number; current: number; colors: string[] };
@@ -15,22 +16,6 @@ function readConfig(host: HTMLElement): Config {
     pointerRadius: n("pointer-radius"), pointerForce: n("pointer-force"), spring: n("spring"), damping: n("damping"), current: n("current"),
     colors: ["violet", "pink", "white"].map(name => css.getPropertyValue(`--particle-${name}`).trim()),
   };
-}
-
-function loadImage(src: string, signal: AbortSignal): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    const finish = (error?: Error) => {
-      clearTimeout(timeout); signal.removeEventListener("abort", abort);
-      image.onload = null; image.onerror = null;
-      if (error) { image.src = ""; reject(error); } else resolve(image);
-    };
-    const abort = () => finish(new Error("Image preparation cancelled"));
-    const timeout = window.setTimeout(() => finish(new Error("Image preparation timed out")), 12000);
-    image.onload = () => finish(); image.onerror = () => finish(new Error(`Cannot load ${src}`));
-    signal.addEventListener("abort", abort, { once: true });
-    image.src = src;
-  });
 }
 
 async function imageGeometry(src: string, size: number, signal: AbortSignal): Promise<ParticleGeometry> {
@@ -51,15 +36,6 @@ async function imageGeometry(src: string, size: number, signal: AbortSignal): Pr
   const points = samplePixels(context.getImageData(0, 0, width, height).data, width, height, ratio > 1 ? 0.86 : 0.84 * ratio, ratio > 1 ? 0.86 / ratio : 0.84, chart ? 0.14 : 0.085);
   if (points.length < 20) throw new Error("Image has no visible particle geometry");
   return points;
-}
-
-function sprite(color: string) {
-  const canvas = document.createElement("canvas"); canvas.width = 32; canvas.height = 32;
-  const ctx = canvas.getContext("2d")!;
-  const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-  gradient.addColorStop(0, color); gradient.addColorStop(0.15, color); gradient.addColorStop(1, "transparent");
-  ctx.fillStyle = gradient; ctx.fillRect(0, 0, 32, 32);
-  return canvas;
 }
 
 /** Canvas owns particle drawing; GSAP's existing ticker supplies the only clock. */
@@ -91,7 +67,7 @@ export function ParticleVortex({ progress, active, reduced, onError }: Props) {
       const angle = radius * Math.PI * 8 + i % 3 * Math.PI * 2 / 3 + scatter(i) * 0.35;
       return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius * 0.7, light: scatter(i, 3) };
     });
-    const glows = config.colors.map(sprite);
+    const glows = config.colors.map(glowSprite);
     const seeds = stars.map((_, i) => ({ depth: scatter(i, 8), angle: scatter(i, 4) * Math.PI * 2, radius: 0.12 + scatter(i, 5) * 0.3 }));
     const orbits = Array.from({ length: config.orbitCount }, (_, i) => scatter(i, 9));
     const previousX = new Float32Array(config.count); const previousY = new Float32Array(config.count);
