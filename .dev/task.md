@@ -9,6 +9,33 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Guía de la clave Groq e inscripción UATF en Supabase — 2026-10-26
+
+Pedido: «quiero que hagas un paso a paso para obtener la api de groq en ajustes, y tambien quiero que lo conectes a una base de datos de supabase. para que funcione el registro». Quiz: el registro es la inscripción UATF; conexión desde el servidor (función en Vercel con la clave secreta, sin dependencias); guía desplegable; aviso y casilla de consentimiento. Segundo quiz: enfoque «Aprobado»; guardar todas las inscripciones aunque se repita el celular; sin proyecto Supabase («no, crealo tu»).
+
+- [x] Ajustes: `<details>` «¿Cómo consigo mi clave?» con cuatro pasos ES/EN y enlace a `console.groq.com/keys` en otra pestaña (aviso para lector de pantalla). Pasos según la quickstart de Groq (la página de claves es `/keys`); «Create API Key», `gsk_` y «se muestra una vez» no pudieron confirmarse en esa página.
+- [x] `api/enroll.ts`: valida `{name, phone, consent, language}` con `validation.ts` compartido, 5 envíos/min por IP, inserta en `enrollments` por REST con la clave secreta en `apikey` (según la doc de claves de Supabase: las claves nuevas no van en `Authorization: Bearer`). 201/400/429/503/502; no registra datos.
+- [x] `supabase/migrations/20261026000000_enrollments.sql`: tabla con checks, RLS sin políticas y `revoke` a `anon`/`authenticated`.
+- [x] Formulario: casilla obligatoria, aviso de privacidad (reemplaza «Demo visual · sin envío de datos»), «Enviando…» con `aria-disabled` y campos de solo lectura, aviso de fallo que conserva los datos, envío abortado al cerrar o salir de Inicio. La casilla no compacta a Jev en móvil.
+- [x] Vite (`/api/enroll` y variables), `vercel.json` (10 s), `.env.example`.
+- [x] Docs: `design.md`, `AGENTS.md`, `docs/architecture.md`, `docs/interaction.md`, `README.md`.
+- [x] Proyecto Supabase «jevling» (`ravfuqlfwoyqrgzorzvy`, sa-east-1, plan gratis) creado con la CLI (`npx supabase`, sesión ya iniciada). La cuenta ya tenía «abdair-coca's Project» (us-east-2); quiz: proyecto nuevo. Repo vinculado (`supabase/.temp/` ignorado) y migración aplicada con `db push`. `.env`: `SUPABASE_URL`, `SUPABASE_SECRET_KEY` y `SUPABASE_DB_PASSWORD` (generada; solo para la CLI).
+- [x] Vercel Production: `SUPABASE_URL` y `SUPABASE_SECRET_KEY` como «Sensitive» (quiz: «Sí, sin desplegar»). Sin deploy.
+- [x] Corrección hallada en la revisión móvil: con el celular enfocado, tocar la etiqueta de la casilla expandía a Jev en mitad del toque y la casilla no se marcaba. El formulario espera al final del toque para expandirse (test nuevo). Los pasos de la guía recuperan su numeración (`list-style: decimal`).
+- [x] e2e `enrollment.spec.ts`: marca la casilla, responde `/api/enroll` como Supabase y añade el caso de fallo con reintento.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 385 tests en 47 archivos (nuevo `apiEnroll`; `enrollmentSession` prueba envío, consentimiento, etiqueta de la casilla en móvil, fallo con reintento y aborto; `settingsPanel`, la guía). |
+| `npm run build` | PASS: `index` 355,88 kB (gzip 114,19 kB); `SettingsPanel` 5,54 kB. |
+| Inscripción real (`npm run dev` → `/api/enroll` → Supabase) | PASS: sin consentimiento 400; válida 201 y fila guardada con celular normalizado (`70000000`). Fila de prueba «Prueba de Jev (borrar)» sigue en la tabla. La clave enmascarada de `projects api-keys` daba 401 «Invalid API key»; con `--reveal` funciona. |
+| RLS con la clave publicable | PASS: insertar y leer responden 401 `permission denied for table enrollments`. |
+| Revisión visual (Playwright sobre `npm run dev`, 1440 y 360 px, `/api/enroll` simulado) | PASS: errores, «Enviando…», fallo, «Datos enviados» y guía en oscuro/claro; sin desborde horizontal; consola solo con los 502 simulados. |
+| `npx playwright test` | Pendiente: Claude Code detuvo la ejecución por falta de memoria del sistema antes de terminar. |
+| Revisión del usuario | Pendiente. |
+
 ## Piano en la banda sonora de Historia — 2026-10-25
 
 Pedido: «no podrias hacer que la musica sea en piano?». Quiz: cambiar solo los instrumentos (el piano reemplaza el arpegio y las trompas; quedan cuerdas, batería, golpes y barridos), piano sintetizado sin archivos, y que siga creciendo hacia Jev.

@@ -14,6 +14,7 @@ import "./settings.css";
 // Loaded only when the settings open.
 
 const FOCUSABLE = "button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])";
+const GROQ_KEYS_URL = "https://console.groq.com/keys";
 
 type Props = {
   onClose: () => void;
@@ -146,6 +147,17 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
         <section className="settings__group" aria-labelledby={keyTitleId}>
           <h3 id={keyTitleId}>{t.groqTitle}</h3>
           <p id={keyHelpId} className="settings__help">{t.groqHelp}</p>
+          <details className="settings__guide">
+            <summary className="settings__link"><span>{t.groqGuide}</span><span aria-hidden="true">›</span></summary>
+            <ol>
+              <li>
+                <a href={GROQ_KEYS_URL} target="_blank" rel="noopener noreferrer">{t.groqStepConsole}<span className="sr-only"> {t.newTab}</span><span aria-hidden="true"> ↗</span></a> {t.groqStepSignIn}
+              </li>
+              <li>{t.groqStepCreate}</li>
+              <li>{t.groqStepCopy}</li>
+              <li>{t.groqStepPaste}</li>
+            </ol>
+          </details>
           <p className="settings__status" role="status">{keyStored ? t.groqSaved : t.groqMissing}</p>
           <form className="settings__key" onSubmit={saveKey}>
             <label htmlFor={keyInputId}>{t.groqLabel}</label>

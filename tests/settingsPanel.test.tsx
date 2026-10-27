@@ -95,6 +95,22 @@ describe("settings panel", () => {
     await waitFor(() => expect(document.activeElement).toBe(input));
   });
 
+  it("explains, folded under the Groq key, how to get one, linking to Groq's console in a new tab", () => {
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    const guide = screen.getByText("¿Cómo consigo mi clave?").closest("details")!;
+    expect(guide.open).toBe(false);
+    expect([...guide.querySelectorAll("li")].map(step => step.textContent)).toEqual([
+      "Abre la consola de Groq (se abre en otra pestaña) ↗ e inicia sesión. Crear la cuenta es gratis.",
+      "En «API Keys», pulsa «Create API Key».",
+      "Ponle un nombre, como «Jev», y copia la clave. Empieza con gsk_ y Groq solo la muestra una vez.",
+      "Pégala en el campo de abajo y pulsa «Guardar clave».",
+    ]);
+    const link = guide.querySelector("a")!;
+    expect(link.href).toBe("https://console.groq.com/keys");
+    expect(link.target).toBe("_blank");
+    expect(link.rel).toBe("noopener noreferrer");
+  });
+
   it("rejects a malformed key, saves nothing and points the error at the field", () => {
     render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     const input = screen.getByLabelText("Clave API");

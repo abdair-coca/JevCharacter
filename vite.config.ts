@@ -126,12 +126,13 @@ const localDevApi = (): Plugin => ({
 
     mountHandler('/api/decide', '/api/decide.ts');
     mountHandler('/api/talk', '/api/talk.ts');
+    mountHandler('/api/enroll', '/api/enroll.ts');
   },
 })
 
 export default defineConfig(({ mode }) => {
   const localEnv = loadEnv(mode, process.cwd(), '')
-  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL'] as const) {
+  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL', 'SUPABASE_URL', 'SUPABASE_SECRET_KEY'] as const) {
     if (!process.env[name] && localEnv[name]) process.env[name] = localEnv[name]
   }
 

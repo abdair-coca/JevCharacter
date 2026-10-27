@@ -33,6 +33,9 @@ dist-ssr
 
 .vercel
 
+# Supabase CLI link state (project ref, pooler URL)
+supabase/.temp/
+
 # Playwright
 test-results/
 playwright-report/

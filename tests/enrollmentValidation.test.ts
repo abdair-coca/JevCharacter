@@ -18,12 +18,15 @@ describe("local enrollment intent", () => {
 describe("enrollment validation", () => {
   it.each(["71234567", "+59171234567", "+591 7123-4567", " 7123 4567 "])("accepts a formatted Bolivian mobile: %s", value => {
     expect(normalizePhone(value)).toBe("71234567");
-    expect(validateEnrollment({ name: "María José de la Cruz", phone: value })).toEqual({});
+    expect(validateEnrollment({ name: "María José de la Cruz", phone: value, consent: true })).toEqual({});
   });
   it.each(["", "1234567", "123456789", "+34 71234567", "59171234567", "7123abcd", "7123+4567", "(71234567)"])("rejects invalid phone: %s", value => expect(normalizePhone(value)).toBeNull());
   it("requires a name without assuming an alphabet or number of surnames", () => {
-    expect(validateEnrollment({ name: "  ", phone: "71234567" })).toEqual({ name: "nameRequired" });
-    expect(validateEnrollment({ name: "王小明", phone: "71234567" })).toEqual({});
-    expect(validateEnrollment({ name: "x".repeat(121), phone: "71234567" })).toEqual({ name: "nameTooLong" });
+    expect(validateEnrollment({ name: "  ", phone: "71234567", consent: true })).toEqual({ name: "nameRequired" });
+    expect(validateEnrollment({ name: "王小明", phone: "71234567", consent: true })).toEqual({});
+    expect(validateEnrollment({ name: "x".repeat(121), phone: "71234567", consent: true })).toEqual({ name: "nameTooLong" });
+  });
+  it("requires consent before the details can be sent", () => {
+    expect(validateEnrollment({ name: "María", phone: "71234567", consent: false })).toEqual({ consent: "consentRequired" });
   });
 });

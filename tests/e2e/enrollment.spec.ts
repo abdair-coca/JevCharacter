@@ -11,14 +11,25 @@ async function send(page: Page, text: string) {
 async function fillValidData(page: Page) {
   await page.locator("#enrollment-name").fill("María José Quispe Mamani");
   await page.locator("#enrollment-phone").fill("71234567");
+  await page.getByText("Acepto que la UATF me contacte con estos datos.").click();
 }
 
+let enrollAnswer = 201;
+let enrollBodies: unknown[] = [];
+
 test.beforeEach(async ({ page }) => {
+  // Registered after the fixture's 503, so this route answers /api/enroll as Supabase would.
+  enrollAnswer = 201;
+  enrollBodies = [];
+  await page.route("**/api/enroll", (route) => {
+    enrollBodies.push(route.request().postDataJSON());
+    return route.fulfill({ status: enrollAnswer, contentType: "application/json", body: "{}" });
+  });
   await page.goto("/");
   await expect(page.locator(INPUT)).toBeVisible({ timeout: 45_000 });
 });
 
-test("opens the demo form for an enrollment intent", async ({ page }) => {
+test("opens the enrollment form for an enrollment intent", async ({ page }) => {
   await send(page, "quiero inscribirme");
 
   await expect(page.locator("#enrollment-name")).toBeVisible();
@@ -37,18 +48,34 @@ test("asks for corrections before confirming with valid data", async ({ page }) 
   await page.getByRole("button", { name: "Confirmar datos" }).click();
 
   await expect(page.locator("#enrollment-name")).toBeVisible();
-  await expect(page.getByText("Datos completados")).toHaveCount(0);
+  await expect(page.getByText("Datos enviados")).toHaveCount(0);
+  expect(enrollBodies).toEqual([]);
 
   await fillValidData(page);
   await page.getByRole("button", { name: "Confirmar datos" }).click();
-  await expect(page.getByText("Datos completados")).toBeVisible();
+  await expect(page.getByText("Datos enviados")).toBeVisible();
+  expect(enrollBodies).toEqual([{ name: "María José Quispe Mamani", phone: "71234567", consent: true, language: "es" }]);
+});
+
+test("keeps the details when sending fails and sends them on retry", async ({ page }) => {
+  enrollAnswer = 503;
+  await send(page, "quiero inscribirme");
+  await fillValidData(page);
+  await page.getByRole("button", { name: "Confirmar datos" }).click();
+  await expect(page.getByText("No pudimos enviar tus datos.", { exact: false })).toBeVisible();
+  await expect(page.locator("#enrollment-name")).toHaveValue("María José Quispe Mamani");
+
+  enrollAnswer = 201;
+  await page.getByRole("button", { name: "Confirmar datos" }).click();
+  await expect(page.getByText("Datos enviados")).toBeVisible();
+  expect(enrollBodies).toHaveLength(2);
 });
 
 test("closes back to Jev and starts empty the next time", async ({ page }) => {
   await send(page, "quiero inscribirme");
   await fillValidData(page);
   await page.getByRole("button", { name: "Confirmar datos" }).click();
-  await expect(page.getByText("Datos completados")).toBeVisible();
+  await expect(page.getByText("Datos enviados")).toBeVisible();
 
   await page.getByRole("button", { name: "Volver a Jev" }).click();
   await expect(page.locator(INPUT)).toBeVisible();

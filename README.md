@@ -6,7 +6,7 @@ JEVLING is a digital creature that watches cursor, touch, activity, absence, and
 
 ## Rediseño y documentación
 
-Home y Features fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN, sin IA ni cambios en la sesión de Home. `/about` presenta el recorrido de Abdair Coca: Bob, TitiEdu, machine learning y JEV/visión futura, con partículas 2D y lectura lineal adaptada a móvil/movimiento reducido. En Inicio, «quiero inscribirme» abre la demo local UATF. Las entregas de About y UATF esperan revisión visual.
+Home y Features fueron aceptadas para avanzar. `/features` presenta ocho escenas deterministas ES/EN, sin IA ni cambios en la sesión de Home. `/about` presenta el recorrido de Abdair Coca: Bob, TitiEdu, machine learning y JEV/visión futura, con partículas 2D y lectura lineal adaptada a móvil/movimiento reducido. En Inicio, «quiero inscribirme» abre la inscripción UATF, que guarda cada registro en Supabase. Las entregas de About y UATF esperan revisión visual.
 
 - [Spec de producto](.dev/spec.md), [plan por fases](.dev/plan.md) y [tarea/handoff activo](.dev/task.md).
 - [Contrato de diseño y tokens](design.md).
@@ -23,7 +23,13 @@ npm install
 npm run dev
 ```
 
-Vite reads `TYPESAFE_API_KEY`, `JEV_MODEL`, and optional `GROQ_MODEL` from the root `.env` on the server only, then runs the real `api/decide.ts` and `api/talk.ts` handlers locally. Groq is called only after Jev selects a contextual talk action, with the Groq key that each visitor saves in Ajustes; that key stays in their browser and reaches `/api/talk` only in a request header. Credentials are never exposed to the browser bundle.
+Vite reads `TYPESAFE_API_KEY`, `JEV_MODEL`, optional `GROQ_MODEL`, `SUPABASE_URL` and `SUPABASE_SECRET_KEY` from the root `.env` on the server only, then runs the real `api/decide.ts`, `api/talk.ts` and `api/enroll.ts` handlers locally. Groq is called only after Jev selects a contextual talk action, with the Groq key that each visitor saves in Ajustes; that key stays in their browser and reaches `/api/talk` only in a request header. Ajustes explains step by step how to get that key. Credentials are never exposed to the browser bundle.
+
+### Supabase (UATF enrollments)
+
+1. In the Supabase project, open **SQL Editor** and run [`supabase/migrations/20261026000000_enrollments.sql`](supabase/migrations/20261026000000_enrollments.sql). It creates `enrollments` with RLS and no policies, so browsers can neither read nor write it.
+2. From **Project Settings › API Keys**, copy the project URL and a **secret** key (`sb_secret_…`) into `.env` as `SUPABASE_URL` and `SUPABASE_SECRET_KEY`. Never the publishable key, and never with a `VITE_` prefix.
+3. Read the enrollments in **Table Editor › enrollments**. Without these variables, `/api/enroll` answers 503 and the form asks the visitor to try again.
 
 Use `npm run dev` to try real API-backed interaction locally. `npm run preview` serves the production frontend only; the automated browser harness supplies its own local HTTP/SSE fixtures for API tests.
 
@@ -81,19 +87,20 @@ Published at **[jev-bot-sigma.vercel.app](https://jev-bot-sigma.vercel.app)** wi
 
 1. Add `TYPESAFE_API_KEY` to the project's Production environment. `JEV_MODEL` defaults to `jev-latest`.
 2. Generated speech needs no server key: each visitor adds a Groq key in Ajustes. `GROQ_MODEL` remains optional.
-3. Use the regular build (`npm run build`, output `dist`) and create a new deployment:
+3. For UATF enrollments, add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` to the Production environment as well.
+4. Use the regular build (`npm run build`, output `dist`) and create a new deployment:
 
 ```bash
 vercel deploy --prod
 ```
 
-Vercel serves `api/decide.ts` and `api/talk.ts` as functions. `api/tsconfig.json` supplies NodeNext/Node types to the function compiler; server ESM imports use explicit `.js` extensions. The root tsconfig remains a project-reference entrypoint. Provider credentials stay server-side. No separate server or database is required.
+Vercel serves `api/decide.ts`, `api/talk.ts` and `api/enroll.ts` as functions. `api/tsconfig.json` supplies NodeNext/Node types to the function compiler; server ESM imports use explicit `.js` extensions. The root tsconfig remains a project-reference entrypoint. Provider credentials stay server-side. The only database is the Supabase `enrollments` table; no separate server is required.
 
 ### Frontend-only alternative (previous publication)
 
 [Previous static deployment checks](.dev/evidence/deployment/README.md).
 
-Home uses local reactions; Features, Story and the UATF form work without APIs. AI-generated speech is unavailable in this build. No provider keys are needed.
+Home uses local reactions; Features and Story work without APIs. AI-generated speech and UATF enrollments are unavailable in this build: the form opens, but sending fails with its retry notice. No provider keys are needed.
 
 ```bash
 vercel link --project jev-bot

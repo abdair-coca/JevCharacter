@@ -33,6 +33,9 @@ const es = {
   groqTitle: "Clave de Groq", groqHelp: "Groq escribe lo que Jev dice cuando habla. La clave se guarda solo en este navegador y viaja al servidor únicamente cuando Jev habla.",
   groqLabel: "Clave API", groqSave: "Guardar clave", groqRemove: "Borrar clave", groqSaved: "Clave guardada en este navegador.",
   groqMissing: "Sin clave, Jev no puede generar respuestas habladas.", groqInvalid: "Revisa la clave: debe tener entre 20 y 200 caracteres, sin espacios.",
+  groqGuide: "¿Cómo consigo mi clave?", groqStepConsole: "Abre la consola de Groq", groqStepSignIn: "e inicia sesión. Crear la cuenta es gratis.",
+  groqStepCreate: "En «API Keys», pulsa «Create API Key».", groqStepCopy: "Ponle un nombre, como «Jev», y copia la clave. Empieza con gsk_ y Groq solo la muestra una vez.",
+  groqStepPaste: "Pégala en el campo de abajo y pulsa «Guardar clave».", newTab: "(se abre en otra pestaña)",
   debugSignal: "Señales en vivo", distance: "Distancia", speed: "Velocidad", near: "Cerca", idle: "Inactividad",
   clicks: "Toques", absence: "Ausencia", source: "Origen", latency: "Latencia", reactionConfidence: "Confianza de reacción",
 } satisfies Record<string, string>;
@@ -71,6 +74,9 @@ const en: Record<MessageKey, string> = {
   groqTitle: "Groq key", groqHelp: "Groq writes what Jev says when it speaks. The key is stored only in this browser and reaches the server only when Jev speaks.",
   groqLabel: "API key", groqSave: "Save key", groqRemove: "Remove key", groqSaved: "Key saved in this browser.",
   groqMissing: "Without a key, Jev can't generate spoken replies.", groqInvalid: "Check the key: it must be 20 to 200 characters, without spaces.",
+  groqGuide: "How do I get my key?", groqStepConsole: "Open the Groq console", groqStepSignIn: "and sign in. Creating an account is free.",
+  groqStepCreate: "Under “API Keys”, press “Create API Key”.", groqStepCopy: "Give it a name, like “Jev”, and copy the key. It starts with gsk_ and Groq shows it only once.",
+  groqStepPaste: "Paste it in the field below and press “Save key”.", newTab: "(opens in a new tab)",
   debugSignal: "Live signals", distance: "Distance", speed: "Speed", near: "Nearby", idle: "Idle",
   clicks: "Clicks", absence: "Absence", source: "Source", latency: "Latency", reactionConfidence: "Reaction confidence",
 };

@@ -29,9 +29,17 @@ const open = (text = "quiero inscribirme") => {
   fireEvent.change(input, { target: { value: text } });
   fireEvent.submit(input.closest("form")!);
 };
+const CONSENT = "Acepto que la UATF me contacte con estos datos.";
 const fill = () => {
   fireEvent.change(screen.getByLabelText("Nombre completo"), { target: { value: "María Ejemplo" } });
   fireEvent.change(screen.getByLabelText("Número de celular"), { target: { value: "+591 7123-4567" } });
+  fireEvent.click(screen.getByLabelText(CONSENT));
+};
+const pendingFetch = () => {
+  let resolve: (response: Response) => void = () => {};
+  const pending = vi.fn<typeof fetch>(() => new Promise<Response>(done => { resolve = done; }));
+  vi.stubGlobal("fetch", pending);
+  return { pending, resolve: (response: Response) => resolve(response) };
 };
 beforeEach(() => {
   vi.clearAllMocks();
@@ -52,10 +60,10 @@ describe("Home enrollment boundary", () => {
     fireEvent.blur(phone, { relatedTarget: confirm });
     expect(document.querySelector(".home-page")?.getAttribute("data-enrollment-focused")).toBe("true");
     fireEvent.click(confirm);
-    expect(screen.getByText("Datos completados")).toBeTruthy();
+    expect(await screen.findByText("Datos enviados")).toBeTruthy();
   });
 
-  it("opens both fields, validates, confirms and returns using the same character without transmitting or storing fields", async () => {
+  it("opens the fields, validates, sends them once to api/enroll and returns using the same character without storing them", async () => {
     const storage = vi.spyOn(Storage.prototype, "setItem");
     render(view()); const character = await screen.findByTestId("character");
     act(() => mocks.props.onReady?.()); open();
@@ -65,10 +73,14 @@ describe("Home enrollment boundary", () => {
     expect(document.getElementById("page-title")?.closest(".enrollment")).toBeTruthy();
     expect(screen.queryByRole("textbox", { name: "Dale contexto a Jev" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
-    expect(screen.getAllByRole("alert")).toHaveLength(2);
+    expect(screen.getAllByRole("alert")).toHaveLength(3);
     expect(document.activeElement).toBe(screen.getByLabelText("Nombre completo"));
     fill(); fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
-    expect(screen.getByText("Datos completados")).toBeTruthy();
+    expect(await screen.findByText("Datos enviados")).toBeTruthy();
+    expect(fetch).toHaveBeenCalledOnce();
+    const [url, init] = vi.mocked(fetch).mock.calls[0];
+    expect(url).toBe("/api/enroll");
+    expect(JSON.parse(String(init?.body))).toEqual({ name: "María Ejemplo", phone: "+591 7123-4567", consent: true, language: "es" });
     expect(document.querySelector(".home-page")?.getAttribute("data-enrollment")).toBe("confirmed");
     expect(document.querySelector<HTMLInputElement>("#enrollment-name")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /Volver a Jev/ }));
@@ -76,8 +88,62 @@ describe("Home enrollment boundary", () => {
     expect(document.activeElement).toBe(screen.getByLabelText("Dale contexto a Jev"));
     expect(document.getElementById("page-title")?.closest(".intro-copy")).toBeTruthy();
     expect(screen.getByTestId("character")).toBe(character);
-    expect(fetch).not.toHaveBeenCalled();
+    expect(fetch).toHaveBeenCalledOnce();
     expect(JSON.stringify(storage.mock.calls)).not.toMatch(/María|7123/);
+  });
+
+  it("keeps Jev compact until a press on the consent label ends, so the box still toggles", async () => {
+    render(view()); await screen.findByTestId("character"); open();
+    const focused = () => document.querySelector(".home-page")?.getAttribute("data-enrollment-focused");
+    const phone = screen.getByLabelText("Número de celular");
+    fireEvent.focus(phone);
+    expect(focused()).toBe("true");
+    const label = screen.getByText(CONSENT);
+    fireEvent.pointerDown(label);
+    fireEvent.blur(phone);
+    expect(focused()).toBe("true");
+    fireEvent.pointerUp(window);
+    fireEvent.click(label);
+    expect((screen.getByLabelText(CONSENT) as HTMLInputElement).checked).toBe(true);
+    await waitFor(() => expect(focused()).toBe("false"));
+  });
+
+  it("asks for consent before sending anything", async () => {
+    render(view()); await screen.findByTestId("character"); open();
+    fireEvent.change(screen.getByLabelText("Nombre completo"), { target: { value: "María Ejemplo" } });
+    fireEvent.change(screen.getByLabelText("Número de celular"), { target: { value: "71234567" } });
+    fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
+    expect(screen.getByRole("alert").textContent).toBe("Marca la casilla para enviar tus datos.");
+    expect(document.activeElement).toBe(screen.getByLabelText(CONSENT));
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("keeps the details and explains a failed send, then sends them again", async () => {
+    const send = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse({ error: "Enrollment unavailable" }, 502))
+      .mockResolvedValueOnce(jsonResponse({ saved: true }, 201));
+    vi.stubGlobal("fetch", send);
+    render(view()); await screen.findByTestId("character"); open(); fill();
+    fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
+    expect(screen.getByRole("button", { name: /Enviando/ }).getAttribute("aria-disabled")).toBe("true");
+    expect(await screen.findByText("No pudimos enviar tus datos. Revisa tu conexión e inténtalo de nuevo.")).toBeTruthy();
+    expect((screen.getByLabelText("Nombre completo") as HTMLInputElement).value).toBe("María Ejemplo");
+    expect((screen.getByLabelText(CONSENT) as HTMLInputElement).checked).toBe(true);
+    fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
+    expect(await screen.findByText("Datos enviados")).toBeTruthy();
+    expect(send).toHaveBeenCalledTimes(2);
+  });
+
+  it("aborts a send when the form closes and ignores its late answer", async () => {
+    const { pending, resolve } = pendingFetch();
+    render(view()); await screen.findByTestId("character"); open(); fill();
+    fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
+    const signal = pending.mock.calls[0][1]?.signal;
+    fireEvent.click(screen.getByRole("button", { name: "Cerrar inscripción" }));
+    expect(signal?.aborted).toBe(true);
+    await act(async () => resolve(jsonResponse({ saved: true }, 201)));
+    await waitFor(() => expect(document.querySelector(".home-page")?.getAttribute("data-enrollment")).toBe("closed"));
+    expect(screen.queryByText("Datos enviados")).toBeNull();
   });
 
   it("discards values on close and route leave but preserves an open form through preferences and tab suspension", async () => {
@@ -103,12 +169,12 @@ describe("Home enrollment boundary", () => {
     act(() => mocks.props.onError?.());
     expect(screen.getByText("Puedes continuar con tus datos.")).toBeTruthy();
     fill(); fireEvent.click(screen.getByRole("button", { name: /Confirmar datos/ }));
-    expect(screen.getByText("Datos completados")).toBeTruthy();
+    expect(await screen.findByText("Datos enviados")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Cerrar inscripción" }));
     await waitFor(() => expect(document.querySelector(".home-page")?.getAttribute("data-enrollment")).toBe("closed"));
     act(() => mocks.props.onReady?.());
-    expect(screen.queryByText("Datos completados")).toBeNull();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(screen.queryByText("Datos enviados")).toBeNull();
+    expect(fetch).toHaveBeenCalledOnce();
   });
 
   it("cancels a pending conversation decision before enrollment and rejects its late result", async () => {
