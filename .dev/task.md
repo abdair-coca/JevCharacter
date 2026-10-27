@@ -34,7 +34,9 @@ Pedido: «quiero que hagas un paso a paso para obtener la api de groq en ajustes
 | RLS con la clave publicable | PASS: insertar y leer responden 401 `permission denied for table enrollments`. |
 | Revisión visual (Playwright sobre `npm run dev`, 1440 y 360 px, `/api/enroll` simulado) | PASS: errores, «Enviando…», fallo, «Datos enviados» y guía en oscuro/claro; sin desborde horizontal; consola solo con los 502 simulados. |
 | `npx playwright test` | Pendiente: Claude Code detuvo la ejecución por falta de memoria del sistema antes de terminar. |
-| Revisión del usuario | Pendiente. |
+| Deploy a producción (2026-10-26, pedido «desplegalo») | `vercel deploy --prod` → `dpl_Ca6WVmZBUigrxpjVNQKtvy84jNX1`, alias `jev-bot-sigma.vercel.app`. El primer intento agotó la memoria de la CLI subiendo 224 MB: sin `.vercelignore` subía todo, `.env` incluido (la CLI solo excluye `.env.local` y `.env.*.local`). Nuevo `.vercelignore`: `.env*`, `supabase/.temp/`, `jev-lab/`, `.dev/`, `dist/` y salidas de pruebas. |
+| Humo en producción | PASS: `/` y `/about` 200; `GET /api/enroll` 405; sin consentimiento 400; guía y casilla en el bundle; ninguna referencia a la clave secreta. Sin inscripción válida de prueba (la hace el usuario). |
+| Revisión del usuario en producción | Pendiente. |
 
 ## Piano en la banda sonora de Historia — 2026-10-25
 

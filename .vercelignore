@@ -2,3 +2,11 @@
 .env
 .env.*
 supabase/.temp/
+
+# Not part of the build (src, public, api and config): lab, evidence and test output would only bloat the upload.
+jev-lab/
+.dev/
+dist/
+test-results/
+playwright-report/
+.playwright-mcp/
