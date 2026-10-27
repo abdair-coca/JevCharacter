@@ -1,0 +1,4 @@
+# Local secrets and CLI state never reach Vercel's uploaded source; production reads its variables from the project settings.
+.env
+.env.*
+supabase/.temp/
