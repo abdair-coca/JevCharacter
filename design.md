@@ -225,7 +225,7 @@ El recorrido principal mantiene frases cortas. Los detalles desplegables conserv
 
 - **Héroe:** título que sube palabra por palabra y retrato de partículas (canvas 2D, violeta/magenta/blanco) que se reúne desde una galaxia, responde al ratón o al toque con resortes y se disuelve al bajar. Sin partículas con movimiento reducido o si falla el canvas: se muestra la foto.
 - **Intereses:** la frase queda fija y sus palabras se encienden con el scroll (opacidad y un leve ascenso).
-- **Proyectos:** tarjetas de Bob, TitiEdu, machine-learning-App y Jev con texto, imagen y enlace del catálogo de Historia; con ratón se inclinan hacia el cursor (transform), con borde y luz como capas propias.
+- **Proyectos (pila de escenas, aprobada el 2026-10-28; pedido: «la presentación de proyectos […] no está espectacular»):** Bob, TitiEdu, machine-learning-App y Jev, con texto, imagen y enlace del catálogo de Historia y etiquetas técnicas que solo nombran lo que dice el relato. Cada proyecto es una escena casi a pantalla completa que queda fija; la siguiente sube y la cubre, y las anteriores se encogen, se oscurecen y asoman arriba como un mazo. La imagen de la escena que sube se asienta desde un leve zoom. Con ratón: borde y luz como capas propias y la imagen se acerca; sin inclinación 3D, porque la escala de la pila es dueña del `transform` de la escena. Un enlace enfocado nunca queda bajo otra escena: el scroll vuelve a la suya. Con movimiento reducido o en pantallas de 34rem de alto o menos, las escenas van una tras otra, sin pila.
 - **Contacto:** foto con anillo degradado y filas grandes por red. Un contacto sin URL no se dibuja; X sigue pendiente.
 - Solo `transform` y `opacity`; DPR ≤ 2, densidad adaptable, pausa fuera de vista y con la pestaña oculta.
 

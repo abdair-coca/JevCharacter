@@ -16,16 +16,19 @@ export const AUTHOR_CONTACTS: readonly Contact[] = [
 /** The author's photo: the particle portrait samples it and the contact shows it as is. */
 export const AUTHOR_PORTRAIT = "/story/Abdair.jpg";
 
-/** The projects the story walks through, by its scene ids; their copy and images stay in the story catalog. */
-export const AUTHOR_WORK: readonly { scene: Exclude<StorySceneId, "creator">; name: string }[] = [
-  { scene: "bob", name: "Bob" },
-  { scene: "titi", name: "TitiEdu" },
-  { scene: "learning", name: "machine-learning-App" },
-  { scene: "vision", name: "Jev" },
+/**
+ * The projects the story walks through, by its scene ids; their copy and images stay in the story catalog.
+ * Tags name only what docs/jev-story.md already says each project uses or does.
+ */
+export const AUTHOR_WORK: readonly { scene: Exclude<StorySceneId, "creator">; name: string; tags: Record<Language, readonly string[]> }[] = [
+  { scene: "bob", name: "Bob", tags: { es: ["IA", "Seguimiento de caras", "Memoria persistente"], en: ["AI", "Face tracking", "Persistent memory"] } },
+  { scene: "titi", name: "TitiEdu", tags: { es: ["POO", "IA", "RAG", "HTML/CSS/JS"], en: ["OOP", "AI", "RAG", "HTML/CSS/JS"] } },
+  { scene: "learning", name: "machine-learning-App", tags: { es: ["Machine learning", "Pyodide", "Algoritmos"], en: ["Machine learning", "Pyodide", "Algorithms"] } },
+  { scene: "vision", name: "Jev", tags: { es: ["Rive", "React", "IA"], en: ["Rive", "React", "AI"] } },
 ];
 
 type AuthorCopyKey = "eyebrow" | "lead" | "scroll" | "portrait" | "interests" | "work" | "workTitle" | "workLead"
-  | "project" | "meetJev" | "contact" | "contactTitle" | "question" | "questionSource" | "story" | "back";
+  | "project" | "meetJev" | "tags" | "contact" | "contactTitle" | "question" | "questionSource" | "story" | "back";
 type AuthorCopy = Record<AuthorCopyKey, string> & {
   /** The title's words, so each one can rise on its own. */
   title: readonly string[];
@@ -42,7 +45,7 @@ export const authorCopy = {
     statement: "Me interesan la [inteligencia artificial], el [desarrollo de software] y las [interfaces interactivas].",
     work: "PROYECTOS", workTitle: "Aprendo construyendo.",
     workLead: "Un robot de cartón, plataformas para enseñar y personajes como Jev.",
-    project: "Ver proyecto", meetJev: "Interactuar con Jev",
+    project: "Ver proyecto", meetJev: "Interactuar con Jev", tags: "Tecnologías",
     contact: "CONTACTO", contactTitle: "Me encuentras en",
     question: "¿Qué pasaría si una IA no viviera dentro de una caja de chat?", questionSource: "La pregunta con la que nació Jev.",
     story: "Conoce la historia de Jev", back: "Interactuar con Jev",
@@ -55,7 +58,7 @@ export const authorCopy = {
     statement: "I'm interested in [artificial intelligence], [software development] and [interactive interfaces].",
     work: "PROJECTS", workTitle: "I learn by building.",
     workLead: "A cardboard robot, teaching platforms and characters like Jev.",
-    project: "View project", meetJev: "Interact with Jev",
+    project: "View project", meetJev: "Interact with Jev", tags: "Technologies",
     contact: "CONTACT", contactTitle: "You can find me on",
     question: "What if an AI didn't live inside a chat box?", questionSource: "The question Jev was born from.",
     story: "Read Jev's story", back: "Interact with Jev",

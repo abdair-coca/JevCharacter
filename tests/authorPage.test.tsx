@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { LazyMotion, domAnimation } from "motion/react";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import AuthorPage from "../src/pages/AuthorPage";
 import { statementWords } from "../src/features/author/catalog";
@@ -63,6 +63,15 @@ describe("Abdair's own section", () => {
     expect(screen.getByRole("heading", { name: "machine-learning-App" })).toBeTruthy();
     fireEvent.click(links[3]);
     expect(window.location.pathname).toBe("/");
+  });
+
+  it("tags each project with the technologies the story names, in the chosen language", () => {
+    render(view());
+    const tags = (name: string, label: string) => [...within(screen.getByRole("heading", { name }).closest("article")!).getByRole("list", { name: label }).querySelectorAll("li")].map(tag => tag.textContent);
+    expect(tags("TitiEdu", "Tecnologías")).toEqual(["POO", "IA", "RAG", "HTML/CSS/JS"]);
+    expect(tags("Jev", "Tecnologías")).toEqual(["Rive", "React", "IA"]);
+    act(() => preferencesStore.getState().setLanguage("en"));
+    expect(tags("Bob", "Technologies")).toEqual(["AI", "Face tracking", "Persistent memory"]);
   });
 
   it("shows the photo and only the networks that already have an address", () => {

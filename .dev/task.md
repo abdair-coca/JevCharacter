@@ -9,6 +9,28 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Proyectos de Abdair como pila de escenas — 2026-10-28
+
+Pedido: «la presentacion de proyectos en la seccion abdair no esta espectacular, no me gusta mucho». Quiz: «Pila de escenas» (frente a galería horizontal y lista editorial) y, como contenido extra, solo «Etiquetas técnicas». Plan concreto aprobado en un segundo quiz («Aprobado»: sin deploy).
+
+- [x] `catalog.ts`: `tags` ES/EN por proyecto, solo con lo que nombra el relato (Bob: IA, seguimiento de caras, memoria persistente; TitiEdu: POO, IA, RAG, HTML/CSS/JS; machine-learning-App: machine learning, Pyodide, algoritmos; Jev: Rive, React, IA) y la etiqueta accesible «Tecnologías».
+- [x] `AuthorWork`: escenas sticky; `useScroll` escribe `--stack` y CSS deriva `--depth` (escala 5 % y sombra por escena encima) y `--arrive` (zoom 1,15 → 1 de la imagen al subir). Sin inclinación 3D; se conservan borde, luz que sigue al ratón y zoom al pasar. Un enlace enfocado bajo otra escena hace volver el scroll a la suya.
+- [x] `author.css`: dos columnas en escritorio, imagen arriba en ≤ 64rem; Bob encuadrado desde arriba; el banner de ML muestra su ventana del gráfico a todo el ancho con fundido arriba y abajo. Movimiento reducido o `max-height: 34rem`: escenas estáticas (móvil horizontal, en dos columnas).
+- [x] Tests: `authorPage` (etiquetas ES/EN); E2E `author.spec.ts`: la pila encoge la primera escena y deja el enlace de Jev arriba; Shift+Tab hasta el de ML lo trae al frente; movimiento reducido sin pila.
+- [x] Docs: `design.md`, `docs/interaction.md`, `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 399 tests en 49 archivos. |
+| `npm run build` | PASS: `AuthorPage` 23,95 kB JS + 18,12 kB CSS; `index` sin cambios (356,57 kB). |
+| `npx playwright test tests/e2e/author.spec.ts` | 5/5 PASS. Antes, en la primera corrida, «header … 320px» falló una vez al esperar el enlace Abdair y pasó en las dos siguientes sin cambios (intermitente, no relacionado). |
+| Revisión visual (Playwright sobre dev: 1440×900, 390×844, 320×568, 844×390) | Sin desborde horizontal ni errores de consola. Capturas: `evidence/author/desktop-stack-bob.png`, `desktop-stack-rising.png`, `desktop-stack-full.png`, `mobile-stack.png`, `landscape-static.png`. `desktop-projects.png` queda como antecedente de las tarjetas. |
+| `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+
+**Límites:** sin teléfono real ni Safari; sin deploy ni push.
+
 ## Música de Historia más ligera en móvil — 2026-10-27
 
 Pedido: «optimices la musica de about porque en movil suena mal […] quiero que decidas todo tu». Sin quiz: el usuario delegó las decisiones.

@@ -32,6 +32,36 @@ for (const device of ["desktop", "mobile"] as const) {
   });
 }
 
+test("each project rises over the last, which shrinks and dims, and a focused link is never left under another", async ({ page }) => {
+  await page.goto("/abdair");
+  await expect(page.locator(".author-stack")).toBeAttached();
+  // Where scene `index` lands on top: its track has climbed to the sticky offset.
+  const landing = (index: number) => page.evaluate(step => {
+    const list = document.querySelector<HTMLElement>(".author-stack")!;
+    const scene = list.children[0] as HTMLElement;
+    return list.getBoundingClientRect().top + scrollY + step * scene.offsetHeight - Number.parseFloat(getComputedStyle(scene).top);
+  }, index);
+  const scale = (index: number) => page.locator(".author-scene__card").nth(index).evaluate(card => new DOMMatrix(getComputedStyle(card).transform).a);
+  // The topmost element at a link's center is the link itself (its overlay spans the scene).
+  const link = (name: string) => page.locator(".author-stack").getByRole("link", { name });
+  const onTop = (name: string) => link(name).evaluate(link => {
+    const box = link.getBoundingClientRect();
+    return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === link;
+  });
+
+  await page.evaluate(top => window.scrollTo({ top, behavior: "instant" }), await landing(3));
+  await expect.poll(() => scale(0)).toBeLessThan(0.9);
+  expect(await scale(3)).toBe(1);
+  await expect.poll(() => onTop("Interactuar con Jev")).toBe(true);
+  expect(await onTop("Ver proyecto: machine-learning-App")).toBe(false);
+
+  await link("Interactuar con Jev").focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(link("Ver proyecto: machine-learning-App")).toBeFocused();
+  await expect.poll(() => onTop("Ver proyecto: machine-learning-App")).toBe(true);
+  expect(Math.abs(await page.evaluate(() => scrollY) - await landing(2))).toBeLessThanOrEqual(1);
+});
+
 test("the header still fits in one row at 320px with the four views", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/abdair");
@@ -48,5 +78,8 @@ test.describe("with reduced motion", () => {
     await expect(page.locator(".author-portrait__photo")).toBeVisible();
     await expect(page.locator(".author-particles")).toHaveCount(0);
     await expect(page.locator(".author-word").first()).toHaveCSS("opacity", "1");
+    // The projects follow one another, without the stack.
+    await expect(page.locator(".author-scene").first()).toHaveCSS("position", "static");
+    await expect(page.locator(".author-scene__card").first()).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
   });
 });

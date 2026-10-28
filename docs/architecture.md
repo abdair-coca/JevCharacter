@@ -86,7 +86,8 @@ El cierre de Historia enlaza con la sección de Abdair («Conocer a Abdair»); l
 
 - `PortraitParticles`: canvas 2D que muestrea la foto una vez (viñeta redonda, fondo oscuro descartado bajo `--portrait-min-light`, luz estirada al percentil 97). Las partículas giran como galaxia, se reúnen en el retrato con `vortexPoint`, se apartan del ratón o de un dedo sobre el retrato con resortes y se disuelven hacia fuera cuando el héroe pasa bajo la cabecera. Usa el ticker de GSAP solo mientras la página y el héroe están visibles, reduce partículas si el dibujo supera su presupuesto y comparte `loadImage`/`glowSprite` (`story/particleAssets.ts`) con el vórtice de Historia.
 - `AuthorStatement`: `useScroll` de Motion escribe `--statement` y CSS enciende cada palabra de la frase de intereses mientras queda fija.
-- `AuthorWork` y `AuthorContact`: entradas con `whileInView`; las tarjetas se inclinan hacia el ratón con variables CSS.
+- `AuthorWork`: escenas sticky en una sola lista; `useScroll` de Motion escribe `--stack` (0–1) y CSS deriva por escena `--depth` (escenas encima: escala y sombra) y `--arrive` (zoom de la imagen al subir). Al enfocar un enlace tapado, vuelve con `window.scrollTo` a donde su escena queda arriba. Con movimiento reducido o `max-height: 34rem`, las escenas son estáticas y esas variables quedan fijas.
+- `AuthorContact`: entradas con `whileInView`.
 
 La página toma el Lenis compartido (`acquirePresentationScroll`) mientras está visible; `scrollRuntime` registra ScrollTrigger al crearlo, porque Lenis lo actualiza aunque la página no tenga triggers propios. Con movimiento reducido, sin `IntersectionObserver` o si el canvas falla, muestra la foto en lugar de partículas, la frase ya encendida y scroll nativo.
 
