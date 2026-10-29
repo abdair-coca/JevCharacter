@@ -28,8 +28,10 @@ Pedido: «la presentacion de proyectos en la seccion abdair no esta espectacular
 | `npx playwright test tests/e2e/author.spec.ts` | 5/5 PASS. Antes, en la primera corrida, «header … 320px» falló una vez al esperar el enlace Abdair y pasó en las dos siguientes sin cambios (intermitente, no relacionado). |
 | Revisión visual (Playwright sobre dev: 1440×900, 390×844, 320×568, 844×390) | Sin desborde horizontal ni errores de consola. Capturas: `evidence/author/desktop-stack-bob.png`, `desktop-stack-rising.png`, `desktop-stack-full.png`, `mobile-stack.png`, `landscape-static.png`. `desktop-projects.png` queda como antecedente de las tarjetas. |
 | `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+| Deploy a producción (2026-10-28, pedido «ejecutalo») | Commit `aa305b9`. `vercel deploy --prod` → `dpl_Bx4bFEU5NQGDxpesGHH2iwpSQj3m`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 y 390 px) | PASS: `/abdair` con escenas sticky, pila completa con Jev arriba, sin desborde ni errores de consola. |
 
-**Límites:** sin teléfono real ni Safari; sin deploy ni push.
+**Límites:** sin teléfono real ni Safari; sin push.
 
 ## Música de Historia más ligera en móvil — 2026-10-27
 
