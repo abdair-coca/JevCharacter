@@ -25,9 +25,10 @@ Pedido: «quiero que la gota sea transparente en todo momento y hay un error al 
 | `npm run build` | PASS: `AboutPage` 29,91 kB JS; `index` sin cambios (356,57 kB). |
 | `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
 | Revisión visual y medición de rueda (Playwright sobre `vite preview` temporal, SwiftShader, 1440×900 y 390×844) | Sin errores de consola. Capturas `evidence/orb/bubble-*.png`. |
-| Deploy | Pendiente: no pedido en este encargo. |
+| Deploy a producción (2026-10-30, pedido «sí, despliégalo») | Commit `d20ba65`. `vercel deploy --prod` → `dpl_GuJFeozEA9op5r2QhQ9z78ZQCbyu`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 y 390 px) | PASS: pompa preparada en las cinco escenas, anillo al revelar, sin errores de consola. Rueda en el cierre: 24 frames, máx. 26 px/frame (sin salto). |
 
-**Límites:** sin rueda física, GPU real ni Safari; la medición usa eventos de rueda simulados.
+**Límites:** sin rueda física, GPU real ni Safari; la medición usa eventos de rueda simulados; sin push.
 
 ## Orbe de cristal en Historia — 2026-10-30
 
