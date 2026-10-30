@@ -29,8 +29,10 @@ Pedido sobre la gota recién desplegada: «no me gusta el efecto del liquido. ti
 | `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
 | Revisión visual (Playwright sobre `vite preview` temporal con SwiftShader: 1440×900, 390×844 y movimiento reducido) | Sin errores de consola ni de shader y sin desborde horizontal. Capturas en `evidence/orb/`. El servidor de desarrollo se había cerrado por falta de memoria: el usuario liberó RAM y cada captura usó un preview que se cerró al terminar. |
 | `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+| Deploy a producción (2026-10-30, «Aprobado con deploy») | Commit `6f0b691`. `vercel deploy --prod` → `dpl_2UANLpNmZKEhqN6Tzq7vezpXLQLu`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 y 390 px) | PASS: `/about` con el orbe preparado en las cinco escenas, seguimiento del cursor, anillo al revelar, sin aviso de error ni errores de consola. |
 
-**Límites:** GPU por software (SwiftShader); sin GPU real, teléfono real ni Safari.
+**Límites:** GPU por software (SwiftShader); sin GPU real, teléfono real ni Safari; sin push.
 
 ## Gota líquida en Historia — 2026-10-30
 
