@@ -24,6 +24,10 @@ Pedido: «No me gustó, vuelve a las partículas, revierte los cambios». Quiz: 
 | `npm run build` | PASS: `AboutPage` 26,11 kB JS; `index` sin cambios (356,57 kB). |
 | `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
 | Revisión en `vite preview` temporal (1440×900) | Partículas preparadas (11.000) en las cinco escenas, sin errores de consola. Rueda en el cierre: 25 frames, máx. 22 px/frame (sin salto). |
+| Deploy a producción (2026-10-30, «Sí, despliega») | Commit `0c919b3`. `vercel deploy --prod` → `dpl_71D6eNJDWY5xQTZZKTAhRvf3RCP3`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 px) | PASS: partículas en las cinco escenas, revelación completa, sin errores de consola; rueda en el cierre: 25 frames, máx. 22 px/frame. En esta corrida el dibujo tardó 63–92 ms (frente a 5–8 ms en local minutos antes, mismo código) y la densidad adaptable bajó al mínimo de 3.500: atribuido a la carga de la máquina (poca RAM libre), sin verificar en otro equipo. |
+
+**Límites:** sin GPU real, teléfono real ni Safari; sin push.
 
 ## Gota de agua real sincronizada con la música — 2026-10-30
 
