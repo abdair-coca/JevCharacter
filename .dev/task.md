@@ -9,6 +9,26 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Orbe transparente y scroll sin saltos al cierre — 2026-10-30
+
+Pedido: «quiero que la gota sea transparente en todo momento y hay un error al pasar a tiny creature big decisions, medio que se vuelve loco». Quiz: el fallo es «El scroll salta», en «Escritorio»; transparencia «Pompa de jabón».
+
+- [x] **Diagnóstico del salto:** `useStoryScroll` ataba el lease de Lenis a `active` (escenario en vista). Al salir el escenario camino del cierre, Lenis se paraba a mitad del desplazamiento y la rueda pasaba a scroll nativo; Features y Abdair ya usaban `visible`. Medido en Chromium con una muesca de 200 px: con el escenario en vista, 14 frames (máx. 48 px/frame); en el cierre, **1 frame de 200 px**. Tras el arreglo, en el cierre: 26 frames (máx. 24 px/frame).
+- [x] **Arreglo:** el lease sigue `visible` (documento). El orbe, el trigger de progreso y el asentamiento se siguen pausando fuera de vista. Test nuevo en `storyScroll.test.tsx`, que falló antes del arreglo (`expected last call … [ true ]`) y pasa después.
+- [x] **Pompa de jabón:** sin relleno oscuro ni cintas dentro. Dentro solo se ve lo que la lente refracta, más una película iridiscente que crece hacia el borde, brillo y halo tenue. También se corrige la composición: antes el interior mezclaba la imagen refractada con la sin refractar (imagen doble). Retirados `--orb-base`, `--orb-lens-glow` y el uniform `u_glow`.
+- [x] Docs: `design.md`, `docs/interaction.md`, `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 404 tests en 50 archivos. |
+| `npm run build` | PASS: `AboutPage` 29,91 kB JS; `index` sin cambios (356,57 kB). |
+| `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
+| Revisión visual y medición de rueda (Playwright sobre `vite preview` temporal, SwiftShader, 1440×900 y 390×844) | Sin errores de consola. Capturas `evidence/orb/bubble-*.png`. |
+| Deploy | Pendiente: no pedido en este encargo. |
+
+**Límites:** sin rueda física, GPU real ni Safari; la medición usa eventos de rueda simulados.
+
 ## Orbe de cristal en Historia — 2026-10-30
 
 Pedido sobre la gota recién desplegada: «no me gusta el efecto del liquido. tiene que ser como el efecto liquido de apple. premium». Quiz 1: referencia «Orbe de Siri», imágenes en «Colores originales», imagen «Detrás del cristal». Quiz 2: cintas «Espectro Siri» y plan «Aprobado con deploy» (sin push).

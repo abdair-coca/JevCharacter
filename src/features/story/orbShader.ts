@@ -7,9 +7,9 @@ void main() {
 
 /**
  * Size units (centered, y down). Behind: the scene image in its own colors, faded into
- * the stage. Above: a glass orb that lenses it with a little dispersion at the rim and
- * carries ribbons of Siri-like light, a soft gloss and an iridescent edge. While the
- * orb opens around Jev its center empties into a ring. Output is premultiplied alpha.
+ * the stage. Above: a clear soap-bubble orb that only lenses what is behind it, with a
+ * little dispersion and a Siri-colored iridescent film at the rim plus a soft gloss.
+ * While the orb opens around Jev its center empties into a ring. Premultiplied alpha.
  */
 export const ORB_FRAGMENT = `#version 300 es
 precision highp float;
@@ -22,13 +22,11 @@ uniform float u_time;
 uniform float u_surge;
 uniform float u_mix;
 uniform vec2 u_has;
-uniform float u_glow;
 uniform float u_imageScale;
 uniform float u_lens;
 uniform float u_dispersion;
 uniform sampler2D u_imageA;
 uniform sampler2D u_imageB;
-uniform vec3 u_base;
 uniform vec3 u_pink;
 uniform vec3 u_blue;
 uniform vec3 u_cyan;
@@ -51,16 +49,6 @@ vec4 stage(vec2 p) {
 float glowAt(vec2 w, vec2 center, float tightness) {
   vec2 d = w - center;
   return exp(-tightness * dot(d, d));
-}
-
-vec3 ribbons(vec2 q) {
-  // Domain-warped flow: four colored lights drift and fold through each other.
-  vec2 w = q + 0.18 * vec2(sin(q.y * 3.1 + u_time * 0.9), sin(q.x * 2.7 - u_time * 0.7));
-  float t = u_time * 0.55;
-  return u_pink * glowAt(w, 0.42 * vec2(sin(t * 1.1), cos(t * 0.9)), 4.0)
-    + u_blue * glowAt(w, 0.45 * vec2(cos(t * 0.8 + 2.0), sin(t * 1.3 + 1.0)), 4.0)
-    + u_cyan * glowAt(w, 0.4 * vec2(sin(t * 1.4 + 4.0), cos(t * 0.7 + 3.0)), 5.0)
-    + u_violet * glowAt(w, 0.3 * vec2(cos(t * 0.6 + 5.0), sin(t * 0.9 + 2.0)), 3.0);
 }
 
 /** sin(n·θ + phase) for the angle θ of a unit direction, for n = 1, 3 or 5. */
@@ -89,26 +77,23 @@ void main() {
   float aa = fwidth(rho) * 1.2;
   float body = 1.0 - smoothstep(1.0 - aa, 1.0 + aa, rho);
   float turn = u_time * 0.314;
-  vec3 iris = mix(mix(u_pink, u_blue, 0.5 + 0.5 * wave(dir, 1.0, turn)), u_cyan, 0.5 + 0.5 * wave(dir, 1.0, turn + 2.1));
-  float halo = exp(-max(rho - 1.0, 0.0) * 7.0) * (1.0 - body) * step(1.0, rho) * 0.28 * u_orb.w;
+  vec3 iris = mix(mix(u_pink, u_blue, 0.5 + 0.5 * wave(dir, 1.0, turn)), mix(u_cyan, u_violet, 0.5 + 0.5 * wave(dir, 1.0, -turn)), 0.5 + 0.5 * wave(dir, 1.0, turn + 2.1));
+  float halo = exp(-max(rho - 1.0, 0.0) * 7.0) * (1.0 - body) * step(1.0, rho) * 0.16 * u_orb.w;
   if (body <= 0.0) { color = back + vec4(iris * halo, halo); return; }
   float z = sqrt(max(1.0 - rho * rho, 0.0));
   // A sphere lens: the center magnifies, the rim compresses and splits the colors.
   float k = 1.0 - u_lens * z;
   float spread = u_dispersion * (1.0 - z);
   vec4 seen = vec4(stage(u_orb.xy + d * k * (1.0 + spread)).r, stage(u_orb.xy + d * k).g, stage(u_orb.xy + d * k * (1.0 - spread)).b, stage(u_orb.xy + d * k).a);
-  vec4 under = seen + vec4(u_base, 1.0) * 0.82 * u_glow * (1.0 - seen.a);
-  // Over a picture the glass stays mostly clear; a soft curve keeps overlapping lights from clipping.
-  vec3 light = ribbons(q) * (0.1 + 0.9 * u_glow * u_glow) * (0.55 + 0.45 * z);
-  light = light / (1.0 + light * 0.7);
-  float rim = pow(1.0 - z, 3.0);
+  // Clear film: color only where the bubble is seen edge-on, drifting like a soap film.
+  float swirl = 0.5 + 0.5 * sin(q.x * 2.3 + q.y * 1.7 + u_time * 0.4 + sin(q.y * 4.0 + u_time) * 0.6);
+  vec3 film = iris * pow(1.0 - z, 3.0) * 0.9 + mix(u_cyan, u_pink, swirl) * pow(1.0 - z, 1.8) * 0.14;
   // A soft gloss up and to the left plus a crisp specular point.
-  float sheen = glowAt(q * vec2(1.0, 1.35), vec2(-0.32, -0.57), 9.0) * 0.38
+  float sheen = glowAt(q * vec2(1.0, 1.35), vec2(-0.32, -0.57), 9.0) * 0.22
     + pow(max(dot(vec3(q, z), normalize(vec3(-0.45, -0.6, 0.66))), 0.0), 60.0) * 0.6;
-  vec3 lit = under.rgb + light + iris * rim * 0.9 + vec3(sheen);
-  float alpha = max(under.a, clamp(max(max(light.r, light.g), light.b) + rim + sheen, 0.0, 1.0));
-  // Opening around Jev: the center empties and a band of light remains.
+  vec3 light = (film + vec3(sheen)) * u_orb.w;
+  vec4 glass = vec4(seen.rgb + light, min(1.0, seen.a + max(max(light.r, light.g), light.b)));
+  // Inside, only what the lens sees; opening around Jev empties the center into a band.
   float hollow = smoothstep(u_ring * 0.9 - aa, u_ring * 0.9 + aa, rho) * u_ring + (1.0 - u_ring);
-  vec4 orb = vec4(lit, alpha) * body * hollow * u_orb.w;
-  color = orb + back * (1.0 - orb.a) + vec4(iris * halo, halo);
+  color = mix(back, glass, body * hollow) + vec4(iris * halo, halo);
 }`;

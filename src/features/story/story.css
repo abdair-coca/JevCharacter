@@ -8,11 +8,11 @@
   --story-flight-size: min(54vw, 44rem); --story-flight-top: 50%; --story-scene-height: 115dvh;
   --story-copy-size: 31rem; --story-title: clamp(2.75rem, 5vw, 5.25rem); --story-author-title: clamp(3.5rem, 8vw, 7rem);
   --story-ready-timeout: var(--presentation-ready-timeout); --story-reveal: 0;
-  /* Glass orb shader: lengths in units of the flight square; spring/damping per 60 fps frame. */
+  /* Soap-bubble orb shader: lengths in units of the flight square; spring/damping per 60 fps frame. */
   --orb-texture: 512; --orb-dpr: 1.5; --orb-speed: 1; --orb-image-scale: 0.86;
-  --orb-lens: 0.45; --orb-dispersion: 0.06; --orb-lens-glow: 0.35;
+  --orb-lens: 0.45; --orb-dispersion: 0.06;
   --orb-spring: 0.06; --orb-damping: 0.82; --orb-stretch: 5;
-  --orb-base: #0B0820; --orb-pink: #FF4FB0; --orb-blue: #3478F6; --orb-cyan: #5AC8FA; --orb-violet: #A35BFF;
+  --orb-pink: #FF4FB0; --orb-blue: #3478F6; --orb-cyan: #5AC8FA; --orb-violet: #A35BFF;
   /* Canvas bleed per side, as a fraction of the flight: the covering orb and its halo are not cut. */
   --orb-bleed: 0.3;
   --story-atmosphere: radial-gradient(ellipse at 75% 35%, rgb(124 58 237 / 0.08), transparent 60%);

@@ -6,8 +6,8 @@ import { LiquidOrb } from "../src/features/story/LiquidOrb";
 const ticker = vi.hoisted(() => ({ add: vi.fn(), remove: vi.fn() }));
 vi.mock("gsap", () => ({ gsap: { ticker } }));
 const tokens: Record<string, string> = {
-  texture: "40", dpr: "1.5", speed: "1", "image-scale": "0.86", lens: "0.45", dispersion: "0.06", "lens-glow": "0.35",
-  spring: "0.06", damping: "0.82", stretch: "5", base: "#0B0820", pink: "#FF4FB0", blue: "#3478F6", cyan: "#5AC8FA", violet: "#A35BFF",
+  texture: "40", dpr: "1.5", speed: "1", "image-scale": "0.86", lens: "0.45", dispersion: "0.06",
+  spring: "0.06", damping: "0.82", stretch: "5", pink: "#FF4FB0", blue: "#3478F6", cyan: "#5AC8FA", violet: "#A35BFF",
 };
 let images: FakeImage[];
 class FakeImage {

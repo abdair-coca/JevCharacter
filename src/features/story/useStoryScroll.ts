@@ -56,8 +56,8 @@ export function useStoryScroll(root: RefObject<HTMLElement | null>, stage: RefOb
     const media = gsap.matchMedia();
     if (!reduced) media.add("(prefers-reduced-motion: no-preference) and (height > 35rem)", () => {
       const css = getComputedStyle(element);
+      // The lease starts active with the document; only a hidden tab suspends it.
       const lease = acquirePresentationScroll(Number.parseFloat(css.getPropertyValue("--story-scroll-lerp")));
-      lease.setActive(activity.current);
       scroll.current = lease;
       const flight = element.querySelector<HTMLElement>(".story-flight")!;
       const distance = () => scene.clientWidth * Number.parseFloat(getComputedStyle(element).getPropertyValue("--story-travel"));
@@ -111,7 +111,9 @@ export function useStoryScroll(root: RefObject<HTMLElement | null>, stage: RefOb
     // Section selection keeps working in linear/offscreen reading. Only the
     // document suspends the shared engine; each scene pauses its own visuals.
     setPresentationVisibility(visible);
-    scroll.current?.setActive(active);
+    // Smooth scrolling follows the document, not the stage: switching it off as the
+    // stage leaves turned the next wheel notch into a jump on the way to the outro.
+    scroll.current?.setActive(visible);
     setAnimationsActive(active);
   }, [active, visible, reduced, setAnimationsActive]);
 

@@ -8,12 +8,12 @@ import { ORB_FRAGMENT, ORB_VERTEX } from "./orbShader";
 type Props = { progress: StoryProgress; active: boolean; reduced: boolean; onError: () => void };
 type Config = {
   texture: number; dpr: number; speed: number; imageScale: number; lens: number; dispersion: number;
-  spring: number; damping: number; stretch: number; lensGlow: number; colors: number[][];
+  spring: number; damping: number; stretch: number; colors: number[][];
 };
 // Scene images in story order; the first and last scenes are the orb alone.
 const IMAGES = ["/story/bob.jpeg", "/story/curiousTiti.webp", "/story/housingML.svg"];
-const COLORS = ["base", "pink", "blue", "cyan", "violet"] as const;
-const UNIFORMS = ["resolution", "extent", "orb", "stretch", "ring", "time", "surge", "mix", "has", "glow", "imageScale", "lens", "dispersion", "imageA", "imageB", ...COLORS] as const;
+const COLORS = ["pink", "blue", "cyan", "violet"] as const;
+const UNIFORMS = ["resolution", "extent", "orb", "stretch", "ring", "time", "surge", "mix", "has", "imageScale", "lens", "dispersion", "imageA", "imageB", ...COLORS] as const;
 
 function rgb(value: string) {
   const hex = value.trim().replace("#", "");
@@ -25,7 +25,7 @@ function readConfig(host: HTMLElement): Config {
   const n = (name: string) => Number.parseFloat(css.getPropertyValue(`--orb-${name}`));
   return {
     texture: n("texture"), dpr: n("dpr"), speed: n("speed"), imageScale: n("image-scale"), lens: n("lens"), dispersion: n("dispersion"),
-    spring: n("spring"), damping: n("damping"), stretch: n("stretch"), lensGlow: n("lens-glow"),
+    spring: n("spring"), damping: n("damping"), stretch: n("stretch"),
     colors: COLORS.map(name => rgb(css.getPropertyValue(`--orb-${name}`))),
   };
 }
@@ -124,7 +124,6 @@ export function LiquidOrb({ progress, active, reduced, onError }: Props) {
       // The first scene has no image; the last one is the orb alone before it opens.
       const has = (scene: number) => (scene >= 1 && scene <= 3 && textures[scene - 1] ? 1 : 0);
       const cover = Math.sin(phase.morph * Math.PI);
-      const imageness = has(phase.scene) * (1 - phase.morph) + has(phase.next) * phase.morph;
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, textures[phase.scene - 1] ?? null);
       gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, textures[phase.next - 1] ?? null);
       gl.uniform4f(uniforms.orb, state.x + offsetX, state.y + offsetY, state.radius, 1 - phase.reveal * 0.15);
@@ -134,7 +133,6 @@ export function LiquidOrb({ progress, active, reduced, onError }: Props) {
       // The image swaps while the orb covers the stage.
       gl.uniform1f(uniforms.mix, clamp((phase.morph - 0.42) / 0.16));
       gl.uniform2f(uniforms.has, has(phase.scene), has(phase.next));
-      gl.uniform1f(uniforms.glow, Math.max(1 - imageness * (1 - config.lensGlow), cover));
       gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLES, 0, 3);
       element.dataset.phase = String(phase.scene); element.dataset.reveal = phase.reveal.toFixed(3);
       element.dataset.deformation = (moving ? Math.hypot(offsetX, offsetY) + Math.hypot(velocityX, velocityY) : 0).toFixed(4);

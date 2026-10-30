@@ -69,10 +69,16 @@ describe("story scroll resource ownership", () => {
     expect(mocks.triggers.find(trigger => trigger.kind === "journey")!.disable).toHaveBeenCalledWith(false);
     expect(mocks.settle.pause).toHaveBeenCalled();
   });
+  it("keeps smooth scrolling while the document is visible, so reaching the outro does not jump", () => {
+    const result = renderHook(props => useStoryScroll(root, stage, props), { initialProps: options });
+    result.rerender({ ...options, active: false });
+    expect(mocks.lease.setActive).toHaveBeenLastCalledWith(true);
+    result.rerender({ ...options, active: false, visible: false });
+    expect(mocks.lease.setActive).toHaveBeenLastCalledWith(false);
+  });
   it("suspends visual triggers offscreen while keeping narrative selection available", () => {
     const result = renderHook(props => useStoryScroll(root, stage, props), { initialProps: options });
     result.rerender({ ...options, active: false });
-    expect(mocks.lease.setActive).toHaveBeenLastCalledWith(false);
     for (const trigger of mocks.triggers.filter(value => value.kind === "journey")) expect(trigger.disable).toHaveBeenCalledWith(false);
     for (const trigger of mocks.triggers.filter(value => value.kind === "selection")) expect(trigger.disable).not.toHaveBeenCalled();
     expect(mocks.visibility).toHaveBeenLastCalledWith(true);
