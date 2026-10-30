@@ -1,18 +1,19 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { clamp, particlePhase, scatter, type StoryProgress } from "./particleGeometry";
+import { clamp, particlePhase, type StoryProgress } from "./particleGeometry";
 import { loadImage } from "./particleAssets";
-import { LIQUID_BALLS, liquidBalls } from "./liquidGeometry";
-import { LIQUID_FRAGMENT, LIQUID_VERTEX } from "./liquidShader";
+import { orbState } from "./orbGeometry";
+import { ORB_FRAGMENT, ORB_VERTEX } from "./orbShader";
 
 type Props = { progress: StoryProgress; active: boolean; reduced: boolean; onError: () => void };
 type Config = {
-  texture: number; dpr: number; speed: number; turns: number; parallax: number; imageScale: number; refraction: number;
-  dentRadius: number; ripple: number; spring: number; damping: number; contrast: number; colors: number[][];
+  texture: number; dpr: number; speed: number; imageScale: number; lens: number; dispersion: number;
+  spring: number; damping: number; stretch: number; lensGlow: number; colors: number[][];
 };
-// Scene images in story order; the first and last scenes are pure liquid.
+// Scene images in story order; the first and last scenes are the orb alone.
 const IMAGES = ["/story/bob.jpeg", "/story/curiousTiti.webp", "/story/housingML.svg"];
-const UNIFORMS = ["resolution", "extent", "balls", "dent", "center", "time", "surge", "mix", "has", "opacity", "imageScale", "refraction", "ripple", "contrast", "imageA", "imageB", "deep", "violet", "pink", "white"] as const;
+const COLORS = ["base", "pink", "blue", "cyan", "violet"] as const;
+const UNIFORMS = ["resolution", "extent", "orb", "stretch", "ring", "time", "surge", "mix", "has", "glow", "imageScale", "lens", "dispersion", "imageA", "imageB", ...COLORS] as const;
 
 function rgb(value: string) {
   const hex = value.trim().replace("#", "");
@@ -21,15 +22,15 @@ function rgb(value: string) {
 
 function readConfig(host: HTMLElement): Config {
   const css = getComputedStyle(host);
-  const n = (name: string) => Number.parseFloat(css.getPropertyValue(`--liquid-${name}`));
+  const n = (name: string) => Number.parseFloat(css.getPropertyValue(`--orb-${name}`));
   return {
-    texture: n("texture"), dpr: n("dpr"), speed: n("speed"), turns: n("turns"), parallax: n("parallax"), imageScale: n("image-scale"),
-    refraction: n("refraction"), dentRadius: n("dent-radius"), ripple: n("ripple"), spring: n("spring"), damping: n("damping"), contrast: n("contrast"),
-    colors: ["deep", "violet", "pink", "white"].map(name => rgb(css.getPropertyValue(`--liquid-${name}`))),
+    texture: n("texture"), dpr: n("dpr"), speed: n("speed"), imageScale: n("image-scale"), lens: n("lens"), dispersion: n("dispersion"),
+    spring: n("spring"), damping: n("damping"), stretch: n("stretch"), lensGlow: n("lens-glow"),
+    colors: COLORS.map(name => rgb(css.getPropertyValue(`--orb-${name}`))),
   };
 }
 
-/** Draws the image contained in a dark square, the frame the liquid looks through. */
+/** Draws the image contained in a transparent square, in its own colors. */
 async function imageCanvas(src: string, size: number, signal: AbortSignal) {
   const image = await loadImage(src, signal);
   const chart = src.endsWith(".svg");
@@ -49,13 +50,12 @@ async function imageCanvas(src: string, size: number, signal: AbortSignal) {
   const canvas = document.createElement("canvas"); canvas.width = size; canvas.height = size;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Image preparation unavailable");
-  context.fillStyle = "#000"; context.fillRect(0, 0, size, size);
   context.drawImage(source, sx, sy, sw, sh, (size - sw * scale) / 2, (size - sh * scale) / 2, sw * scale, sh * scale);
   if (raster) { raster.width = 0; raster.height = 0; }
   return canvas;
 }
 
-/** Compiles the liquid program, or returns null when WebGL2 or the shader is unavailable. */
+/** Compiles the orb program, or returns null when WebGL2 or the shader is unavailable. */
 function setup(element: HTMLCanvasElement) {
   try {
     const gl = element.getContext("webgl2", { premultipliedAlpha: true, antialias: false });
@@ -66,7 +66,7 @@ function setup(element: HTMLCanvasElement) {
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader) ?? "Shader failed");
       return shader;
     };
-    const shaders = [compile(gl.VERTEX_SHADER, LIQUID_VERTEX), compile(gl.FRAGMENT_SHADER, LIQUID_FRAGMENT)];
+    const shaders = [compile(gl.VERTEX_SHADER, ORB_VERTEX), compile(gl.FRAGMENT_SHADER, ORB_FRAGMENT)];
     const program = gl.createProgram()!;
     shaders.forEach(shader => gl.attachShader(program, shader));
     gl.linkProgram(program);
@@ -79,8 +79,8 @@ function setup(element: HTMLCanvasElement) {
   }
 }
 
-/** A WebGL2 metaball shader owns the liquid; GSAP's existing ticker supplies the only clock. */
-export function LiquidBlob({ progress, active, reduced, onError }: Props) {
+/** A WebGL2 shader owns the glass orb; GSAP's existing ticker supplies the only clock. */
+export function LiquidOrb({ progress, active, reduced, onError }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const activity = useRef({ active, reduced });
   const error = useRef(onError);
@@ -89,67 +89,55 @@ export function LiquidBlob({ progress, active, reduced, onError }: Props) {
   useEffect(() => {
     const element = canvas.current!;
     const host = element.parentElement!;
-    const liquid = setup(element);
+    const orb = setup(element);
     // Text and original static resources remain available.
-    if (!liquid) { error.current(); return; }
-    const { gl, program, shaders, uniforms } = liquid;
+    if (!orb) { error.current(); return; }
+    const { gl, program, shaders, uniforms } = orb;
     const config = readConfig(host);
     const abort = new AbortController();
     let disposed = false; let ticking = false; let time = 0; let size = 0; let frameStep = 1;
-    let pointerX = 0; let pointerY = 0; let px = 0; let py = 0;
     let pointer: { x: number; y: number } | null = null;
-    // The dent follows the pointer on springs, so leaving makes the surface rebound.
-    let dentX = 0; let dentY = 0; let dentVX = 0; let dentVY = 0; let strength = 0; let strengthV = 0;
+    // The pointer pulls the orb on a spring; its velocity squashes the orb like a drop.
+    let offsetX = 0; let offsetY = 0; let velocityX = 0; let velocityY = 0;
     let textures: (WebGLTexture | null)[] = IMAGES.map(() => null);
-    const balls = new Float32Array(LIQUID_BALLS * 3);
-    const depths = Array.from({ length: LIQUID_BALLS }, (_, i) => scatter(i, 8));
     gl.uniform1i(uniforms.imageA, 0); gl.uniform1i(uniforms.imageB, 1);
-    (["deep", "violet", "pink", "white"] as const).forEach((name, i) => gl.uniform3fv(uniforms[name], config.colors[i]));
-    gl.uniform1f(uniforms.imageScale, config.imageScale); gl.uniform1f(uniforms.refraction, config.refraction);
-    gl.uniform1f(uniforms.ripple, config.ripple); gl.uniform1f(uniforms.contrast, config.contrast);
+    COLORS.forEach((name, i) => gl.uniform3fv(uniforms[name], config.colors[i]));
+    gl.uniform1f(uniforms.imageScale, config.imageScale); gl.uniform1f(uniforms.lens, config.lens); gl.uniform1f(uniforms.dispersion, config.dispersion);
     gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); gl.clearColor(0, 0, 0, 0);
     const draw = () => {
       if (disposed || !size || gl.isContextLost()) return;
       const moving = !activity.current.reduced;
       const phase = particlePhase(moving ? progress.current : 4.9);
+      const state = orbState(phase, time * config.speed);
       const box = pointer && moving ? host.getBoundingClientRect() : null;
       const inside = pointer && box && pointer.x >= box.left && pointer.x <= box.right && pointer.y >= box.top && pointer.y <= box.bottom;
-      const cursorX = inside && pointer ? (pointer.x - box.left - box.width / 2) / size : 0;
-      const cursorY = inside && pointer ? (pointer.y - box.top - box.height / 2) / size : 0;
-      pointerX = inside ? Math.max(-0.5, Math.min(0.5, cursorX)) : 0;
-      pointerY = inside ? Math.max(-0.5, Math.min(0.5, cursorY)) : 0;
-      px += (pointerX - px) * 0.055; py += (pointerY - py) * 0.055;
       if (moving) {
+        const targetX = inside && pointer ? ((pointer.x - box.left - box.width / 2) / size - state.x) * state.follow : 0;
+        const targetY = inside && pointer ? ((pointer.y - box.top - box.height / 2) / size - state.y) * state.follow : 0;
         const damping = Math.pow(config.damping, frameStep);
-        // A fresh press starts under the pointer instead of sliding in from the last one.
-        if (inside && Math.abs(strength) < 0.01) { dentX = cursorX; dentY = cursorY; }
-        if (inside) {
-          dentVX = (dentVX + (cursorX - dentX) * config.spring * 3 * frameStep) * damping;
-          dentVY = (dentVY + (cursorY - dentY) * config.spring * 3 * frameStep) * damping;
-          dentX += dentVX * frameStep; dentY += dentVY * frameStep;
-        }
-        strengthV = (strengthV + ((inside ? 1 : 0) - strength) * config.spring * frameStep) * damping;
-        strength += strengthV * frameStep;
+        velocityX = (velocityX + (targetX - offsetX) * config.spring * frameStep) * damping;
+        velocityY = (velocityY + (targetY - offsetY) * config.spring * frameStep) * damping;
+        offsetX += velocityX * frameStep; offsetY += velocityY * frameStep;
       }
-      liquidBalls(phase, time * config.speed, config.turns, balls);
-      for (let i = 0; i < LIQUID_BALLS; i++) {
-        balls[i * 3] += px * config.parallax * depths[i]; balls[i * 3 + 1] += py * config.parallax * depths[i];
-      }
-      const surge = Math.sin(phase.morph * Math.PI);
-      // The first scene has no image; the last one is pure liquid before it opens.
+      const stretch = Math.min(0.35, Math.hypot(velocityX, velocityY) * config.stretch);
+      const direction = Math.atan2(velocityY, velocityX);
+      // The first scene has no image; the last one is the orb alone before it opens.
       const has = (scene: number) => (scene >= 1 && scene <= 3 && textures[scene - 1] ? 1 : 0);
+      const cover = Math.sin(phase.morph * Math.PI);
+      const imageness = has(phase.scene) * (1 - phase.morph) + has(phase.next) * phase.morph;
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, textures[phase.scene - 1] ?? null);
       gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, textures[phase.next - 1] ?? null);
-      gl.uniform3fv(uniforms.balls, balls);
-      gl.uniform4f(uniforms.dent, dentX, dentY, config.dentRadius, moving ? strength : 0);
-      gl.uniform2f(uniforms.center, px * config.parallax * 0.5, py * config.parallax * 0.5);
-      gl.uniform1f(uniforms.time, time * config.speed); gl.uniform1f(uniforms.surge, moving ? surge : 0);
-      gl.uniform1f(uniforms.mix, clamp((phase.morph - 0.3) / 0.4));
+      gl.uniform4f(uniforms.orb, state.x + offsetX, state.y + offsetY, state.radius, 1 - phase.reveal * 0.15);
+      gl.uniform2f(uniforms.stretch, Math.cos(direction) * stretch, Math.sin(direction) * stretch);
+      gl.uniform1f(uniforms.ring, state.ring);
+      gl.uniform1f(uniforms.time, time * config.speed); gl.uniform1f(uniforms.surge, moving ? cover : 0);
+      // The image swaps while the orb covers the stage.
+      gl.uniform1f(uniforms.mix, clamp((phase.morph - 0.42) / 0.16));
       gl.uniform2f(uniforms.has, has(phase.scene), has(phase.next));
-      gl.uniform1f(uniforms.opacity, 1 - phase.reveal * 0.35);
+      gl.uniform1f(uniforms.glow, Math.max(1 - imageness * (1 - config.lensGlow), cover));
       gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLES, 0, 3);
       element.dataset.phase = String(phase.scene); element.dataset.reveal = phase.reveal.toFixed(3);
-      element.dataset.deformation = (moving ? Math.abs(strength) + Math.abs(strengthV) : 0).toFixed(4);
+      element.dataset.deformation = (moving ? Math.hypot(offsetX, offsetY) + Math.hypot(velocityX, velocityY) : 0).toFixed(4);
     };
     const tick = (_seconds: number, delta: number) => {
       frameStep = Math.min(delta / (1000 / 60), 2);
@@ -161,7 +149,7 @@ export function LiquidBlob({ progress, active, reduced, onError }: Props) {
         ticking = enabled; element.dataset.running = String(enabled);
         if (enabled) gsap.ticker.add(tick); else {
           gsap.ticker.remove(tick); pointer = null;
-          strength = 0; strengthV = 0; dentVX = 0; dentVY = 0;
+          offsetX = 0; offsetY = 0; velocityX = 0; velocityY = 0;
         }
       }
       draw();
@@ -196,6 +184,8 @@ export function LiquidBlob({ progress, active, reduced, onError }: Props) {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        // Premultiplied on upload, so transparent edges blend without dark fringes.
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, result.value);
         result.value.width = 0; result.value.height = 0;
         return texture;
@@ -214,5 +204,5 @@ export function LiquidBlob({ progress, active, reduced, onError }: Props) {
       element.width = 0; element.height = 0;
     };
   }, [progress]);
-  return <canvas className="story-liquid" ref={canvas} aria-hidden="true" data-running="false" />;
+  return <canvas className="story-orb" ref={canvas} aria-hidden="true" data-running="false" />;
 }

@@ -9,6 +9,29 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Orbe de cristal en Historia — 2026-10-30
+
+Pedido sobre la gota recién desplegada: «no me gusta el efecto del liquido. tiene que ser como el efecto liquido de apple. premium». Quiz 1: referencia «Orbe de Siri», imágenes en «Colores originales», imagen «Detrás del cristal». Quiz 2: cintas «Espectro Siri» y plan «Aprobado con deploy» (sin push).
+
+- [x] `LiquidOrb` (sustituye a `LiquidBlob`): shader WebGL2 (`orbShader.ts`). La imagen de la escena va detrás en sus colores, con fundido redondeado y los fondos casi negros recortados (el fondo de Bob ya no forma un rectángulo). Encima va el orbe: lente esférica con dispersión cromática en el borde, cintas de luz con curva suave contra la saturación, brillo, borde iridiscente y halo. Sobre las imágenes las cintas bajan para que el cristal deje ver.
+- [x] `orbGeometry` (función pura): orbe solo y centrado (r 0,3) en la primera y la última escena; lente pequeña (r 0,16) que deriva y sigue al cursor en Bob, TitiEdu y ML; crece hasta r 0,6 y se centra mientras cambia la escena (la imagen cambia debajo); anillo de luz (r 0,44) al revelar a Jev.
+- [x] Cursor (mouse/pen): muelle amortiguado y aplastamiento según la velocidad. Los ángulos salen de armónicos de la dirección en el marco fijo: `atan` dejaba una línea de un píxel en ±π (vista en SwiftShader) y el marco de la velocidad podía girar el borde al invertir el movimiento.
+- [x] `story.css`: tokens `--orb-*` y sangrado del 30 %. Retirados `LiquidBlob`, `liquidGeometry`, `liquidShader` y sus tests.
+- [x] Tests: `liquidOrb.test.tsx` (seguimiento y vuelta, movimiento reducido, pausa, texturas, fallo de imagen, sin WebGL2) y `orbGeometry.test.ts` (determinista, solo/lente, cubre centrado, anillo quieto).
+- [x] Docs: `design.md` (el orbe prevalece y retira la recoloración de imágenes), `docs/interaction.md`, `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 403 tests en 50 archivos. |
+| `npm run build` | PASS: `AboutPage` 30,69 kB JS + 8,01 kB CSS; `index` sin cambios (356,57 kB). |
+| `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
+| Revisión visual (Playwright sobre `vite preview` temporal con SwiftShader: 1440×900, 390×844 y movimiento reducido) | Sin errores de consola ni de shader y sin desborde horizontal. Capturas en `evidence/orb/`. El servidor de desarrollo se había cerrado por falta de memoria: el usuario liberó RAM y cada captura usó un preview que se cerró al terminar. |
+| `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+
+**Límites:** GPU por software (SwiftShader); sin GPU real, teléfono real ni Safari.
+
 ## Gota líquida en Historia — 2026-10-30
 
 Pedido: «quiero que reemplacemos una animacion que ya tenemos con un liquido que se deforma». Quiz 1: «Vórtice de Historia» y «Gota viscosa (blob)». Quiz 2: imagen «Dentro de la gota», final «Se abre en gotas», render «Shader WebGL», cursor «Se hunde y ondula». Plan concreto aprobado en un tercer quiz («Aprobado con deploy»; sin push).

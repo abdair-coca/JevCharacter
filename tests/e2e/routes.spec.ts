@@ -3,7 +3,7 @@ import { expect, test } from "./fixtures";
 const READY = {
   "/": ".home-page .character-rive[data-ready='true']",
   "/features": ".features-page .character-rive[data-ready='true']",
-  "/about": ".story-liquid[data-prepared='true']",
+  "/about": ".story-orb[data-prepared='true']",
   "/abdair": ".author-particles[data-prepared='true']",
 } as const;
 

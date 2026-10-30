@@ -10,7 +10,7 @@ import type { CharacterController } from "../character/useCharacterController";
 import { useStageVisibility } from "../features/presentation/useStageVisibility";
 import { STORY_SCENES, storyCopy } from "../features/story/catalog";
 import { useStoryScroll } from "../features/story/useStoryScroll";
-import { LiquidBlob } from "../features/story/LiquidBlob";
+import { LiquidOrb } from "../features/story/LiquidOrb";
 import { StillImage } from "../features/story/StillImage";
 import { useStoryMusic } from "../features/story/useStoryMusic";
 import "../features/story/story.css";
@@ -33,7 +33,7 @@ export default function AboutPage() {
   const controller = useRef<CharacterController | null>(null);
   const inView = useStageVisibility(stage);
   const [selected, setSelected] = useState(0);
-  // Jev starts loading at the first liquid change ("Todo empezó con cartón"), so the Jev scene is ready.
+  // Jev starts loading at the first orb change ("Todo empezó con cartón"), so the Jev scene is ready.
   const [started, setStarted] = useState(false);
   const active = visible && inView;
   const { progress, reveal } = useStoryScroll(root, stage, { onScene: setSelected, active, visible, reduced, preferenceKey: `${language}-${theme}`, selected });
@@ -76,7 +76,7 @@ export default function AboutPage() {
         <div className="story-stage" ref={stage}>
           <div className="story-flight">
             <div className="story-art" aria-hidden="true">
-            <LiquidBlob progress={progress} active={active} reduced={reduced} onError={liquidFailed} />
+            <LiquidOrb progress={progress} active={active} reduced={reduced} onError={liquidFailed} />
             <div className="creature-zone story-creature"><div className="creature-presence">
                <Suspense fallback={null}>{started && <Character key={attempt} ref={controller} presentation staticPose={reduced} active={active && status !== "error" && (selected === 4 || status === "loading" || reduced)} onReady={ready} onError={failed} />}</Suspense>
             </div></div>
