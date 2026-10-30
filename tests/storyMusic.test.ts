@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createStoryMusic, REVEAL_CHORD, SCENE_CHORDS, STEP_SECONDS, storyCues } from "../src/features/story/storyMusic";
+import { createStoryMusic, REVEAL_CHORD, SCENE_CHORDS, STEP_SECONDS, storyCues, type StoryPulse } from "../src/features/story/storyMusic";
 import { FakeContext, fakeCore, scheduledToStop, type FakeGain, type FakeOscillator } from "./audioFakes";
 
 let context: FakeContext;
@@ -239,6 +239,51 @@ describe("story soundtrack", () => {
     expect(notes.every(note => note.detune.events.length === 0)).toBe(true);
     expect(filters.filter(node => node.type === "lowpass").length).toBeLessThan(5);
     expect(filters.some(node => node.type === "highpass" && node.frequency.events[0]?.value === 110)).toBe(true);
+  });
+
+  it("tells the visuals each note, beat and impact as it is heard, ahead of the audio clock", () => {
+    const { core, music } = setup();
+    const pulses: StoryPulse[] = [];
+    music.onPulse(pulse => pulses.push(pulse));
+    core.unlock();
+    music.start();
+    music.setScene(3);
+    advance(1);
+    const kinds = new Set(pulses.map(pulse => pulse.kind));
+    for (const kind of ["impact", "note", "melody", "kick"] as const) expect(kinds.has(kind)).toBe(true);
+    expect(pulses.find(pulse => pulse.kind === "impact")?.strength).toBe(1);
+    // Scheduled ahead: each pulse names when it will be heard, never before it is announced.
+    const now = performance.now();
+    expect(pulses.at(-1)!.at).toBeGreaterThan(now - 50);
+  });
+
+  it("keeps the same rhythm silently before the first gesture and while muted", () => {
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval", "setTimeout", "clearTimeout", "performance"] });
+    const { core, music } = setup();
+    const pulses: StoryPulse[] = [];
+    const stop = music.onPulse(pulse => pulses.push(pulse));
+    music.setScene(3);
+    music.start();
+    vi.advanceTimersByTime(STEP_SECONDS * 1000 * 16);
+    expect(context.oscillators).toHaveLength(0);
+    const notes = pulses.filter(pulse => pulse.kind === "note");
+    expect(notes.length).toBeGreaterThanOrEqual(14);
+    // A sixteenth apart on the performance clock, like the soundtrack.
+    expect(notes[1].at - notes[0].at).toBeCloseTo(STEP_SECONDS * 1000, 3);
+    music.setScene(4);
+    vi.advanceTimersByTime(STEP_SECONDS * 1000 * 2);
+    expect(pulses.some(pulse => pulse.kind === "impact")).toBe(true);
+    // Heard again: the soundtrack takes the grid over without a second, silent stream.
+    core.unlock();
+    pulses.length = 0;
+    advance(0.5);
+    expect(pulses.length).toBeGreaterThan(0);
+    expect(context.oscillators.length).toBeGreaterThan(0);
+    music.stop();
+    stop();
+    pulses.length = 0;
+    vi.advanceTimersByTime(1000);
+    expect(pulses).toHaveLength(0);
   });
 
   it("reads the scroll: risers in each transition and toward the reveal, bloom with the star", () => {

@@ -43,6 +43,9 @@ type Session = {
 
 const midi = (note: number) => 440 * 2 ** ((note - 69) / 12);
 
+/** A musical moment the visuals follow; `at` is when it is heard, in performance-clock milliseconds. */
+export type StoryPulse = { kind: "note" | "melody" | "kick" | "impact"; strength: number; at: number };
+
 /** An inspiring arc from A minor to C major: vi, IV, I, V and IV, one chord per scene. */
 export const SCENE_CHORDS: readonly Chord[] = [
   { bass: 45, notes: [57, 60, 64, 71], intensity: 0.25 }, // Am(add9): the creator, a quiet beginning
@@ -89,6 +92,30 @@ const SINGLE_STRING = 1.4;
 const PIANO_CENTS = 2;
 const THEME_CENTS = 3;
 const KNOCK = 0.08;
+
+/** The parts of one sixteenth that the visuals follow: shared by the soundtrack and the silent pulse. */
+function groove(step: number, intensity: number, energy: number) {
+  const beat = step % BAR;
+  const phrase = step % PHRASE;
+  const every = energy >= 0.55 ? 1 : energy >= 0.35 ? 2 : 4;
+  return {
+    beat, phrase,
+    arp: beat % every === 0,
+    kick: intensity >= 0.75 ? beat % 4 === 0 : intensity >= 0.55 ? beat % 8 === 0 : intensity >= 0.4 && beat === 0,
+    theme: intensity >= 0.75 ? THEME.filter(([at]) => at === phrase) : [],
+  };
+}
+
+/** What is heard on one sixteenth; without the theme, each beat's first note carries the melody. */
+function pulsesOf({ beat, arp, kick, theme }: ReturnType<typeof groove>, energy: number, impact: number) {
+  const pulses: Omit<StoryPulse, "at">[] = [];
+  if (impact > 0) pulses.push({ kind: "impact", strength: impact });
+  if (arp) pulses.push({ kind: "note", strength: (beat % 4 === 0 ? 1 : 0.7) * (0.5 + 0.5 * energy) });
+  for (const [, length] of theme) pulses.push({ kind: "melody", strength: Math.min(1, 0.3 + length / 8) });
+  if (theme.length === 0 && arp && beat % 4 === 0) pulses.push({ kind: "melody", strength: 0.6 });
+  if (kick) pulses.push({ kind: "kick", strength: 1 });
+  return pulses;
+}
 
 /**
  * What the scroll means musically: `bloom` grows as the star forms (to 0.5) and opens
@@ -151,6 +178,9 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
   let lastImpact = -Infinity;
   let lastStrength = 0;
   let session: Session | null = null;
+  // Without sound the same grid runs silently on the performance clock, so the visuals keep the rhythm.
+  let quiet: { timer: number; next: number; step: number } | null = null;
+  const listeners = new Set<(pulse: StoryPulse) => void>();
   let noiseBuffer: { context: AudioContext; buffer: AudioBuffer } | null = null;
   let pianoWaves: { context: AudioContext; full: PeriodicWave; soft: PeriodicWave } | null = null;
 
@@ -342,8 +372,10 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
 
   /** Everything that lands on one sixteenth, from the chord and energy of that moment. */
   function play(context: AudioContext, s: Session, time: number) {
+    let landed = 0;
     if (pending > 0) {
       const strength = pending;
+      landed = strength;
       pending = 0;
       s.step = 0;
       lastImpact = time;
@@ -357,12 +389,11 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
     const { intensity } = chord;
     // Building toward the next scene pushes the groove before the chord arrives.
     const energy = Math.min(1, intensity + (latched ? 0 : rise) * 0.3);
-    const beat = s.step % BAR;
-    const phrase = s.step % PHRASE;
+    const step = groove(s.step, intensity, energy);
+    const { beat, phrase } = step;
     const [root, third, fifth] = chord.notes;
     const arp = [root, third, fifth, root + 12, third + 12, fifth + 12].map(note => midi(note + 12));
-    const every = energy >= 0.55 ? 1 : energy >= 0.35 ? 2 : 4;
-    if (beat % every === 0) {
+    if (step.arp) {
       const level = (beat % 4 === 0 ? 0.24 : 0.17) * (0.5 + 0.5 * energy);
       const pan = beat % 2 === 0 ? -0.35 : 0.35;
       // Each note is held for a beat, so the arpeggio rings into the next ones.
@@ -370,8 +401,7 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
       // A high ostinato an octave up makes the groove shimmer as it grows.
       if (energy >= 0.6) piano(context, s, arp[ARP[beat]] * 2, time, STEP_SECONDS * 2, level * 0.4, -pan, 2 + energy * 3, PIANO_CENTS);
     }
-    const kick = intensity >= 0.75 ? beat % 4 === 0 : intensity >= 0.55 ? beat % 8 === 0 : intensity >= 0.4 && beat === 0;
-    if (kick) drum(context, s.out, time, s.profile.kick);
+    if (step.kick) drum(context, s.out, time, s.profile.kick);
     // The climax drives on with a backbeat.
     if (intensity >= 1 && beat % 8 === 4) clap(context, s.out, time, 0.2);
     if (intensity >= 0.86 && FILL.includes(phrase)) drum(context, s.out, time, TOM);
@@ -379,8 +409,7 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
     if (energy >= 0.6 && (energy >= 0.95 ? beat % 2 === 1 : beat % 4 === 2)) hat(context, s.out, time, 0.09);
     if (intensity >= 0.75) {
       const tones = [...chord.notes].sort((a, b) => a - b).slice(0, 4).map(note => note + 12);
-      for (const [at, length, tone] of THEME) {
-        if (at !== phrase) continue;
+      for (const [, length, tone] of step.theme) {
         const brightness = 3 + intensity * 4;
         const level = intensity >= 1 ? 0.09 : 0.07;
         piano(context, s, midi(tones[tone]), time, length * STEP_SECONDS, level, 0, brightness, THEME_CENTS);
@@ -388,6 +417,47 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
       }
     }
     if (bloom > 0.15 && beat % (bloom > 0.5 ? 2 : 4) === 0) bell(context, s.out, arp[ARP[(beat + 5) % BAR]] * 2, time, 0.02 + bloom * 0.05);
+    // Heard at `time` on the audio clock: translated to the performance clock the visuals draw on.
+    emit(pulsesOf(step, energy, landed), performance.now() + (time - context.currentTime + (context.outputLatency || 0)) * 1000);
+  }
+
+  function emit(pulses: Omit<StoryPulse, "at">[], at: number) {
+    for (const pulse of pulses) for (const listener of listeners) listener({ ...pulse, at });
+  }
+
+  /** One silent sixteenth: the same impacts and grid as the soundtrack, only as pulses. */
+  function hum(q: NonNullable<typeof quiet>, time: number) {
+    let landed = 0;
+    if (pending > 0) {
+      landed = pending;
+      pending = 0;
+      q.step = 0;
+      lastImpact = time;
+      lastStrength = landed;
+      latched = true;
+    }
+    const { intensity } = target().chord;
+    const energy = Math.min(1, intensity + (latched ? 0 : rise) * 0.3);
+    emit(pulsesOf(groove(q.step, intensity, energy), energy, landed), time * 1000);
+  }
+
+  function hush() {
+    if (!quiet) return;
+    window.clearInterval(quiet.timer);
+    quiet = null;
+  }
+
+  function listen() {
+    if (quiet || session || !wanted) return;
+    pending = 0;
+    lastImpact = -Infinity;
+    const q = { timer: 0, next: performance.now() / 1000 + 0.05, step: 0 };
+    q.timer = window.setInterval(() => {
+      const now = performance.now() / 1000;
+      while (q.next < now - LATE) { q.next += STEP_SECONDS; q.step++; }
+      while (q.next < now + 0.1) { hum(q, q.next); q.next += STEP_SECONDS; q.step++; }
+    }, TICK_MS);
+    quiet = q;
   }
 
   function tick() {
@@ -406,10 +476,13 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
     }
   }
 
-  /** Queues an impact on the next sixteenth; the chord changes with it. */
-  function request(context: AudioContext, strength: number) {
+  /** Queues an impact on the next sixteenth; the chord changes with it. Heard or silent alike. */
+  function request(strength: number) {
+    const context = core.context();
+    const now = session && context ? context.currentTime : quiet ? performance.now() / 1000 : null;
+    if (now === null) return;
     // The reveal's climax is never swallowed by the scene impact just before it.
-    if (pending === 0 && context.currentTime - lastImpact < IMPACT_GAP && strength <= lastStrength) return;
+    if (pending === 0 && now - lastImpact < IMPACT_GAP && strength <= lastStrength) return;
     pending = Math.max(pending, strength);
   }
 
@@ -424,6 +497,8 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
     const context = core.context();
     const output = core.bus("music");
     if (session || !context || !output) return;
+    hush();
+    lastImpact = -Infinity;
     const now = context.currentTime;
     const profile = compact() ? COMPACT : FULL;
     const master = context.createGain();
@@ -467,7 +542,7 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
   function end(seconds: number) {
     pending = 0;
     const context = core.context();
-    if (!session || !context) { session = null; return; }
+    if (!session || !context) { session = null; listen(); return; }
     const ending = session;
     session = null;
     window.clearInterval(ending.timer);
@@ -479,6 +554,7 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
     for (const source of [ending.sweep, ending.riser.noise, ending.riser.tone]) source.stop(stopAt);
     // One-shots already scheduled finish on their own under the fade.
     ending.sweep.addEventListener("ended", () => { ending.master.disconnect(); });
+    listen();
   }
 
   core.subscribe(() => {
@@ -488,17 +564,16 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
 
   return {
     /** The story is on screen: play once audio is allowed. */
-    start() { wanted = true; if (core.audible()) begin(); },
+    start() { wanted = true; if (core.audible()) begin(); else listen(); },
     /** The story left the screen: fade out. */
-    stop() { wanted = false; end(FADE_OUT); },
+    stop() { wanted = false; hush(); end(FADE_OUT); },
     /** A new scene lands an impact: full going forward, softer going back. */
     setScene(index: number) {
       const next = Math.max(0, Math.min(SCENE_CHORDS.length - 1, Math.trunc(index)));
       if (next === scene) return;
       const forward = next > scene;
       scene = next;
-      const context = core.context();
-      if (session && context) request(context, forward ? 1 : 0.45);
+      request(forward ? 1 : 0.45);
       refresh();
     },
     setBloom(value: number) {
@@ -506,9 +581,8 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
       if (Math.abs(next - bloom) < 0.005) return;
       const revealed = target().key === "reveal";
       bloom = next;
-      const context = core.context();
       // The reveal is the climax: the strongest impact of the story.
-      if (!revealed && target().key === "reveal" && session && context) request(context, 1.3);
+      if (!revealed && target().key === "reveal") request(1.3);
       refresh();
     },
     setRise(value: number) {
@@ -520,6 +594,11 @@ export function createStoryMusic(core: AudioCore = appAudio, { compact = compact
       if (context) shape(context.currentTime);
     },
     playing: () => session !== null,
+    /** Follows every heard (or, without sound, silent) note, beat and impact; returns the unsubscribe. */
+    onPulse(listener: (pulse: StoryPulse) => void) {
+      listeners.add(listener);
+      return () => { listeners.delete(listener); };
+    },
   };
 }
 

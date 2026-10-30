@@ -13,6 +13,7 @@ import { useStoryScroll } from "../features/story/useStoryScroll";
 import { LiquidOrb } from "../features/story/LiquidOrb";
 import { StillImage } from "../features/story/StillImage";
 import { useStoryMusic } from "../features/story/useStoryMusic";
+import { storyMusic } from "../features/story/storyMusic";
 import "../features/story/story.css";
 
 const Character = lazy(() => import("../components/Character"));
@@ -76,7 +77,7 @@ export default function AboutPage() {
         <div className="story-stage" ref={stage}>
           <div className="story-flight">
             <div className="story-art" aria-hidden="true">
-            <LiquidOrb progress={progress} active={active} reduced={reduced} onError={liquidFailed} />
+            <LiquidOrb progress={progress} active={active} reduced={reduced} onError={liquidFailed} onPulse={storyMusic.onPulse} />
             <div className="creature-zone story-creature"><div className="creature-presence">
                <Suspense fallback={null}>{started && <Character key={attempt} ref={controller} presentation staticPose={reduced} active={active && status !== "error" && (selected === 4 || status === "loading" || reduced)} onReady={ready} onError={failed} />}</Suspense>
             </div></div>

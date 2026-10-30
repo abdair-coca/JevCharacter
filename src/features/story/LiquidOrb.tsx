@@ -4,29 +4,27 @@ import { clamp, particlePhase, type StoryProgress } from "./particleGeometry";
 import { loadImage } from "./particleAssets";
 import { orbState } from "./orbGeometry";
 import { ORB_FRAGMENT, ORB_VERTEX } from "./orbShader";
+import { createWater, DROPLETS, RIPPLES } from "./waterPhysics";
+import type { StoryPulse } from "./storyMusic";
 
-type Props = { progress: StoryProgress; active: boolean; reduced: boolean; onError: () => void };
+/** `onPulse` follows the soundtrack's notes, beats and impacts (silent ones too); returns the unsubscribe. */
+type Props = { progress: StoryProgress; active: boolean; reduced: boolean; onError: () => void; onPulse?: (listener: (pulse: StoryPulse) => void) => () => void };
 type Config = {
-  texture: number; dpr: number; speed: number; imageScale: number; lens: number; dispersion: number;
-  spring: number; damping: number; stretch: number; colors: number[][];
+  texture: number; dpr: number; speed: number; imageScale: number; refraction: number; dispersion: number; height: number;
+  spring: number; damping: number; stretch: number;
 };
-// Scene images in story order; the first and last scenes are the orb alone.
+// Scene images in story order; the first and last scenes are the drop alone.
 const IMAGES = ["/story/bob.jpeg", "/story/curiousTiti.webp", "/story/housingML.svg"];
-const COLORS = ["pink", "blue", "cyan", "violet"] as const;
-const UNIFORMS = ["resolution", "extent", "orb", "stretch", "ring", "time", "surge", "mix", "has", "imageScale", "lens", "dispersion", "imageA", "imageB", ...COLORS] as const;
-
-function rgb(value: string) {
-  const hex = value.trim().replace("#", "");
-  return [0, 2, 4].map(offset => Number.parseInt(hex.slice(offset, offset + 2), 16) / 255);
-}
+const UNIFORMS = ["resolution", "extent", "orb", "stretch", "ring", "time", "surge", "mix", "has", "imageScale", "refraction", "dispersion", "height", "pulse", "modes", "drops", "ripples", "imageA", "imageB"] as const;
+/** A pulse announced this long ago was missed (the stage was paused): it is dropped, not played late. */
+const STALE_MS = 250;
 
 function readConfig(host: HTMLElement): Config {
   const css = getComputedStyle(host);
   const n = (name: string) => Number.parseFloat(css.getPropertyValue(`--orb-${name}`));
   return {
-    texture: n("texture"), dpr: n("dpr"), speed: n("speed"), imageScale: n("image-scale"), lens: n("lens"), dispersion: n("dispersion"),
-    spring: n("spring"), damping: n("damping"), stretch: n("stretch"),
-    colors: COLORS.map(name => rgb(css.getPropertyValue(`--orb-${name}`))),
+    texture: n("texture"), dpr: n("dpr"), speed: n("speed"), imageScale: n("image-scale"), refraction: n("refraction"), dispersion: n("dispersion"),
+    height: n("height"), spring: n("spring"), damping: n("damping"), stretch: n("stretch"),
   };
 }
 
@@ -79,13 +77,29 @@ function setup(element: HTMLCanvasElement) {
   }
 }
 
-/** A WebGL2 shader owns the glass orb; GSAP's existing ticker supplies the only clock. */
-export function LiquidOrb({ progress, active, reduced, onError }: Props) {
+/** A WebGL2 shader owns the water drop; GSAP's existing ticker supplies the only clock. */
+export function LiquidOrb({ progress, active, reduced, onError, onPulse }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const activity = useRef({ active, reduced });
   const error = useRef(onError);
   const render = useRef<(() => void) | null>(null);
+  const water = useRef(createWater());
   useLayoutEffect(() => { activity.current = { active, reduced }; error.current = onError; render.current?.(); }, [active, reduced, onError]);
+  // Pulses are announced ahead of when they are heard; the drop reacts on time.
+  useEffect(() => {
+    if (!onPulse) return;
+    const queue: StoryPulse[] = [];
+    const drain = () => {
+      const now = performance.now();
+      while (queue.length && queue[0].at <= now) {
+        const pulse = queue.shift()!;
+        if (now - pulse.at < STALE_MS && activity.current.active && !activity.current.reduced) water.current.hit(pulse);
+      }
+    };
+    const stop = onPulse(pulse => { queue.push(pulse); queue.sort((a, b) => a.at - b.at); });
+    gsap.ticker.add(drain);
+    return () => { stop(); gsap.ticker.remove(drain); };
+  }, [onPulse]);
   useEffect(() => {
     const element = canvas.current!;
     const host = element.parentElement!;
@@ -100,9 +114,10 @@ export function LiquidOrb({ progress, active, reduced, onError }: Props) {
     // The pointer pulls the orb on a spring; its velocity squashes the orb like a drop.
     let offsetX = 0; let offsetY = 0; let velocityX = 0; let velocityY = 0;
     let textures: (WebGLTexture | null)[] = IMAGES.map(() => null);
+    const modes = new Float32Array(5); const drops = new Float32Array(DROPLETS * 3); const waves = new Float32Array(RIPPLES * 4);
     gl.uniform1i(uniforms.imageA, 0); gl.uniform1i(uniforms.imageB, 1);
-    COLORS.forEach((name, i) => gl.uniform3fv(uniforms[name], config.colors[i]));
-    gl.uniform1f(uniforms.imageScale, config.imageScale); gl.uniform1f(uniforms.lens, config.lens); gl.uniform1f(uniforms.dispersion, config.dispersion);
+    gl.uniform1f(uniforms.imageScale, config.imageScale); gl.uniform1f(uniforms.refraction, config.refraction);
+    gl.uniform1f(uniforms.dispersion, config.dispersion); gl.uniform1f(uniforms.height, config.height);
     gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); gl.clearColor(0, 0, 0, 0);
     const draw = () => {
       if (disposed || !size || gl.isContextLost()) return;
@@ -127,6 +142,9 @@ export function LiquidOrb({ progress, active, reduced, onError }: Props) {
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, textures[phase.scene - 1] ?? null);
       gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, textures[phase.next - 1] ?? null);
       gl.uniform4f(uniforms.orb, state.x + offsetX, state.y + offsetY, state.radius, 1 - phase.reveal * 0.15);
+      water.current.write(state.x + offsetX, state.y + offsetY, state.radius, modes, drops, waves);
+      gl.uniform1f(uniforms.pulse, modes[0]); gl.uniform4f(uniforms.modes, modes[1], modes[2], modes[3], modes[4]);
+      gl.uniform3fv(uniforms.drops, drops); gl.uniform4fv(uniforms.ripples, waves);
       gl.uniform2f(uniforms.stretch, Math.cos(direction) * stretch, Math.sin(direction) * stretch);
       gl.uniform1f(uniforms.ring, state.ring);
       gl.uniform1f(uniforms.time, time * config.speed); gl.uniform1f(uniforms.surge, moving ? cover : 0);
@@ -136,10 +154,13 @@ export function LiquidOrb({ progress, active, reduced, onError }: Props) {
       gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLES, 0, 3);
       element.dataset.phase = String(phase.scene); element.dataset.reveal = phase.reveal.toFixed(3);
       element.dataset.deformation = (moving ? Math.hypot(offsetX, offsetY) + Math.hypot(velocityX, velocityY) : 0).toFixed(4);
+      element.dataset.water = water.current.energy().toFixed(4);
     };
     const tick = (_seconds: number, delta: number) => {
       frameStep = Math.min(delta / (1000 / 60), 2);
-      time += Math.min(delta, 64) / 1000; draw();
+      time += Math.min(delta, 64) / 1000;
+      water.current.step(Math.min(delta, 64) / 1000);
+      draw();
     };
     const sync = () => {
       const enabled = activity.current.active && !activity.current.reduced;
@@ -147,7 +168,7 @@ export function LiquidOrb({ progress, active, reduced, onError }: Props) {
         ticking = enabled; element.dataset.running = String(enabled);
         if (enabled) gsap.ticker.add(tick); else {
           gsap.ticker.remove(tick); pointer = null;
-          offsetX = 0; offsetY = 0; velocityX = 0; velocityY = 0;
+          offsetX = 0; offsetY = 0; velocityX = 0; velocityY = 0; water.current.reset();
         }
       }
       draw();

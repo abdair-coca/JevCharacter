@@ -9,6 +9,28 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Gota de agua real sincronizada con la música — 2026-10-30
+
+Pedido: «i want it becomes like real wather, with a few drops it has to be incredible, and i has to match with the music». Quiz 1: «Gota de agua grande», sincronía «Completa», sin sonido «Mismo ritmo». Quiz 2: borde «Agua pura» y plan «Aprobado con deploy» (sin push).
+
+- [x] `storyMusic`: `groove` (pura) decide arpegio, bombo y tema por semicorchea; la usan la banda sonora y un secuenciador silencioso sobre el reloj de `performance` cuando no hay sonido (antes del gesto o silenciado). `onPulse` publica `note`/`melody`/`kick`/`impact` con el instante en que se oyen (hora de audio → `performance` + `outputLatency`). Sin cambios de sonido: los 12 tests previos pasan sin tocar.
+- [x] `waterPhysics` (pura): latido, chapoteo y tres lóbulos como muelles subamortiguados; cinco gotitas con muelle de vuelo que se funden al volver; hasta seis ondas. Nota → onda; melodía → gotita (más el tercer lóbulo); bombo → latido; golpe → salpicadura de todas las gotitas.
+- [x] `orbShader`: gota de agua por campo de distancia (`smin` cuerpo + gotitas), altura de gota sobre cristal (borde de cuarto de círculo, acotado al 55 % del radio), normales por diferencias finitas, refracción con dispersión leve, borde oscuro por reflexión interna, ventana con Fresnel, destello, cáustica, sombra y luz de estudio tenue cuando no hay imagen. Anillo de agua alrededor de Jev. Variable `distance` renombrada (choca con la función GLSL) y menos muestreos (sombra solo cerca de la gota, 3 muestras de refracción).
+- [x] `LiquidOrb`: encola los pulsos y los aplica cuando se oyen; descarta los de más de 250 ms o con la escena en pausa; `dataset.water` expone la energía. `AboutPage` pasa `storyMusic.onPulse`. Tokens `--orb-height`, `--orb-refraction`, `--orb-dispersion`; fuera los colores Siri.
+- [x] Tests: `storyMusic` (+2: pulsos con sonido y ritmo silencioso con relevo), `waterPhysics.test.ts` (4) y `liquidOrb.test.tsx` (+1: a tiempo, nunca antes, descarta lo pasado).
+- [x] Docs: `design.md`, `docs/interaction.md`, `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 411 tests en 51 archivos. |
+| `npm run build` | PASS: `AboutPage` 35,19 kB JS (antes 29,91); `index` sin cambios (356,57 kB). |
+| `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
+| Revisión visual (Playwright sobre `vite preview` temporal, SwiftShader, 1440×900 y 390×844) | Sin errores de consola. Capturas en `evidence/water/`. Energía del agua en ML muestreada cada 150 ms sin sonido: 0,36–0,76 y en movimiento continuo. |
+| `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+
+**Límites:** sin escuchar la sincronía con audio real (headless no tiene gesto de audio; la sincronía con sonido está cubierta por tests con reloj de audio falso); sin GPU real, teléfono real ni Safari. En móvil, la imagen de Bob queda bajo el titular de su escena (composición previa al agua, sin cambiar).
+
 ## Orbe transparente y scroll sin saltos al cierre — 2026-10-30
 
 Pedido: «quiero que la gota sea transparente en todo momento y hay un error al pasar a tiny creature big decisions, medio que se vuelve loco». Quiz: el fallo es «El scroll salta», en «Escritorio»; transparencia «Pompa de jabón».

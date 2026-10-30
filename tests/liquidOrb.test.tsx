@@ -2,12 +2,13 @@
 import { act, cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LiquidOrb } from "../src/features/story/LiquidOrb";
+import type { StoryPulse } from "../src/features/story/storyMusic";
 
 const ticker = vi.hoisted(() => ({ add: vi.fn(), remove: vi.fn() }));
 vi.mock("gsap", () => ({ gsap: { ticker } }));
 const tokens: Record<string, string> = {
-  texture: "40", dpr: "1.5", speed: "1", "image-scale": "0.86", lens: "0.45", dispersion: "0.06",
-  spring: "0.06", damping: "0.82", stretch: "5", pink: "#FF4FB0", blue: "#3478F6", cyan: "#5AC8FA", violet: "#A35BFF",
+  texture: "40", dpr: "1.5", speed: "1", "image-scale": "0.86", height: "0.11", refraction: "0.05", dispersion: "0.004",
+  spring: "0.06", damping: "0.82", stretch: "5",
 };
 let images: FakeImage[];
 class FakeImage {
@@ -33,7 +34,32 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
-describe("glass orb renderer ownership", () => {
+describe("water drop renderer ownership", () => {
+  it("answers the music on time: a pulse moves the water when it is heard, never early or stale", () => {
+    let listener: ((pulse: StoryPulse) => void) | null = null;
+    const unsubscribe = vi.fn();
+    const onPulse = vi.fn((next: (pulse: StoryPulse) => void) => { listener = next; return unsubscribe; });
+    const props = { progress: { current: 1.3 }, active: true, reduced: false, onError: vi.fn(), onPulse };
+    const result = render(<div><LiquidOrb {...props} /></div>);
+    const [drain] = ticker.add.mock.calls[0] as [() => void];
+    const tick = ticker.add.mock.calls.at(-1)![0] as (seconds: number, delta: number) => void;
+    const node = document.querySelector("canvas")!;
+    act(() => { tick(0, 16); });
+    expect(Number(node.dataset.water)).toBe(0);
+    // Announced ahead: nothing moves until it is heard.
+    act(() => { listener!({ kind: "impact", strength: 1, at: performance.now() + 60_000 }); drain(); tick(0, 16); });
+    expect(Number(node.dataset.water)).toBe(0);
+    // A pulse missed while paused is dropped; one heard now splashes the drop.
+    act(() => { listener!({ kind: "impact", strength: 1, at: performance.now() - 1000 }); drain(); tick(0, 16); });
+    expect(Number(node.dataset.water)).toBe(0);
+    act(() => { listener!({ kind: "impact", strength: 1, at: performance.now() }); drain(); for (let i = 0; i < 6; i++) tick(0, 16); });
+    expect(Number(node.dataset.water)).toBeGreaterThan(0.05);
+    expect(gl.uniform3fv).toHaveBeenCalled();
+    result.unmount();
+    expect(unsubscribe).toHaveBeenCalledOnce();
+    expect(ticker.remove).toHaveBeenCalledWith(drain);
+  });
+
   it("follows the pointer, springs back after it leaves and stays still with reduced motion", () => {
     const props = { progress: { current: 1.3 }, active: true, reduced: false, onError: vi.fn() };
     const result = render(<div><LiquidOrb {...props} /></div>);
