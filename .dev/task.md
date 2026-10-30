@@ -28,6 +28,8 @@ Pedido: «i want it becomes like real wather, with a few drops it has to be incr
 | `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
 | Revisión visual (Playwright sobre `vite preview` temporal, SwiftShader, 1440×900 y 390×844) | Sin errores de consola. Capturas en `evidence/water/`. Energía del agua en ML muestreada cada 150 ms sin sonido: 0,36–0,76 y en movimiento continuo. |
 | `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+| Deploy a producción (2026-10-30, «Aprobado con deploy») | Commit `a5cb593`. `vercel deploy --prod` → `dpl_ED6jjCGw5Ke1GCfRrVqTeX3hJ5VT`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 px) | PASS: gota preparada en las cinco escenas, energía del agua en ML 0–0,83 en movimiento continuo, sin errores de consola. Rueda en el cierre: 27 frames, máx. 23 px/frame (sin salto). Con el escenario en vista, 4 frames: SwiftShader dibuja el shader nuevo despacio y caben menos frames en la misma animación de Lenis. |
 
 **Límites:** sin escuchar la sincronía con audio real (headless no tiene gesto de audio; la sincronía con sonido está cubierta por tests con reloj de audio falso); sin GPU real, teléfono real ni Safari. En móvil, la imagen de Bob queda bajo el titular de su escena (composición previa al agua, sin cambiar).
 
