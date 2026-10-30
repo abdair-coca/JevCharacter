@@ -29,8 +29,10 @@ Pedido: «quiero que reemplacemos una animacion que ya tenemos con un liquido qu
 | `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
 | Revisión visual (Playwright sobre dev con SwiftShader: 1440×900 y 390×844, más movimiento reducido) | Sin errores de consola ni de shader y sin desborde horizontal. Capturas en `evidence/liquid/`: `desktop-creator`, `desktop-bob`, `desktop-morph`, `desktop-pointer-dent`, `desktop-titi`, `desktop-ml`, `desktop-reveal`, `mobile-morph`, `mobile-reveal`, `desktop-reduced`. |
 | `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+| Deploy a producción (2026-10-30, «Aprobado con deploy») | Commit `ba91570`. `vercel deploy --prod` → `dpl_2CAbezDUWmghL1wFxXL9DKwnjzTq`, alias `jev-bot-sigma.vercel.app`. Sin push. |
+| Humo en producción (Playwright, 1440 y 390 px) | PASS: `/about` con la gota preparada en las cinco escenas, hoyuelo del cursor, gráfico de ML visible, sin aviso de error ni errores de consola. |
 
-**Límites:** render con GPU por software (SwiftShader); sin medición de GPU real, sin teléfono real ni Safari.
+**Límites:** render con GPU por software (SwiftShader); sin medición de GPU real, sin teléfono real ni Safari; sin push.
 
 ## Proyectos de Abdair como pila de escenas — 2026-10-28
 
