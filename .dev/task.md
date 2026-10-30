@@ -9,6 +9,29 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Gota líquida en Historia — 2026-10-30
+
+Pedido: «quiero que reemplacemos una animacion que ya tenemos con un liquido que se deforma». Quiz 1: «Vórtice de Historia» y «Gota viscosa (blob)». Quiz 2: imagen «Dentro de la gota», final «Se abre en gotas», render «Shader WebGL», cursor «Se hunde y ondula». Plan concreto aprobado en un tercer quiz («Aprobado con deploy»; sin push).
+
+- [x] `LiquidBlob` (sustituye a `ParticleVortex`): shader WebGL2 (`liquidShader.ts`) con 12 metaballs colocadas por `liquidGeometry` (función pura de fase y tiempo). Nebulosa en la primera escena; Bob, TitiEdu y ML dentro de la gota, recoloreados por luminancia y refractados en el borde; morph que estira la gota y suelta gotitas en espiral; anillo de gotitas que deja el centro a Jev. Cursor: hoyuelo gaussiano acotado con ondas y resortes (rebote sin crear gotas sueltas).
+- [x] El SVG de ML (tamaño porcentual, natural 300×90) se rasteriza entero antes de recortar su gráfico: recortarlo directamente solo dibujaba el fondo y la cuadrícula.
+- [x] Sin WebGL2, shader roto, contexto perdido o fallo de imagen → `onError` → lectura estática con aviso. Al desmontar se liberan texturas y programa; el contexto se conserva para el remontaje de Strict Mode.
+- [x] `story.css`: tokens `--particle-*` → `--liquid-*`; sangrado 30 % → 15 %; DPR ≤1,5. `AboutPage`: `liquidError`/`.story-liquid-error`; copy `liquidError`. Retirados `ParticleVortex` y `starGeometry` (sin uso).
+- [x] Tests: `liquidBlob.test.tsx` (WebGL2 simulado: hoyuelo y rebote, movimiento reducido, pausa, subida única de texturas, fallo de imagen, sin WebGL2) y `liquidGeometry.test.ts` (determinista, cuerpo acotado, gotitas fuera en el morph, centro libre al revelar). Retirado el test de la estrella.
+- [x] Docs: `design.md` (excepción WebGL2 2D aprobada), `docs/interaction.md`, `docs/architecture.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b` y `tsc -p tsconfig.tests.json --noEmit` | PASS. |
+| `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 403 tests en 50 archivos. |
+| `npm run build` | PASS: `AboutPage` 30,50 kB JS + 8,11 kB CSS; `index` sin cambios (356,57 kB). |
+| `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
+| Revisión visual (Playwright sobre dev con SwiftShader: 1440×900 y 390×844, más movimiento reducido) | Sin errores de consola ni de shader y sin desborde horizontal. Capturas en `evidence/liquid/`: `desktop-creator`, `desktop-bob`, `desktop-morph`, `desktop-pointer-dent`, `desktop-titi`, `desktop-ml`, `desktop-reveal`, `mobile-morph`, `mobile-reveal`, `desktop-reduced`. |
+| `npx playwright test` completo | Pendiente: no se corrió la suite entera. |
+
+**Límites:** render con GPU por software (SwiftShader); sin medición de GPU real, sin teléfono real ni Safari.
+
 ## Proyectos de Abdair como pila de escenas — 2026-10-28
 
 Pedido: «la presentacion de proyectos en la seccion abdair no esta espectacular, no me gusta mucho». Quiz: «Pila de escenas» (frente a galería horizontal y lista editorial) y, como contenido extra, solo «Etiquetas técnicas». Plan concreto aprobado en un segundo quiz («Aprobado»: sin deploy).

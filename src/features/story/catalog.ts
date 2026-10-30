@@ -48,7 +48,7 @@ export type StorySceneId = (typeof STORY_SCENES)[number]["id"];
 
 type StoryCopyKey = "navigation" | "previous" | "next" | "detail" | "scroll" | "scene"
   | "loading" | "error" | "retry" | "experiment" | "vision" | "back" | "features" | "end"
-  | "particleError" | "reveal" | "revealAction" | "project" | "author";
+  | "liquidError" | "reveal" | "revealAction" | "project" | "author";
 export const storyCopy = {
   es: {
     navigation: "Escenas de la historia", previous: "Escena anterior", next: "Escena siguiente",
@@ -56,7 +56,7 @@ export const storyCopy = {
     scene: "Escena", loading: "Preparando a Jev…", error: "Jev no pudo cargar. La historia sigue disponible.", retry: "Reintentar carga",
     experiment: "Un recorrido de Abdair Coca.", vision: "Un experimento. La visión: evolucionar contigo.",
     back: "Interactuar con Jev", features: "Ver sus capacidades", end: "La historia sigue en cada interacción.",
-    particleError: "Una imagen no pudo prepararse. Puedes seguir leyendo la historia.", reveal: "O sigue deslizando", revealAction: "Revelar a Jev", project: "Ver proyecto",
+    liquidError: "Una imagen no pudo prepararse. Puedes seguir leyendo la historia.", reveal: "O sigue deslizando", revealAction: "Revelar a Jev", project: "Ver proyecto",
     author: "Conocer a Abdair",
   },
   en: {
@@ -65,7 +65,7 @@ export const storyCopy = {
     scene: "Scene", loading: "Getting Jev ready…", error: "Jev could not load. The story is still available.", retry: "Retry loading",
     experiment: "A journey by Abdair Coca.", vision: "An experiment. The vision: to evolve with you.",
     back: "Interact with Jev", features: "Explore its capabilities", end: "The story continues with every interaction.",
-    particleError: "An image could not be prepared. You can still read the story.", reveal: "Or keep scrolling", revealAction: "Reveal Jev", project: "View project",
+    liquidError: "An image could not be prepared. You can still read the story.", reveal: "Or keep scrolling", revealAction: "Reveal Jev", project: "View project",
     author: "Meet Abdair",
   },
 } satisfies Record<Language, Record<StoryCopyKey, string>>;

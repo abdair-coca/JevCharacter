@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { particlePhase, samplePixels, starGeometry, vortexPoint } from "../src/features/story/particleGeometry";
+import { particlePhase, samplePixels, vortexPoint } from "../src/features/story/particleGeometry";
 
 describe("particle storytelling geometry", () => {
-  it("holds the star before opening and is reversible without accumulated state", () => {
+  it("holds the last scene before opening and is reversible without accumulated state", () => {
     const sequence = [0, 1.2, 2.8, 3.9, 4.3, 4.7, 5];
     const forward = sequence.map(particlePhase);
     expect([...sequence].reverse().map(particlePhase).reverse()).toEqual(forward);
@@ -11,16 +11,6 @@ describe("particle storytelling geometry", () => {
     expect(particlePhase(5).reveal).toBe(1);
     expect(particlePhase(1.4).morph).toBe(0);
     expect(particlePhase(1.9).morph).toBeGreaterThan(0.8);
-  });
-
-  it("generates a bounded, repeatable five-point star with a reinforced contour", () => {
-    const points = starGeometry(3000);
-    expect(points).toEqual(starGeometry(3000));
-    for (const point of points) expect(Math.hypot(point.x, point.y)).toBeLessThanOrEqual(0.411);
-    for (let tip = 0; tip < 5; tip++) {
-      const angle = tip * Math.PI * 2 / 5 - Math.PI / 2;
-      expect(points.some(point => Math.hypot(point.x - Math.cos(angle) * 0.41, point.y - Math.sin(angle) * 0.41) < 0.035)).toBe(true);
-    }
   });
 
   it("excludes transparent/background pixels without discarding luminous details", () => {

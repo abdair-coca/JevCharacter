@@ -10,7 +10,7 @@ import type { CharacterController } from "../character/useCharacterController";
 import { useStageVisibility } from "../features/presentation/useStageVisibility";
 import { STORY_SCENES, storyCopy } from "../features/story/catalog";
 import { useStoryScroll } from "../features/story/useStoryScroll";
-import { ParticleVortex } from "../features/story/ParticleVortex";
+import { LiquidBlob } from "../features/story/LiquidBlob";
 import { StillImage } from "../features/story/StillImage";
 import { useStoryMusic } from "../features/story/useStoryMusic";
 import "../features/story/story.css";
@@ -24,21 +24,21 @@ export default function AboutPage() {
   const copy = storyCopy[language];
   const visible = usePageVisibility();
   const motionPreference = useReducedMotionPreference();
-  const [particleError, setParticleError] = useState(false);
+  const [liquidError, setLiquidError] = useState(false);
   const [short, setShort] = useState(() => window.matchMedia?.("(max-height: 35rem)").matches ?? false);
-  const reduced = motionPreference || short || particleError || typeof IntersectionObserver === "undefined";
+  const reduced = motionPreference || short || liquidError || typeof IntersectionObserver === "undefined";
   const transition = useUiMotion();
   const root = useRef<HTMLElement | null>(null);
   const stage = useRef<HTMLDivElement | null>(null);
   const controller = useRef<CharacterController | null>(null);
   const inView = useStageVisibility(stage);
   const [selected, setSelected] = useState(0);
-  // Jev starts loading at the first particle change ("Todo empezó con cartón"), so the Jev scene is ready.
+  // Jev starts loading at the first liquid change ("Todo empezó con cartón"), so the Jev scene is ready.
   const [started, setStarted] = useState(false);
   const active = visible && inView;
   const { progress, reveal } = useStoryScroll(root, stage, { onScene: setSelected, active, visible, reduced, preferenceKey: `${language}-${theme}`, selected });
   useStoryMusic(selected, progress, reduced);
-  const particlesFailed = useCallback(() => setParticleError(true), []);
+  const liquidFailed = useCallback(() => setLiquidError(true), []);
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [attempt, setAttempt] = useState(0);
   const currentAttempt = useRef(0);
@@ -71,12 +71,12 @@ export default function AboutPage() {
   }, [status, active, started, failed]);
 
   return (
-    <main className="story-page" ref={root} data-story-selected={STORY_SCENES[selected].id} data-static={reduced} data-story-status={status} data-particle-error={particleError}>
+    <main className="story-page" ref={root} data-story-selected={STORY_SCENES[selected].id} data-static={reduced} data-story-status={status} data-liquid-error={liquidError}>
       <div className="story-workspace">
         <div className="story-stage" ref={stage}>
           <div className="story-flight">
             <div className="story-art" aria-hidden="true">
-            <ParticleVortex progress={progress} active={active} reduced={reduced} onError={particlesFailed} />
+            <LiquidBlob progress={progress} active={active} reduced={reduced} onError={liquidFailed} />
             <div className="creature-zone story-creature"><div className="creature-presence">
                <Suspense fallback={null}>{started && <Character key={attempt} ref={controller} presentation staticPose={reduced} active={active && status !== "error" && (selected === 4 || status === "loading" || reduced)} onReady={ready} onError={failed} />}</Suspense>
             </div></div>
@@ -109,7 +109,7 @@ export default function AboutPage() {
           {status !== "ready" && (selected === 4 || status === "error") && <m.div key={status} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition}><p>{status === "error" ? copy.error : copy.loading}</p>{status === "error" && <Button variant="ghost" onClick={retry}>{copy.retry}</Button>}</m.div>}
         </AnimatePresence>
       </div>
-      {particleError && <p className="story-particle-error" role="status">{copy.particleError}</p>}
+      {liquidError && <p className="story-liquid-error" role="status">{copy.liquidError}</p>}
       <footer className="story-outro">
         <p className="story-eyebrow">JEVLING — {copy.experiment}</p>
         <h2 lang="en">Tiny creature. <br /><em>Big decisions.</em></h2>

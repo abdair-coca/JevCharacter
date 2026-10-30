@@ -10,22 +10,6 @@ export function scatter(index: number, salt = 0) {
   return value - Math.floor(value);
 }
 
-export function starGeometry(count: number): ParticleGeometry {
-  const vertices = Array.from({ length: 10 }, (_, i) => {
-    const angle = i * Math.PI / 5 - Math.PI / 2;
-    const radius = i % 2 === 0 ? 0.41 : 0.18;
-    return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
-  });
-  return Array.from({ length: count }, (_, i) => {
-    const side = i % 10;
-    const a = vertices[side]; const b = vertices[(side + 1) % 10];
-    const edge = scatter(i, 1);
-    // Half the particles reinforce the boundary; the rest fill the five arms.
-    const radius = Math.floor(i / 10) % 2 === 0 ? 0.97 + scatter(i, 2) * 0.03 : Math.sqrt(scatter(i, 2));
-    return { x: (a.x + (b.x - a.x) * edge) * radius, y: (a.y + (b.y - a.y) * edge) * radius, light: 0.6 + scatter(i, 3) * 0.4 };
-  });
-}
-
 /** Sampling is preparation-only, never called by the renderer or on scroll. */
 export function samplePixels(data: Uint8ClampedArray, width: number, height: number, extentX: number, extentY: number, minLight = 0.085): ParticleGeometry {
   const points: ParticlePoint[] = [];
