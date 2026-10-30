@@ -9,6 +9,22 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Vuelta a las partículas de Historia — 2026-10-30
+
+Pedido: «No me gustó, vuelve a las partículas, revierte los cambios». Quiz: conservar el arreglo del scroll del cierre («Mantener el arreglo») y desplegar («Sí, despliega»).
+
+- [x] Código, tests y docs de diseño restaurados al estado de `e71e133` (partículas) en un commit nuevo, sin reescribir historia: vuelven `ParticleVortex`, su test, `starGeometry`, los tokens `--particle-*`, `storyMusic` sin pulsos y la copy `particleError`. Fuera `LiquidOrb`, `orbGeometry`, `orbShader`, `waterPhysics` y sus tests.
+- [x] Se conserva solo el arreglo del scroll: `useStoryScroll` con el lease de Lenis atado a `visible` y su test, más sus dos frases en `docs/interaction.md` y `docs/architecture.md`. Frente a `e71e133`, la diferencia en `src`, `tests`, `design.md` y `docs` son solo esos 4 archivos.
+- [x] Las capturas `evidence/liquid/`, `orb/` y `water/` y los registros de esas rondas quedan como antecedente.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 400 tests (los 399 de las partículas más el del scroll). |
+| `npm run build` | PASS: `AboutPage` 26,11 kB JS; `index` sin cambios (356,57 kB). |
+| `npx playwright test` de `routes`, `reduced-motion` y `navigation` | 9/9 PASS. |
+| Revisión en `vite preview` temporal (1440×900) | Partículas preparadas (11.000) en las cinco escenas, sin errores de consola. Rueda en el cierre: 25 frames, máx. 22 px/frame (sin salto). |
+
 ## Gota de agua real sincronizada con la música — 2026-10-30
 
 Pedido: «i want it becomes like real wather, with a few drops it has to be incredible, and i has to match with the music». Quiz 1: «Gota de agua grande», sincronía «Completa», sin sonido «Mismo ritmo». Quiz 2: borde «Agua pura» y plan «Aprobado con deploy» (sin push).
