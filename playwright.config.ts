@@ -2,6 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 4173;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
+// Phones load every view and measure the story; interaction in depth stays on the desktop project.
+const PHONE_SPECS = /(routes|navigation|reduced-motion|story-performance)\.spec\.ts/;
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -23,6 +25,8 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
+    { name: "android", use: { ...devices["Pixel 7"] }, testMatch: PHONE_SPECS },
+    { name: "iphone", use: { ...devices["iPhone 14"] }, testMatch: PHONE_SPECS },
   ],
   // vite preview serves the build without the dev API middleware, so specs never reach a provider.
   webServer: {

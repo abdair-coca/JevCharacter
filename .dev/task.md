@@ -9,6 +9,29 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - **Siguiente acción exacta:** revisión final del usuario. Tras la aprobación final: informar resultados y después vaciar el contenido de `spec.md`, `plan.md` y `task.md`, conservando los tres archivos.
 - **Estado del código:** las tres fases están commiteadas. Sin deploy ni push.
 
+## Calidad y confianza: teléfonos y rendimiento de partículas — 2026-10-30
+
+Pedido: «haz los de calidad y confianza para mejorar el sistema». Hallazgo previo: el CI ya existía (`ci.yml`, commit `2eec3e4`) y corre la suite e2e completa en cada push; la última corrida (`67ccc3d`, run 41135107191) pasó: Vitest 400/400 y e2e 68/68 en 14,3 min. Quiz: Android + iPhone en CI; medir rendimiento en CI; solo commit (sin push).
+
+- [x] `playwright.config.ts`: proyectos `android` (Pixel 7, Chromium) e `iphone` (iPhone 14, WebKit) con `routes`, `navigation`, `reduced-motion` y `story-performance`; la suite entera sigue en Chromium de escritorio.
+- [x] `ci.yml` instala `chromium webkit`. WebKit no se instaló en local (aprobado solo para CI).
+- [x] `tests/e2e/story-performance.spec.ts`: recorre Historia con la rueda y guarda cada reporte del vórtice (`data-draw-ms`, `data-count`). Comprueba que la densidad no baja del piso, que un reporte sobre presupuesto ya trae menos partículas y que el último reporte no pasa de 4× el presupuesto (~25 fps). Una variante con la CPU 6× más lenta (CDP) exige que la densidad baje. WebKit lo omite (sin rueda en WebKit móvil). Los tiempos quedan como anotación del test y en el log.
+- [x] README: cobertura e2e por proyecto y aviso de que es emulación, no teléfono físico.
+
+| Comprobación | Resultado |
+|---|---|
+| `npm run lint`, `typecheck`, `typecheck:tests` | PASS. |
+| `story-performance` chromium + android (local, `vite preview`) | PASS 4/4. Escritorio 11 000 partículas a 3,9–5,4 ms; Android 5 500 a 2,2–2,9 ms. CPU 6×: escritorio 11 000 → 3 500 y 30,9 → 13,0 ms; Android 5 500 → 3 500 y 19,6 → 11,8 ms. |
+| `--project=android` completo (local) | PASS 10/10. |
+| Suite completa chromium + android (local) | Detenida por Claude Code por falta de memoria del sistema (~120 MB libres de 8 GB): 21 PASS, 9 FAIL por caída del worker (`code=3221225794`, `Target crashed`), 46 sin correr. Ninguna falla fue de aserción; esas mismas pruebas pasan en el CI. No se reintentó. |
+| Proyecto `iphone` (WebKit) | Pendiente: sin WebKit local; se valida en el CI al hacer push. |
+| CI con los cambios | Pendiente: sin push (pedido «solo commit»). |
+
+**Hallazgos y límites:**
+- El 63–92 ms medido en producción tras el deploy anterior no se repite en el mismo build local (4–5 ms): fue la carga de la máquina. Con la CPU 6× más lenta, el piso de 3 500 partículas todavía queda en 12–13 ms, por encima del presupuesto de 10 ms. En equipos muy lentos el vórtice va algo por debajo de 60 fps. Bajar el piso es una decisión de diseño que no se tomó.
+- El umbral de 4× del presupuesto no se calibró en el runner de GitHub: si allí falla sin regresión, se ajusta con los números de la anotación.
+- Emulación de Chromium/WebKit en Linux; no sustituye un teléfono físico ni Safari en iOS.
+
 ## Vuelta a las partículas de Historia — 2026-10-30
 
 Pedido: «No me gustó, vuelve a las partículas, revierte los cambios». Quiz: conservar el arreglo del scroll del cierre («Mantener el arreglo») y desplegar («Sí, despliega»).
