@@ -25,7 +25,8 @@ Pedido: «haz los de calidad y confianza para mejorar el sistema». Hallazgo pre
 | `--project=android` completo (local) | PASS 10/10. |
 | Suite completa chromium + android (local) | Detenida por Claude Code por falta de memoria del sistema (~120 MB libres de 8 GB): 21 PASS, 9 FAIL por caída del worker (`code=3221225794`, `Target crashed`), 46 sin correr. Ninguna falla fue de aserción; esas mismas pruebas pasan en el CI. No se reintentó. |
 | Proyecto `iphone` (WebKit) | Pendiente: sin WebKit local; se valida en el CI al hacer push. |
-| CI con los cambios | Pendiente: sin push (pedido «solo commit»). |
+| CI con los cambios (push de `70bd8d8`, run 41148646777) | CANCELADO al llegar al límite de 30 min durante la suite de escritorio, antes de los teléfonos. El runner fue ~1,8× más lento (mismos tests: 1,1 min frente a 37 s; escritorio 27 min frente a 14,3). Lint, typecheck y Vitest 400/400 PASS; `reply.spec.ts:98` falló y pasó en el reintento (inestable conocido). |
+| Arreglo (quiz: «Teléfonos en un job paralelo», push) | `ci.yml`: `verify` corre e2e solo `--project=chromium`; el job nuevo `phones` corre `android` + `iphone` en paralelo, con su propio build, WebKit y reporte (`playwright-report-phones`). |
 
 **Hallazgos y límites:**
 - El 63–92 ms medido en producción tras el deploy anterior no se repite en el mismo build local (4–5 ms): fue la carga de la máquina. Con la CPU 6× más lenta, el piso de 3 500 partículas todavía queda en 12–13 ms, por encima del presupuesto de 10 ms. En equipos muy lentos el vórtice va algo por debajo de 60 fps. Bajar el piso es una decisión de diseño que no se tomó.
