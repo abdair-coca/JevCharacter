@@ -38,10 +38,11 @@ const FIRST_AUDIO_TIMEOUT_MS = 6_000;
 const TOTAL_TIMEOUT_MS = 14_000;
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/interactions";
 const BODY_KEYS = new Set(["text", "language"]);
-// Jev's character, the same in both languages; the model reads the sentence verbatim.
+// Jev's character, the same in both languages; the model reads the sentence verbatim. The first, livelier
+// style with giggles sounded exaggerated in Spanish; the user chose this calmer one on 2026-11-01.
 const STYLE: Record<SpeechLanguage, string> = {
-  es: "Voz de una criatura pequeña: juguetona, curiosa y alegre, con energía ligera y risitas breves cuando algo le alegra. Español latinoamericano neutro.",
-  en: "A small creature's voice: playful, curious and cheerful, light energy, with brief giggles when something delights it.",
+  es: "Voz cálida y amable de una criatura pequeña, curiosa, con un toque juguetón muy ligero. Habla natural y tranquila, sin exagerar la entonación y sin reír. Español latinoamericano neutro.",
+  en: "A small creature's warm, friendly voice, curious, with a very light playful touch. It speaks naturally and calmly, without exaggerated intonation and without laughing.",
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>

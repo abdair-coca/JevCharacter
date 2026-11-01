@@ -71,7 +71,7 @@ describe("/api/speak", () => {
     const [content] = upstream.input[0].content;
     expect(content.text).toBe("¡Hola, amigo!");
     expect(content.annotations[0].type).toBe("speech_metadata");
-    expect(content.annotations[0].style).toContain("juguetona");
+    expect(content.annotations[0].style).toContain("sin exagerar la entonación");
   });
 
   it("styles English in English and follows the configured model and voice", async () => {
@@ -82,7 +82,7 @@ describe("/api/speak", () => {
     const upstream = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
     expect(upstream.model).toBe("gemini-3.8-flash-tts");
     expect(upstream.generation_config.speech_config).toEqual([{ voice: "Leda" }]);
-    expect(upstream.input[0].content[0].annotations[0].style).toContain("playful");
+    expect(upstream.input[0].content[0].annotations[0].style).toContain("without exaggerated intonation");
   });
 
   it("joins an event split across network chunks", async () => {
