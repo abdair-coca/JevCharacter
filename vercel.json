@@ -14,6 +14,9 @@
     },
     "api/enroll.ts": {
       "maxDuration": 10
+    },
+    "api/transcribe.ts": {
+      "maxDuration": 10
     }
   }
 }

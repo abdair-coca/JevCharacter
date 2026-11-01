@@ -29,14 +29,14 @@ type LocalApiHandler = (
   response: LocalApiResponse,
 ) => Promise<unknown>;
 
-async function readJsonBody(request: IncomingMessage): Promise<unknown> {
+async function readJsonBody(request: IncomingMessage, maxBytes: number): Promise<unknown> {
   const chunks: Buffer[] = [];
   let size = 0;
 
   for await (const chunk of request) {
     const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
     size += bytes.length;
-    if (size > 16_384) throw new Error('Request body too large');
+    if (size > maxBytes) throw new Error('Request body too large');
     chunks.push(bytes);
   }
 
@@ -79,7 +79,7 @@ function createApiResponse(response: ServerResponse): LocalApiResponse {
 const localDevApi = (): Plugin => ({
   name: 'jevling-local-api',
   configureServer(server) {
-    const mountHandler = (route: string, modulePath: string) => {
+    const mountHandler = (route: string, modulePath: string, maxBytes = 16_384) => {
       server.middlewares.use(route, (request, response, next) => {
         if (request.method !== 'POST') {
           next();
@@ -89,7 +89,7 @@ const localDevApi = (): Plugin => ({
         void (async () => {
           let body: unknown;
           try {
-            body = await readJsonBody(request);
+            body = await readJsonBody(request, maxBytes);
           } catch {
             sendJson(response, 400, { error: 'Invalid request body' });
             return;
@@ -127,6 +127,8 @@ const localDevApi = (): Plugin => ({
     mountHandler('/api/decide', '/api/decide.ts');
     mountHandler('/api/talk', '/api/talk.ts');
     mountHandler('/api/enroll', '/api/enroll.ts');
+    // A heard phrase travels as base64 WAV: up to 15 s of 16 kHz audio.
+    mountHandler('/api/transcribe', '/api/transcribe.ts', 700_000);
   },
 })
 

@@ -44,6 +44,31 @@ describe("Home input", () => {
     fireEvent.click(screen.getByRole("button", { name: "Enviar a Jev" }));
     expect(submit).toHaveBeenCalledWith("Nuevo contexto");
   });
+  it("offers hands-free as a pressed toggle and shows what Jev is doing with the microphone", () => {
+    const onToggle = vi.fn();
+    const listen = { status: "off" as const, notice: null, heard: "", onToggle };
+    const { rerender } = render(<ContextWhisper context="" onSubmit={vi.fn()} onClear={vi.fn()} listen={listen} />);
+    const mic = screen.getByRole("button", { name: "Manos libres" });
+    expect(mic.getAttribute("aria-pressed")).toBe("false");
+    fireEvent.click(mic);
+    expect(onToggle).toHaveBeenCalledTimes(1);
+
+    rerender(<ContextWhisper context="" onSubmit={vi.fn()} onClear={vi.fn()} listen={{ ...listen, status: "listening" }} />);
+    expect(mic.getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByText("Escuchando · di «Jev»")).toBeTruthy();
+
+    rerender(<ContextWhisper context="" onSubmit={vi.fn()} onClear={vi.fn()} listen={{ ...listen, status: "listening", heard: "¿qué hora es?" }} />);
+    expect(screen.getByText("¿qué hora es?").tagName).toBe("Q");
+    expect(screen.getAllByRole("status").map(status => status.textContent)).toContain("Oí: ¿qué hora es?");
+
+    rerender(<ContextWhisper context="" onSubmit={vi.fn()} onClear={vi.fn()} listen={{ ...listen, notice: "denied" }} />);
+    expect(screen.getAllByRole("status").map(status => status.textContent)).toContain("Sin permiso de micrófono. Actívalo en tu navegador.");
+    expect(mic.getAttribute("aria-pressed")).toBe("false");
+  });
+  it("has no microphone when hands-free is not offered", () => {
+    render(<ContextWhisper context="" onSubmit={vi.fn()} onClear={vi.fn()} />);
+    expect(screen.queryByRole("button", { name: "Manos libres" })).toBeNull();
+  });
 });
 
 describe("Home HUD", () => {

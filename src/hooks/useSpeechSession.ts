@@ -20,6 +20,8 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
   const [detail, setDetail] = useState<SpeechDetail | null>(null);
   const [notice, setNotice] = useState<SpeechNotice>(null);
   const [status, setStatus] = useState<"idle" | "waiting" | "streaming">("idle");
+  // From the spoken sentence until Jev returns to Base: hands-free ignores what it hears meanwhile.
+  const [speaking, setSpeaking] = useState(false);
   const historyRef = useRef<SpeechExchange[]>([]);
   const pendingRef = useRef<PendingSpeech | null>(null);
   const generationRef = useRef(0);
@@ -34,6 +36,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
   const releaseTalk = useCallback(() => {
     if (!talkingRef.current) return;
     talkingRef.current = false;
+    setSpeaking(false);
     void characterRef.current?.idle();
   }, [characterRef]);
 
@@ -96,6 +99,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
         if (!isCurrent()) return;
         request.spoken = text;
         talkingRef.current = true;
+        setSpeaking(true);
         void characterRef.current?.speak(request.state);
         setNotice(null);
         setStatus("streaming");
@@ -167,5 +171,5 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
 
   const hasOpenQuestion = useCallback(() => openQuestionRef.current, []);
 
-  return { caption, detail, notice, status, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
+  return { caption, detail, notice, status, speaking, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
 }

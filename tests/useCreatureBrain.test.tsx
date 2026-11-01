@@ -81,6 +81,24 @@ describe("useCreatureBrain talk flow", () => {
     unmount();
   });
 
+  it("sends a phrase said to Jev straight to speech and reports while he talks", async () => {
+    const fetchMock = vi.fn((_url: RequestInfo | URL) => Promise.resolve(new Response('event: spoken\ndata: {"text":"Te escucho."}\n\nevent: done\ndata: {}\n\n')));
+    const { result, character, unmount } = mountBrain(fetchMock);
+
+    expect(result.current.speaking).toBe(false);
+    act(() => result.current.submitContext("¿qué carreras puedo estudiar?", { direct: true }));
+    await waitFor(() => expect(result.current.speechCaption?.text).toBe("Te escucho."));
+    expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual(["/api/talk"]);
+    expect(result.current.decision.action).toEqual({ kind: "talk", state: "Talk" });
+    expect(result.current.speaking).toBe(true);
+    expect(character.speak).toHaveBeenLastCalledWith("Talk");
+
+    // The voice reports the end of the sentence; Jev is no longer talking.
+    act(() => result.current.onSpeechFinished());
+    expect(result.current.speaking).toBe(false);
+    unmount();
+  });
+
   it("uses the latest language if it changes while the decision is still pending", async () => {
     let resolveDecision: (response: Response) => void = () => {};
     const fetchMock = vi.fn((url: RequestInfo | URL) => {

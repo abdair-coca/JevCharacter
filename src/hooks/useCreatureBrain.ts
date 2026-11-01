@@ -66,7 +66,10 @@ type CreatureBrain = {
   onSpeechFinished: () => void;
   history: ReactionHistoryEntry[];
   apiLatencyMs: number;
-  submitContext: (context: string) => void;
+  /** Jev is saying a reply, until the voice ends. */
+  speaking: boolean;
+  /** `direct`: the message was said to Jev by name, so it goes straight to speech. */
+  submitContext: (context: string, options?: { direct?: boolean }) => void;
   clearContext: () => void;
   forceState: (state: CharacterState) => void;
 };
@@ -238,12 +241,12 @@ export function useCreatureBrain(
     };
   }, [active, sensors]);
 
-  const submitContext = (context: string) => {
+  const submitContext = (context: string, { direct = false }: { direct?: boolean } = {}) => {
     if (!activeRef.current || document.visibilityState !== "visible") return;
     const safeContext = context.trim().slice(0, BRAIN_CONFIG.contextMaxLength);
     if (!safeContext) return;
-    // An answer to Jev's own question continues the conversation without a new decision.
-    const answering = hasOpenQuestion();
+    // An answer to Jev's own question, or a phrase said to him, continues without a new decision.
+    const answering = direct || hasOpenQuestion();
     cancelSpeech();
     setDecisionInterrupted(false);
     if (!thinkingShownRef.current) {
@@ -344,6 +347,7 @@ export function useCreatureBrain(
     onSpeechFinished: speech.finishTalk,
     history,
     apiLatencyMs,
+    speaking: speech.speaking,
     submitContext,
     clearContext,
     forceState,

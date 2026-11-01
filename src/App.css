@@ -110,6 +110,14 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 .whisper__send:disabled { opacity: 1; background: var(--color-surface-raised); color: var(--color-muted); box-shadow: none; }
 .whisper__send > span { display: grid; place-items: center; }
 .whisper__send svg { width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform var(--duration-spring) var(--ease-spring); }
+/* Hands-free microphone: a ring shows Jev is listening; it breathes, and swells while a voice is heard. */
+.whisper__mic.ui-button { position: relative; width: var(--size-send); height: var(--size-send); border-radius: var(--radius-pill); color: var(--color-muted); }
+.whisper__mic[aria-pressed="true"] { color: var(--color-accent); }
+.whisper__mic svg { position: relative; width: var(--size-icon); height: var(--size-icon); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.whisper__mic-ring { position: absolute; inset: 0; border: var(--border-thin) solid currentColor; border-radius: inherit; background: color-mix(in srgb, var(--color-accent) 12%, transparent); opacity: 0; transition: opacity var(--duration-ui) var(--ease-out); }
+.whisper__mic[aria-pressed="true"] .whisper__mic-ring { opacity: 1; }
+.whisper__listen { min-width: 0; color: var(--color-accent); }
+.whisper__listen q { color: var(--color-foreground); }
 .whisper__meta { position: absolute; top: 100%; left: 0; right: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-3); margin-top: var(--space-3); padding-inline: var(--space-4); font-size: var(--text-caption); color: var(--color-muted); line-height: var(--line-body); }
 .whisper__meta:empty { display: none; }
 /* The row overlays what sits below it on narrow screens: only its own content takes taps. */
@@ -175,6 +183,8 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 @keyframes nav-pop { 50% { transform: scale(calc(var(--motion-icon-pop) * var(--motion-icon-pop))); } }
 @keyframes nav-page-left { 50% { transform: rotate(calc(var(--motion-page-open) * -1)); } }
 @keyframes nav-page-right { 50% { transform: rotate(var(--motion-page-open)); } }
+@keyframes mic-breathe { 50% { transform: scale(var(--motion-breathe-scale)); opacity: 0.6; } }
+@keyframes mic-hear { 50% { transform: scale(var(--motion-icon-pop)); } }
 @media (prefers-reduced-motion: no-preference) {
   /* Jev's eyes on the logo blink. */
   .brand-mark:is(:hover, :active) .brand-mark__eyes { animation: brand-blink var(--duration-ui) var(--ease-in-out); }
@@ -188,6 +198,8 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
   .settings-toggle .theme-toggle__icons svg { transition: transform var(--duration-spring) var(--ease-spring); }
   .settings-toggle:active .theme-toggle__icons svg { transform: rotate(var(--motion-gear-turn)); }
   .whisper__send:active:not(:disabled) svg { transform: translate(var(--motion-nudge), calc(var(--motion-nudge) * -1)); }
+  [data-listen="listening"] .whisper__mic-ring { animation: mic-breathe var(--duration-breathe) var(--ease-in-out) infinite; }
+  [data-listen="hearing"] .whisper__mic-ring { animation: mic-hear var(--duration-consider) var(--ease-in-out) infinite; }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .settings-toggle:hover .theme-toggle__icons svg { transform: rotate(var(--motion-gear-turn)); }
@@ -228,7 +240,7 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
   .whisper__meta { padding-inline: var(--space-2); }
   .speech-slot { min-height: var(--space-3); }
   .whisper__meta { font-size: var(--text-caption); flex-wrap: nowrap; }
-  .whisper__meta #context-help { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .whisper__meta :is(#context-help, .whisper__listen) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .whisper__meta button { flex-shrink: 0; font-size: 0; }
   .whisper__meta button span { font-size: var(--text-caption); }
   .whisper__count { flex-shrink: 0; }

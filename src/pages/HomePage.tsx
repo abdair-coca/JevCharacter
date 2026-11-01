@@ -21,6 +21,7 @@ import { EnrollmentParticles } from "../features/enrollment/EnrollmentParticles"
 import CreatureLoader from "../features/loading/CreatureLoader";
 import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewport";
 import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
+import { useHandsFree } from "../creature/listen/useHandsFree";
 import { jevVoice } from "../creature/voice/voiceEngine";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { ReplyCard } from "../features/reply/SpeechReply";
@@ -117,11 +118,20 @@ export default function HomePage({ active = true }: { active?: boolean }) {
     return () => { cancelAnimationFrame(frame); character?.stop(); };
   }, [enrollment.phase, running, characterStatus, enrollmentMotion.reduced, enrollmentMotion.hold]);
 
-  const submitContext = (message: string) => {
+  // `direct`: said to Jev by name through the microphone, so it skips the decision.
+  const submitContext = (message: string, direct = false) => {
     if (!running || enrollment.isOpen) return;
     if (enrollment.tryOpen(message)) setDiagnostics(false);
-    else brain.submitContext(message);
+    else brain.submitContext(message, { direct });
   };
+  const handsFree = useHandsFree({
+    enabled: conversational,
+    busy: brain.status === "deciding" || brain.speaking,
+    speaking: brain.speaking,
+    language,
+    onMessage: message => submitContext(message, true),
+    onSummoned: () => { void characterRef.current?.playFor("Hello", 1200); },
+  });
 
   const handleStagePointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
     if (!conversational) return;
@@ -179,7 +189,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
           <p className="sr-only" role="status">{!brain.speechNotice && brain.speechCaption?.complete ? brain.speechCaption.text : ""}</p>
         </div>
         <m.div className="interaction-dock" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={transition}>
-          <ContextWhisper context={brain.userContext} onSubmit={submitContext} onClear={brain.clearContext} status={brain.status} />
+          <ContextWhisper context={brain.userContext} onSubmit={submitContext} onClear={brain.clearContext} status={brain.status} listen={handsFree} />
           <BrainHUD decision={brain.decision} status={brain.status} personality={brain.personality} speechNotice={brain.speechNotice} decisionInterrupted={brain.decisionInterrupted} />
         </m.div>
       </div>
