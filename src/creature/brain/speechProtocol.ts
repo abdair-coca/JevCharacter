@@ -9,13 +9,21 @@ export type SpeechExchange = {
   assistant: string;
 };
 
-/** Carries the visitor's own Groq key to `/api/talk`; the server uses it for that request and never stores it. */
+/** Carries the visitor's own Groq key to `/api/talk` and `/api/transcribe`; the server uses it for that request and never stores it. */
 export const GROQ_KEY_HEADER = "x-groq-api-key";
-const GROQ_KEY_PATTERN = /^[\x21-\x7E]{20,200}$/;
+/** Carries the visitor's own Google key to `/api/speak`, under the same rules. */
+export const GEMINI_KEY_HEADER = "x-gemini-api-key";
+const API_KEY_PATTERN = /^[\x21-\x7E]{20,200}$/;
 
 /** The trimmed key when it is visible ASCII of plausible length, else null. Shared by the browser and the API. */
 export function parseGroqKey(value: unknown): string | null {
   if (typeof value !== "string") return null;
   const key = value.trim();
-  return GROQ_KEY_PATTERN.test(key) ? key : null;
+  return API_KEY_PATTERN.test(key) ? key : null;
 }
+
+/** Google keys pass the same shape check; the provider is the one that accepts or rejects them. */
+export const parseGeminiKey = parseGroqKey;
+
+/** Jev's voice arrives as headerless 16-bit mono PCM at this rate. */
+export const SPEECH_AUDIO_SAMPLE_RATE = 24_000;

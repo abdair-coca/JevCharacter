@@ -1,19 +1,26 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SettingsPanel from "../src/features/settings/SettingsPanel";
 import { clearGroqKey, readGroqKey } from "../src/creature/brain/groqKeyStore";
+import { clearGeminiKey, readGeminiKey } from "../src/creature/brain/geminiKeyStore";
+import { voiceProblem } from "../src/creature/voice/geminiVoice";
 import { preferencesStore } from "../src/stores/preferencesStore";
 
 vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useOrganicMotion: () => ({ spring: { duration: 0 } }) }));
 
 const KEY = "gsk_test_visible_key_1234567890";
 const NO_KEY = "Sin clave, Jev no puede generar respuestas habladas.";
+const GOOGLE_KEY = "AIza_test_visible_key_1234567890";
+const groq = () => within(screen.getByRole("region", { name: "Clave de Groq" }));
+const voice = () => within(screen.getByRole("region", { name: "Voz de Jev (Google)" }));
 
 afterEach(cleanup);
 beforeEach(() => {
   window.localStorage.clear();
   clearGroqKey();
+  clearGeminiKey();
+  voiceProblem.clear();
   preferencesStore.setState({ language: "es", theme: "light", themePreference: "system", sound: true, jevColor: "violet" });
 });
 
@@ -81,7 +88,7 @@ describe("settings panel", () => {
 
   it("saves a well-formed Groq key in this browser, empties the field and keeps focus inside", async () => {
     render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
-    expect(screen.getByRole("status").textContent).toBe(NO_KEY);
+    expect(groq().getByRole("status").textContent).toBe(NO_KEY);
     const input = screen.getByLabelText("Clave API") as HTMLInputElement;
     expect(input.type).toBe("password");
     fireEvent.change(input, { target: { value: `  ${KEY}  ` } });
@@ -89,7 +96,7 @@ describe("settings panel", () => {
     expect(readGroqKey()).toBe(KEY);
     expect(window.localStorage.getItem("jevling.groqKey")).toBe(JSON.stringify(KEY));
     expect(input.value).toBe("");
-    expect(screen.getByRole("status").textContent).toBe("Clave guardada en este navegador.");
+    expect(groq().getByRole("status").textContent).toBe("Clave guardada en este navegador.");
     expect(screen.getByRole("button", { name: "Borrar clave" })).toBeTruthy();
     // The save button is disabled now; focus must not fall back to the page, or Escape stops working.
     await waitFor(() => expect(document.activeElement).toBe(input));
@@ -129,6 +136,48 @@ describe("settings panel", () => {
     fireEvent.click(screen.getByRole("button", { name: "Borrar clave" }));
     expect(readGroqKey()).toBeNull();
     expect(window.localStorage.getItem("jevling.groqKey")).toBeNull();
-    expect(screen.getByRole("status").textContent).toBe(NO_KEY);
+    expect(groq().getByRole("status").textContent).toBe(NO_KEY);
+  });
+
+  it("keeps Jev's voice key apart: saved in this browser, with Google's free-tier note", async () => {
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    expect(voice().getByRole("status").textContent).toBe("Sin clave, Jev habla con sus pitidos.");
+    expect(voice().getByText("En el nivel gratuito, Google puede usar el texto que Jev dice para mejorar sus productos.")).toBeTruthy();
+    const input = screen.getByLabelText("Clave de voz") as HTMLInputElement;
+    expect(input.type).toBe("password");
+    fireEvent.change(input, { target: { value: GOOGLE_KEY } });
+    fireEvent.click(screen.getByRole("button", { name: "Guardar clave de voz" }));
+    expect(readGeminiKey()).toBe(GOOGLE_KEY);
+    expect(window.localStorage.getItem("jevling.geminiKey")).toBe(JSON.stringify(GOOGLE_KEY));
+    expect(readGroqKey()).toBeNull();
+    expect(voice().getByRole("status").textContent).toBe("Clave guardada en este navegador. Jev habla con su voz.");
+    await waitFor(() => expect(document.activeElement).toBe(input));
+
+    fireEvent.click(screen.getByRole("button", { name: "Borrar clave de voz" }));
+    expect(readGeminiKey()).toBeNull();
+    expect(voice().getByRole("status").textContent).toBe("Sin clave, Jev habla con sus pitidos.");
+  });
+
+  it("links the voice key guide to Google AI Studio in a new tab", () => {
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    const link = voice().getByText("¿Cómo consigo la clave de voz?").closest("details")!.querySelector("a")!;
+    expect(link.href).toBe("https://aistudio.google.com/apikey");
+    expect(link.target).toBe("_blank");
+    expect(link.rel).toBe("noopener noreferrer");
+  });
+
+  it("says when Google refuses the saved voice key, and a new key clears it", () => {
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    fireEvent.change(screen.getByLabelText("Clave de voz"), { target: { value: GOOGLE_KEY } });
+    fireEvent.click(screen.getByRole("button", { name: "Guardar clave de voz" }));
+    act(() => voiceProblem.report("rejected"));
+    expect(voice().getByRole("status").textContent).toBe("Google rechazó la clave. Mientras tanto, Jev habla con sus pitidos.");
+    act(() => voiceProblem.report("quota"));
+    expect(voice().getByRole("status").textContent).toBe("Se agotó la cuota gratuita de Google por ahora. Jev habla con sus pitidos hasta que se renueve.");
+
+    fireEvent.change(screen.getByLabelText("Clave de voz"), { target: { value: `${GOOGLE_KEY}x` } });
+    fireEvent.click(screen.getByRole("button", { name: "Guardar clave de voz" }));
+    expect(voiceProblem.read()).toBeNull();
+    expect(voice().getByRole("status").textContent).toBe("Clave guardada en este navegador. Jev habla con su voz.");
   });
 });

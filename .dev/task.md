@@ -4,10 +4,46 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 1 (Escuchar), implementada el 2026-11-01; **entregada para revisión**.
+- **Fase activa:** fase 2 (Voz), en curso desde el 2026-11-01. Fase 1 aprobada («continua con la fase dos», 2026-11-01), sin la prueba real con micrófono.
 - **Aprobaciones:** spec, plan, cambio de reglas y `@supabase/supabase-js` aprobados el 2026-10-31 («Aprobado, empieza fase 1»). Propuestas: se mantienen la ventana de 8 s y los interruptores de plugins; se descartan el apagado tras 5 min y «Borrar mi cuenta».
-- **Siguiente acción exacta:** prueba real del usuario con micrófono y clave Groq en `npm run dev` y aprobación de la fase 1. Después, fase 2 (Voz) según `plan.md`.
+- **Siguiente acción exacta:** implementar la fase 2 según `plan.md` y entregarla para revisión.
+- **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
 - **Estado del código:** fase 1 commiteada. Sin deploy ni push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+
+## Fase 2 — implementación, 2026-11-01
+
+- [x] **Forma REST confirmada en la doc de Gemini:**
+  - `POST https://generativelanguage.googleapis.com/v1beta/interactions` con `x-goog-api-key`, `stream: true`, `response_format` `audio/l16` a 24 kHz y `generation_config.speech_config: [{voice}]`.
+  - El estilo va en `speech_metadata.style`.
+  - El audio llega en eventos `step.delta` con `delta.type: "audio"` y `delta.data` en base64.
+  - La doc no muestra el formato SSE exacto ni un evento final; el parser acepta líneas `data:` y `[DONE]`, y se confirma con la prueba real.
+- [x] `speechProtocol.ts`: `GEMINI_KEY_HEADER`, `parseGeminiKey` (la misma forma que la de Groq) y `SPEECH_AUDIO_SAMPLE_RATE`.
+- [x] `keyStore.ts` (nuevo): fábrica de clave por proveedor. `groqKeyStore` la usa sin cambiar sus exportaciones; `geminiKeyStore` (`jevling.geminiKey`) es la segunda.
+- [x] `api/speak.ts`:
+  - Valida `{text ≤120, language}` y la clave, y limita a 20 frases por minuto por IP.
+  - Pide a Gemini el estilo de Jev por idioma (en español, latinoamericano neutro) con `Puck` y `gemini-3.8-flash-lite-tts` por defecto (`GEMINI_TTS_VOICE` y `GEMINI_TTS_MODEL`).
+  - Reenvía el PCM en cuanto llega. Las cabeceras salen con el primer audio, así que 400/401/403 → 401, 429 → 429, sin audio en 6 s → 504 y lo demás → 502.
+  - `vercel.json` le da 15 s.
+- [x] `voiceEngine.beginSpeech` y `SpeechHandle` (`play`, `finish`, `fallback`):
+  - La firma «¡Ui!» suena primero y el audio se encola en el canal de habla, así que silenciar, una acción, una frase nueva u ocultar la pestaña lo cortan.
+  - Al silenciar a mitad de frase se avisa el final, para que Jev no quede atascado en la pose de habla.
+  - `fallback` pitea la frase justo tras la firma.
+- [x] `geminiVoice.ts` (nuevo):
+  - `createPcmDecoder` une bytes partidos y `streamVoice` lee `/api/speak`.
+  - `createGeminiVoice` usa los pitidos sin clave, sin sonido o con texto incompleto. Pasa a pitidos si el primer audio tarda más de 3 s o si falla antes de sonar, y si falla a mitad suena lo que llegó.
+  - `voiceProblem` (`rejected` o `quota`) es lo que muestra Ajustes. `homeVoice` es la voz de Home; `useSpeechVoice` le pasa el idioma de la frase.
+- [x] Ajustes: `KeySection` reutilizable (Groq y voz comparten el mismo marcado). La sección «Voz de Jev (Google)» tiene aviso fijo de privacidad del nivel gratuito, guía a `aistudio.google.com/apikey`, estado de clave rechazada o cuota agotada, y «Guardar/Borrar clave de voz». La ayuda de Groq ahora menciona la escucha. Textos ES/EN.
+- [x] `.env.example`: `GEMINI_TTS_MODEL` y `GEMINI_TTS_VOICE`; `vite.config.ts` monta `/api/speak` y acepta escrituras binarias.
+- [x] Docs de estado actual: `docs/architecture.md` (claves, `api/speak.ts` y voz con palabras) y `docs/interaction.md` (sección «Voz con palabras en Home»). `AGENTS.md`: regla de la clave de Google y del audio de voz. La regla «nunca palabras» de `design.md` se cambia en la fase 5, como dice el plan.
+- [ ] Prueba real con Gemini: pendiente. `GEMINI_API_KEY` aún no está en `.env.local`. El script `scratchpad/speak-real.mjs` (sin commitear) carga `/api/speak` con Vite, mide el primer audio y el total y guarda un WAV por frase (2 ES, 1 EN).
+- [ ] Aprobación del usuario.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 55 archivos / 496 tests (antes 454). Nuevos: `apiSpeak` (16: cuerpo hacia Gemini con Puck, estilo y formato, idioma y variables, evento partido, clave, 5 cuerpos inválidos, método, 400/403/429/500, sin audio y red), `geminiVoice` (15: decodificador PCM, `streamVoice`, voz con firma y fin, 3 casos de pitidos, 401/429/502 con aviso, aviso que se limpia, lentitud de 3 s, corte a mitad, cancelación y reemplazo, audio de una frase cortada), `voiceEngine` (+6: firma y cola, corte, reemplazo, silencio a mitad, plan B tras la firma, sin sonido), `settingsPanel` (+3), `speechVoice` (+1) y `groqKeyStore` (+1). |
+| `npm run build` | PASS: `index` 371,76 kB (gzip 119,82 kB), +5,1 kB; `SettingsPanel` 6,08 kB. El bundle no contiene `generativelanguage`, `x-goog-api-key`, `api.groq.com` ni `SUPABASE_SECRET`; solo el nombre de la cabecera `x-gemini-api-key`. |
+| e2e Chromium `settings.spec.ts` y `voice.spec.ts` (nuevo) | PASS 15/15: matriz ES/EN × claro/oscuro × escritorio/móvil con la sección de voz (aviso visible, guardar y estado, dentro del ancho), y en Home una frase con clave de Google va a `/api/speak` con `{text, language}` y la cabecera; sin clave no se llama. |
 
 ## Fase 1 — entrega para revisión, 2026-11-01
 
@@ -24,7 +60,7 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - [x] Home: botón «Manos libres» (`aria-pressed`) en el campo, con anillo que respira al escuchar y late al oír (fijo con movimiento reducido), y una línea bajo el campo con el estado, «Oí: …» (`<q>`) o el aviso. Solo los avisos y lo oído se anuncian. Textos ES/EN.
 - [x] Docs de estado actual: `docs/architecture.md` (`creature/listen/`, `api/transcribe.ts` y camino `direct`) y `docs/interaction.md` (sección «Manos libres en Home»). `AGENTS.md`: la clave Groq viaja también a `/api/transcribe` y el audio no se guarda ni se registra. `design.md` queda para la fase 5, como dice el plan.
 - [ ] Prueba real con micrófono y Groq (pendiente: no hay clave Groq en este equipo y la prueba necesita voz real).
-- [ ] Aprobación del usuario.
+- [x] Aprobación del usuario (2026-11-01, «continua con la fase dos»).
 
 | Comprobación | Resultado |
 |---|---|

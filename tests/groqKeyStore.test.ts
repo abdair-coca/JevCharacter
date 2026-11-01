@@ -63,3 +63,16 @@ describe("Groq key store", () => {
     expect(store.readGroqKey()).toBe(KEY);
   });
 });
+
+describe("Google voice key store", () => {
+  it("keeps its own key, apart from the Groq key", async () => {
+    vi.resetModules();
+    const groq = await import("../src/creature/brain/groqKeyStore");
+    const gemini = await import("../src/creature/brain/geminiKeyStore");
+    expect(gemini.saveGeminiKey(`AIza_${KEY}`)).toBe(true);
+    expect(window.localStorage.getItem("jevling.geminiKey")).toBe(JSON.stringify(`AIza_${KEY}`));
+    expect(groq.readGroqKey()).toBeNull();
+    gemini.clearGeminiKey();
+    expect(gemini.readGeminiKey()).toBeNull();
+  });
+});

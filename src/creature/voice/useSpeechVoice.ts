@@ -1,18 +1,25 @@
 import { useEffect, useRef } from "react";
 import type { SpeechCaption } from "../../hooks/useSpeechSession";
-import { jevVoice, type VoiceEngine } from "./voiceEngine";
+import type { SpeechLanguage } from "../brain/speechProtocol";
+import { jevVoice } from "./voiceEngine";
+
+/** Says a caption: Jev's chirps, or Gemini on Home, which also needs the caption's language. */
+export type SpeechVoice = {
+  speak: (key: string, text: string, complete: boolean, onEnd?: () => void, language?: SpeechLanguage) => void;
+  stopSpeech: () => void;
+};
 
 const noop = () => {};
 
 /**
- * Jev chirps along with the real reply text. A caption that fades after it was
+ * Jev voices the real reply text. A caption that fades after it was
  * complete lets the phrase finish; a cancelled, unfinished reply stops it. `onFinished`
  * runs once a complete reply has sounded its last syllable, or at once when nothing sounds.
  */
 export function useSpeechVoice(
   caption: SpeechCaption | null,
   silenced: boolean,
-  voice: Pick<VoiceEngine, "speak" | "stopSpeech"> = jevVoice,
+  voice: SpeechVoice = jevVoice,
   onFinished: () => void = noop,
 ) {
   const voiced = useRef<{ complete: boolean } | null>(null);
@@ -20,7 +27,7 @@ export function useSpeechVoice(
   useEffect(() => { finished.current = onFinished; }, [onFinished]);
   useEffect(() => {
     if (caption && !silenced) {
-      voice.speak(`home-${caption.generation}`, caption.text, caption.complete, caption.complete ? () => finished.current() : undefined);
+      voice.speak(`home-${caption.generation}`, caption.text, caption.complete, caption.complete ? () => finished.current() : undefined, caption.language);
       voiced.current = { complete: caption.complete };
       return;
     }

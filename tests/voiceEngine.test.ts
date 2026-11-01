@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createVoiceEngine } from "../src/creature/voice/voiceEngine";
 import { ACTION_MOTIFS, scoreSpeech, type VoiceGlide } from "../src/creature/voice/voiceScore";
-import { FakeContext, fakeCore, reaches, silenced } from "./audioFakes";
+import { FakeContext, fakeCore, reaches, silenced, type FakeNode } from "./audioFakes";
 
 let context: FakeContext;
 let clock: number;
@@ -53,6 +53,94 @@ describe("Jev voice reply end", () => {
     voice.speak("next", "Hola.", true, muted);
     voice.stop();
     expect(muted).toHaveBeenCalledOnce();
+  });
+});
+
+describe("another voice speaking for Jev", () => {
+  afterEach(() => { vi.useRealTimers(); });
+  const signature = () => context.oscillators.filter(oscillator => oscillator.type === "triangle");
+  const signatureEnd = () => Math.max(...context.oscillators.flatMap(oscillator => oscillator.stops).filter((time): time is number => typeof time === "number")) - 0.2;
+
+  it("signs the reply with a chirp, queues the audio after it and reports the end once it has sounded", () => {
+    vi.useFakeTimers();
+    const { core, voice } = setup();
+    core.unlock();
+    const onEnd = vi.fn();
+    const handle = voice.beginSpeech("reply", onEnd);
+    expect(signature().length).toBeGreaterThan(0);
+    const chirpEnd = signatureEnd();
+
+    handle.play(new Float32Array(50), 100);
+    handle.play(new Float32Array(100), 100);
+    const [first, second] = context.noises;
+    expect(first.startAt).toBeCloseTo(chirpEnd, 5);
+    expect(second.startAt).toBeCloseTo(chirpEnd + 0.5, 5);
+    expect(reaches(first, core.bus("voice") as unknown as FakeNode)).toBe(true);
+
+    handle.finish();
+    vi.advanceTimersByTime((chirpEnd + 1.4) * 1000);
+    expect(onEnd).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(200);
+    expect(onEnd).toHaveBeenCalledOnce();
+  });
+
+  it("is cut like the chirps: stopping silences the queued audio and reports no end", () => {
+    vi.useFakeTimers();
+    const { core, voice } = setup();
+    core.unlock();
+    const onEnd = vi.fn();
+    const handle = voice.beginSpeech("reply", onEnd);
+    handle.play(new Float32Array(100), 100);
+    voice.stopSpeech();
+    expect(silenced(context.noises[0])).toBe(true);
+    expect(handle.active).toBe(false);
+    handle.play(new Float32Array(100), 100);
+    handle.finish();
+    expect(context.noises).toHaveLength(1);
+    vi.runAllTimers();
+    expect(onEnd).not.toHaveBeenCalled();
+  });
+
+  it("a new reply replaces it", () => {
+    const { core, voice } = setup();
+    core.unlock();
+    const first = voice.beginSpeech("first");
+    first.play(new Float32Array(100), 100);
+    voice.speak("second", "Hola.", true);
+    expect(first.active).toBe(false);
+    expect(silenced(context.noises[0])).toBe(true);
+  });
+
+  it("muting mid-reply still reports its end", () => {
+    const { core, voice } = setup();
+    core.unlock();
+    const onEnd = vi.fn();
+    voice.beginSpeech("reply", onEnd).play(new Float32Array(100), 100);
+    core.setEnabled(false);
+    expect(onEnd).toHaveBeenCalledOnce();
+  });
+
+  it("falls back on chirping the sentence right after the signature", () => {
+    const { core, voice } = setup();
+    core.unlock();
+    const onEnd = vi.fn();
+    const handle = voice.beginSpeech("reply", onEnd);
+    const chirps = signature().length;
+    const chirpEnd = signatureEnd();
+    handle.fallback("Hola, ¿cómo estás?");
+    const sentence = signature().slice(chirps);
+    expect(sentence).toHaveLength(scoreSpeech("Hola, ¿cómo estás?").length);
+    expect(Math.min(...sentence.map(oscillator => oscillator.startAt))).toBeGreaterThanOrEqual(chirpEnd - 1e-6);
+  });
+
+  it("without sound there is nothing to queue and the end comes at once", () => {
+    const { voice } = setup();
+    const onEnd = vi.fn();
+    const handle = voice.beginSpeech("reply", onEnd);
+    handle.play(new Float32Array(100), 100);
+    expect(context.noises).toHaveLength(0);
+    handle.finish();
+    expect(onEnd).toHaveBeenCalledOnce();
   });
 });
 

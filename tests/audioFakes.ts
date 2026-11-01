@@ -54,7 +54,13 @@ export class FakeContext {
   createStereoPanner() { return Object.assign(new FakeNode(), { pan: new FakeParam() }); }
   createBiquadFilter() { return Object.assign(new FakeNode(), { type: "lowpass", frequency: new FakeParam(), Q: new FakeParam() }); }
   createConvolver() { const convolver = Object.assign(new FakeNode(), { buffer: null as unknown }); this.convolvers.push(convolver); return convolver; }
-  createBuffer(_channels: number, length: number) { return { getChannelData: () => new Float32Array(length) }; }
+  buffers: { length: number; duration: number; copied: Float32Array | null }[] = [];
+  createBuffer(_channels: number, length: number, sampleRate = this.sampleRate) {
+    const buffer = { length, duration: length / sampleRate, copied: null as Float32Array | null,
+      getChannelData: () => new Float32Array(length), copyToChannel(samples: Float32Array) { buffer.copied = samples; } };
+    this.buffers.push(buffer);
+    return buffer;
+  }
   createDynamicsCompressor() { return new FakeNode(); }
   createPeriodicWave() { return {}; }
 }

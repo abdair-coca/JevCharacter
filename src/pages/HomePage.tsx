@@ -22,7 +22,7 @@ import CreatureLoader from "../features/loading/CreatureLoader";
 import { useEnrollmentViewport } from "../features/enrollment/useEnrollmentViewport";
 import { useSpeechVoice } from "../creature/voice/useSpeechVoice";
 import { useHandsFree } from "../creature/listen/useHandsFree";
-import { jevVoice } from "../creature/voice/voiceEngine";
+import { homeVoice } from "../creature/voice/geminiVoice";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { ReplyCard } from "../features/reply/SpeechReply";
 import "../features/enrollment/enrollment.css";
@@ -69,7 +69,7 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const sensors = usePointerSensor(stageRef, creatureShellRef, conversational, active && !enrollment.isOpen);
   const brain = useCreatureBrain(sensors, characterRef, { active: conversational, language });
   const enrollmentWasOpen = useRef(false);
-  useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice), jevVoice, brain.onSpeechFinished);
+  useSpeechVoice(brain.speechCaption, Boolean(brain.speechNotice), homeVoice, brain.onSpeechFinished);
   // A reply with blocks becomes a card beside Jev on wide screens and opens straight in a sheet otherwise.
   const wide = useMediaQuery("(min-width: 64.001rem)");
   const reply = brain.speechDetail;

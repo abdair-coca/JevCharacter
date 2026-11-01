@@ -130,7 +130,7 @@ El sonido está activado por defecto y empieza con el primer clic, toque o tecla
 - Memoria entre visitas: cuando el usuario revela algo duradero (gustos, metas, situación), el modelo añade una nota oculta de hasta 160 caracteres que se guarda en este navegador. Cada mensaje lleva las notas más recientes y las relacionadas, y Jev las usa con naturalidad. Nunca se guardan teléfonos, documentos ni otros números largos, ni datos del formulario. «Borrar conversación» no borra la memoria.
 - «Memoria», en Ajustes (desde cualquier vista), abre «Lo que Jev recuerda» en lugar de Ajustes: las notas de la más reciente a la más antigua con su fecha relativa, un botón para olvidar cada una y «Olvidar todo», que pide confirmación dentro del panel. El foco empieza en el título, Tab no sale del diálogo, Escape lo cierra (o cancela primero la confirmación) y el foco vuelve al engranaje. Navegar a otra vista lo cierra.
 - «Diagnóstico» aparece en Ajustes solo en Inicio: muestra u oculta el panel de señales y cierra Ajustes. La tecla `d` sigue alternándolo y `Esc` lo oculta.
-- Vite lee `TYPESAFE_API_KEY`, `JEV_MODEL`, `GROQ_MODEL`, `SUPABASE_URL` y `SUPABASE_SECRET_KEY` desde `.env`, únicamente server-side. En desarrollo, `/api/decide`, `/api/talk`, `/api/transcribe` y `/api/enroll` ejecutan handlers reales; Groq se consulta solo cuando Jev elige `talk` o transcribe una frase de manos libres.
+- Vite lee `TYPESAFE_API_KEY`, `JEV_MODEL`, `GROQ_MODEL`, `GEMINI_TTS_MODEL`, `GEMINI_TTS_VOICE`, `SUPABASE_URL` y `SUPABASE_SECRET_KEY` desde `.env`, únicamente server-side. En desarrollo, `/api/decide`, `/api/talk`, `/api/transcribe`, `/api/speak` y `/api/enroll` ejecutan handlers reales; Groq se consulta solo cuando Jev elige `talk` o transcribe una frase de manos libres.
 - La clave de Groq la escribe el visitante en Ajustes. Se guarda en su navegador (`jevling.groqKey`), se envía solo en la cabecera de `/api/talk` y `/api/transcribe` y el servidor no la guarda ni la registra. Sin clave, Jev no genera respuestas habladas: el servidor responde 401 y el HUD de Home lo dice («Para que Jev hable, guarda tu clave de Groq en Ajustes.») con un botón «Abrir Ajustes» que abre el mismo panel del engranaje; al cerrarlo, el foco vuelve a ese botón. Cualquier otro fallo mantiene el aviso de habla no disponible. Las respuestas locales de Jev no cambian.
 
 ## Manos libres en Home
@@ -142,3 +142,11 @@ El sonido está activado por defecto y empieza con el primer clic, toque o tecla
 - Lo que se oye mientras Jev decide o habla se descarta antes de transcribirse, para que no se escuche a sí mismo. Para cortarlo se apaga el micrófono o se le escribe.
 - Se apaga al ocultar la pestaña, salir de Inicio, abrir la inscripción UATF o si Groq rechaza la clave. Si Groq llega a su límite, sigue escuchando y lo avisa.
 - El audio nunca se guarda: cada frase viaja una vez a `/api/transcribe` y se descarta.
+
+## Voz con palabras en Home
+
+- Con una clave de Google guardada en Ajustes («Voz de Jev (Google)»), Jev dice la frase hablada con la voz Puck de Gemini, en estilo de criatura juguetona, curiosa y alegre (en español, latinoamericano neutro). Antes suena su firma de pitidos, un «¡Ui!» con risita. Los bloques se muestran, no se leen.
+- La animación de habla dura lo que dura la voz y vuelve a `Base` al terminar. El interruptor «Sonido de Jev», ocultar la pestaña, un mensaje nuevo o una acción la cortan como a los pitidos.
+- Sin clave, con el sonido apagado, si Google rechaza la clave o agota la cuota, si falla o si el audio tarda más de 3 s en empezar, Jev dice la frase con sus pitidos y la respuesta llega igual. Ajustes explica una clave rechazada o la cuota agotada.
+- Ajustes muestra la sección como la de Groq: campo de contraseña, «Guardar clave de voz», «Borrar clave de voz», estado y una guía de cuatro pasos hacia Google AI Studio. Un aviso fijo dice que, en el nivel gratuito, Google puede usar el texto que Jev dice para mejorar sus productos.
+- Capacidades sigue con los pitidos: es determinista y no consulta `/api/*`.

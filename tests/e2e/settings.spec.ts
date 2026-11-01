@@ -6,9 +6,18 @@ const viewports = { desktop: { width: 1440, height: 900 }, mobile: { width: 390,
 const KEY = "gsk_test_visible_key_1234567890";
 
 type Language = "es" | "en";
-const copy: Record<Language, { gear: string; key: string; save: string; saved: string; invalid: string }> = {
-  es: { gear: "Ajustes", key: "Clave API", save: "Guardar clave", saved: "Clave guardada en este navegador.", invalid: "Revisa la clave: debe tener entre 20 y 200 caracteres, sin espacios." },
-  en: { gear: "Settings", key: "API key", save: "Save key", saved: "Key saved in this browser.", invalid: "Check the key: it must be 20 to 200 characters, without spaces." },
+const VOICE_KEY = "AIza_test_visible_key_1234567890";
+const copy: Record<Language, { gear: string; groq: string; key: string; save: string; saved: string; invalid: string; voice: string; voiceKey: string; voiceSave: string; voiceSaved: string; privacy: string }> = {
+  es: {
+    gear: "Ajustes", groq: "Clave de Groq", key: "Clave API", save: "Guardar clave", saved: "Clave guardada en este navegador.", invalid: "Revisa la clave: debe tener entre 20 y 200 caracteres, sin espacios.",
+    voice: "Voz de Jev (Google)", voiceKey: "Clave de voz", voiceSave: "Guardar clave de voz", voiceSaved: "Clave guardada en este navegador. Jev habla con su voz.",
+    privacy: "En el nivel gratuito, Google puede usar el texto que Jev dice para mejorar sus productos.",
+  },
+  en: {
+    gear: "Settings", groq: "Groq key", key: "API key", save: "Save key", saved: "Key saved in this browser.", invalid: "Check the key: it must be 20 to 200 characters, without spaces.",
+    voice: "Jev's voice (Google)", voiceKey: "Voice key", voiceSave: "Save voice key", voiceSaved: "Key saved in this browser. Jev speaks with its voice.",
+    privacy: "On the free tier, Google may use the text Jev says to improve its products.",
+  },
 };
 
 /** Seeds language and theme once per tab, then opens Home. */
@@ -45,17 +54,30 @@ for (const language of ["es", "en"] as const) {
         expect(box.y).toBeGreaterThanOrEqual(0);
         expect(box.y + box.height).toBeLessThanOrEqual(viewports[device].height);
 
-        const field = page.getByLabel(text.key);
+        const groq = dialog.getByRole("region", { name: text.groq });
+        const field = groq.getByLabel(text.key, { exact: true });
         await field.fill("corta");
-        await page.getByRole("button", { name: text.save }).click();
+        await groq.getByRole("button", { name: text.save, exact: true }).click();
         await expect(field).toHaveAttribute("aria-invalid", "true");
-        await expect(page.getByText(text.invalid)).toBeVisible();
+        await expect(groq.getByText(text.invalid)).toBeVisible();
 
         await field.fill(KEY);
-        await page.getByRole("button", { name: text.save }).click();
-        await expect(dialog.getByRole("status")).toHaveText(text.saved);
+        await groq.getByRole("button", { name: text.save, exact: true }).click();
+        await expect(groq.getByRole("status")).toHaveText(text.saved);
         await expect(field).toHaveValue("");
         if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/settings-${device}-${language}-${theme}.png` });
+
+        // Jev's voice key sits in its own section, with Google's free-tier note.
+        const voice = dialog.getByRole("region", { name: text.voice });
+        await expect(voice.getByText(text.privacy)).toBeVisible();
+        const voiceField = voice.getByLabel(text.voiceKey, { exact: true });
+        await voiceField.fill(VOICE_KEY);
+        await voice.getByRole("button", { name: text.voiceSave, exact: true }).click();
+        await expect(voice.getByRole("status")).toHaveText(text.voiceSaved);
+        await expect(voiceField).toHaveValue("");
+        const voiceBox = await voice.boundingBox();
+        expect(voiceBox && voiceBox.x + voiceBox.width).toBeLessThanOrEqual(viewports[device].width);
+        if (EVIDENCE) await page.screenshot({ path: `${EVIDENCE}/settings-voice-${device}-${language}-${theme}.png` });
 
         await page.keyboard.press("Escape");
         await expect(dialog).toBeHidden();

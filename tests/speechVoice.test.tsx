@@ -33,6 +33,12 @@ describe("Home reply voice", () => {
     expect(voice.stopSpeech).toHaveBeenCalledOnce();
   });
 
+  it("tells the voice the caption's language, so Gemini styles it in that language", () => {
+    const { rerender, voice } = mount();
+    rerender({ value: { ...caption("Hello!", true), language: "en" }, silenced: false });
+    expect(voice.speak).toHaveBeenCalledWith("home-1", "Hello!", true, expect.any(Function), "en");
+  });
+
   it("stays quiet while a speech notice replaces the caption", () => {
     const { rerender, voice } = mount();
     rerender({ value: caption("Hola", false), silenced: true });

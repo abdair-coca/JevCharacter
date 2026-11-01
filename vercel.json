@@ -17,6 +17,9 @@
     },
     "api/transcribe.ts": {
       "maxDuration": 10
+    },
+    "api/speak.ts": {
+      "maxDuration": 15
     }
   }
 }

@@ -16,7 +16,7 @@ type LocalApiResponse = {
   setHeader: (name: string, value: string) => void;
   status: (code: number) => LocalApiResponse;
   json: (body: unknown) => unknown;
-  write: (chunk: string) => boolean;
+  write: (chunk: string | Uint8Array) => boolean;
   end: () => void;
   on: (event: 'close', listener: () => void) => LocalApiResponse;
   flushHeaders: () => void;
@@ -129,12 +129,13 @@ const localDevApi = (): Plugin => ({
     mountHandler('/api/enroll', '/api/enroll.ts');
     // A heard phrase travels as base64 WAV: up to 15 s of 16 kHz audio.
     mountHandler('/api/transcribe', '/api/transcribe.ts', 700_000);
+    mountHandler('/api/speak', '/api/speak.ts');
   },
 })
 
 export default defineConfig(({ mode }) => {
   const localEnv = loadEnv(mode, process.cwd(), '')
-  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL', 'SUPABASE_URL', 'SUPABASE_SECRET_KEY'] as const) {
+  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL', 'GEMINI_TTS_MODEL', 'GEMINI_TTS_VOICE', 'SUPABASE_URL', 'SUPABASE_SECRET_KEY'] as const) {
     if (!process.env[name] && localEnv[name]) process.env[name] = localEnv[name]
   }
 

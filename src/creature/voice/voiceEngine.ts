@@ -4,6 +4,16 @@ import type { TalkState } from "../brain/brain.types";
 import { ACTION_MOTIFS, scoreSpeech, TALK_BABBLE, type VoiceGlide } from "./voiceScore";
 
 type Channel = "action" | "speech";
+/** A reply another voice sounds through Jev's speech channel; inactive once the reply was cut or replaced. */
+export type SpeechHandle = {
+  readonly active: boolean;
+  /** Queues mono samples right after what is already queued. */
+  play: (samples: Float32Array, sampleRate: number) => void;
+  /** No more audio is coming: the end is reported once the queue has sounded. */
+  finish: () => void;
+  /** The other voice could not speak: Jev chirps the sentence himself, after the signature. */
+  fallback: (text: string) => void;
+};
 type Speech = { key: string; voicedUntil: number; offsetEnd: number; timeEnd: number | null; finish: (() => void) | null; timer: number | null };
 type EngineOptions = { core?: AudioCore; now?: () => number };
 
@@ -23,6 +33,10 @@ const VOWEL_BRIGHT = 1300;
 const VOWEL_Q = 1.4;
 // How far the loudness drops at each syllable seam.
 const SEAM_DIP = 0.4;
+// Jev's own chirp, a bright whoop with a giggle, signs every reply another voice says for him.
+const SIGNATURE = "¡Ui!";
+// A small cushion before queued audio, so chunks that arrive a little late still play without a gap.
+const AUDIO_LEAD = 0.12;
 
 function isTalk(cue: CharacterCue): cue is TalkState {
   return TALK_STATES.includes(cue);
@@ -57,6 +71,14 @@ export function createVoiceEngine({ core = appAudio, now = () => performance.now
     const finish = current.finish;
     current.finish = null;
     finish?.();
+  }
+
+  // A finished reply reports its end once everything queued for it has sounded.
+  function endWhenSounded(current: Speech, context: AudioContext, onEnd?: () => void) {
+    if (current.timer !== null) window.clearTimeout(current.timer);
+    current.finish = onEnd ?? null;
+    const remainingMs = current.timeEnd === null ? 0 : Math.max(0, current.timeEnd - context.currentTime) * 1000;
+    current.timer = window.setTimeout(() => notifyEnd(current), remainingMs);
   }
 
   // Cuts the current speech. Only `notify` reports its end: a replaced or cancelled reply must not.
@@ -202,10 +224,57 @@ export function createVoiceEngine({ core = appAudio, now = () => performance.now
         current.timeEnd = start - first + last;
       }
       if (!complete) return;
-      if (current.timer !== null) window.clearTimeout(current.timer);
-      current.finish = onEnd ?? null;
-      const remainingMs = current.timeEnd === null ? 0 : Math.max(0, current.timeEnd - context.currentTime) * 1000;
-      current.timer = window.setTimeout(() => notifyEnd(current), remainingMs);
+      endWhenSounded(current, context, onEnd);
+    },
+    /**
+     * Starts a reply another voice says for Jev (Gemini). The signature chirp sounds first; `play`
+     * queues that voice on the speech channel, so muting, a new action or a new reply cut it too.
+     */
+    beginSpeech(key: string, onEnd?: () => void): SpeechHandle {
+      lastSpeechAt = now();
+      clearTalkTimer();
+      endSpeech(false);
+      // Muting or hiding the tab mid-reply still reports its end, like the chirps do.
+      const current: Speech = { key, voicedUntil: 0, offsetEnd: 0, timeEnd: null, finish: onEnd ?? null, timer: null };
+      speech = current;
+      const context = core.context();
+      if (core.audible() && context) {
+        const signature = scoreSpeech(SIGNATURE);
+        const start = context.currentTime + 0.02;
+        schedule("speech", signature, start);
+        current.timeEnd = start + signature.reduce((latest, glide) => Math.max(latest, glide.at + glide.duration), 0);
+      }
+      const live = () => speech === current;
+      return {
+        get active() { return live(); },
+        play(samples, sampleRate) {
+          const audio = core.context();
+          const output = core.bus("voice");
+          if (!live() || !audio || !output || !core.audible() || samples.length === 0) return;
+          const buffer = audio.createBuffer(1, samples.length, sampleRate);
+          buffer.copyToChannel(Float32Array.from(samples), 0);
+          const source = audio.createBufferSource();
+          source.buffer = buffer;
+          source.connect(output);
+          const at = Math.max(audio.currentTime + AUDIO_LEAD, current.timeEnd ?? 0);
+          nodes.speech.add(source);
+          source.onended = () => { nodes.speech.delete(source); source.disconnect(); };
+          source.start(at);
+          current.timeEnd = at + buffer.duration;
+        },
+        finish() {
+          const audio = core.context();
+          if (!live()) return;
+          if (!audio || !core.audible()) notifyEnd(current);
+          else endWhenSounded(current, audio, onEnd);
+        },
+        fallback(text) {
+          if (!live()) return;
+          // The chirped sentence starts after the signature, on the same reply.
+          current.offsetEnd = 0;
+          engine.speak(key, text, true, onEnd);
+        },
+      };
     },
     stopSpeech() {
       endSpeech(false);

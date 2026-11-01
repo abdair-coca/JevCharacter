@@ -1,20 +1,25 @@
-import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useEffect, useId, useRef, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import { m } from "motion/react";
 import { Button } from "../../components/ui/button";
 import { JEV_COLOR_IDS } from "../../character/jevColors";
-import { clearGroqKey, readGroqKey, saveGroqKey } from "../../creature/brain/groqKeyStore";
+import { geminiKeyStore } from "../../creature/brain/geminiKeyStore";
+import { groqKeyStore } from "../../creature/brain/groqKeyStore";
+import { useVoiceProblem, voiceProblem as voiceProblemStore } from "../../creature/voice/geminiVoice";
 import { useTranslation } from "../../i18n/useTranslation";
 import { appAudio } from "../../lib/audioCore";
 import { useOrganicMotion, useUiMotion } from "../../lib/motionTokens";
 import { usePreferences } from "../../stores/preferencesStore";
 import { CloseIcon } from "../reply/SpeechReply";
+import { KeySection } from "./KeySection";
 import "./settings.css";
 
 // Loaded only when the settings open.
 
 const FOCUSABLE = "button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])";
 const GROQ_KEYS_URL = "https://console.groq.com/keys";
+const GEMINI_KEYS_URL = "https://aistudio.google.com/apikey";
+const clearVoiceProblem = () => voiceProblemStore.clear();
 
 type Props = {
   onClose: () => void;
@@ -24,7 +29,7 @@ type Props = {
   diagnostics?: { active: boolean; onToggle: () => void };
 };
 
-/** Ajustes: Jev's sound, color, memory and diagnostics, the interface language and the visitor's own Groq key. Modal over the page. */
+/** Ajustes: Jev's sound, color, memory and diagnostics, the interface language and the visitor's own Groq and Google keys. Modal over the page. */
 export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Props) {
   const t = useTranslation();
   const language = usePreferences(state => state.language);
@@ -37,16 +42,9 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
   const { spring } = useOrganicMotion();
   const headingId = useId();
   const jevTitleId = useId();
-  const keyTitleId = useId();
-  const keyInputId = useId();
-  const keyHelpId = useId();
-  const keyErrorId = useId();
   const panel = useRef<HTMLDivElement | null>(null);
   const heading = useRef<HTMLHeadingElement | null>(null);
-  const keyInput = useRef<HTMLInputElement | null>(null);
-  const [draft, setDraft] = useState("");
-  const [keyStored, setKeyStored] = useState(() => readGroqKey() !== null);
-  const [keyRejected, setKeyRejected] = useState(false);
+  const voiceProblem = useVoiceProblem();
 
   useEffect(() => { heading.current?.focus({ preventScroll: true }); }, []);
 
@@ -56,26 +54,6 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
     // Turning sound on is itself a gesture, so audio can start right away.
     appAudio.setEnabled(true);
     appAudio.unlock();
-  };
-
-  const saveKey = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!saveGroqKey(draft)) {
-      setKeyRejected(true);
-      return;
-    }
-    // The key leaves the field as soon as it is saved. The save button turns disabled and would drop
-    // focus, so focus moves to the field: Escape keeps working from inside the dialog.
-    setDraft("");
-    setKeyRejected(false);
-    setKeyStored(true);
-    requestAnimationFrame(() => keyInput.current?.focus({ preventScroll: true }));
-  };
-
-  const removeKey = () => {
-    clearGroqKey();
-    setKeyStored(false);
-    requestAnimationFrame(() => keyInput.current?.focus({ preventScroll: true }));
   };
 
   // Keys stay inside the modal: Home's shortcuts must not act behind it.
@@ -144,33 +122,9 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
           )}
         </section>
 
-        <section className="settings__group" aria-labelledby={keyTitleId}>
-          <h3 id={keyTitleId}>{t.groqTitle}</h3>
-          <p id={keyHelpId} className="settings__help">{t.groqHelp}</p>
-          <details className="settings__guide">
-            <summary className="settings__link"><span>{t.groqGuide}</span><span aria-hidden="true">›</span></summary>
-            <ol>
-              <li>
-                <a href={GROQ_KEYS_URL} target="_blank" rel="noopener noreferrer">{t.groqStepConsole}<span className="sr-only"> {t.newTab}</span><span aria-hidden="true"> ↗</span></a> {t.groqStepSignIn}
-              </li>
-              <li>{t.groqStepCreate}</li>
-              <li>{t.groqStepCopy}</li>
-              <li>{t.groqStepPaste}</li>
-            </ol>
-          </details>
-          <p className="settings__status" role="status">{keyStored ? t.groqSaved : t.groqMissing}</p>
-          <form className="settings__key" onSubmit={saveKey}>
-            <label htmlFor={keyInputId}>{t.groqLabel}</label>
-            <input id={keyInputId} ref={keyInput} type="password" value={draft} placeholder="gsk_…" autoComplete="off" autoCapitalize="none" autoCorrect="off" spellCheck={false}
-              aria-invalid={keyRejected} aria-describedby={keyRejected ? keyErrorId : keyHelpId}
-              onChange={event => { setDraft(event.target.value); setKeyRejected(false); }} />
-            {keyRejected && <p id={keyErrorId} className="settings__error">{t.groqInvalid}</p>}
-            <div className="settings__actions">
-              <button type="submit" disabled={!draft.trim()}>{t.groqSave}</button>
-              {keyStored && <button type="button" onClick={removeKey}>{t.groqRemove}</button>}
-            </div>
-          </form>
-        </section>
+        <KeySection provider="groq" store={groqKeyStore} keysUrl={GROQ_KEYS_URL} placeholder="gsk_…" />
+        <KeySection provider="gemini" store={geminiKeyStore} keysUrl={GEMINI_KEYS_URL} placeholder="AIza…" note={t.geminiPrivacy}
+          problem={voiceProblem === "rejected" ? t.geminiRejected : voiceProblem === "quota" ? t.geminiQuota : null} onSaved={clearVoiceProblem} />
       </m.div>
     </div>,
     document.body,
