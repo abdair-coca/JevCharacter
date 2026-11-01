@@ -79,6 +79,7 @@ html:has(.home-session:not([hidden])) { overflow: hidden; }
 .home-controls { position: relative; z-index: var(--layer-content); width: min(100%, var(--size-content)); margin-inline: auto; }
 .speech-slot { position: relative; min-height: var(--space-8); pointer-events: none; }
 .speech-caption { position: absolute; bottom: 100%; left: 0; right: 0; width: fit-content; max-width: var(--size-input); margin: 0 auto var(--space-3); padding: var(--space-3) var(--space-6); color: var(--color-foreground); background: var(--color-background-secondary); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-body); line-height: var(--line-body); text-align: center; overflow-wrap: anywhere; }
+.speech-caption--tool { color: var(--color-muted); }
 .interaction-dock { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, var(--size-input)) minmax(0, 1fr); align-items: start; gap: var(--space-4); }
 .interaction-dock .whisper-wrap { grid-column: 2; }
 .interaction-dock .brain-hud { grid-column: 3; justify-self: start; width: min(100%, var(--size-hud-compact)); }

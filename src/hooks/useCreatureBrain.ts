@@ -22,7 +22,7 @@ import {
   savePersonality,
 } from "../creature/personality/personalityStorage";
 import { MORPH_FORMS, mentionedMorphForms, requestedMorphForm } from "../creature/brain/morphIntent";
-import type { SpeechLanguage } from "../creature/brain/speechProtocol";
+import type { SpeechLanguage, SpeechPlugin } from "../creature/brain/speechProtocol";
 import { useSpeechSession, type SpeechCaption, type SpeechDetail, type SpeechNotice } from "./useSpeechSession";
 import { executeDecisionAction } from "../creature/rive/riveReactionAdapter";
 import type { SensorController } from "../creature/sensors/pointerSensor";
@@ -68,6 +68,8 @@ type CreatureBrain = {
   apiLatencyMs: number;
   /** Jev is saying a reply, until the voice ends. */
   speaking: boolean;
+  /** A plugin Jev is using for the pending reply, before its sentence arrives. */
+  speechTool: SpeechPlugin | null;
   /** `direct`: the message was said to Jev by name, so it goes straight to speech. */
   submitContext: (context: string, options?: { direct?: boolean }) => void;
   clearContext: () => void;
@@ -348,6 +350,7 @@ export function useCreatureBrain(
     history,
     apiLatencyMs,
     speaking: speech.speaking,
+    speechTool: speech.tool,
     submitContext,
     clearContext,
     forceState,

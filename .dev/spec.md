@@ -61,7 +61,7 @@ Quiz del 2026-10-31:
 
 ### 3. Plugins: GitHub y WhatsApp
 
-- **Ajustes › Plugins:** interruptores «GitHub» y «WhatsApp», encendidos por defecto y persistidos en `jevling.plugins`. Cada mensaje envía cuáles están activos y el servidor solo ofrece al modelo esas herramientas. Propuesta aprobada en el quiz de aprobación. La lista es extensible: cada plugin declara su esquema, sus límites y su ejecución en `api/plugins/`.
+- **Ajustes › Plugins:** interruptores «GitHub» y «WhatsApp», encendidos por defecto y persistidos en `jevling.plugins`. Cada mensaje envía cuáles están activos y el servidor solo ofrece al modelo esas herramientas. Propuesta aprobada en el quiz de aprobación. La lista es extensible: cada plugin declara su esquema, sus límites y su ejecución en `api/_plugins/`.
 - **GitHub (solo lectura, público):** herramientas para ver un repo, buscar repos, listar issues o PRs, ver commits recientes y ver un perfil. Usan la API REST con `GITHUB_TOKEN` del servidor, opcional y de solo lectura. Cada resultado se recorta a ≤1500 caracteres, con hasta 2 llamadas por mensaje y 4 s por llamada.
 - **Flujo:** `/api/talk` llama a Groq en streaming con las herramientas activas. Si el modelo pide una, el servidor la ejecuta, emite el evento SSE `tool` (`{plugin, status}`) para que Home muestre «Buscando en GitHub…» mientras Jev piensa, y abre una segunda llamada en streaming con el resultado. Sin herramientas, el camino es el actual.
 - **Fuentes:** un bloque nuevo `links` (hasta 3 enlaces) muestra de dónde salió el dato. El servidor solo acepta URLs `https://github.com/…` que aparecieron en los resultados de la herramienta. Se dibujan como enlaces de React con `rel="noopener noreferrer"`, nunca como HTML del modelo.

@@ -5,7 +5,8 @@ import { historyReply, type SpeechBlock } from "../creature/brain/speechBlocks";
 import { readGroqKey } from "../creature/brain/groqKeyStore";
 import { SpeechKeyRequiredError, streamSpeechReply } from "../creature/brain/speechClient";
 import { addMemory, readMemory, selectRelevant } from "../creature/memory/memoryStore";
-import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage } from "../creature/brain/speechProtocol";
+import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage, type SpeechPlugin } from "../creature/brain/speechProtocol";
+import { enabledPlugins, preferencesStore } from "../stores/preferencesStore";
 
 /** `needsKey`: Jev could not speak because this browser has no valid Groq key saved in Ajustes. */
 export type SpeechNotice = "unavailable" | "needsKey" | "regenerating" | "interrupted" | null;
@@ -22,6 +23,8 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
   const [status, setStatus] = useState<"idle" | "waiting" | "streaming">("idle");
   // From the spoken sentence until Jev returns to Base: hands-free ignores what it hears meanwhile.
   const [speaking, setSpeaking] = useState(false);
+  // A plugin working for the pending reply, until its sentence arrives.
+  const [tool, setTool] = useState<SpeechPlugin | null>(null);
   const historyRef = useRef<SpeechExchange[]>([]);
   const pendingRef = useRef<PendingSpeech | null>(null);
   const generationRef = useRef(0);
@@ -57,6 +60,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     if (clearHistory) historyRef.current = [];
     setCaption(null);
     setDetail(null);
+    setTool(null);
     setNotice(null);
     setStatus("idle");
   }, [invalidate]);
@@ -72,6 +76,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     pendingRef.current = request;
     setCaption(null);
     setDetail(null);
+    setTool(null);
     setNotice(regenerating ? "regenerating" : null);
     setStatus("waiting");
     if (regenerating) void characterRef.current?.think();
@@ -82,6 +87,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       invalidate();
       setCaption(null);
       setDetail(null);
+      setTool(null);
       setNotice(notice);
       setStatus("idle");
       void characterRef.current?.idle();
@@ -92,6 +98,14 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       language: request.language,
       history: historyRef.current.slice(-SPEECH_HISTORY_LIMIT),
       memory: selectRelevant(readMemory(), request.message),
+      plugins: enabledPlugins(preferencesStore.getState().plugins),
+      // A tool round takes longer than a plain reply: the wait starts again when it begins.
+      onTool: plugin => {
+        if (!isCurrent()) return;
+        if (request.timeout !== null) window.clearTimeout(request.timeout);
+        request.timeout = window.setTimeout(() => fail(), SPEECH_REQUEST_TIMEOUT_MS);
+        setTool(plugin);
+      },
       apiKey: readGroqKey(),
       signal: request.controller.signal,
       // The spoken sentence arrives whole: Jev talks while the blocks keep streaming.
@@ -101,6 +115,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
         talkingRef.current = true;
         setSpeaking(true);
         void characterRef.current?.speak(request.state);
+        setTool(null);
         setNotice(null);
         setStatus("streaming");
         setCaption({ text, complete: true, generation: request.generation, language: request.language });
@@ -153,6 +168,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       invalidate();
       setCaption(null);
       setDetail(null);
+      setTool(null);
       setStatus("idle");
       setNotice(interrupted ? "interrupted" : null);
     }
@@ -171,5 +187,5 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
 
   const hasOpenQuestion = useCallback(() => openQuestionRef.current, []);
 
-  return { caption, detail, notice, status, speaking, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
+  return { caption, detail, notice, status, speaking, tool, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
 }

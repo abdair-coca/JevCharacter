@@ -4,6 +4,11 @@ export const SPEECH_REQUEST_TIMEOUT_MS = 12_000;
 export type SpeechLanguage = "es" | "en";
 export const isSpeechLanguage = (value: unknown): value is SpeechLanguage => value === "es" || value === "en";
 
+/** Plugins the visitor can switch on or off in Ajustes; each message says which ones are on. */
+export const SPEECH_PLUGINS = ["github", "whatsapp"] as const;
+export type SpeechPlugin = (typeof SPEECH_PLUGINS)[number];
+export const isSpeechPlugin = (value: unknown): value is SpeechPlugin => SPEECH_PLUGINS.some(plugin => plugin === value);
+
 export type SpeechExchange = {
   user: string;
   assistant: string;

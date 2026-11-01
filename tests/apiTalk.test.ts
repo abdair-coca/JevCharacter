@@ -454,3 +454,226 @@ describe("/api/talk", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
+
+/** The SSE events written to the browser, in order. */
+function sse(writes: string[]) {
+  return writes.join("").split("\n\n").filter(Boolean).map(frame => {
+    const name = /^event: (.+)$/mu.exec(frame)?.[1] ?? "";
+    const data = /^data: (.*)$/mu.exec(frame)?.[1] ?? "null";
+    return { name, data: JSON.parse(data) as unknown };
+  });
+}
+
+const toolCall = (index: number, fields: { id?: string; name?: string; arguments?: string }) => `data: ${JSON.stringify({
+  choices: [{ delta: { tool_calls: [{ index, ...(fields.id ? { id: fields.id, type: "function" } : {}), function: { ...(fields.name ? { name: fields.name } : {}), ...(fields.arguments ? { arguments: fields.arguments } : {}) } }] } }],
+})}\n\n`;
+const object = (value: unknown) => content(JSON.stringify(value));
+
+describe("/api/talk con plugins", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+  });
+
+  it.each([
+    ["un plugin desconocido", ["slack"]],
+    ["un plugin repetido", ["github", "github"]],
+    ["algo que no es lista", "github"],
+  ])("rechaza %s antes del proveedor", async (_case, plugins) => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const response = apiResponse();
+    await handler(request({ ...validBody, plugins }), response.response);
+    expect(response.statusCode).toBe(400);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("ofrece las herramientas de GitHub solo con su plugin encendido", async () => {
+    const fetchMock = vi.fn().mockImplementation(() => Promise.resolve(groqResponse([spoken("Hola."), "data: [DONE]\n\n"])));
+    vi.stubGlobal("fetch", fetchMock);
+    await handler(request({ ...validBody, plugins: ["github", "whatsapp"] }), apiResponse().response);
+    await handler(request({ ...validBody, plugins: ["whatsapp"] }), apiResponse().response);
+    const [on, off] = fetchMock.mock.calls.map(([, init]) => JSON.parse(String((init as RequestInit).body)));
+    expect(on.tool_choice).toBe("auto");
+    expect(on.tools.map((tool: { function: { name: string } }) => tool.function.name)).toEqual(["github_repo", "github_search_repos", "github_issues", "github_pull_requests", "github_commits", "github_user"]);
+    expect(on.messages[0].content).toContain("Plugin GitHub");
+    expect(off.tools).toBeUndefined();
+    expect(off.messages[0].content).toContain("El plugin GitHub está apagado");
+  });
+
+  it("consulta GitHub, avisa la búsqueda, responde con los datos y solo enlaza páginas que GitHub devolvió", async () => {
+    vi.stubEnv("GITHUB_TOKEN", "github_pat_test");
+    const groqBodies: Record<string, unknown>[] = [];
+    const githubCalls: { url: string; headers: Record<string, string> }[] = [];
+    const fetchMock = vi.fn((url: RequestInfo | URL, init?: RequestInit) => {
+      if (String(url).startsWith("https://api.github.com/")) {
+        githubCalls.push({ url: String(url), headers: init?.headers as Record<string, string> });
+        return Promise.resolve(new Response(JSON.stringify({
+          full_name: "facebook/react", description: "The library for web and native user interfaces.",
+          stargazers_count: 230_000, html_url: "https://github.com/facebook/react", language: "JavaScript",
+        })));
+      }
+      groqBodies.push(JSON.parse(String(init?.body)));
+      return Promise.resolve(groqBodies.length === 1
+        ? groqResponse([
+          toolCall(0, { id: "call_1", name: "github_repo" }),
+          toolCall(0, { arguments: '{"repo":' }),
+          toolCall(0, { arguments: '"https://github.com/facebook/react"}' }),
+          "data: [DONE]\n\n",
+        ])
+        : groqResponse([
+          spoken("React tiene 230 mil estrellas."),
+          object({ type: "memory", text: "" }),
+          object({ type: "links", items: [{ label: "facebook/react", url: "https://github.com/facebook/react" }, { label: "Otro", url: "https://github.com/evil/phish" }] }),
+          "data: [DONE]\n\n",
+        ]));
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const response = apiResponse();
+    await handler(request({ ...validBody, message: "¿Cuántas estrellas tiene React?", plugins: ["github"] }), response.response);
+
+    expect(githubCalls).toHaveLength(1);
+    expect(githubCalls[0].url).toBe("https://api.github.com/repos/facebook/react");
+    expect(githubCalls[0].headers.Authorization).toBe("Bearer github_pat_test");
+    const events = sse(response.writes);
+    expect(events.map(event => event.name)).toEqual(["tool", "spoken", "block", "done"]);
+    expect(events[0].data).toEqual({ plugin: "github" });
+    expect(events[2].data).toEqual({ block: { type: "links", items: [{ label: "facebook/react", url: "https://github.com/facebook/react" }] } });
+
+    const followUp = groqBodies[1] as { tool_choice: string; max_completion_tokens: number; temperature: number; messages: { role: string; content: string | null; tool_calls?: unknown[]; tool_call_id?: string }[] };
+    // A second round is still allowed after the first.
+    expect(followUp.tool_choice).toBe("auto");
+    expect(followUp.max_completion_tokens).toBe(512);
+    expect(followUp.temperature).toBe(0.2);
+    // The chat stays on the fast model; the reply built on GitHub data uses the larger one.
+    expect((groqBodies[0] as { model: string }).model).toBe("openai/gpt-oss-20b");
+    expect((followUp as unknown as { model: string; reasoning_effort: string }).model).toBe("openai/gpt-oss-120b");
+    expect((followUp as unknown as { reasoning_effort: string }).reasoning_effort).toBe("low");
+    expect((groqBodies[0] as { temperature: number }).temperature).toBe(0.55);
+    const [assistant, tool] = followUp.messages.slice(-2);
+    expect(assistant).toMatchObject({ role: "assistant", tool_calls: [{ id: "call_1", type: "function", function: { name: "github_repo", arguments: '{"repo":"https://github.com/facebook/react"}' } }] });
+    expect(tool.role).toBe("tool");
+    expect(tool.tool_call_id).toBe("call_1");
+    expect(JSON.parse(String(tool.content))).toMatchObject({ name: "facebook/react", stars: 230_000, url: "https://github.com/facebook/react" });
+  });
+
+  it("nunca deja pasar enlaces sin una consulta que los respalde", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(groqResponse([
+      spoken("Mira esto."),
+      object({ type: "links", items: [{ label: "React", url: "https://github.com/facebook/react" }] }),
+      "data: [DONE]\n\n",
+    ])));
+    const response = apiResponse();
+    await handler(request({ ...validBody, plugins: ["github"] }), response.response);
+    expect(sse(response.writes).map(event => event.name)).toEqual(["spoken", "done"]);
+  });
+
+  it("responde a una herramienta inventada con un error para el modelo, sin llamar a nadie más", async () => {
+    const groqBodies: { messages: { role: string; content: string | null }[] }[] = [];
+    vi.stubGlobal("fetch", vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      groqBodies.push(JSON.parse(String(init?.body)));
+      return Promise.resolve(groqBodies.length === 1
+        ? groqResponse([toolCall(0, { id: "call_x", name: "send_email", arguments: "{}" }), "data: [DONE]\n\n"])
+        : groqResponse([spoken("No puedo hacer eso."), "data: [DONE]\n\n"]));
+    }));
+    const response = apiResponse();
+    await handler(request({ ...validBody, plugins: ["github"] }), response.response);
+    expect(sse(response.writes).map(event => event.name)).toEqual(["spoken", "done"]);
+    expect(groqBodies[1].messages.at(-1)).toMatchObject({ role: "tool", content: JSON.stringify({ error: "unknown_tool" }) });
+  });
+
+  it("muestra el borrador de WhatsApp solo con su plugin encendido", async () => {
+    const reply = () => groqResponse([
+      spoken("Te lo dejo listo."),
+      object({ type: "whatsapp", text: "Hola, llego 10 minutos tarde." }),
+      "data: [DONE]\n\n",
+    ]);
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(reply())));
+    const on = apiResponse();
+    await handler(request({ ...validBody, plugins: ["whatsapp"] }), on.response);
+    const off = apiResponse();
+    await handler(request({ ...validBody, plugins: [] }), off.response);
+    expect(sse(on.writes).find(event => event.name === "block")?.data).toEqual({ block: { type: "whatsapp", text: "Hola, llego 10 minutos tarde." } });
+    expect(sse(off.writes).map(event => event.name)).toEqual(["spoken", "done"]);
+  });
+});
+
+describe("/api/talk con varias rondas de herramientas", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+  });
+
+  const githubAnswers = (url: string) => {
+    if (url.includes("/commits")) return [{ commit: { message: "Upgrade React", author: { name: "Ana", date: "2026-10-31T00:00:00Z" } }, html_url: "https://github.com/vercel/next.js/commit/abcdef1234567" }];
+    return { full_name: "vercel/next.js", stargazers_count: 130_000, html_url: "https://github.com/vercel/next.js" };
+  };
+
+  it("deja pedir los commits después del repo, cierra con una ronda sin herramientas y enlaza las fuentes aunque el modelo no lo haga", async () => {
+    const groqBodies: { tool_choice?: string; tools?: unknown[] }[] = [];
+    vi.stubGlobal("fetch", vi.fn((url: RequestInfo | URL, init?: RequestInit) => {
+      if (String(url).startsWith("https://api.github.com/")) return Promise.resolve(new Response(JSON.stringify(githubAnswers(String(url)))));
+      groqBodies.push(JSON.parse(String(init?.body)));
+      const replies = [
+        [toolCall(0, { id: "call_1", name: "github_repo", arguments: '{"repo":"vercel/next.js"}' }), "data: [DONE]\n\n"],
+        [toolCall(0, { id: "call_2", name: "github_commits", arguments: '{"repo":"vercel/next.js","days":7}' }), "data: [DONE]\n\n"],
+        [spoken("Esta semana actualizaron React."), "data: [DONE]\n\n"],
+      ];
+      return Promise.resolve(groqResponse(replies[groqBodies.length - 1]));
+    }));
+    const response = apiResponse();
+    await handler(request({ ...validBody, message: "¿Qué cambió esta semana en vercel/next.js?", plugins: ["github"] }), response.response);
+
+    expect(groqBodies.map(body => body.tool_choice)).toEqual(["auto", "auto", "none"]);
+    const events = sse(response.writes);
+    expect(events.map(event => event.name)).toEqual(["tool", "tool", "spoken", "block", "done"]);
+    expect(events[3].data).toEqual({ block: { type: "links", items: [
+      { label: "vercel/next.js", url: "https://github.com/vercel/next.js" },
+      { label: "vercel/next.js @abcdef1", url: "https://github.com/vercel/next.js/commit/abcdef1234567" },
+    ] } });
+  });
+
+  it("usa GROQ_TOOL_MODEL para responder con datos de herramientas", async () => {
+    vi.stubEnv("GROQ_TOOL_MODEL", "llama-3.3-70b-versatile");
+    const models: string[] = [];
+    vi.stubGlobal("fetch", vi.fn((url: RequestInfo | URL, init?: RequestInit) => {
+      if (String(url).startsWith("https://api.github.com/")) return Promise.resolve(new Response(JSON.stringify(githubAnswers(String(url)))));
+      const sent = JSON.parse(String(init?.body)) as { model: string; reasoning_effort?: string };
+      models.push(`${sent.model}${sent.reasoning_effort ? "+low" : ""}`);
+      return Promise.resolve(groqResponse(models.length === 1
+        ? [toolCall(0, { id: "call_1", name: "github_repo", arguments: '{"repo":"vercel/next.js"}' }), "data: [DONE]\n\n"]
+        : [spoken("Tiene 130 mil estrellas."), "data: [DONE]\n\n"]));
+    }));
+    await handler(request({ ...validBody, plugins: ["github"] }), apiResponse().response);
+    expect(models).toEqual(["openai/gpt-oss-20b+low", "llama-3.3-70b-versatile"]);
+  });
+
+  it("reintenta sin herramientas cuando Groq rechaza una que el modelo inventó", async () => {
+    const groqBodies: { tools?: unknown[] }[] = [];
+    vi.stubGlobal("fetch", vi.fn((_url: RequestInfo | URL, init?: RequestInit) => {
+      groqBodies.push(JSON.parse(String(init?.body)));
+      return Promise.resolve(groqBodies.length === 1
+        ? groqResponse([`data: ${JSON.stringify({ error: { message: "attempted to call tool 'send_whatsapp' which was not in request.tools", code: "tool_use_failed" } })}\n\n`])
+        : groqResponse([spoken("Te lo dejo listo."), object({ type: "whatsapp", text: "Llego tarde." }), "data: [DONE]\n\n"]));
+    }));
+    const response = apiResponse();
+    await handler(request({ ...validBody, message: "Mándale a mi grupo por WhatsApp que llego tarde", plugins: ["github", "whatsapp"] }), response.response);
+
+    expect(groqBodies).toHaveLength(2);
+    expect(groqBodies[0].tools).toHaveLength(6);
+    expect(groqBodies[1].tools).toBeUndefined();
+    expect(sse(response.writes).map(event => event.name)).toEqual(["spoken", "block", "done"]);
+  });
+
+  it("no reintenta si ya mostró la frase, para no repetirla", async () => {
+    const fetchMock = vi.fn(() => Promise.resolve(groqResponse([
+      spoken("Te lo dejo listo."),
+      `data: ${JSON.stringify({ error: { code: "tool_use_failed" } })}\n\n`,
+    ])));
+    vi.stubGlobal("fetch", fetchMock);
+    const response = apiResponse();
+    await handler(request({ ...validBody, plugins: ["github"] }), response.response);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(sse(response.writes).map(event => event.name)).toEqual(["spoken", "error"]);
+  });
+});

@@ -45,7 +45,7 @@ Cada fase se entrega para revisión y se detiene hasta su aprobación.
 
 ## Fase 3 — Plugins
 
-- `api/plugins/registry.ts` (tipos de plugin, esquemas de herramientas y límites) y `api/plugins/github.ts` (5 herramientas, recorte de resultados, timeout y `GITHUB_TOKEN` opcional).
+- `api/_plugins/registry.ts` (tipos de plugin, esquemas de herramientas y límites) y `api/_plugins/github.ts` (con `_`: Vercel publica como función todo archivo de `api/` salvo las carpetas que empiezan por `_`) (5 herramientas, recorte de resultados, timeout y `GITHUB_TOKEN` opcional).
 - `api/talk.ts`: el cuerpo acepta `plugins`; añade `tools` a la llamada en streaming; ejecuta `tool_calls` (≤2) y abre la segunda llamada; emite `tool`; revisa `UPSTREAM_TIMEOUT_MS` y `MAX_COMPLETION_TOKENS` con medición; actualiza el prompt (cuándo usar GitHub y cuándo redactar para WhatsApp).
 - `speechBlocks.ts`: bloques `links` (solo URLs vistas en los resultados) y `whatsapp` (≤500, sin 7 o más dígitos).
 - `ReplyBlocks.tsx` y `reply.css`: enlaces de fuente y tarjeta de WhatsApp; Home muestra «Buscando en GitHub…» con el evento `tool`.

@@ -73,6 +73,22 @@ function Choices({ block, onAsk }: { block: ChoicesBlock; onAsk?: (answer: strin
   );
 }
 
+type WhatsappBlock = Extract<SpeechBlock, { type: "whatsapp" }>;
+
+/** A message Jev drafted: the visitor reads it here and sends it from WhatsApp, choosing who gets it there. */
+function WhatsappDraft({ block }: { block: WhatsappBlock }) {
+  const t = useTranslation();
+  return (
+    <figure className="reply-whatsapp">
+      <figcaption>{t.replyWhatsappLabel}</figcaption>
+      <blockquote><p><Words text={block.text} /></p></blockquote>
+      <a className="reply-whatsapp__open" href={`https://wa.me/?text=${encodeURIComponent(block.text)}`} target="_blank" rel="noopener noreferrer">
+        {t.replyWhatsapp}<span className="sr-only"> {t.newTab}</span><span aria-hidden="true"> ↗</span>
+      </a>
+    </figure>
+  );
+}
+
 function ReplyBlock({ block, onAsk }: { block: SpeechBlock; onAsk?: (question: string) => void }) {
   const t = useTranslation();
   switch (block.type) {
@@ -119,6 +135,20 @@ function ReplyBlock({ block, onAsk }: { block: SpeechBlock; onAsk?: (question: s
       );
     case "choices":
       return <Choices block={block} onAsk={onAsk} />;
+    case "links":
+      // Only GitHub pages reach here: both server and client validated each URL.
+      return (
+        <nav className="reply-links" aria-label={t.replySources}>
+          <span className="reply-links__label" aria-hidden="true">{t.replySources}</span>
+          <ul>
+            {block.items.map((item, index) => (
+              <li key={index}><a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}<span className="sr-only"> {t.newTab}</span><span aria-hidden="true"> ↗</span></a></li>
+            ))}
+          </ul>
+        </nav>
+      );
+    case "whatsapp":
+      return <WhatsappDraft block={block} />;
   }
 }
 

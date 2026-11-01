@@ -99,6 +99,24 @@ describe("useCreatureBrain talk flow", () => {
     unmount();
   });
 
+  it("says which plugin is working until the sentence arrives, and sends the plugins left on", async () => {
+    let push: (chunk: string) => void = () => {};
+    const stream = new ReadableStream<Uint8Array>({ start(controller) { push = chunk => controller.enqueue(new TextEncoder().encode(chunk)); } });
+    const fetchMock = vi.fn((_url: RequestInfo | URL, _init?: RequestInit) => Promise.resolve(new Response(stream)));
+    const { result, unmount } = mountBrain(fetchMock);
+
+    act(() => result.current.submitContext("¿cuántas estrellas tiene react?", { direct: true }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).plugins).toEqual(["github", "whatsapp"]);
+    expect(result.current.speechTool).toBeNull();
+    act(() => push('event: tool\ndata: {"plugin":"github"}\n\n'));
+    await waitFor(() => expect(result.current.speechTool).toBe("github"));
+    act(() => push('event: spoken\ndata: {"text":"Tiene muchas."}\n\nevent: done\ndata: {}\n\n'));
+    await waitFor(() => expect(result.current.speechCaption?.text).toBe("Tiene muchas."));
+    expect(result.current.speechTool).toBeNull();
+    unmount();
+  });
+
   it("uses the latest language if it changes while the decision is still pending", async () => {
     let resolveDecision: (response: Response) => void = () => {};
     const fetchMock = vi.fn((url: RequestInfo | URL) => {

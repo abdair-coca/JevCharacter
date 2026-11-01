@@ -10,7 +10,7 @@
       "maxDuration": 10
     },
     "api/talk.ts": {
-      "maxDuration": 10
+      "maxDuration": 30
     },
     "api/enroll.ts": {
       "maxDuration": 10

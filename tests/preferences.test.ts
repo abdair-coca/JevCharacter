@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { runInNewContext } from "node:vm";
 import { describe, expect, it, vi } from "vitest";
-import { createPreferencesStore } from "../src/stores/preferencesStore";
+import { createPreferencesStore, DEFAULT_PLUGINS, enabledPlugins } from "../src/stores/preferencesStore";
 
 const bootstrap = readFileSync(resolve(process.cwd(), "public/preferences-init.js"), "utf8");
 function initialPreferences({ saved = {}, browser = "es-BO", dark = false, blocked = false }:
@@ -38,7 +38,7 @@ describe("first paint preferences", () => {
 describe("presentation preferences", () => {
   it("tracks system changes only without a manual override and can return to system mode", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true, jevColor: "violet" }, persist, () => true);
+    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true, jevColor: "violet", plugins: DEFAULT_PLUGINS }, persist, () => true);
     store.getState().syncSystemTheme(true);
     expect(store.getState().theme).toBe("dark");
     store.getState().setThemePreference("light");
@@ -50,28 +50,38 @@ describe("presentation preferences", () => {
   });
   it("changes language without resetting theme and persists only presentation fields", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "es", sound: true, jevColor: "violet" }, persist);
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "es", sound: true, jevColor: "violet", plugins: DEFAULT_PLUGINS }, persist);
     store.getState().setLanguage("en");
     expect(store.getState()).toMatchObject({ theme: "dark", themePreference: "dark", language: "en" });
     expect(persist.mock.calls).toEqual([["jevling.language", "en"]]);
   });
   it("persists Jev's sound choice without touching theme or language", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true, jevColor: "violet" }, persist);
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true, jevColor: "violet", plugins: DEFAULT_PLUGINS }, persist);
     store.getState().setSound(false);
     expect(store.getState()).toMatchObject({ theme: "dark", language: "en", sound: false });
     expect(persist.mock.calls).toEqual([["jevling.sound", false]]);
   });
   it("persists Jev's body color without touching the other preferences", () => {
     const persist = vi.fn();
-    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true, jevColor: "violet" }, persist);
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "en", sound: true, jevColor: "violet", plugins: DEFAULT_PLUGINS }, persist);
     store.getState().setJevColor("cyan");
     expect(store.getState()).toMatchObject({ theme: "dark", language: "en", sound: true, jevColor: "cyan" });
     expect(persist.mock.calls).toEqual([["jevling.jevColor", "cyan"]]);
   });
+  it("switches one plugin without touching the other preferences and lists the ones left on", () => {
+    const persist = vi.fn();
+    const store = createPreferencesStore({ theme: "dark", themePreference: "dark", language: "es", sound: true, jevColor: "violet", plugins: DEFAULT_PLUGINS }, persist);
+    expect(enabledPlugins(store.getState().plugins)).toEqual(["github", "whatsapp"]);
+    store.getState().setPlugin("github", false);
+    expect(store.getState()).toMatchObject({ plugins: { github: false, whatsapp: true }, sound: true, language: "es" });
+    expect(persist.mock.calls).toEqual([["jevling.plugins", { github: false, whatsapp: true }]]);
+    expect(enabledPlugins(store.getState().plugins)).toEqual(["whatsapp"]);
+  });
+
   it("keeps manual choices in memory when storage writes fail", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("Denied"); });
-    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true, jevColor: "violet" });
+    const store = createPreferencesStore({ theme: "light", themePreference: "system", language: "es", sound: true, jevColor: "violet", plugins: DEFAULT_PLUGINS });
     store.getState().setThemePreference("dark");
     store.getState().setLanguage("en");
     expect(store.getState()).toMatchObject({ theme: "dark", language: "en" });

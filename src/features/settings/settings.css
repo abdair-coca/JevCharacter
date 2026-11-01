@@ -38,6 +38,9 @@
 .settings__swatch[data-color="red"] { --swatch: var(--jev-skin-red); }
 
 .settings__group { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: var(--border-thin) solid var(--color-border); }
+/* A plugin switch with its one-line explanation right under it. */
+.settings__plugin { display: grid; gap: var(--space-1); }
+.settings__plugin .settings__help { padding-inline: var(--space-4); }
 .settings__group h3 { margin: 0; font-size: var(--text-small); font-weight: var(--weight-label); }
 /* Rows that leave Ajustes for another panel (memory, Home's diagnostics). */
 .settings__link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--size-target); padding-inline: var(--space-4); border: var(--border-thin) solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-foreground); font-size: var(--text-small); font-weight: var(--weight-label); }

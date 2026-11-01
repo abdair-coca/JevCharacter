@@ -2,20 +2,32 @@ import { createStore } from "zustand/vanilla";
 import { useStore } from "zustand";
 
 import { readStorage, writeStorage } from "../lib/storage";
-import type { SpeechLanguage } from "../creature/brain/speechProtocol";
+import { SPEECH_PLUGINS, type SpeechLanguage, type SpeechPlugin } from "../creature/brain/speechProtocol";
 import { DEFAULT_JEV_COLOR, isJevColor, type JevColor } from "../character/jevColors";
 
 export type Theme = "light" | "dark";
 export type ThemePreference = Theme | "system";
 export type Language = SpeechLanguage;
-type Preferences = { theme: Theme; themePreference: ThemePreference; language: Language; sound: boolean; jevColor: JevColor };
+/** Which plugins the visitor left on; both start on. */
+export type PluginSettings = Record<SpeechPlugin, boolean>;
+type Preferences = { theme: Theme; themePreference: ThemePreference; language: Language; sound: boolean; jevColor: JevColor; plugins: PluginSettings };
 type PreferencesState = Preferences & {
   setThemePreference: (preference: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSound: (sound: boolean) => void;
   setJevColor: (jevColor: JevColor) => void;
+  setPlugin: (plugin: SpeechPlugin, enabled: boolean) => void;
   syncSystemTheme: (dark: boolean) => void;
 };
+
+export const DEFAULT_PLUGINS: PluginSettings = { github: true, whatsapp: true };
+
+const isPluginSettings = (value: unknown): value is PluginSettings =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value) &&
+  SPEECH_PLUGINS.every(plugin => typeof (value as Record<string, unknown>)[plugin] === "boolean");
+
+/** The plugins that are on, in catalog order, as each message sends them. */
+export const enabledPlugins = (plugins: PluginSettings): SpeechPlugin[] => SPEECH_PLUGINS.filter(plugin => plugins[plugin]);
 
 export function createPreferencesStore(
   initial: Preferences,
@@ -41,6 +53,11 @@ export function createPreferencesStore(
       persist("jevling.jevColor", jevColor);
       set({ jevColor });
     },
+    setPlugin: (plugin, enabled) => {
+      const plugins = { ...get().plugins, [plugin]: enabled };
+      persist("jevling.plugins", plugins);
+      set({ plugins });
+    },
     syncSystemTheme: (dark) => {
       if (get().themePreference === "system") set({ theme: dark ? "dark" : "light" });
     },
@@ -57,6 +74,7 @@ export const preferencesStore = createPreferencesStore({
   // Jev's voice is on by default; it still waits for the first user gesture.
   sound: readStorage("jevling.sound", true, (value): value is boolean => typeof value === "boolean"),
   jevColor: readStorage("jevling.jevColor", DEFAULT_JEV_COLOR, isJevColor),
+  plugins: readStorage("jevling.plugins", DEFAULT_PLUGINS, isPluginSettings),
 });
 
 export function usePreferences<T>(selector: (state: PreferencesState) => T): T {

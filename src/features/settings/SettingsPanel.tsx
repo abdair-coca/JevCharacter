@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/button";
 import { JEV_COLOR_IDS } from "../../character/jevColors";
 import { geminiKeyStore } from "../../creature/brain/geminiKeyStore";
 import { groqKeyStore } from "../../creature/brain/groqKeyStore";
+import { SPEECH_PLUGINS, type SpeechPlugin } from "../../creature/brain/speechProtocol";
 import { useVoiceProblem, voiceProblem as voiceProblemStore } from "../../creature/voice/geminiVoice";
 import { useTranslation } from "../../i18n/useTranslation";
 import { appAudio } from "../../lib/audioCore";
@@ -20,6 +21,10 @@ const FOCUSABLE = "button, [href], input, textarea, select, [tabindex]:not([tabi
 const GROQ_KEYS_URL = "https://console.groq.com/keys";
 const GEMINI_KEYS_URL = "https://aistudio.google.com/apikey";
 const clearVoiceProblem = () => voiceProblemStore.clear();
+const PLUGIN_TEXT = {
+  github: { name: "pluginGithub", help: "pluginGithubHelp" },
+  whatsapp: { name: "pluginWhatsapp", help: "pluginWhatsappHelp" },
+} as const satisfies Record<SpeechPlugin, unknown>;
 
 type Props = {
   onClose: () => void;
@@ -38,10 +43,13 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
   const setSound = usePreferences(state => state.setSound);
   const jevColor = usePreferences(state => state.jevColor);
   const setJevColor = usePreferences(state => state.setJevColor);
+  const plugins = usePreferences(state => state.plugins);
+  const setPlugin = usePreferences(state => state.setPlugin);
   const transition = useUiMotion();
   const { spring } = useOrganicMotion();
   const headingId = useId();
   const jevTitleId = useId();
+  const pluginsTitleId = useId();
   const panel = useRef<HTMLDivElement | null>(null);
   const heading = useRef<HTMLHeadingElement | null>(null);
   const voiceProblem = useVoiceProblem();
@@ -120,6 +128,19 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
               <span>{t.diagnostics}</span><span aria-hidden="true">›</span>
             </button>
           )}
+        </section>
+
+        <section className="settings__group" aria-labelledby={pluginsTitleId}>
+          <h3 id={pluginsTitleId}>{t.plugins}</h3>
+          {SPEECH_PLUGINS.map(plugin => (
+            <div key={plugin} className="settings__plugin">
+              <button type="button" className="settings__switch" aria-pressed={plugins[plugin]} aria-describedby={`${pluginsTitleId}-${plugin}`} onClick={() => setPlugin(plugin, !plugins[plugin])}>
+                <span>{t[PLUGIN_TEXT[plugin].name]}</span>
+                <span className="settings__track" aria-hidden="true" />
+              </button>
+              <p id={`${pluginsTitleId}-${plugin}`} className="settings__help">{t[PLUGIN_TEXT[plugin].help]}</p>
+            </div>
+          ))}
         </section>
 
         <KeySection provider="groq" store={groqKeyStore} keysUrl={GROQ_KEYS_URL} placeholder="gsk_…" />

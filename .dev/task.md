@@ -4,11 +4,65 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 2 (Voz), en curso desde el 2026-11-01. Fase 1 aprobada («continua con la fase dos», 2026-11-01), sin la prueba real con micrófono.
+- **Fase activa:** fase 3 (Plugins), implementada y verificada el 2026-11-01; **entregada para revisión**. Fase 1 aprobada («continua con la fase dos»), sin prueba real con micrófono pero con Whisper real (ver fase 2). Fase 2 aprobada («esta bien, sigue con la fase 3», 2026-11-01).
 - **Aprobaciones:** spec, plan, cambio de reglas y `@supabase/supabase-js` aprobados el 2026-10-31 («Aprobado, empieza fase 1»). Propuestas: se mantienen la ventana de 8 s y los interruptores de plugins; se descartan el apagado tras 5 min y «Borrar mi cuenta».
-- **Siguiente acción exacta:** implementar la fase 2 según `plan.md` y entregarla para revisión.
+- **Siguiente acción exacta:** revisión de la fase 3 por el usuario. Después, fase 4 (Memoria en la nube): antes, el usuario configura Google OAuth en Supabase.
 - **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
 - **Estado del código:** fase 1 commiteada. Sin deploy ni push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+
+## Fase 3 — implementación, 2026-11-01
+
+- [x] **Estructura:** los plugins de servidor viven en `api/_plugins/` y no en `api/plugins/` como decía el plan, porque Vercel publica como función todo archivo de `api/` salvo las carpetas con `_`. Actualizados `plan.md` y `spec.md`.
+- [x] `speechProtocol.ts`: `SPEECH_PLUGINS` (`github`, `whatsapp`), `isSpeechPlugin`.
+- [x] `speechBlocks.ts`:
+  - Bloques `links` (hasta 3; `githubUrl` acepta solo `https://github.com/…` sin credenciales ni puerto) y `whatsapp` (≤500, sin 7 o más dígitos).
+  - Un `links` o `whatsapp` rechazado se descarta entero y nunca pasa a párrafo.
+  - En el historial, «WhatsApp: …»; los enlaces se omiten.
+- [x] `api/_plugins/registry.ts` y `github.ts`: 5 herramientas de solo lectura (repo, búsqueda, issues/PRs, commits y perfil).
+  - `owner/name` también desde una URL; `GITHUB_TOKEN` opcional.
+  - Errores para el modelo: `not_found`, `rate_limited` y `unavailable`.
+  - Campos ≤140 caracteres y resultado ≤1500. Solo URLs de GitHub.
+- [x] `api/talk.ts`:
+  - Acepta `plugins`. Las herramientas solo se ofrecen con GitHub encendido.
+  - Hasta 2 rondas de hasta 2 herramientas: evento `tool`, 10 s por ronda y 4 s por herramienta.
+  - Reintento sin herramientas tras `tool_use_failed`, solo si aún no salió la frase.
+  - `whatsapp` solo con su plugin. `links` solo con páginas vistas, y fuentes automáticas si el modelo no las escribió.
+  - El prompt pauta cada plugin encendido o apagado. `vercel.json`: `talk` a 30 s.
+- [x] Cliente:
+  - `preferencesStore.plugins` (`jevling.plugins`, ambos encendidos) y `enabledPlugins`.
+  - `speechClient` envía `plugins` y avisa `tool`. `useSpeechSession` expone `tool`, que se borra con la frase, y reinicia el plazo de 12 s al llegar `tool`.
+  - Home muestra y anuncia «Buscando en GitHub…».
+- [x] UI:
+  - «Fuentes» con enlaces en otra pestaña.
+  - Borrador de WhatsApp como cita con «Abrir en WhatsApp» (`wa.me/?text=`).
+  - Ajustes › Plugins con dos interruptores y su explicación. Textos ES/EN.
+- [x] `.env.example` (`GITHUB_TOKEN`) y `vite.config.ts` lo pasa al servidor de desarrollo.
+- [x] Docs de estado actual: `docs/architecture.md` (`api/talk.ts`, `api/_plugins/`, bloques y cliente) y `docs/interaction.md` («Plugins en Home»).
+
+**Verificación real.** El script `scratchpad/talk-real.mjs` (sin commitear) usa el `/api/talk` del proyecto con el `GROQ_API_KEY` de `.env` y GitHub sin token. Son 9 casos espaciados 20 s, y cada dato se contrasta con la API de GitHub.
+
+| Corrida | Resultado |
+|---|---|
+| 1 (una ronda, `tool_choice: "none"` tras herramientas) | 6/9 con respuesta. Los datos de React (252 070), los issues de VS Code, los PRs de Deno y torvalds (12 repos) coinciden. **Fallos:** next.js; Groq cortó con `Tool choice is none, but model called a tool` al querer pedir los commits tras el repo. 2 de 3 de WhatsApp dieron error; la segunda vez salieron, pero no se pudo reproducir la causa (lo más probable, aún sin confirmar, es `tool_use_failed` por una herramienta inventada). El modelo no escribió `links` en 4 de 6. |
+| Correcciones | Hasta 2 rondas. Reintento sin herramientas tras `tool_use_failed`. Fuentes automáticas desde las páginas vistas. Descripción de `github_commits` para «qué cambió». |
+| 2 | 9/9 con respuesta y fuentes, y WhatsApp 3/3. **Errores del modelo:** inventó «Upgrade React a 18.2.0» (el commit dice «from `a703ca64…` to `e84e1492…`») y dijo que Deno no tiene PRs abiertos: pidió issues con `kind`. En WhatsApp decía «Te mando el mensaje». |
+| Correcciones | `github_issues` y `github_pull_requests` separadas. Temperatura 0,2 tras herramientas. El prompt pide copiar títulos y cifras tal cual, no concluir sobre lo que no se consultó y no decir que Jev envía el mensaje. |
+| Recomprobación | Deno: 20b acertó 2/2 y 120b 1/1. next.js: 20b siguió inventando la versión de React (2/2: «18.3.0» y «18.3.1»); 120b citó los identificadores exactos (1/1), con la misma latencia. |
+| Quiz del modelo (2026-11-01) | **«120b solo tras GitHub»:** la charla sigue con `GROQ_MODEL` (20b) y las respuestas tras herramientas usan `GROQ_TOOL_MODEL` (por defecto `openai/gpt-oss-120b`). |
+| 3 (final) | **GitHub 6/6 correctas con fuentes:** React 252 069 estrellas (API 252 069); next.js sin versiones inventadas; VS Code #345433/#345431/#345430 = API; búsqueda con 417 k / 310 k / 259 k estrellas (API 417 687 / 310 444 / 259 400); torvalds 12 repos; Deno #37115/#37113/#37112 = API. **WhatsApp 3/3**, ya sin decir que Jev lo envía; uno cambió «llego» por «llegué». Latencia con GitHub: 2,0–3,5 s en total y frase a los 1,8–3,1 s. Con WhatsApp: 0,5–0,7 s. |
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=1` | PASS: 57 archivos / 542 tests (antes 496). Nuevos: `apiTalk` (+14: validación de `plugins`, herramientas solo con GitHub, ronda completa con token, fuentes filtradas, enlaces sin consulta, herramienta inventada, WhatsApp según plugin, dos rondas con fuentes automáticas, `GROQ_TOOL_MODEL`, reintento tras `tool_use_failed` y sin reintento si ya salió la frase), `githubPlugin` (14), `pluginBlocks` (17: URLs válidas e inválidas, enlaces, borrador, cliente con `tool`, render de fuentes y `wa.me`, Ajustes › Plugins), `preferences` (+1) y `useCreatureBrain` (+1: aviso de herramienta). |
+| `npm run build` | PASS: `index` 375,38 kB (gzip 120,95 kB), +3,6 kB. El bundle no contiene `api.github.com`, `GITHUB_TOKEN` ni nombres de modelos. |
+| e2e Chromium de Home tras el último cambio: `plugins`, `settings`, `reply-blocks`, `choices`, `memory` y `voice` | PASS 36/36 en 7,2 min. |
+| e2e `plugins.spec.ts` (nuevo, Chromium) | PASS 5/5: fuentes y borrador de WhatsApp en escritorio y móvil, claro y oscuro, dentro del ancho y con el `wa.me` exacto; apagar GitHub en Ajustes lo quita de los mensajes siguientes. |
+
+**Límites:**
+- GitHub sin token comparte 60 consultas por hora en todo el servidor; con `GITHUB_TOKEN` son 5000.
+- Ningún modelo es infalible: las fuentes enlazadas siempre son reales, pero el texto lo escribe el modelo.
+- El aviso «Buscando en GitHub…» se probó con Vitest; en e2e la respuesta simulada llega entera de una vez.
 
 ## Fase 2 — implementación, 2026-11-01
 
@@ -44,7 +98,7 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - [x] **Escucha del usuario (2026-11-01):** «esta genial, pero siento que la voz en español es muy exagerada». Con `style-variants.mjs` (misma petición que `api/speak.ts`, solo cambia el estilo) se generaron tres versiones de las mismas frases con Puck: suave, media y neutra. En el quiz eligió **«Suave»** y el **mismo nivel en inglés**. `STYLE` queda así: criatura pequeña, cálida y curiosa, con un toque juguetón muy ligero, natural y tranquila, sin exagerar la entonación y sin reír (en español, latinoamericano neutro). La firma de pitidos no cambia. Se actualizaron `apiSpeak` (16 PASS), `spec.md`, `docs/architecture.md` y `docs/interaction.md`.
   - Muestras finales con el handler real: ES 1 y 2 → 200, primer audio en 1874–1971 ms, total de 2926–3261 ms y 4,8–5,32 s de audio. EN → 429, y al minuto 200: primer audio en 2020 ms y total de 3274 ms para 4,2 s.
 - **Cuota gratuita de Gemini observada:** tras 3 o 4 frases seguidas, la siguiente da 429 (tres veces en la sesión) y vuelve a funcionar al minuto. Una vez dio 503 (Google saturado). En los dos casos, `/api/speak` responde 429 o 502 y Jev usa sus pitidos: en una conversación rápida algunas respuestas sonarán con pitidos, y Ajustes lo explica. Los límites exactos solo se ven en el AI Studio de cada visitante.
-- [ ] Aprobación del usuario.
+- [x] Aprobación del usuario (2026-11-01, «esta bien, sigue con la fase 3»).
 - **Latencia de punta a punta (sin medir):** se suman unos 0,7 s de silencio de cierre, ~0,6 s de Whisper, la frase de Groq y ~1,7 s hasta el primer audio de Gemini, unos 3,5–4 s en total. La firma de pitidos suena en cuanto llega la frase. Se mide en la fase 5 contra la meta de p50 ≤ 3 s.
 
 | Comprobación | Resultado |

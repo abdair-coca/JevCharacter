@@ -16,6 +16,7 @@ const es = {
   reply: "Respuesta de Jev", replyEyebrow: "Jev responde", replyClose: "Cerrar respuesta", replyMore: "Más",
   replyHandle: "Arrastra para ajustar el panel",
   replyTip: "Consejo:", replyWarning: "Atención:", replyFollowUp: "Preguntas para seguir", replyChoicesHint: "O escríbeme tu respuesta.",
+  replySources: "Fuentes", replyWhatsapp: "Abrir en WhatsApp", replyWhatsappLabel: "Mensaje para WhatsApp", toolGithub: "Buscando en GitHub…",
   received: "Contexto enviado", confidence: "Confianza", deciding: "Decidiendo",
   listen: "Manos libres", listenOn: "Escuchando · di «Jev»", listenStarting: "Activando el micrófono…",
   listenHearing: "Te oigo…", listenTranscribing: "Entendiendo…", listenHeard: "Oí:",
@@ -49,6 +50,8 @@ const es = {
   geminiGuide: "¿Cómo consigo la clave de voz?", geminiStepConsole: "Abre Google AI Studio", geminiStepSignIn: "e inicia sesión con tu cuenta de Google. Es gratis.",
   geminiStepCreate: "Pulsa «Create API key».", geminiStepCopy: "Copia la clave que aparece.",
   geminiStepPaste: "Pégala en el campo de abajo y pulsa «Guardar clave de voz».",
+  plugins: "Plugins", pluginGithub: "GitHub", pluginGithubHelp: "Jev consulta datos públicos de GitHub: repositorios, issues, pull requests, commits y perfiles.",
+  pluginWhatsapp: "WhatsApp", pluginWhatsappHelp: "Jev redacta mensajes y los abre en WhatsApp para que tú elijas a quién enviarlos.",
   debugSignal: "Señales en vivo", distance: "Distancia", speed: "Velocidad", near: "Cerca", idle: "Inactividad",
   clicks: "Toques", absence: "Ausencia", source: "Origen", latency: "Latencia", reactionConfidence: "Confianza de reacción",
 } satisfies Record<string, string>;
@@ -70,6 +73,7 @@ const en: Record<MessageKey, string> = {
   reply: "Jev's reply", replyEyebrow: "Jev says", replyClose: "Close reply", replyMore: "More",
   replyHandle: "Drag to resize the panel",
   replyTip: "Tip:", replyWarning: "Heads up:", replyFollowUp: "Follow-up questions", replyChoicesHint: "Or type your own answer.",
+  replySources: "Sources", replyWhatsapp: "Open in WhatsApp", replyWhatsappLabel: "WhatsApp message", toolGithub: "Searching GitHub…",
   received: "Context sent", confidence: "Confidence", deciding: "Deciding",
   listen: "Hands-free", listenOn: "Listening · say “Jev”", listenStarting: "Turning on the microphone…",
   listenHearing: "I hear you…", listenTranscribing: "Understanding…", listenHeard: "I heard:",
@@ -103,6 +107,8 @@ const en: Record<MessageKey, string> = {
   geminiGuide: "How do I get the voice key?", geminiStepConsole: "Open Google AI Studio", geminiStepSignIn: "and sign in with your Google account. It's free.",
   geminiStepCreate: "Press “Create API key”.", geminiStepCopy: "Copy the key it shows.",
   geminiStepPaste: "Paste it in the field below and press “Save voice key”.",
+  plugins: "Plugins", pluginGithub: "GitHub", pluginGithubHelp: "Jev looks up public GitHub data: repositories, issues, pull requests, commits and profiles.",
+  pluginWhatsapp: "WhatsApp", pluginWhatsappHelp: "Jev drafts messages and opens them in WhatsApp so you choose who gets them.",
   debugSignal: "Live signals", distance: "Distance", speed: "Speed", near: "Nearby", idle: "Idle",
   clicks: "Clicks", absence: "Absence", source: "Source", latency: "Latency", reactionConfidence: "Reaction confidence",
 };

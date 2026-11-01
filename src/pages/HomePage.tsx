@@ -184,9 +184,13 @@ export default function HomePage({ active = true }: { active?: boolean }) {
         <div className="speech-slot">
           {!brain.speechNotice && <AnimatePresence mode="wait">
             {!reply && brain.speechCaption && <SpeechCaption key={brain.speechCaption.generation} {...brain.speechCaption} onRevealed={brain.onSpeechCaptionRevealed} />}
+            {/* While a plugin works, before the sentence arrives, Jev says what she is looking up. */}
+            {!reply && !brain.speechCaption && brain.speechTool === "github" && (
+              <m.div key="tool" className="speech-caption speech-caption--tool" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition}><span aria-hidden="true">{t.toolGithub}</span></m.div>
+            )}
           </AnimatePresence>}
           {/* One live region: the sentence is announced once, whether it shows as a caption or a reply. */}
-          <p className="sr-only" role="status">{!brain.speechNotice && brain.speechCaption?.complete ? brain.speechCaption.text : ""}</p>
+          <p className="sr-only" role="status">{brain.speechNotice ? "" : brain.speechCaption?.complete ? brain.speechCaption.text : brain.speechTool === "github" ? t.toolGithub : ""}</p>
         </div>
         <m.div className="interaction-dock" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={transition}>
           <ContextWhisper context={brain.userContext} onSubmit={submitContext} onClear={brain.clearContext} status={brain.status} listen={handsFree} />

@@ -2,10 +2,12 @@ import { acceptsBlock, clampText, parseBlock, parseMemoryNote, SPEECH_SPOKEN_MAX
 import {
   GROQ_KEY_HEADER,
   isSpeechLanguage,
+  isSpeechPlugin,
   SPEECH_HISTORY_LIMIT,
   SPEECH_MESSAGE_MAX_CHARS,
   type SpeechExchange,
   type SpeechLanguage,
+  type SpeechPlugin,
 } from "./speechProtocol";
 
 type StreamSpeechOptions = {
@@ -14,6 +16,10 @@ type StreamSpeechOptions = {
   history: SpeechExchange[];
   /** Persistent notes chosen for this message; the server bounds them again. */
   memory: string[];
+  /** Plugins the visitor left on; the server offers the model only their tools and blocks. */
+  plugins?: SpeechPlugin[];
+  /** A plugin started working for this reply (Jev is looking something up). */
+  onTool?: (plugin: SpeechPlugin) => void;
   /** The visitor's own Groq key, sent only as a request header. */
   apiKey?: string | null;
   signal: AbortSignal;
@@ -36,7 +42,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
 /** Streams one reply: the spoken sentence first, then each block the client also validates. */
-export async function streamSpeechReply({ message, language, history, memory: notes, apiKey, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechResult> {
+export async function streamSpeechReply({ message, language, history, memory: notes, plugins = [], onTool, apiKey, signal, onSpoken, onBlock }: StreamSpeechOptions): Promise<SpeechResult> {
   if (!isSpeechLanguage(language)) throw new Error("Invalid speech language");
   signal.throwIfAborted();
   const response = await fetch("/api/talk", {
@@ -51,6 +57,7 @@ export async function streamSpeechReply({ message, language, history, memory: no
       language,
       history: history.slice(-SPEECH_HISTORY_LIMIT),
       memory: notes,
+      plugins,
     }),
     signal,
   });
@@ -89,7 +96,7 @@ export async function streamSpeechReply({ message, language, history, memory: no
       streamComplete = true;
       return;
     }
-    if (name !== "spoken" && name !== "block" && name !== "memory") return;
+    if (name !== "spoken" && name !== "block" && name !== "memory" && name !== "tool") return;
 
     let payload: unknown;
     try {
@@ -98,6 +105,12 @@ export async function streamSpeechReply({ message, language, history, memory: no
       throw new Error("Invalid speech stream event");
     }
     if (!isRecord(payload)) throw new Error("Invalid speech stream event");
+
+    // Tools run before the sentence: only a plugin this request turned on is reported.
+    if (name === "tool") {
+      if (isSpeechPlugin(payload.plugin) && plugins.includes(payload.plugin)) onTool?.(payload.plugin);
+      return;
+    }
 
     if (name === "spoken") {
       const text = clampText(payload.text, SPEECH_SPOKEN_MAX_CHARS);

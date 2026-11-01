@@ -135,7 +135,7 @@ const localDevApi = (): Plugin => ({
 
 export default defineConfig(({ mode }) => {
   const localEnv = loadEnv(mode, process.cwd(), '')
-  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL', 'GEMINI_TTS_MODEL', 'GEMINI_TTS_VOICE', 'SUPABASE_URL', 'SUPABASE_SECRET_KEY'] as const) {
+  for (const name of ['TYPESAFE_API_KEY', 'JEV_MODEL', 'GROQ_MODEL', 'GROQ_TOOL_MODEL', 'GEMINI_TTS_MODEL', 'GEMINI_TTS_VOICE', 'GITHUB_TOKEN', 'SUPABASE_URL', 'SUPABASE_SECRET_KEY'] as const) {
     if (!process.env[name] && localEnv[name]) process.env[name] = localEnv[name]
   }
 

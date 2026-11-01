@@ -30,6 +30,10 @@ const QUESTION_MAX_CHARS = 120;
 const OPTIONS_MIN = 2;
 const OPTIONS_MAX = 5;
 const OPTION_MAX_CHARS = 40;
+const LINKS_MAX = 3;
+const LINK_LABEL_MAX_CHARS = 60;
+const LINK_URL_MAX_CHARS = 300;
+export const WHATSAPP_TEXT_MAX_CHARS = 500;
 const OBJECT_MAX_CHARS = 4_000;
 // Seven or more digits, even with spaces, dots or dashes: phone, ID or account numbers.
 const LONG_NUMBER = /\d(?:[\s.-]?\d){6,}/u;
@@ -45,7 +49,12 @@ export type SpeechBlock =
   | { type: "callout"; tone: CalloutTone; text: string }
   | { type: "chips"; items: string[] }
   // Jev asks the user and offers answers; it always closes the reply.
-  | { type: "choices"; question: string; options: string[] };
+  | { type: "choices"; question: string; options: string[] }
+  // Where a plugin's facts came from: GitHub pages only, and on the server only those its results named.
+  | { type: "links"; items: SpeechLink[] }
+  // A message Jev drafted for the user to send from WhatsApp.
+  | { type: "whatsapp"; text: string };
+export type SpeechLink = { label: string; url: string };
 export type SpeechReply = { spoken: string; blocks: SpeechBlock[] };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -77,6 +86,18 @@ function cleanItems(value: unknown, max: number, maxChars: number): string[] {
 function paragraph(text: string, emphasis: unknown): SpeechBlock {
   const marked = cleanItems(emphasis, EMPHASIS_MAX, EMPHASIS_MAX_CHARS).filter(phrase => text.includes(phrase));
   return marked.length > 0 ? { type: "paragraph", text, emphasis: marked } : { type: "paragraph", text };
+}
+
+/** A public GitHub page over HTTPS, without credentials or a port; anything else is never linked. */
+export function githubUrl(value: unknown): string | null {
+  if (typeof value !== "string" || length(value) > LINK_URL_MAX_CHARS) return null;
+  try {
+    const url = new URL(value.trim());
+    if (url.protocol !== "https:" || url.hostname !== "github.com" || url.username || url.password || url.port) return null;
+    return url.pathname.length > 1 ? url.href : null;
+  } catch {
+    return null;
+  }
 }
 
 function normalizeKnown(value: Record<string, unknown>): SpeechBlock | null {
@@ -119,6 +140,20 @@ function normalizeKnown(value: Record<string, unknown>): SpeechBlock | null {
       const options = cleanItems(value.options, OPTIONS_MAX, OPTION_MAX_CHARS);
       return question && options.length >= OPTIONS_MIN ? { type: "choices", question, options } : null;
     }
+    case "links": {
+      const items = (Array.isArray(value.items) ? value.items : []).flatMap(item => {
+        if (!isRecord(item)) return [];
+        const url = githubUrl(item.url);
+        const label = clampText(item.label, LINK_LABEL_MAX_CHARS);
+        return url && label ? [{ label, url }] : [];
+      }).slice(0, LINKS_MAX);
+      return items.length > 0 ? { type: "links", items } : null;
+    }
+    case "whatsapp": {
+      // The text travels inside a wa.me link: never a phone, ID or account number.
+      const text = clampText(value.text, WHATSAPP_TEXT_MAX_CHARS);
+      return text && !LONG_NUMBER.test(text) ? { type: "whatsapp", text } : null;
+    }
     default:
       return null;
   }
@@ -139,6 +174,8 @@ export function parseBlock(value: unknown): SpeechBlock | null {
   if (!isRecord(value) || value.type === "memory") return null;
   const known = normalizeKnown(value);
   if (known) return known;
+  // A rejected link or WhatsApp draft is dropped whole: its URL or number never becomes visible text.
+  if (value.type === "links" || value.type === "whatsapp") return null;
   const text = clampText(collectText(value).join(" "), PARAGRAPH_MAX_CHARS);
   return text ? { type: "paragraph", text } : null;
 }
@@ -171,6 +208,10 @@ function blockStrings(block: SpeechBlock): string[] {
       return block.columns.flatMap(column => [column.title, ...column.points]);
     case "highlight":
       return [block.value, block.label];
+    case "links":
+      return block.items.map(item => item.label);
+    case "whatsapp":
+      return [block.text];
   }
 }
 
@@ -197,7 +238,10 @@ export function summarizeBlocks(blocks: SpeechBlock[]): string {
         return [`${block.label}: ${block.value}`];
       case "choices":
         return [`${block.question} (${block.options.join(" / ")})`];
+      case "whatsapp":
+        return [`WhatsApp: ${block.text}`];
       case "chips":
+      case "links":
         return [];
     }
   }).join(" ");
