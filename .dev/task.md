@@ -35,8 +35,14 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 - [x] Ajustes: `KeySection` reutilizable (Groq y voz comparten el mismo marcado). La sección «Voz de Jev (Google)» tiene aviso fijo de privacidad del nivel gratuito, guía a `aistudio.google.com/apikey`, estado de clave rechazada o cuota agotada, y «Guardar/Borrar clave de voz». La ayuda de Groq ahora menciona la escucha. Textos ES/EN.
 - [x] `.env.example`: `GEMINI_TTS_MODEL` y `GEMINI_TTS_VOICE`; `vite.config.ts` monta `/api/speak` y acepta escrituras binarias.
 - [x] Docs de estado actual: `docs/architecture.md` (claves, `api/speak.ts` y voz con palabras) y `docs/interaction.md` (sección «Voz con palabras en Home»). `AGENTS.md`: regla de la clave de Google y del audio de voz. La regla «nunca palabras» de `design.md` se cambia en la fase 5, como dice el plan.
-- [ ] Prueba real con Gemini: pendiente. `GEMINI_API_KEY` aún no está en `.env.local`. El script `scratchpad/speak-real.mjs` (sin commitear) carga `/api/speak` con Vite, mide el primer audio y el total y guarda un WAV por frase (2 ES, 1 EN).
-- [ ] Aprobación del usuario.
+- [x] **Prueba real con Gemini (2026-11-01).** Clave en `GEMINI_API_KEY` de `.env` (ignorado por git). Scripts del scratchpad, sin commitear: `speak-real.mjs` carga el `/api/speak` del proyecto con Vite y guarda un WAV por frase; `transcribe-real.mjs` pasa esos WAV a 16 kHz con `wav.ts` y los manda al `/api/transcribe` del proyecto con el `GROQ_API_KEY` de `.env`.
+  - El SSE real coincide con el parser: 200 en las 3 frases, sin cambios de código.
+  - Primer audio en 1514–1969 ms y total de 2545–3110 ms para 3,76–5,4 s de audio, en 44–69 fragmentos: la voz se genera más rápido de lo que suena y el plan B de 3 s no salta.
+  - Es voz clara: RMS 0,13–0,20; la frase 1 llega al pico 1,0 con 1 muestra recortada de 90 240.
+  - **Whisper real (verificación de la fase 1):** las 3 frases se transcriben bien en 385–821 ms. Gemini pronuncia «Jev» y Whisper escribe «Jeff» en español y «Jev» en inglés; las variantes de `wakeWord` cubren los dos.
+- [x] **Corrección encontrada con la prueba real (fase 1):** con `prompt: "Jev"`, Whisper inventó «Jev,» al inicio de una frase que no lo dice («Como te gusta la tecnología…»), así que Jev habría respondido a algo que no era para él. Comparado sobre el mismo audio, sin pista o con una frase de contexto no lo inventa y reconoce el nombre igual. `api/transcribe.ts` usa ahora «Jev es una criatura digital.» / «Jev is a digital creature.» según el idioma. Reejecutado: la frase 2 ya no se toma como dirigida a Jev y las otras dos sí. `apiTranscribe` pasa a 17 tests (+1, la pista en inglés).
+- [ ] Escucha del usuario de los 3 WAV (`scratchpad/voice/`) y aprobación.
+- **Latencia de punta a punta (sin medir):** se suman unos 0,7 s de silencio de cierre, ~0,6 s de Whisper, la frase de Groq y ~1,7 s hasta el primer audio de Gemini, unos 3,5–4 s en total. La firma de pitidos suena en cuanto llega la frase. Se mide en la fase 5 contra la meta de p50 ≤ 3 s.
 
 | Comprobación | Resultado |
 |---|---|

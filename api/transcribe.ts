@@ -29,8 +29,9 @@ const RATE_WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 30;
 const UPSTREAM_TIMEOUT_MS = 8_000;
 const MODEL = "whisper-large-v3-turbo";
-// Whisper writes the name better when it expects it.
-const NAME_PROMPT = "Jev";
+// Whisper reads the prompt as the previous sentence. The bare name made it start phrases with an invented
+// «Jev,» (measured 2026-11-01 with Jev's own voice); a full sentence names him without that.
+const NAME_PROMPT: Record<SpeechLanguage, string> = { es: "Jev es una criatura digital.", en: "Jev is a digital creature." };
 // Segments Whisper itself rates as probably silence are its usual hallucinations («Gracias por ver»).
 const NO_SPEECH_MAX = 0.6;
 const BASE64_PATTERN = /^[A-Za-z0-9+/]+={0,2}$/;
@@ -117,7 +118,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   form.append("file", new Blob([new Uint8Array(body.audio)], { type: "audio/wav" }), "phrase.wav");
   form.append("model", MODEL);
   form.append("language", body.language);
-  form.append("prompt", NAME_PROMPT);
+  form.append("prompt", NAME_PROMPT[body.language]);
   form.append("response_format", "verbose_json");
   form.append("temperature", "0");
 

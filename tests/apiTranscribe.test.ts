@@ -50,7 +50,8 @@ describe("/api/transcribe", () => {
     const form = init.body as FormData;
     expect(form.get("model")).toBe("whisper-large-v3-turbo");
     expect(form.get("language")).toBe("es");
-    expect(form.get("prompt")).toBe("Jev");
+    // A full sentence: the bare name made Whisper invent «Jev,» at the start of phrases.
+    expect(form.get("prompt")).toBe("Jev es una criatura digital.");
     expect(form.get("response_format")).toBe("verbose_json");
     const file = form.get("file") as File;
     expect(file.type).toBe("audio/wav");
@@ -89,6 +90,13 @@ describe("/api/transcribe", () => {
 
   it("only accepts POST", async () => {
     expect((await call({}, undefined, "GET")).statusCode).toBe(405);
+  });
+
+  it("names Jev in an English sentence for English phrases", async () => {
+    const fetchMock = groqReturns({ text: "Hi Jev" });
+    await call({ audio: phrase(), language: "en" });
+    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect((init.body as FormData).get("prompt")).toBe("Jev is a digital creature.");
   });
 
   it.each([[401, 401], [429, 429], [500, 502]])("maps a Groq %i to %i", async (upstream, status) => {
