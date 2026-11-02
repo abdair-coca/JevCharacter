@@ -11,6 +11,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 import { appAudio } from "../../lib/audioCore";
 import { useOrganicMotion, useUiMotion } from "../../lib/motionTokens";
 import { usePreferences } from "../../stores/preferencesStore";
+import { AccountSection } from "../account/AccountSection";
 import { CloseIcon } from "../reply/SpeechReply";
 import { KeySection } from "./KeySection";
 import "./settings.css";
@@ -34,7 +35,7 @@ type Props = {
   diagnostics?: { active: boolean; onToggle: () => void };
 };
 
-/** Ajustes: Jev's sound, color, memory and diagnostics, the interface language and the visitor's own Groq and Google keys. Modal over the page. */
+/** Ajustes: Jev's sound, color, memory and diagnostics, the account, the interface language and the visitor's own Groq and Google keys. Modal over the page. */
 export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Props) {
   const t = useTranslation();
   const language = usePreferences(state => state.language);
@@ -129,6 +130,8 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
             </button>
           )}
         </section>
+
+        <AccountSection />
 
         <section className="settings__group" aria-labelledby={pluginsTitleId}>
           <h3 id={pluginsTitleId}>{t.plugins}</h3>

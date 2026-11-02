@@ -34,5 +34,7 @@ export default defineConfig({
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
+    // The build talks to a fake Supabase project that account.spec.ts answers; never to the real one.
+    env: { VITE_SUPABASE_URL: "https://jev-e2e.supabase.co", VITE_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_e2e" },
   },
 });

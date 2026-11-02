@@ -1,10 +1,11 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import { m } from "motion/react";
-import { clearMemory, readMemory, removeMemory, type MemoryNote } from "../../creature/memory/memoryStore";
+import { clearMemory, importBrowserMemory, reloadAccountMemory, removeMemory, useMemory, type MemoryNote } from "../../creature/memory/memoryStore";
 import { useTranslation } from "../../i18n/useTranslation";
 import { useUiMotion } from "../../lib/motionTokens";
 import { usePreferences } from "../../stores/preferencesStore";
+import { signIn, useAccount } from "../account/accountStore";
 import { CloseIcon } from "../reply/SpeechReply";
 import "./memory.css";
 
@@ -25,8 +26,10 @@ function ForgetIcon() {
 }
 
 const newestFirst = (notes: MemoryNote[]) => [...notes].reverse();
+// «Not now» to moving this browser's notes into the account holds until the next visit.
+let importDeclined = false;
 
-/** «What Jev remembers»: every note, with forget one and forget all. Modal over Home. */
+/** «What Jev remembers»: every note, from this browser or the account, with forget one and forget all. Modal over Home. */
 export default function MemoryPanel({ onClose }: { onClose: () => void }) {
   const t = useTranslation();
   const language = usePreferences(state => state.language);
@@ -35,29 +38,55 @@ export default function MemoryPanel({ onClose }: { onClose: () => void }) {
   const panel = useRef<HTMLDivElement | null>(null);
   const heading = useRef<HTMLHeadingElement | null>(null);
   const cancel = useRef<HTMLButtonElement | null>(null);
-  const [notes, setNotes] = useState(() => newestFirst(readMemory()));
+  const memory = useMemory();
+  const account = useAccount();
+  const notes = useMemo(() => newestFirst(memory.notes), [memory.notes]);
   const [confirming, setConfirming] = useState(false);
+  const [declined, setDeclined] = useState(importDeclined);
+  const [importing, setImporting] = useState(false);
+  const [importFailed, setImportFailed] = useState(false);
   const [now] = useState(Date.now);
 
   useEffect(() => { heading.current?.focus({ preventScroll: true }); }, []);
+  // Opening the panel brings in what other devices kept or forgot.
+  useEffect(() => { reloadAccountMemory(); }, []);
   useEffect(() => { if (confirming) cancel.current?.focus({ preventScroll: true }); }, [confirming]);
 
   // After forgetting a note, focus stays in the list: on the next note, else on the title.
   const forget = (id: string, index: number) => {
-    const next = newestFirst(removeMemory(id));
-    setNotes(next);
+    const remaining = removeMemory(id).length;
     requestAnimationFrame(() => {
       const buttons = panel.current?.querySelectorAll<HTMLButtonElement>(".memory-note__forget");
-      (buttons?.[Math.min(index, next.length - 1)] ?? heading.current)?.focus({ preventScroll: true });
+      (buttons?.[Math.min(index, remaining - 1)] ?? heading.current)?.focus({ preventScroll: true });
     });
   };
 
   const forgetAll = () => {
     clearMemory();
-    setNotes([]);
     setConfirming(false);
     heading.current?.focus({ preventScroll: true });
   };
+
+  // Either answer removes the offer, so focus returns to the title.
+  const moveNotes = async () => {
+    setImporting(true);
+    setImportFailed(false);
+    const moved = await importBrowserMemory();
+    setImporting(false);
+    setImportFailed(!moved);
+    if (moved) heading.current?.focus({ preventScroll: true });
+  };
+
+  const decline = () => {
+    importDeclined = true;
+    setDeclined(true);
+    heading.current?.focus({ preventScroll: true });
+  };
+
+  const where = memory.source === "browser" ? t.memoryLocal
+    : memory.status === "loading" ? t.memoryLoading
+      : memory.status === "offline" ? t.memoryOffline : t.memoryAccount;
+  const offerImport = memory.source === "account" && memory.status === "ready" && memory.browserNotes > 0 && !declined;
 
   // Keys stay inside the modal: Home's shortcuts must not act behind it.
   const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -91,9 +120,29 @@ export default function MemoryPanel({ onClose }: { onClose: () => void }) {
           <h2 ref={heading} id={headingId} tabIndex={-1}>{t.memoryTitle}</h2>
           <button type="button" className="reply__close" onClick={onClose} aria-label={t.memoryClose}><CloseIcon /></button>
         </header>
-        <p className="memory__local">{t.memoryLocal}</p>
+        <p className={memory.status === "offline" ? "memory__local memory__local--offline" : "memory__local"} role="status">{where}</p>
+        {memory.source === "browser" && account.status !== "unavailable" && (
+          <div className="memory__account">
+            <button type="button" className="memory__sign-in" disabled={account.status === "connecting"} onClick={() => void signIn()}>
+              {account.status === "connecting" ? t.accountConnecting : t.accountSignIn}
+            </button>
+            {account.failed && <p className="memory__error" role="alert">{t.accountFailed}</p>}
+          </div>
+        )}
+        {offerImport && (
+          <div className="memory__offer">
+            <p>{t.memoryImportAsk}</p>
+            {importFailed && <p className="memory__error" role="alert">{t.memoryImportFailed}</p>}
+            <div>
+              <button type="button" onClick={decline}>{t.memoryImportLater}</button>
+              <button type="button" className="memory__primary" disabled={importing} onClick={() => void moveNotes()}>
+                {memory.browserNotes === 1 ? t.memoryImportOne : t.memoryImportMany.replace("{count}", String(memory.browserNotes))}
+              </button>
+            </div>
+          </div>
+        )}
         {notes.length === 0
-          ? <p className="memory__empty">{t.memoryEmpty}</p>
+          ? memory.status !== "loading" && <p className="memory__empty">{t.memoryEmpty}</p>
           : (
             <ul className="memory__list">
               {notes.map((note, index) => (

@@ -5,6 +5,7 @@ import SettingsPanel from "../src/features/settings/SettingsPanel";
 import { clearGroqKey, readGroqKey } from "../src/creature/brain/groqKeyStore";
 import { clearGeminiKey, readGeminiKey } from "../src/creature/brain/geminiKeyStore";
 import { voiceProblem } from "../src/creature/voice/geminiVoice";
+import { accountStore } from "../src/features/account/accountStore";
 import { preferencesStore } from "../src/stores/preferencesStore";
 
 vi.mock("../src/lib/motionTokens", () => ({ useUiMotion: () => ({ duration: 0 }), useOrganicMotion: () => ({ spring: { duration: 0 } }) }));
@@ -15,7 +16,10 @@ const GOOGLE_KEY = "AIza_test_visible_key_1234567890";
 const groq = () => within(screen.getByRole("region", { name: "Clave de Groq" }));
 const voice = () => within(screen.getByRole("region", { name: "Voz de Jev (Google)" }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  accountStore.setState({ status: "unavailable", email: null, failed: false });
+});
 beforeEach(() => {
   window.localStorage.clear();
   clearGroqKey();
@@ -25,6 +29,22 @@ beforeEach(() => {
 });
 
 describe("settings panel", () => {
+  it("shows the account only when login exists: sign in, or who is signed in and sign out", () => {
+    const { unmount } = render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    expect(screen.queryByRole("region", { name: "Cuenta" })).toBeNull();
+    unmount();
+
+    act(() => accountStore.setState({ status: "signedOut" }));
+    render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
+    const account = () => within(screen.getByRole("region", { name: "Cuenta" }));
+    expect(account().getByRole("button", { name: "Iniciar sesión con Google" })).toBeTruthy();
+    act(() => accountStore.setState({ status: "connecting" }));
+    expect((account().getByRole("button", { name: "Conectando…" }) as HTMLButtonElement).disabled).toBe(true);
+    act(() => accountStore.setState({ status: "signedIn", email: "ana@example.com" }));
+    expect(account().getByRole("status").textContent).toBe("Sesión iniciada como ana@example.com");
+    expect(account().getByRole("button", { name: "Cerrar sesión" })).toBeTruthy();
+  });
+
   it("is a modal dialog named Ajustes, focuses its title and closes with Escape", () => {
     const onClose = vi.fn();
     render(<SettingsPanel onClose={onClose} onOpenMemory={vi.fn()} />);

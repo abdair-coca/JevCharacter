@@ -4,11 +4,64 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 3 (Plugins), implementada y verificada el 2026-11-01; **entregada para revisión**. Fase 1 aprobada («continua con la fase dos»), sin prueba real con micrófono pero con Whisper real (ver fase 2). Fase 2 aprobada («esta bien, sigue con la fase 3», 2026-11-01).
+- **Fase activa:** fase 4 (Memoria en la nube), implementada y verificada con pruebas el 2026-11-01; **falta la verificación real**, que depende del usuario. Fase 1 aprobada («continua con la fase dos»), sin prueba real con micrófono pero con Whisper real (ver fase 2). Fase 2 aprobada («esta bien, sigue con la fase 3», 2026-11-01). Fase 3 aprobada («continua con la fase 4, ya estan los datos en .env», 2026-11-01).
 - **Aprobaciones:** spec, plan, cambio de reglas y `@supabase/supabase-js` aprobados el 2026-10-31 («Aprobado, empieza fase 1»). Propuestas: se mantienen la ventana de 8 s y los interruptores de plugins; se descartan el apagado tras 5 min y «Borrar mi cuenta».
-- **Siguiente acción exacta:** revisión de la fase 3 por el usuario. Después, fase 4 (Memoria en la nube): antes, el usuario configura Google OAuth en Supabase.
+- **Siguiente acción exacta:**
+  1. El usuario pone `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` en `.env`, crea el cliente OAuth de Google y activa Google en Supabase con las URLs de retorno.
+  2. Correr `scratchpad/memory-real.mjs` (RLS por REST con la clave publicable y dos clientes de una cuenta) y la prueba de dos navegadores con Google.
+  3. Entregar la fase 4 para revisión.
 - **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
-- **Estado del código:** fase 1 commiteada. Sin deploy ni push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+- **Estado del código:** fases 1 a 4 commiteadas. Sin deploy ni push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+
+## Fase 4 — implementación, 2026-11-01
+
+- [x] **Antes de codificar:** el proyecto de Supabase estaba pausado (su dominio no resolvía) y el usuario lo reactivó. Auth responde, con Google aún apagado (`/auth/v1/settings`: `google: false`, `email: true`). `.env` tenía `SUPABASE_URL`, `SUPABASE_SECRET_KEY` y `SUPABASE_DB_PASSWORD`, pero no las claves web.
+- [x] **Quiz (2026-11-01):** el proyecto «estaba pausado»; «dime como obtengo esas claves» (se dieron los pasos de las claves web, el cliente OAuth y el proveedor Google); Google OAuth «Todavía no»; la migración la aplica el agente con psql; «Ahora no» al importar → «Se vuelve a ofrecer» (sin clave nueva en el navegador).
+- [x] **Migración** `supabase/migrations/20261101000000_memories.sql`:
+  - Tabla `memories`: `id`, `user_id` (por defecto `auth.uid()`, borrado en cascada), `text` (1–160 caracteres, no en blanco, sin `\d([\s.-]?\d){6,}`, la misma regla del navegador) y `created_at`.
+  - Disparador `memories_keep_latest` (40 por usuario).
+  - RLS con políticas de select, insert y delete propias para `authenticated`. `revoke all` a `anon` y a `authenticated`, y después `grant select, insert, delete` a `authenticated`.
+  - **Prueba en seco** contra el proyecto (pooler de sesión `aws-1-sa-east-1`), dentro de una transacción con `rollback`: 15/15. Cubre RLS al escribir como otro, CHECK de dígitos, 161 caracteres y blancos, sin `update`, B no ve ni borra lo de A, anon sin lectura ni escritura, 40 notas y la cascada; tras el rollback, la tabla no existía.
+  - **Aplicada** con aprobación («Sí, aplícala»), con `psql -1`. Comprobado: RLS activa, 3 políticas, permisos `DELETE,INSERT,SELECT` solo para `authenticated` y el disparador. Registrada en `supabase_migrations.schema_migrations` (20261101000000, memories).
+- [x] **Dependencia** `@supabase/supabase-js` 2.118.0 (aprobada). En diferido: chunk propio de 214 kB (55 kB en gzip), fuera del `index`. Sin claves web en el build, el import desaparece del bundle.
+- [x] `src/lib/supabaseClient.ts`:
+  - `supabaseConfigured` y `hasSavedAuth` (claves `jevling.auth*`).
+  - `forgetAuthLeftovers` limpia el verificador de un login que no terminó.
+  - `loadSupabase` usa PKCE, sesión en `jevling.auth` y `detectSessionInUrl`, y reintenta si falla la descarga.
+- [x] `src/vite-env.d.ts`: tipos de `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`.
+- [x] `features/account/`:
+  - `accountStore`:
+    - `startAccount` solo carga supabase-js con sesión guardada o un login que vuelve.
+    - `signIn` va a Google y vuelve a la misma vista. `signOut` usa `scope: "local"`.
+    - Si Google vuelve con error, avisa y limpia la URL.
+    - Al volver atrás desde Google (bfcache), el botón vuelve a su estado.
+  - `memoryRemote`: tabla `memories` con la sesión del visitante; valida las filas.
+  - `AccountSection`: Ajustes › Cuenta.
+- [x] `memoryStore.ts`:
+  - Dos fuentes tras las mismas funciones. `connectAccountMemory`, `disconnectAccountMemory` y `reloadAccountMemory`, al abrir el panel y al volver a la pestaña.
+  - Cola de escrituras en orden. Estados `loading`, `ready` y `offline`.
+  - `importBrowserMemory` (sin repetidas, con fecha, y luego vacía el navegador). `useMemory`.
+- [x] `MemoryPanel.tsx`:
+  - Texto según la fuente: «Guardado en tu cuenta.», «Trayendo lo que recuerdo…» o «Sin conexión…».
+  - «Iniciar sesión con Google» sin sesión.
+  - «Llevar N notas a tu cuenta» o «Ahora no», hasta la siguiente visita.
+- [x] Textos ES/EN, estilos reutilizados (acento para iniciar sesión y llevar notas) y `.env.example` con las claves web.
+- [x] `playwright.config.ts`: el build de e2e apunta a un proyecto falso (`jev-e2e.supabase.co`), nunca al real.
+- [x] Docs de estado actual: `docs/architecture.md` y `docs/interaction.md`.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run` | PASS: 59 archivos / 564 tests (antes 542). Nuevos: `accountMemory` (10: fuente de cuenta, escrituras en orden, olvidar todo, recarga con notas sin guardar y olvidadas, sin conexión, 40 notas, importación y fallo de importación), `accountStore` (7: sin sesión no carga Supabase, sesión guardada, escrituras en la tabla, ida a Google, login cancelado, fallo de carga, cerrar sesión), `memoryPanel` (+4) y `settingsPanel` (+1). |
+| `npm run build` | PASS: `index` 381,63 kB (gzip 123,16 kB), +6,3 kB; con claves web, 381,91 kB más el chunk diferido de supabase-js. `dist/` no contiene `sb_secret`, `SUPABASE_SECRET` ni `SUPABASE_DB_PASSWORD`. |
+| e2e `account.spec.ts` (nuevo, Chromium, sesión simulada) | PASS 2/2. (1) Con sesión: Ajustes dice la cuenta; el panel lista las notas de la cuenta; llevar 1 nota hace un `POST` y vacía `jevling.memory`; olvidar hace `DELETE id=eq.row-1`; cerrar sesión borra `jevling.auth*` y vuelve a «Se guarda solo en este navegador.». (2) Sin sesión no hay requests a Supabase; «Iniciar sesión con Google» va a `/auth/v1/authorize` con `provider=google`, `redirect_to` de la misma vista y PKCE `s256`. |
+| e2e Chromium `settings`, `companion`, `account`, `plugins`, `voice` | PASS 32/32 en 9,8 min. |
+| e2e Chromium `memory`, `listen` | PASS 3/3. |
+
+**Pendiente (verificación real):**
+- RLS por REST con la clave publicable y sincronización entre dos clientes de una cuenta: `scratchpad/memory-real.mjs`, que crea 2 usuarios temporales con la clave secreta y los borra al final. Necesita `VITE_SUPABASE_PUBLISHABLE_KEY`.
+- Dos navegadores con la misma cuenta de Google: necesita el cliente OAuth y el proveedor Google activos.
+- e2e en Android e iPhone (no corren aquí).
 
 ## Fase 3 — implementación, 2026-11-01
 
