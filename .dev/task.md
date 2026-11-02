@@ -11,7 +11,7 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
   2. Correr `scratchpad/memory-real.mjs` (RLS por REST con la clave publicable y dos clientes de una cuenta) y la prueba de dos navegadores con Google.
   3. Entregar la fase 4 para revisión.
 - **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
-- **Estado del código:** fases 1 a 4 commiteadas. Sin deploy ni push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+- **Estado del código:** fases 1 a 4 en GitHub (`ca8caf5`, push pedido por el usuario el 2026-11-02). Vercel lo desplegó a producción sin las variables `VITE_SUPABASE_*`, así que allí no aparece el login. La corrección de la prueba de foco sigue sin push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
 
 ## Fase 4 — implementación, 2026-11-01
 
@@ -57,11 +57,14 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 | e2e `account.spec.ts` (nuevo, Chromium, sesión simulada) | PASS 2/2. (1) Con sesión: Ajustes dice la cuenta; el panel lista las notas de la cuenta; llevar 1 nota hace un `POST` y vacía `jevling.memory`; olvidar hace `DELETE id=eq.row-1`; cerrar sesión borra `jevling.auth*` y vuelve a «Se guarda solo en este navegador.». (2) Sin sesión no hay requests a Supabase; «Iniciar sesión con Google» va a `/auth/v1/authorize` con `provider=google`, `redirect_to` de la misma vista y PKCE `s256`. |
 | e2e Chromium `settings`, `companion`, `account`, `plugins`, `voice` | PASS 32/32 en 9,8 min. |
 | e2e Chromium `memory`, `listen` | PASS 3/3. |
+| CI de `ca8caf5` (2026-11-02) | FAIL `verify`: `npm test` 563/564 en `enrollmentSession.test.tsx:88`, así que no corrió el e2e Chromium. PASS `phones` (Android e iPhone). |
+| Corrección de esa prueba | La prueba esperaba al campo y miraba el foco de inmediato; si el commit supera la franja de 5 ms del programador de React, el efecto de foco llega después. Reproducido 3/3 con un commit y un programador retrasados (scripts del scratchpad, sin commitear); con la espera sobre el foco, PASS 3/3 y el archivo 9/9 con el mismo retraso. La app no cambia. |
+| `vitest run` tras la corrección | PASS 564/564 dos veces con `--maxWorkers=4`. Con todos los workers de esta máquina, FAIL 4/4 `homeSession` (timeout de 5 s) y 2/4 `siteHeader`; solas pasan 5/5 y en el CI de `ca8caf5` también. Limitación local por carga, sin corregir. |
 
 **Pendiente (verificación real):**
 - RLS por REST con la clave publicable y sincronización entre dos clientes de una cuenta: `scratchpad/memory-real.mjs`, que crea 2 usuarios temporales con la clave secreta y los borra al final. Necesita `VITE_SUPABASE_PUBLISHABLE_KEY`.
 - Dos navegadores con la misma cuenta de Google: necesita el cliente OAuth y el proveedor Google activos.
-- e2e en Android e iPhone (no corren aquí).
+- e2e Chromium completo en CI: no corre hasta que pase `npm test`, tras el push de la corrección.
 
 ## Fase 3 — implementación, 2026-11-01
 

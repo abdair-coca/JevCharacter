@@ -84,8 +84,7 @@ describe("Home enrollment boundary", () => {
     expect(document.querySelector(".home-page")?.getAttribute("data-enrollment")).toBe("confirmed");
     expect(document.querySelector<HTMLInputElement>("#enrollment-name")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /Volver a Jev/ }));
-    await waitFor(() => expect(screen.getByRole("textbox", { name: "Dale contexto a Jev" })).toBeTruthy());
-    expect(document.activeElement).toBe(screen.getByLabelText("Dale contexto a Jev"));
+    await waitFor(() => expect(document.activeElement).toBe(screen.getByRole("textbox", { name: "Dale contexto a Jev" })));
     expect(document.getElementById("page-title")?.closest(".intro-copy")).toBeTruthy();
     expect(screen.getByTestId("character")).toBe(character);
     expect(fetch).toHaveBeenCalledOnce();
