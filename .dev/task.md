@@ -11,6 +11,43 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
   2. Para tener login en producción, a pedido: `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` en Vercel y `vercel deploy --prod`.
 - **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
 - **Estado del código:** fases 1 a 4 en GitHub (push pedido por el usuario el 2026-11-02). Producción quedó en `4773bfc`, desplegado por esos push, sin las variables `VITE_SUPABASE_*`: allí no aparece el login. Desde `1596ba6` un push ya no despliega. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+- **Verificación de las fases 1 a 4 (2026-11-03):** hallazgos abajo, sin corregir. El usuario eligió «Reportar y tú decides»: esperan su decisión.
+
+## Verificación de las fases 1 a 4 — 2026-11-03
+
+Alcance elegido en el quiz: código contra la spec, unit tests, build y APIs reales («Código + APIs reales»). Sin CI ni e2e, por la regla del 2026-11-02. Scripts en el scratchpad, sin commitear; no se creó ningún usuario ni fila. Ningún código cambió.
+
+| Comprobación | Resultado |
+|---|---|
+| `tsc -b`, `tsc -p tsconfig.tests.json --noEmit`, `eslint . --max-warnings=0` | PASS. |
+| `vitest run --maxWorkers=4` con el `.env` actual | FAIL 562/564: `settingsPanel.test.tsx:34` y `memoryPanel.test.tsx:98`, que suponen un build sin Supabase. |
+| El mismo comando con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` vacías | PASS 564/564. |
+| `vite build` a una carpeta aparte | PASS: `index` 381,95 kB (gzip 123,35 kB). supabase-js solo en su chunk diferido. |
+| Secretos | PASS: 0 coincidencias de los valores de `.env` en el build y en los archivos versionados de texto. `sb_secret_` aparece solo como comprobación de prefijo de supabase-js. |
+| `/api/speak` real | 3/5 con audio: ES 2 y EN 1, primer audio en 1689–2107 ms y total de 2785–3016 ms. 2/5 dieron 502 (ES) y no se repitieron en 2 reintentos; causa sin confirmar, no se capturó la respuesta de Google. |
+| Validación de `/api/speak`, `/api/transcribe` y `/api/talk` | PASS 18/18, y el 429 llega en la petición 13 de `/api/talk`. |
+| Detector + WAV + Whisper + «Jev» con voz de Gemini | EN con nombre: acierta. ES sin nombre: se descarta bien. **ES con nombre: FAIL 1/1**, Whisper escribió «¿Kid? ¿Qué carreras puedo estudiar?». |
+| GitHub real | 4/4 con datos iguales a la API y fuentes: estrellas ES y EN (251 890), commits de esta semana e issues #345810/#345809/#345808. |
+| WhatsApp real | 5/5 con bloque y `wa.me`. |
+| Supabase sin sesión | PASS 6/6: leer, crear, borrar y editar `memories` y leer `enrollments` dan 401 (`42501`); sin clave, 401. Google está activo. |
+
+**Hallazgos sin corregir, de mayor a menor gravedad:**
+
+1. **«Jev» sin medir con voz humana.** La prueba de la fase 1 sigue pendiente y la frase del criterio 1 falló hoy con voz sintética. El listón de ≥9/10 no tiene medición.
+2. **Jev responde a ruidos en la ventana de 8 s.** Con silencio, ruido, golpe, zumbido o tecleo sintéticos, Groq devolvió `no_speech_prob` 0 en 10/10, así que el filtro de `api/transcribe.ts:94` no quitó nada («Gracias.», «¡Gracias por ver el video!», «.»). Fuera de la ventana se descartan; dentro, `useHandsFree.ts:76` los envía como mensaje (comprobado con la transcripción simulada). Cada respuesta abre otra ventana. Sin ver aún con micrófono real.
+3. **Escape y tocarlo no interrumpen a Jev (spec, «Turnos»).** `HomePage.tsx:161` solo cierra el diagnóstico y `voiceEngine.ts:191` excluye el toque a propósito. `docs/interaction.md:143` dice que apagar el micrófono lo corta, y tampoco lo hace.
+4. **Borrar la clave Groq no apaga el micrófono (spec, «Indicador»).** Sigue en `listening` hasta la frase siguiente, que va a `/api/transcribe` sin clave y recibe 401; no llega a Groq.
+5. **Un ruido constante que aparece de pronto no se aprende.** Con 3 s de silencio y 2 min de ruido sintético: 8 frases de 15 s, 120 s enviados. `voiceActivity.ts:71` solo actualiza el ruido fuera de una frase. Sin la supresión de ruido del navegador, que puede atenuarlo.
+6. **GitHub apagado: no explica cómo encenderlo (spec, sección 3).** 0/5 lo dijeron y uno ofreció buscarlo. No se llamó a GitHub en ninguna.
+7. **WhatsApp con un número: promete un borrador que no aparece.** 4/4 dijeron «lo dejo listo» sin bloque. Ningún número salió.
+8. **WhatsApp cambia el sentido del mensaje.** En 3/5 («llegué tarde», «nos vemos en el próximo encuentro»), y los 5 añaden frases no pedidas.
+9. **Clave Groq equivocada en `/api/talk`.** `api/talk.ts:295` responde 502 y Home dice «no disponible», sin señalar la clave; `/api/transcribe` sí responde 401.
+10. **Dos unit tests dependen del `.env` local** (tabla de arriba): `npm test` sale en rojo en este equipo.
+11. **«Oí: …» sobrevive al apagar y encender:** la línea no vuelve a decir «Escuchando · di «Jev»». Además, «Hola, Jev» llega como «Hola,».
+12. **Email abierto en Supabase:** `email: true` y `disable_signup: false`, aunque la spec solo admite Google. La RLS contiene a esos usuarios, pero evitan el modo «Prueba».
+13. **Textos desactualizados:** `spec.md:3` y `plan.md:5` («Fase 1 en curso»), `spec.md:65` («hasta 2 llamadas», el código hace 2 rondas de 2) y `plan.md:25` (`prompt: "Jev"`). `GITHUB_TOKEN` no está en `.env` ni `.env.local`.
+
+**Sin comprobar:** e2e y CI (regla del usuario); oír la voz, micrófono real y login con Google (los hace el usuario); RLS entre dos usuarios, que no se repitió para no crear usuarios (PASS 9/9 el 2026-11-02); las variables de Vercel.
 
 ## Fase 4 — implementación, 2026-11-01
 
