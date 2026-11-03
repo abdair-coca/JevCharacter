@@ -64,7 +64,7 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 **Pendiente (verificación real):**
 - RLS por REST con la clave publicable y sincronización entre dos clientes de una cuenta: `scratchpad/memory-real.mjs`, que crea 2 usuarios temporales con la clave secreta y los borra al final. Necesita `VITE_SUPABASE_PUBLISHABLE_KEY`.
 - Dos navegadores con la misma cuenta de Google: necesita el cliente OAuth y el proveedor Google activos.
-- e2e Chromium completo en CI: no corre hasta que pase `npm test`, tras el push de la corrección.
+- e2e Chromium completo en CI: sin correr. El usuario pidió el 2026-11-02 no usar CI/CD ni e2e, solo los unit tests afectados («tarda mucho»), y el run de `4773bfc` se canceló con `npm test` y `phones` en verde. Esto cambia la matriz Playwright de la fase 5.
 
 ## Fase 3 — implementación, 2026-11-01
 
