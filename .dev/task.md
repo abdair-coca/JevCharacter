@@ -47,7 +47,35 @@ Alcance elegido en el quiz: código contra la spec, unit tests, build y APIs rea
 12. **Email abierto en Supabase:** `email: true` y `disable_signup: false`, aunque la spec solo admite Google. La RLS contiene a esos usuarios, pero evitan el modo «Prueba».
 13. **Textos desactualizados:** `spec.md:3` y `plan.md:5` («Fase 1 en curso»), `spec.md:65` («hasta 2 llamadas», el código hace 2 rondas de 2) y `plan.md:25` (`prompt: "Jev"`). `GITHUB_TOKEN` no está en `.env` ni `.env.local`.
 
-**Sin comprobar:** e2e y CI (regla del usuario); oír la voz, micrófono real y login con Google (los hace el usuario); RLS entre dos usuarios, que no se repitió para no crear usuarios (PASS 9/9 el 2026-11-02); las variables de Vercel.
+### Recorrido en navegador real, 2026-11-03
+
+El usuario pidió «quiero que lo verifiques tu». Sin las suites e2e ni CI: guiones propios de Playwright en el scratchpad, con la app, Whisper, Groq y GitHub reales. El audio entra por `getUserMedia` inyectado (pasa por el `AudioWorklet`, el detector y `/api/transcribe` reales) o por el micrófono falso de Chromium, con eco, ruido y ganancia activos. Las claves de `.env` se cargaron solo en ese navegador aislado, nunca en el Chrome del usuario. Sin GPU, los tiempos valen poco.
+
+| Comprobación | Resultado |
+|---|---|
+| «Jev» con 4 voces de Windows (80 frases, Whisper real) | Con nombre 37/40: Helena 8/10, Sabina 10/10, David 9/10, Zira 10/10. Sin nombre 0/40 falsos, también con «jefe» y «chef». Whisper por `/api/transcribe`: p50 598 ms, p90 784 ms. |
+| Fase 1 en navegador | PASS: encender e indicadores, mensaje sin el nombre y sin `/api/decide`, ignora lo oído mientras Jev habla, ventana de 8 s y su fin, apagado por pestaña, ruta e inscripción, avisos de permiso, micrófono y clave, inglés. Criterio 1 PASS en los dos sentidos con el procesado de Chrome. |
+| Fase 2 en navegador | PASS: firma y voz, corte al silenciar, ocultar la pestaña y con un mensaje nuevo; clave falsa real (401); sin clave; 429 y más de 3 s (simulados); aviso de privacidad; Features sin `/api/*`. Sin concluir: la pose termina 0,9–1,5 s después de la voz, sin GPU. Tras agotarse la cuota se usó una voz grabada en `/api/speak`. |
+| Fase 3 en navegador | PASS: «Buscando en GitHub…», fuentes que son commits reales de la semana, estrellas iguales a la API, interruptores que persisten, `wa.me` abre `api.whatsapp.com/send` con el texto y sin destinatario, móvil oscuro y claro. Una vez salió «El habla no está disponible» en móvil, sin reproducirse en 3 intentos. |
+| Fase 4 sin sesión | PASS 10/10: notas en el navegador, panel, olvidar una, número no guardado, sin llamadas a Supabase, PKCE hasta Google y volver sin entrar. |
+| Fase 4 con la cuenta real (Chrome del usuario, 2 pestañas) | PASS: «Ahora no» y su vuelta al recargar, «Llevar 2 notas», otra pestaña las trae de la base, olvidar una, «Olvidar todo», cerrar sesión, login desde `/features` con vuelta a esa vista (el usuario pulsó su cuenta en Google). Quedó como estaba: con sesión y 0 notas. |
+
+**Cambios sobre la lista de arriba:**
+- **2 confirmado:** Whisper oyó un tecleo como «¿Qué es esto?» y Jev respondió; tecleo y tos también pasan el procesado de Chrome. Los 26 sonidos sin voz de la medición devolvieron texto inventado.
+- **3 y 4 confirmados** midiendo la salida de audio y las pistas del micrófono.
+- **5 baja a menor:** con el procesado de Chrome, ruido blanco y ventilador dieron 1 envío en 75 s.
+- **7:** 4/5 prometen el borrador sin mostrarlo; una vez dijo que no podía.
+- **6:** GitHub apagado 0/6; WhatsApp apagado explica el interruptor 1/2 y la otra pidió copiar un texto que no dio.
+- **11 confirmado:** al encender tras cambiar a inglés, la línea seguía en «I heard: ¿Qué es esto?».
+
+**Hallazgos nuevos:**
+14. **Whisper repite la frase de contexto y despierta a Jev.** Con un ventilador, por el procesado real de Chrome, devolvió «Jev es una criatura digital.» (`api/transcribe.ts:34`) y Jev respondió sin que nadie lo nombrara; también «Jev is a digital creature.» con palmas (1/26). Otros 6 de 26 repiten la frase sin el nombre («I am a digital creature.»), que en la ventana de 8 s también llega a Jev.
+15. **Decir solo «Jev» no funciona.** Dura 220–320 ms en las 4 voces y `LISTEN_SPEECH_MIN_MS` (`listenProtocol.ts:6`) exige 400 ms, así que el detector lo descarta. «Oye, Jev» y «Hola, Jev» sí pasan. Falta confirmarlo con voz humana.
+16. **Gemini gratis da 10 frases de voz al día.** Respuesta real: «limit: 10 requests per day on Free Tier». Antes solo se había observado el límite por minuto. Cada respuesta gasta una; después, pitidos. Estas pruebas agotaron la cuota del día de la clave de `.env`, que vuelve hacia las 4:00.
+
+**También:** los 3 nombres perdidos están al inicio de la frase y Whisper los pierde igual sin el corte del detector, así que el detector queda descartado. En un navegador sin GPU, la voz empezó 6,4 s tras callar y el primer pitido a los 2,1 s (1 muestra); sumando los tiempos del servidor salen unos 4 s, sobre la meta inicial de p50 ≤ 3 s, que se ajusta en la fase 5. «Llevar 2 notas» tardó entre 2,5 y 8,5 s, sin más aviso que el botón atenuado.
+
+**Sin comprobar:** voz humana y oír la voz (solo el usuario); dos dispositivos reales (lo confirmó el usuario el 2026-11-02; hoy, 2 pestañas); aviso sin conexión con sesión (solo unit tests); RLS entre dos usuarios, que no se repitió para no crear usuarios (PASS 9/9 el 2026-11-02); las variables de Vercel; suites e2e y CI (regla del usuario).
 
 ## Fase 4 — implementación, 2026-11-01
 
