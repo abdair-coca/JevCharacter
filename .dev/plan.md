@@ -10,7 +10,7 @@
 2. **Fase 2 — Voz:** `/api/speak` con Gemini TTS, clave en Ajustes, estilo, reproducción y plan B. Depende de la fase 1 para el turno de habla en manos libres.
 3. **Fase 3 — Plugins:** registro de plugins, GitHub con herramientas, bloques `links` y `whatsapp` y Ajustes › Plugins.
 4. **Fase 4 — Memoria en la nube:** Supabase Auth con Google, tabla `memories`, sincronización e importación.
-5. **Fase 5 — Cierre:** reglas y textos, listón de calidad con 20 casos reales y matriz completa.
+5. **Fase 5 — Cierre:** reglas y textos, listón de calidad con 20 casos reales y unit tests afectados.
 
 Cada fase se entrega para revisión y se detiene hasta su aprobación.
 
@@ -73,7 +73,7 @@ Cada fase se entrega para revisión y se detiene hasta su aprobación.
 - Reglas y textos: `AGENTS.md` (claves, persistencia en servidor y Supabase en el navegador), `design.md` (voz con palabras, escucha, plugins, persistencia y nota de Bob), `docs/architecture.md`, `docs/interaction.md`, `docs/README.md`, `README.md` (variables y pasos de configuración) y la copia de Historia ES/EN.
 - `.env.example`: `GEMINI_TTS_MODEL`, `GITHUB_TOKEN`, `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`.
 - Listón de calidad: los 20 casos reales con resultados en `task.md`.
-- Matriz Playwright completa y capturas en `.dev/evidence/assistant/`. Se comprueba que `dist/` no contiene secretos.
+- Unit tests afectados, sin CI/CD ni e2e (cambio pedido por el usuario el 2026-11-02), y capturas en `.dev/evidence/assistant/`. Se comprueba que `dist/` no contiene secretos.
 
 ## Riesgos
 

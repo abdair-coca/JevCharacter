@@ -4,14 +4,13 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 
 ## Retoma aquí
 
-- **Fase activa:** fase 4 (Memoria en la nube), implementada y verificada con pruebas el 2026-11-01; **falta la verificación real**, que depende del usuario. Fase 1 aprobada («continua con la fase dos»), sin prueba real con micrófono pero con Whisper real (ver fase 2). Fase 2 aprobada («esta bien, sigue con la fase 3», 2026-11-01). Fase 3 aprobada («continua con la fase 4, ya estan los datos en .env», 2026-11-01).
+- **Fase activa:** fase 5 (Cierre), sin empezar. Fase 4 aprobada («si funciona, cierra la fase 4 y pushea», 2026-11-02). Fase 1 aprobada («continua con la fase dos»), sin prueba real con micrófono pero con Whisper real (ver fase 2). Fase 2 aprobada («esta bien, sigue con la fase 3», 2026-11-01). Fase 3 aprobada («continua con la fase 4, ya estan los datos en .env», 2026-11-01).
 - **Aprobaciones:** spec, plan, cambio de reglas y `@supabase/supabase-js` aprobados el 2026-10-31 («Aprobado, empieza fase 1»). Propuestas: se mantienen la ventana de 8 s y los interruptores de plugins; se descartan el apagado tras 5 min y «Borrar mi cuenta».
 - **Siguiente acción exacta:**
-  1. El usuario pone `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` en `.env`, crea el cliente OAuth de Google y activa Google en Supabase con las URLs de retorno.
-  2. Correr `scratchpad/memory-real.mjs` (RLS por REST con la clave publicable y dos clientes de una cuenta) y la prueba de dos navegadores con Google.
-  3. Entregar la fase 4 para revisión.
+  1. Empezar la fase 5 cuando el usuario lo pida. Se verifica solo con los unit tests afectados, sin CI/CD ni e2e.
+  2. Para tener login en producción, a pedido: `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` en Vercel y `vercel deploy --prod`.
 - **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
-- **Estado del código:** fases 1 a 4 en GitHub (`ca8caf5`, push pedido por el usuario el 2026-11-02). Vercel lo desplegó a producción sin las variables `VITE_SUPABASE_*`, así que allí no aparece el login. La corrección de la prueba de foco sigue sin push. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
+- **Estado del código:** fases 1 a 4 en GitHub (push pedido por el usuario el 2026-11-02). Producción quedó en `4773bfc`, desplegado por esos push, sin las variables `VITE_SUPABASE_*`: allí no aparece el login. Desde `1596ba6` un push ya no despliega. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
 
 ## Fase 4 — implementación, 2026-11-01
 
@@ -61,9 +60,13 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
 | Corrección de esa prueba | La prueba esperaba al campo y miraba el foco de inmediato; si el commit supera la franja de 5 ms del programador de React, el efecto de foco llega después. Reproducido 3/3 con un commit y un programador retrasados (scripts del scratchpad, sin commitear); con la espera sobre el foco, PASS 3/3 y el archivo 9/9 con el mismo retraso. La app no cambia. |
 | `vitest run` tras la corrección | PASS 564/564 dos veces con `--maxWorkers=4`. Con todos los workers de esta máquina, FAIL 4/4 `homeSession` (timeout de 5 s) y 2/4 `siteHeader`; solas pasan 5/5 y en el CI de `ca8caf5` también. Limitación local por carga, sin corregir. |
 
-**Pendiente (verificación real):**
-- RLS por REST con la clave publicable y sincronización entre dos clientes de una cuenta: `scratchpad/memory-real.mjs`, que crea 2 usuarios temporales con la clave secreta y los borra al final. Necesita `VITE_SUPABASE_PUBLISHABLE_KEY`.
-- Dos navegadores con la misma cuenta de Google: necesita el cliente OAuth y el proveedor Google activos.
+**Verificación real (2026-11-02):**
+- RLS por REST con la clave publicable y sincronización entre dos clientes de una cuenta: PASS 9/9 con `scratchpad/memory-real.mjs`. Los 2 usuarios temporales se borraron.
+- Google en un proyecto de Google Cloud propio, en modo «Prueba»: login en Chrome normal y en incógnito con la misma cuenta. «Llevar 1 nota a tu cuenta» en Chrome normal creó la fila bajo esa cuenta y «Olvidar todo» allí dejó la tabla en 0.
+- Nota vista en incógnito: la confirmó el usuario («si funciona»); no la observé directamente. «Olvidar todo» no se usó en incógnito, y el borrado entre clientes lo cubre `memory-real.mjs`.
+- Login en producción: sin probar, faltan las variables en Vercel y un despliegue. Solo los usuarios de prueba de Google pueden entrar mientras la app siga en «Prueba».
+
+**Sin correr:**
 - e2e Chromium completo en CI: sin correr. El usuario pidió el 2026-11-02 no usar CI/CD ni e2e, solo los unit tests afectados («tarda mucho»), y el run de `4773bfc` se canceló con `npm test` y `phones` en verde. Esto cambia la matriz Playwright de la fase 5.
 
 ## Fase 3 — implementación, 2026-11-01
