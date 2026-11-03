@@ -88,7 +88,7 @@ Published at **[jev-bot-sigma.vercel.app](https://jev-bot-sigma.vercel.app)** wi
 1. Add `TYPESAFE_API_KEY` to the project's Production environment. `JEV_MODEL` defaults to `jev-latest`.
 2. Generated speech needs no server key: each visitor adds a Groq key in Ajustes. `GROQ_MODEL` remains optional.
 3. For UATF enrollments, add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` to the Production environment as well.
-4. Use the regular build (`npm run build`, output `dist`) and create a new deployment:
+4. Pushing to GitHub does not deploy (`git.deploymentEnabled` is off in `vercel.json`). Use the regular build (`npm run build`, output `dist`) and create a new deployment:
 
 ```bash
 vercel deploy --prod
