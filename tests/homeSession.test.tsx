@@ -3,6 +3,8 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testi
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CharacterController } from "../src/character/useCharacterController";
 import App from "../src/App";
+import { clearGroqKey, saveGroqKey } from "../src/creature/brain/groqKeyStore";
+import { homeVoice } from "../src/creature/voice/geminiVoice";
 import { preferencesStore } from "../src/stores/preferencesStore";
 import { decision, jsonResponse } from "./helpers";
 
@@ -16,7 +18,7 @@ vi.mock("../src/pages/FeaturesPage", () => ({ default: () => <main><h1 data-page
 vi.mock("../src/components/Character", async () => {
   const { forwardRef, useImperativeHandle } = await import("react");
   const controller = {
-    stop: vi.fn(), think: vi.fn(), idle: vi.fn(), talk: vi.fn(), playFor: vi.fn(),
+    stop: vi.fn(), think: vi.fn(), idle: vi.fn(), talk: vi.fn(), speak: vi.fn(), playFor: vi.fn(),
     play: vi.fn(), morph: vi.fn(), bump: vi.fn(), answer: vi.fn(), sequence: vi.fn(),
     hello: vi.fn(), ghost: vi.fn(), flower: vi.fn(), cloud: vi.fn(),
   } as unknown as CharacterController;
@@ -61,6 +63,57 @@ describe("persistent Home shell", () => {
     expect(screen.getByTestId("character")).toBe(character);
     expect(character.getAttribute("data-active")).toBe("true");
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  describe("stopping Jev", () => {
+    // A reply that has started and never ends: Jev stays talking until something stops him.
+    function talkingFetch() {
+      const encoder = new TextEncoder();
+      return vi.fn((url: RequestInfo | URL) => {
+        if (String(url) === "/api/decide") return Promise.resolve(jsonResponse(decision({ kind: "talk", state: "Talk" })));
+        const body = new ReadableStream<Uint8Array>({ start: controller => controller.enqueue(encoder.encode('event: spoken\ndata: {"text":"Te cuento algo muy largo."}\n\n')) });
+        return Promise.resolve(new Response(body, { status: 200, headers: { "Content-Type": "text/event-stream" } }));
+      });
+    }
+    async function startTalking() {
+      saveGroqKey("gsk_test_visible_key_1234567890");
+      vi.stubGlobal("fetch", talkingFetch());
+      const stopSpeech = vi.spyOn(homeVoice, "stopSpeech");
+      render(<App />);
+      const character = await screen.findByTestId("character");
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "Cuéntame algo" } });
+      fireEvent.submit(screen.getByRole("textbox").closest("form")!);
+      await waitFor(() => expect(document.querySelector(".speech-caption")?.textContent).toBe("Te cuento algo muy largo."));
+      return { character, stopSpeech };
+    }
+    afterEach(() => {
+      clearGroqKey();
+      vi.restoreAllMocks();
+    });
+
+    it("Escape from the field cuts his voice and leaves the text and the field alone", async () => {
+      const { stopSpeech } = await startTalking();
+      const input = screen.getByRole<HTMLInputElement>("textbox");
+      input.focus();
+      fireEvent.keyDown(input, { key: "Escape" });
+      expect(stopSpeech).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).toBe(input);
+      expect(document.querySelector(".speech-caption")?.textContent).toBe("Te cuento algo muy largo.");
+      // Jev no longer talks: the next press does what it did before.
+      fireEvent.keyDown(input, { key: "Escape" });
+      expect(stopSpeech).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).not.toBe(input);
+    });
+
+    it("tapping his body cuts his voice; tapping the stage or his canvas far from him does not", async () => {
+      const { character, stopSpeech } = await startTalking();
+      vi.spyOn(document.querySelector(".creature-presence")!, "getBoundingClientRect").mockReturnValue(new DOMRect(100, 100, 400, 400));
+      fireEvent.pointerDown(document.querySelector(".home-page")!, { clientX: 300, clientY: 300 });
+      fireEvent.pointerDown(character, { clientX: 490, clientY: 300 });
+      expect(stopSpeech).not.toHaveBeenCalled();
+      fireEvent.pointerDown(character, { clientX: 340, clientY: 340 });
+      expect(stopSpeech).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("does not initialize Home on a direct Features visit", async () => {

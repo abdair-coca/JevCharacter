@@ -233,6 +233,22 @@ describe("/api/talk", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it("dice que la clave no vale cuando Groq la rechaza, sin confundirlo con una caída", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(new Response("{}", { status: 401 }))));
+    const response = apiResponse();
+    await handler(request(validBody), response.response);
+    expect(response.statusCode).toBe(401);
+    expect(response.writes.join("")).toContain("Speech key rejected");
+  });
+
+  it("dice que Groq llegó a su límite, sin confundirlo con una caída", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(new Response("{}", { status: 429 }))));
+    const response = apiResponse();
+    await handler(request(validBody), response.response);
+    expect(response.statusCode).toBe(429);
+    expect(response.writes.join("")).toContain("Speech quota exceeded");
+  });
+
   it("ignora GROQ_API_KEY del entorno: solo cuenta la clave de la petición", async () => {
     vi.stubEnv("GROQ_API_KEY", "server-key-from-env-1234567890");
     const fetchMock = vi.fn();

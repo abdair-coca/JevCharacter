@@ -73,6 +73,8 @@ type CreatureBrain = {
   /** `direct`: the message was said to Jev by name, so it goes straight to speech. */
   submitContext: (context: string, options?: { direct?: boolean }) => void;
   clearContext: () => void;
+  /** Stops Jev while he thinks or talks, by a tap or Escape. */
+  interrupt: () => void;
   forceState: (state: CharacterState) => void;
 };
 
@@ -86,7 +88,7 @@ export function useCreatureBrain(
   const [personality, setPersonality] = useState(loadPersonality);
   const [userContext, setUserContext] = useState("");
   const speech = useSpeechSession(characterRef, language, active);
-  const { start: startSpeech, cancel: cancelSpeech, hasOpenQuestion } = speech;
+  const { start: startSpeech, cancel: cancelSpeech, interrupt: interruptSpeech, hasOpenQuestion } = speech;
   const [decisionInterrupted, setDecisionInterrupted] = useState(false);
   const activeRef = useRef(active);
   const [history, setHistory] = useState<ReactionHistoryEntry[]>([]);
@@ -285,6 +287,15 @@ export function useCreatureBrain(
     schedulerRef.current?.requestContextDecision();
   }, [cancelSpeech, sensors]);
 
+  const interrupt = useCallback(() => {
+    if (!activeRef.current) return;
+    schedulerRef.current?.cancelPending();
+    thinkingShownRef.current = false;
+    setStatus("observing");
+    interruptSpeech();
+    void characterRef.current?.idle();
+  }, [characterRef, interruptSpeech]);
+
   const forceState = (state: CharacterState) => {
     if (!activeRef.current || document.visibilityState !== "visible") return;
     schedulerRef.current?.cancelPending();
@@ -353,6 +364,7 @@ export function useCreatureBrain(
     speechTool: speech.tool,
     submitContext,
     clearContext,
+    interrupt,
     forceState,
   };
 }

@@ -1,6 +1,6 @@
 # Spec: Jev escucha, habla, usa plugins y recuerda en la nube
 
-**Estado:** aprobada el 2026-10-31 («Aprobado, empieza fase 1»). Fase 1 en curso.
+**Estado:** aprobada el 2026-10-31 («Aprobado, empieza fase 1»). Fases 1 a 4 aprobadas; fase 5 sin empezar.
 
 **Fuentes:** [contrato visual](../design.md), [arquitectura](../docs/architecture.md), [interacción](../docs/interaction.md), [plan](plan.md), [tarea activa](task.md).
 
@@ -42,11 +42,11 @@ Quiz del 2026-10-31:
 
 - **Activación:** un botón de micrófono junto al campo de Home activa o desactiva «Manos libres» (`aria-pressed`). La primera vez el navegador pide permiso. Si se niega o no hay micrófono, se muestra un aviso y el botón queda apagado.
 - **Indicador:** mientras escucha, hay un anillo visible y el texto «Escuchando, di «Jev»» con movimiento reducido respetado. Se apaga al ocultar la pestaña, salir de Home o borrar la clave Groq.
-- **Captura:** `getUserMedia` con cancelación de eco, supresión de ruido y control de ganancia. Un detector de voz local por energía, sin dependencias, corta frases de 0,4 a 15 s tras unos 700 ms de silencio y conserva unos 300 ms previos para no perder el arranque. El audio sale como WAV mono de 16 kHz. Nunca se guarda en el navegador ni en el servidor.
-- **Transcripción:** `api/transcribe.ts` reenvía cada frase a Groq (`whisper-large-v3-turbo`) con la clave del visitante en `X-Groq-Api-Key`, el idioma de la interfaz y una frase de contexto que nombra a Jev («Jev es una criatura digital.»; con solo el nombre, Whisper inventaba «Jev,» al inicio, medido el 2026-11-01). Valida tamaño y duración, aplica límite de frecuencia y no registra audio ni texto.
+- **Captura:** `getUserMedia` con cancelación de eco, supresión de ruido y control de ganancia. Un detector de voz local por energía, sin dependencias, corta frases de 0,15 a 15 s tras unos 700 ms de silencio y conserva unos 300 ms previos para no perder el arranque (el mínimo bajó de 0,4 s el 2026-11-03: decir solo «Jev» dura 200–320 ms y «No», desde 180 ms). Solo envía lo que suena a voz: al menos 60 ms que se repiten a un tono de 70 a 400 Hz. Una frase de 15 s sin pausa pasa a ser el nivel de ruido de la sala. El audio sale como WAV mono de 16 kHz. Nunca se guarda en el navegador ni en el servidor.
+- **Transcripción:** `api/transcribe.ts` reenvía cada frase a Groq (`whisper-large-v3-turbo`) con la clave del visitante en `X-Groq-Api-Key`, el idioma de la interfaz y una frase de contexto que nombra a Jev («Jev es una criatura digital.»; con solo el nombre, Whisper inventaba «Jev,» al inicio, medido el 2026-11-01). Valida tamaño y duración, aplica límite de frecuencia y no registra audio ni texto. Descarta lo que Whisper inventa con el ruido: esa frase de contexto, frases de su entrenamiento, texto sin letras y segmentos con `avg_logprob` bajo -1.
 - **Palabra «Jev»:** el cliente busca «Jev» y sus transcripciones habituales («Yev», «Jeff», «Chev») en cualquier parte de la frase. Si no está, la frase se descarta sin mostrarse. Si está, se quita y el resto se envía. Si solo dijiste «Jev», Jev te mira y espera la pregunta.
 - **Camino:** una frase dirigida a Jev va directo a respuesta hablada (decisión TALK local, como la conversación abierta de `choices`), sin pasar por `/api/decide`. El texto transcrito se muestra igual que uno escrito.
-- **Turnos:** mientras Jev piensa o habla, las frases oídas se ignoran para que no se escuche a sí mismo. Se le interrumpe tocándolo o con Escape. Al terminar de hablar, durante 8 s se le puede contestar sin decir «Jev» (propuesta aprobada en el quiz de aprobación).
+- **Turnos:** mientras Jev piensa o habla, las frases oídas se ignoran para que no se escuche a sí mismo. Se le interrumpe tocando su cuerpo o con Escape, también desde el campo: si aún piensa, la respuesta se descarta; si ya habla, se corta la voz y el texto queda escrito. Apagar el micrófono no lo interrumpe. Al terminar de hablar, durante 8 s se le puede contestar sin decir «Jev» (propuesta aprobada en el quiz de aprobación).
 
 ### 2. Jev habla con voz y estilo propios
 
@@ -57,15 +57,16 @@ Quiz del 2026-10-31:
 - **Estilo «criatura juguetona»:** voz precargada Puck («Upbeat»), elegida en el quiz de la fase 2. Una firma breve de pitidos de Jev suena justo antes de la voz. **Ajuste del 2026-11-01:** el usuario sintió «muy exagerada» la voz en español con el estilo «juguetón, curioso y alegre, con risitas». Tras oír tres versiones eligió la «suave» para ambos idiomas: criatura pequeña, cálida y curiosa, con un toque juguetón muy ligero, natural y tranquila, sin exagerar la entonación ni reír.
 - **Reproducción:** por el bus de voz de `appAudio`, así que «Sonido de Jev», silenciar y ocultar la pestaña la controlan como hoy. La animación de habla dura lo que dura el audio y vuelve a `Base` al terminar.
 - **Plan B:** sin clave, con la clave rechazada, sin cuota (429), con error o si el audio tarda más de 3 s en empezar, Jev usa sus pitidos de siempre y la respuesta sigue igual. Ajustes muestra el estado.
+- **Límite gratuito:** Google da pocas frases de voz al día (10 medidas el 2026-11-03, según su propio mensaje de error). Se mantiene Gemini y Ajustes lo avisa junto a la clave (decidido el 2026-11-03, «arregla todo», sobre la recomendación).
 - **Features** sigue con pitidos: es determinista y no consulta `/api/*`.
 
 ### 3. Plugins: GitHub y WhatsApp
 
 - **Ajustes › Plugins:** interruptores «GitHub» y «WhatsApp», encendidos por defecto y persistidos en `jevling.plugins`. Cada mensaje envía cuáles están activos y el servidor solo ofrece al modelo esas herramientas. Propuesta aprobada en el quiz de aprobación. La lista es extensible: cada plugin declara su esquema, sus límites y su ejecución en `api/_plugins/`.
-- **GitHub (solo lectura, público):** herramientas para ver un repo, buscar repos, listar issues o PRs, ver commits recientes y ver un perfil. Usan la API REST con `GITHUB_TOKEN` del servidor, opcional y de solo lectura. Cada resultado se recorta a ≤1500 caracteres, con hasta 2 llamadas por mensaje y 4 s por llamada.
+- **GitHub (solo lectura, público):** herramientas para ver un repo, buscar repos, listar issues o PRs, ver commits recientes y ver un perfil. Usan la API REST con `GITHUB_TOKEN` del servidor, opcional y de solo lectura. Cada resultado se recorta a ≤1500 caracteres, con hasta 2 llamadas por ronda, 2 rondas por mensaje y 4 s por llamada.
 - **Flujo:** `/api/talk` llama a Groq en streaming con las herramientas activas. Si el modelo pide una, el servidor la ejecuta, emite el evento SSE `tool` (`{plugin, status}`) para que Home muestre «Buscando en GitHub…» mientras Jev piensa, y abre una segunda llamada en streaming con el resultado. Sin herramientas, el camino es el actual.
 - **Fuentes:** un bloque nuevo `links` (hasta 3 enlaces) muestra de dónde salió el dato. El servidor solo acepta URLs `https://github.com/…` que aparecieron en los resultados de la herramienta. Se dibujan como enlaces de React con `rel="noopener noreferrer"`, nunca como HTML del modelo.
-- **WhatsApp:** un bloque nuevo `whatsapp` (`{"text":"≤500"}`) cuando pides enviar o compartir algo por WhatsApp. Muestra el mensaje y un botón «Abrir en WhatsApp» (`https://wa.me/?text=…`, en otra pestaña); el destinatario se elige dentro de WhatsApp. Se rechazan textos con secuencias de 7 o más dígitos, como en la memoria.
+- **WhatsApp:** un bloque nuevo `whatsapp` (`{"text":"≤500"}`) cuando pides enviar o compartir algo por WhatsApp. Muestra el mensaje y un botón «Abrir en WhatsApp» (`https://wa.me/?text=…`, en otra pestaña); el destinatario se elige dentro de WhatsApp. Una secuencia de 7 o más dígitos no sale nunca: se sustituye por «[…]» y el visitante la escribe en WhatsApp (antes se rechazaba el borrador y Jev prometía uno que no aparecía; cambiado el 2026-11-03).
 - Sin el plugin activo, Jev explica que está apagado y cómo encenderlo.
 
 ### 4. Memoria persistente en la nube
@@ -115,7 +116,7 @@ Se mide con un set de 20 casos reales en dev (claves reales) y se registra en `t
 
 ## Dependencias y acciones del usuario
 
-- **Dependencia nueva:** `@supabase/supabase-js` (fase 4), cargada en diferido solo al iniciar sesión o si hay sesión guardada. Groq, Gemini y GitHub se llaman con `fetch`, y el detector de voz es propio. Si el detector por energía falla en las pruebas, se propondrá `@ricky0123/vad-web` para aprobarla antes de añadirla.
+- **Dependencia nueva:** `@supabase/supabase-js` (fase 4), cargada en diferido solo al iniciar sesión o si hay sesión guardada. Groq, Gemini y GitHub se llaman con `fetch`, y el detector de voz es propio. Si el detector, con la comprobación de tono añadida el 2026-11-03, falla con voz humana y ruido real, se propondrá `@ricky0123/vad-web` para aprobarla antes de añadirla.
 - **Solo el usuario puede hacer esto:**
   1. Crear una clave de Gemini para probar (los visitantes usan la suya).
   2. Crear un token de GitHub de solo lectura de repos públicos y ponerlo en `GITHUB_TOKEN` (Vercel y `.env.local`).

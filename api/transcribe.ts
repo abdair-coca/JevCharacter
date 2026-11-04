@@ -33,7 +33,25 @@ const MODEL = "whisper-large-v3-turbo";
 // «Jev,» (measured 2026-11-01 with Jev's own voice); a full sentence names him without that.
 const NAME_PROMPT: Record<SpeechLanguage, string> = { es: "Jev es una criatura digital.", en: "Jev is a digital creature." };
 // Segments Whisper itself rates as probably silence are its usual hallucinations («Gracias por ver»).
+// Groq reported 0 for every sound measured on 2026-11-03, so this limit alone stops none of them.
 const NO_SPEECH_MAX = 0.6;
+// Whisper's own limit for a segment it barely believes. Noise often fell below it; speech did not (-0.89 at worst, 2026-11-03).
+const AVG_LOGPROB_MIN = -1;
+// Noise comes back as the prompt or as sentences from Whisper's training data, often with full confidence
+// (measured 2026-11-03: 26 of 26 sounds without a voice got some text). They would wake Jev or answer him.
+const INVENTED = new RegExp(`^(?:${[
+  "(?:(?:el|la|yo|jev|esto|es|soy) )*una criatura digital",
+  "(?:(?:the|jev|it|he|this|is|i|am|im|its) )*a digital creature",
+  "gracias por ver(?: el video| este video)?",
+  "suscribete(?: al canal)?",
+  "suscribanse(?: al canal)?",
+  "thanks? for watching",
+  "thank you for watching",
+  "subtitulos .+",
+  "subtitles .+",
+  "musica",
+  "music",
+].join("|")})?$`, "u");
 const BASE64_PATTERN = /^[A-Za-z0-9+/]+={0,2}$/;
 const BODY_KEYS = new Set(["audio", "language"]);
 
@@ -85,15 +103,26 @@ function isRateLimited(key: string) {
   return bucket.count > MAX_REQUESTS_PER_WINDOW;
 }
 
+/** True for text with nothing to say («.») and for what Whisper invents from noise. */
+function isInvented(text: string) {
+  const plain = text.normalize("NFD").replace(/\p{M}|['’]/gu, "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  return INVENTED.test(plain);
+}
+
+const isHeard = (segment: Record<string, unknown>) =>
+  (typeof segment.no_speech_prob !== "number" || segment.no_speech_prob < NO_SPEECH_MAX) &&
+  (typeof segment.avg_logprob !== "number" || segment.avg_logprob >= AVG_LOGPROB_MIN) &&
+  !isInvented(String(segment.text));
+
 /** The text of the segments Whisper heard as speech; the whole text when it reports no segments. */
 function spokenText(value: unknown) {
   if (!isRecord(value) || typeof value.text !== "string") return null;
-  if (!Array.isArray(value.segments)) return value.text;
-  return value.segments
+  const text = !Array.isArray(value.segments) ? value.text : value.segments
     .filter((segment): segment is Record<string, unknown> => isRecord(segment) && typeof segment.text === "string")
-    .filter((segment) => typeof segment.no_speech_prob !== "number" || segment.no_speech_prob < NO_SPEECH_MAX)
+    .filter(isHeard)
     .map((segment) => String(segment.text))
     .join("");
+  return isInvented(text) ? "" : text;
 }
 
 export default async function handler(request: ApiRequest, response: ApiResponse) {

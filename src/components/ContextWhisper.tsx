@@ -22,7 +22,7 @@ type Props = {
 type Messages = ReturnType<typeof useTranslation>;
 
 const NOTICE_TEXT: Record<Exclude<HandsFreeNotice, null>, keyof Messages> = {
-  denied: "listenDenied", noMic: "listenNoMic", unsupported: "listenUnsupported", needsKey: "listenNeedsKey", quota: "listenQuota",
+  denied: "listenDenied", noMic: "listenNoMic", unsupported: "listenUnsupported", needsKey: "listenNeedsKey", keyRejected: "listenKeyRejected", quota: "listenQuota",
 };
 
 function ListenLine({ listen, t }: { listen: ListenControl; t: Messages }) {

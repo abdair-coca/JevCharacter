@@ -2,7 +2,7 @@
 
 - **Base:** [spec.md](spec.md).
 - **Contratos de UI/animación:** [design.md](../design.md).
-- **Estado:** aprobado el 2026-10-31. Fase 1 en curso.
+- **Estado:** aprobado el 2026-10-31. Fases 1 a 4 aprobadas; fase 5 sin empezar.
 
 ## Dependencias y orden
 
@@ -22,7 +22,7 @@ Cada fase se entrega para revisión y se detiene hasta su aprobación.
   - `wakeWord.ts` (puro): normaliza, encuentra «Jev» y sus variantes y devuelve el resto de la frase.
   - `micCapture.ts`: `getUserMedia` y un `AudioWorklet` que entrega PCM; se libera al apagar.
   - `useHandsFree.ts`: estado `off | requesting | listening | transcribing | denied`, apagado por pestaña oculta, salida de Home o clave borrada; ignorar lo oído mientras Jev piensa o habla, y ventana de 8 s sin «Jev» al terminar de hablar.
-- `api/transcribe.ts`: valida el WAV (tamaño ≤ ~600 kB, ≤15 s, cabecera RIFF), idioma y clave; aplica límite de frecuencia; reenvía multipart a Groq `audio/transcriptions` (`whisper-large-v3-turbo`, `language`, `prompt: "Jev"`). Al empezar se confirma cómo entrega Vercel un cuerpo binario; si no lo entrega, el audio viaja en base64 dentro de JSON.
+- `api/transcribe.ts`: valida el WAV (tamaño ≤ ~600 kB, ≤15 s, cabecera RIFF), idioma y clave; aplica límite de frecuencia; reenvía multipart a Groq `audio/transcriptions` (`whisper-large-v3-turbo`, `language` y una frase de contexto que nombra a Jev). Al empezar se confirma cómo entrega Vercel un cuerpo binario; si no lo entrega, el audio viaja en base64 dentro de JSON.
 - `useCreatureBrain`: nueva entrada `submitSpoken(text)` que arranca el habla con una decisión TALK local, el mismo camino que la conversación abierta de `choices`.
 - UI: botón de micrófono e indicador en `ContextWhisper`, ES/EN y avisos de permiso denegado, sin micrófono y sin clave.
 - Tests:
@@ -78,10 +78,10 @@ Cada fase se entrega para revisión y se detiene hasta su aprobación.
 ## Riesgos
 
 - **Privacidad del micrófono:** manos libres envía a Groq cada frase que oye, aunque no diga «Jev». Se mitiga con un indicador siempre visible, apagado automático, frases sin «Jev» descartadas sin mostrarse y audio nunca guardado.
-- **Cuota de Groq:** Whisper y el chat comparten la clave del visitante (chat: 8000 TPM). Cada frase oída consume cuota de Whisper, así que se medirá en la fase 1 y se descartarán frases muy cortas o de poca energía.
+- **Cuota de Groq:** Whisper y el chat comparten la clave del visitante (chat: 8000 TPM, unos 5 mensajes por minuto, medido el 2026-11-03; Home avisa que espere). Cada frase oída consume cuota de Whisper, así que se descartan las frases muy cortas o sin voz antes de enviarlas.
 - **Eco:** Jev podría oírse a sí mismo. Se mitiga con cancelación de eco e ignorando lo oído mientras piensa y habla.
 - **Detector de voz por energía:** puede fallar con ruido. Si falla, se propone `@ricky0123/vad-web` con aprobación.
-- **Gemini TTS:** la cuota gratuita es del proyecto de Google de cada visitante y sus límites no son públicos. El nivel gratuito usa el texto para mejorar productos de Google. Se mitiga con el plan B de pitidos y un aviso fijo.
+- **Gemini TTS:** la cuota gratuita es del proyecto de Google de cada visitante: 10 frases al día, medidas el 2026-11-03. El nivel gratuito usa el texto para mejorar productos de Google. Se mitiga con el plan B de pitidos y avisos fijos.
 - **Herramientas con `gpt-oss-20b`:** puede elegir mal la herramienta o no usarla. Se mitiga con un prompt con ejemplos, y `GROQ_MODEL` permite probar `gpt-oss-120b`. Se mide en la fase 3.
 - **Tiempo de función en Vercel:** dos llamadas a Groq y una a GitHub en el mismo pedido. Se miden los tiempos y se ajustan el timeout y `maxDuration`.
 - **Autenticación:** errores en las URLs de retorno o en la RLS exponen datos. Se mitiga con migración revisada, prueba RLS real y ningún secreto en el navegador.

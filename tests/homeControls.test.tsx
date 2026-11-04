@@ -87,6 +87,11 @@ describe("Home HUD", () => {
     fireEvent.click(action);
     expect(settingsDialogStore.getState()).toEqual({ open: true, memory: false, opener: action });
   });
+  it("says a saved Groq key was rejected and opens Ajustes from the notice", () => {
+    render(<BrainHUD decision={decision()} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} speechNotice="keyRejected" />);
+    expect(screen.getByRole("status").textContent).toBe("Groq rechazó tu clave. Revísala en Ajustes.");
+    expect(screen.getByRole("button", { name: "Abrir Ajustes" })).toBeTruthy();
+  });
   it("offers no settings action for other speech failures", () => {
     render(<BrainHUD decision={decision()} status="observing" personality={{ energy: 50, trust: 40, curiosity: 60 }} speechNotice="unavailable" />);
     expect(screen.queryByRole("button", { name: "Abrir Ajustes" })).toBeNull();

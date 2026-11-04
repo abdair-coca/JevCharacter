@@ -3,13 +3,20 @@ import type { CharacterController } from "../character/useCharacterController";
 import type { TalkState } from "../creature/brain/brain.types";
 import { historyReply, type SpeechBlock } from "../creature/brain/speechBlocks";
 import { readGroqKey } from "../creature/brain/groqKeyStore";
-import { SpeechKeyRequiredError, streamSpeechReply } from "../creature/brain/speechClient";
+import { SpeechKeyRequiredError, SpeechRateError, streamSpeechReply } from "../creature/brain/speechClient";
 import { addMemory, readMemory, selectRelevant } from "../creature/memory/memoryStore";
 import { SPEECH_HISTORY_LIMIT, SPEECH_MESSAGE_MAX_CHARS, SPEECH_REQUEST_TIMEOUT_MS, type SpeechExchange, type SpeechLanguage, type SpeechPlugin } from "../creature/brain/speechProtocol";
 import { enabledPlugins, preferencesStore } from "../stores/preferencesStore";
 
-/** `needsKey`: Jev could not speak because this browser has no valid Groq key saved in Ajustes. */
-export type SpeechNotice = "unavailable" | "needsKey" | "regenerating" | "interrupted" | null;
+/** `needsKey`: Jev could not speak because this browser has no Groq key saved in Ajustes; `keyRejected`: Groq refused the saved one; `rateLimited`: too many messages for now. */
+export type SpeechNotice = "unavailable" | "needsKey" | "keyRejected" | "rateLimited" | "regenerating" | "interrupted" | null;
+type SpeechFailure = "unavailable" | "needsKey" | "keyRejected" | "rateLimited";
+
+function failureOf(error: unknown): SpeechFailure {
+  if (error instanceof SpeechRateError) return "rateLimited";
+  if (!(error instanceof SpeechKeyRequiredError)) return "unavailable";
+  return readGroqKey() ? "keyRejected" : "needsKey";
+}
 export type SpeechCaption = { text: string; complete: boolean; generation: number; language: SpeechLanguage };
 /** A reply with blocks, kept until dismissed or replaced; `complete` once the stream has ended. */
 export type SpeechDetail = { spoken: string; blocks: SpeechBlock[]; complete: boolean; generation: number; language: SpeechLanguage };
@@ -82,7 +89,7 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
     if (regenerating) void characterRef.current?.think();
 
     const isCurrent = () => pendingRef.current === request && activeRef.current && !request.controller.signal.aborted;
-    const fail = (notice: "unavailable" | "needsKey" = "unavailable") => {
+    const fail = (notice: SpeechFailure = "unavailable") => {
       if (!isCurrent()) return;
       invalidate();
       setCaption(null);
@@ -139,8 +146,14 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
       openQuestionRef.current = reply.blocks.some(block => block.type === "choices");
       setStatus("idle");
       if (!request.dismissed) setDetail(reply.blocks.length > 0 ? { spoken: reply.spoken, blocks: reply.blocks, complete: true, generation: request.generation, language: request.language } : null);
-    }).catch((error: unknown) => fail(error instanceof SpeechKeyRequiredError ? "needsKey" : "unavailable"));
+    }).catch((error: unknown) => fail(failureOf(error)));
   }, [characterRef, invalidate]);
+
+  // The visitor stopped Jev: a reply still on its way is dropped; one he is saying stays written and only his talking ends.
+  const interrupt = useCallback(() => {
+    if (pendingRef.current && !pendingRef.current.spoken) cancel();
+    else releaseTalk();
+  }, [cancel, releaseTalk]);
 
   // Closing a reply hides it without cancelling the voice; its late blocks are ignored.
   const dismissDetail = useCallback((generation: number) => {
@@ -187,5 +200,5 @@ export function useSpeechSession(characterRef: RefObject<CharacterController | n
 
   const hasOpenQuestion = useCallback(() => openQuestionRef.current, []);
 
-  return { caption, detail, notice, status, speaking, tool, start, cancel, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
+  return { caption, detail, notice, status, speaking, tool, start, cancel, interrupt, dismissDetail, onCaptionRevealed, finishTalk: releaseTalk, hasOpenQuestion };
 }

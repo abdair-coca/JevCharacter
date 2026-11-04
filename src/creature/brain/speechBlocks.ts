@@ -150,9 +150,9 @@ function normalizeKnown(value: Record<string, unknown>): SpeechBlock | null {
       return items.length > 0 ? { type: "links", items } : null;
     }
     case "whatsapp": {
-      // The text travels inside a wa.me link: never a phone, ID or account number.
-      const text = clampText(value.text, WHATSAPP_TEXT_MAX_CHARS);
-      return text && !LONG_NUMBER.test(text) ? { type: "whatsapp", text } : null;
+      // The text travels inside a wa.me link: a phone, ID or account number never does, and the visitor adds it in WhatsApp.
+      const text = clampText(value.text, WHATSAPP_TEXT_MAX_CHARS)?.replace(new RegExp(LONG_NUMBER, "gu"), "[…]");
+      return text ? { type: "whatsapp", text } : null;
     }
     default:
       return null;

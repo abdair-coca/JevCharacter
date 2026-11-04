@@ -136,7 +136,7 @@ export default function MemoryPanel({ onClose }: { onClose: () => void }) {
             <div>
               <button type="button" onClick={decline}>{t.memoryImportLater}</button>
               <button type="button" className="memory__primary" disabled={importing} onClick={() => void moveNotes()}>
-                {memory.browserNotes === 1 ? t.memoryImportOne : t.memoryImportMany.replace("{count}", String(memory.browserNotes))}
+                {importing ? t.memoryImporting : memory.browserNotes === 1 ? t.memoryImportOne : t.memoryImportMany.replace("{count}", String(memory.browserNotes))}
               </button>
             </div>
           </div>

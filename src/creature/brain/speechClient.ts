@@ -38,6 +38,14 @@ export class SpeechKeyRequiredError extends Error {
   }
 }
 
+/** Too many messages for now, on this server or on the visitor's Groq key: waiting a few seconds is enough. */
+export class SpeechRateError extends Error {
+  constructor() {
+    super("Speech rate exceeded");
+    this.name = "SpeechRateError";
+  }
+}
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
@@ -68,6 +76,7 @@ export async function streamSpeechReply({ message, language, history, memory: no
   }
 
   if (response.status === 401) throw new SpeechKeyRequiredError();
+  if (response.status === 429) throw new SpeechRateError();
   if (!response.ok) throw new Error("Speech response unavailable");
   if (!response.body) throw new Error("Speech stream unavailable");
 

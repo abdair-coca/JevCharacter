@@ -143,6 +143,14 @@ class ToolUseFailedError extends Error {
   }
 }
 
+/** Groq's limit on this key: 8000 tokens a minute on its free tier, about 5 messages (measured 2026-11-03). */
+class UpstreamLimitError extends Error {
+  constructor() {
+    super("Upstream rate limit");
+    this.name = "UpstreamLimitError";
+  }
+}
+
 /** «facebook/react», «microsoft/vscode #345431» or «vercel/next.js @a1b2c3d» from a GitHub page. */
 function linkLabel(url: string) {
   const path = decodeURIComponent(new URL(url).pathname.slice(1))
@@ -172,13 +180,17 @@ function firstDelta(value: unknown): { text: string; toolCalls: ToolCallDelta[] 
   return { text, toolCalls };
 }
 
-function pluginPrompt(plugins: readonly SpeechPlugin[]) {
+function pluginPrompt(plugins: readonly SpeechPlugin[], language: SpeechLanguage) {
+  // The model copies an example word for word, so each one is already in the reply's language.
+  const say = language === "es"
+    ? { github: "Mi plugin de GitHub está apagado; enciéndelo en Ajustes, en Plugins, y te lo busco.", whatsapp: "Mi plugin de WhatsApp está apagado; enciéndelo en Ajustes, en Plugins, y te lo preparo.", late: ["que llego tarde", "Llego tarde."] }
+    : { github: "My GitHub plugin is off; turn it on in Settings, under Plugins, and I'll look it up.", whatsapp: "My WhatsApp plugin is off; turn it on in Settings, under Plugins, and I'll get it ready.", late: ["that I'm running late", "I'm running late."] };
   const github = plugins.includes("github")
     ? `Plugin GitHub (solo lectura, datos públicos): si preguntan por un repositorio, proyecto, issues, pull requests, commits o perfil de GitHub, llama primero a la herramienta adecuada (para «qué cambió» o «qué hay de nuevo», github_commits; puedes llamar dos a la vez), sin escribir nada antes, y responde después solo con los datos que devolvió: copia títulos, nombres, cifras y fechas tal cual, sin traducirlos ni completarlos; nunca inventes versiones, cifras ni fechas. Si una lista vuelve vacía, dilo; no concluyas nada sobre lo que no consultaste. Si devuelve un error, dilo con sencillez. Tras usarla, termina con {"type":"links","items":[{"label":"máx 60","url":"https://github.com/..."}]}: de 1 a 3 enlaces que aparezcan en los resultados.`
-    : "El plugin GitHub está apagado: si preguntan por GitHub, di que lo pueden encender en Ajustes › Plugins y no inventes datos.";
+    : `El plugin GitHub está apagado, así que no tienes esos datos. Si preguntan por un repositorio, proyecto, issues, pull requests, commits o perfil de GitHub, tu frase hablada DEBE decir que está apagado y que se enciende en Ajustes, en Plugins: {"type":"spoken","text":"${say.github}"}. No des cifras ni datos de memoria y no añadas bloques.`;
   const whatsapp = plugins.includes("whatsapp")
-    ? `Plugin WhatsApp: si piden enviar, mandar o compartir algo por WhatsApp, redacta el mensaje en un bloque {"type":"whatsapp","text":"máx 500, listo para enviar, en primera persona del usuario"} y di en la frase hablada que lo dejas listo para abrirlo en WhatsApp. Tú no envías nada: el usuario lo abre y elige a quién mandarlo, así que nunca digas que lo envías ni ofrezcas enviarlo a alguien. Nunca pongas números de teléfono ni datos personales.`
-    : "El plugin WhatsApp está apagado: si piden enviar algo por WhatsApp, di que lo pueden encender en Ajustes › Plugins.";
+    ? `Plugin WhatsApp: si piden enviar, mandar o compartir algo por WhatsApp, escribe SIEMPRE un bloque {"type":"whatsapp","text":"máx 500"} y di en la frase hablada que lo dejas listo para abrirlo en WhatsApp. El texto dice lo que pidieron y nada más, en el idioma de la conversación, en primera persona del usuario y en el mismo tiempo verbal: «${say.late[0]}» es "${say.late[1]}"; no añadas saludos, motivos, disculpas ni despedidas. Tú no envías nada: el usuario lo abre y elige a quién mandarlo, así que nunca digas que lo envías ni ofrezcas enviarlo a alguien. Nunca escribas un número de teléfono en el bloque, aunque te lo den: si es el destinatario, omítelo; si es parte del mensaje, pon [número] en su lugar. En esos casos escribe igual el bloque y di en la frase que el destinatario o el número se pone en WhatsApp.`
+    : `El plugin WhatsApp está apagado. Si piden enviar o compartir algo por WhatsApp, no redactes el mensaje: tu frase hablada DEBE decir que está apagado y que se enciende en Ajustes, en Plugins: {"type":"spoken","text":"${say.whatsapp}"}. No añadas bloques.`;
   return [github, whatsapp].join("\n");
 }
 
@@ -202,7 +214,7 @@ Ejemplo para «compara A y B»: {"type":"spoken","text":"Te los comparo."}{"type
 Ejemplo para «me gusta dibujar, ¿qué puedo estudiar?»: {"type":"spoken","text":"¡Dibujar abre muchos caminos! ¿Qué te atrae más?"}{"type":"memory","text":"Le gusta dibujar y busca qué carrera estudiar."}{"type":"choices","question":"¿Qué te atrae más de dibujar?","options":["Crear personajes","Diseñar espacios","Comunicar ideas","Arte por el arte"]}
 Si recibes recuerdos del usuario, úsalos con naturalidad cuando ayuden, sin recitarlos.
 Historial solo para continuidad.
-${pluginPrompt(plugins)}`;
+${pluginPrompt(plugins, language)}`;
 }
 
 // Past replies return to the model in the same object format it must answer in. The model
@@ -292,6 +304,8 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     const messages = upstreamMessages(body);
     const upstream = await complete(messages, "auto");
 
+    if (upstream.status === 401) return response.status(401).json({ error: "Speech key rejected" });
+    if (upstream.status === 429) return response.status(429).json({ error: "Speech quota exceeded" });
     if (!upstream.ok || !upstream.body) {
       return response.status(502).json({ error: "Speech unavailable" });
     }
@@ -441,6 +455,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
       } catch (error) {
         if (!(error instanceof ToolUseFailedError) || spoken !== null) throw error;
         const retry = await complete(history, "omit", stage);
+        if (retry.status === 429) throw new UpstreamLimitError();
         if (!retry.ok || !retry.body) throw new Error("Speech unavailable after a refused tool call", { cause: error });
         return read(retry.body);
       }
@@ -495,11 +510,13 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     if (spoken === null) throw new Error("Empty speech response");
     emit(response, "done", {});
     response.end();
-  } catch {
+  } catch (error) {
     if (clientDisconnected || response.writableEnded) return;
     if (response.headersSent) {
       emit(response, "error", {});
       response.end();
+    } else if (error instanceof UpstreamLimitError) {
+      response.status(429).json({ error: "Speech quota exceeded" });
     } else {
       response.status(502).json({ error: "Speech unavailable" });
     }

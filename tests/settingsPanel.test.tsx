@@ -163,6 +163,7 @@ describe("settings panel", () => {
     render(<SettingsPanel onClose={vi.fn()} onOpenMemory={vi.fn()} />);
     expect(voice().getByRole("status").textContent).toBe("Sin clave, Jev habla con sus pitidos.");
     expect(voice().getByText("En el nivel gratuito, Google puede usar el texto que Jev dice para mejorar sus productos.")).toBeTruthy();
+    expect(voice().getByText(/Google da pocas frases de voz al día/)).toBeTruthy();
     const input = screen.getByLabelText("Clave de voz") as HTMLInputElement;
     expect(input.type).toBe("password");
     fireEvent.change(input, { target: { value: GOOGLE_KEY } });

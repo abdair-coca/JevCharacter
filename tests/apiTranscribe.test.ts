@@ -66,6 +66,30 @@ describe("/api/transcribe", () => {
     expect((await call({ audio: phrase(), language: "es" })).body).toEqual({ text: "Jev, hola." });
   });
 
+  it.each([
+    "Jev es una criatura digital.", "El Jev es una criatura digital.", "Soy una criatura digital.", "Jev is a digital creature.", "I'm a digital creature.", "It is a digital creature.",
+    "¡Gracias por ver el video!", "¡Suscríbete al canal!", "Thanks for watching!", "Thank you for watching.",
+    "Subtítulos por la comunidad de Amara.org", "Música", ".", "...", " ",
+  ])("drops «%s», which Whisper invents from noise", async (text) => {
+    groqReturns({ text, segments: [{ text, no_speech_prob: 0, avg_logprob: -0.2 }] });
+    expect((await call({ audio: phrase(), language: "es" })).body).toEqual({ text: "" });
+    groqReturns({ text });
+    expect((await call({ audio: phrase(), language: "es" })).body).toEqual({ text: "" });
+  });
+
+  it.each(["Gracias.", "Thank you.", "¿Eres una criatura digital?", "Jev, ¿qué música me recomiendas?", "Sí."])("keeps «%s», which a person says", async (text) => {
+    groqReturns({ text, segments: [{ text, no_speech_prob: 0, avg_logprob: -0.5 }] });
+    expect((await call({ audio: phrase(), language: "es" })).body).toEqual({ text });
+  });
+
+  it("drops the segments Whisper barely believes and keeps the rest", async () => {
+    groqReturns({
+      text: " Jev, hola. En ég er enn.",
+      segments: [{ text: " Jev, hola.", no_speech_prob: 0, avg_logprob: -0.3 }, { text: " En ég er enn.", no_speech_prob: 0, avg_logprob: -1.36 }],
+    });
+    expect((await call({ audio: phrase(), language: "es" })).body).toEqual({ text: "Jev, hola." });
+  });
+
   it("asks for a key before calling Groq", async () => {
     const fetchMock = groqReturns({ text: "hola" });
     expect((await call({ audio: phrase(), language: "es" }, {})).statusCode).toBe(401);
@@ -78,7 +102,7 @@ describe("/api/transcribe", () => {
     ["an unknown language", { audio: phrase(), language: "fr" }],
     ["an extra field", { audio: phrase(), language: "es", model: "whisper-large-v3" }],
     ["text that is not base64", { audio: "not base64!", language: "es" }],
-    ["too short a phrase", { audio: phrase(200), language: "es" }],
+    ["too short a phrase", { audio: phrase(100), language: "es" }],
     ["too long a phrase", { audio: phrase(LISTEN_SEGMENT_MAX_MS + 500), language: "es" }],
     ["another sample rate", { audio: phrase(1000, 44_100), language: "es" }],
     ["a file that is not WAV", { audio: Buffer.from("ID3".padEnd(20_000, "x")).toString("base64"), language: "es" }],

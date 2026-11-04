@@ -9,7 +9,9 @@ describe("matchWakeWord", () => {
     ["Oye Jev, ¿qué hora es?", "Oye, ¿qué hora es?"],
     ["¿Qué opinas, Jev?", "¿Qué opinas?"],
     ["Hola Jev", "Hola"],
+    ["Hola, Jev", "Hola"],
     ["Hey Jeff, what can I study?", "Hey, what can I study?"],
+    ["Jeph, tell me a joke.", "tell me a joke."],
     ["yev cuéntame un chiste", "cuéntame un chiste"],
   ])("finds the name in «%s»", (transcript, message) => {
     expect(matchWakeWord(transcript)).toEqual({ addressed: true, message });

@@ -12,13 +12,13 @@ type Props = {
   placeholder: string;
   /** Shown instead of the saved state while the provider is refusing the saved key. */
   problem?: string | null;
-  /** A fixed note under the help, such as how the provider uses what it receives. */
-  note?: string;
+  /** Fixed notes under the help, such as how the provider uses what it receives. */
+  notes?: string[];
   onSaved?: () => void;
 };
 
 /** One provider key the visitor keeps in this browser: help, a guide, its state and the field to save or remove it. */
-export function KeySection({ provider, store, keysUrl, placeholder, problem, note, onSaved }: Props) {
+export function KeySection({ provider, store, keysUrl, placeholder, problem, notes = [], onSaved }: Props) {
   const t = useTranslation();
   const titleId = useId();
   const inputId = useId();
@@ -54,7 +54,7 @@ export function KeySection({ provider, store, keysUrl, placeholder, problem, not
     <section className="settings__group" aria-labelledby={titleId}>
       <h3 id={titleId}>{t[`${provider}Title`]}</h3>
       <p id={helpId} className="settings__help">{t[`${provider}Help`]}</p>
-      {note && <p className="settings__help">{note}</p>}
+      {notes.map(note => <p key={note} className="settings__help">{note}</p>)}
       <details className="settings__guide">
         <summary className="settings__link"><span>{t[`${provider}Guide`]}</span><span aria-hidden="true">›</span></summary>
         <ol>

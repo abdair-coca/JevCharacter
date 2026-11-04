@@ -96,13 +96,37 @@ describe("voice activity detector", () => {
 
   it("ignores a click shorter than a phrase", () => {
     const detector = createVoiceActivityDetector();
-    expect(feed(detector, join(silence(500), tone(200), silence(1000)))).toEqual([]);
+    expect(feed(detector, join(silence(500), tone(100), silence(1000)))).toEqual([]);
   });
 
   it("cuts a phrase at the maximum length", () => {
     const detector = createVoiceActivityDetector();
     const [first] = feed(detector, join(silence(300), tone(LISTEN_SEGMENT_MAX_MS + 2000)));
     expect(first.samples.length).toBe(samplesFor(LISTEN_SEGMENT_MAX_MS));
+  });
+
+  it("sends a hum that never pauses once, and hears a voice again at the next pause", () => {
+    const detector = createVoiceActivityDetector();
+    expect(feed(detector, join(silence(500), tone(LISTEN_SEGMENT_MAX_MS * 4, 0.05)))).toHaveLength(1);
+    expect(detector.speaking).toBe(false);
+    expect(feed(detector, join(silence(200), tone(1000, 0.4), silence(1000)))).toHaveLength(1);
+  });
+
+  it("does not take a sudden hiss for a phrase", () => {
+    const detector = createVoiceActivityDetector();
+    expect(feed(detector, join(silence(500), hiss(1500, 0.2), silence(1000)))).toEqual([]);
+    expect(detector.speaking).toBe(false);
+  });
+
+  it("does not take typing or claps for a phrase", () => {
+    const detector = createVoiceActivityDetector();
+    const taps = Array.from({ length: 12 }, () => join(hiss(50, 0.4), silence(90)));
+    expect(feed(detector, join(silence(500), ...taps, silence(1000)))).toEqual([]);
+  });
+
+  it("hears a voice saying a single short word", () => {
+    const detector = createVoiceActivityDetector();
+    expect(feed(detector, join(silence(500), tone(250), silence(1000)))).toHaveLength(1);
   });
 
   it("learns steady room noise and still hears a voice over it", () => {

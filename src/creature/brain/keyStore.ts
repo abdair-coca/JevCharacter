@@ -6,12 +6,16 @@ export type KeyStore = {
   /** Saves a well-formed key in this browser. Returns false, and saves nothing, when the key is malformed. */
   save: (value: string) => boolean;
   clear: () => void;
+  /** Runs after the key is saved or removed in this browser. */
+  subscribe: (listener: () => void) => () => void;
 };
 
 /** A provider key the visitor keeps in this browser only. */
 export function createKeyStore(storageKey: string, parse: (value: unknown) => string | null): KeyStore {
   // Without storage (private browsing, blocked site data) the key lasts for this session only.
   let sessionKey: string | null | undefined;
+  const listeners = new Set<() => void>();
+  const notify = () => { for (const listener of listeners) listener(); };
   return {
     read() {
       if (sessionKey === undefined) {
@@ -24,11 +28,17 @@ export function createKeyStore(storageKey: string, parse: (value: unknown) => st
       if (!key) return false;
       sessionKey = key;
       writeStorage(storageKey, key);
+      notify();
       return true;
     },
     clear() {
       sessionKey = null;
       removeStorage(storageKey);
+      notify();
+    },
+    subscribe(listener) {
+      listeners.add(listener);
+      return () => { listeners.delete(listener); };
     },
   };
 }

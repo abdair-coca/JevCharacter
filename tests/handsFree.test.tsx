@@ -133,15 +133,44 @@ describe("useHandsFree", () => {
     await waitFor(() => expect(onMessage).toHaveBeenCalledWith("¿qué hora es?"));
   });
 
-  it("switches off and asks for the key when Groq rejects it", async () => {
+  it("switches off and points at the key when Groq rejects it", async () => {
     vi.stubGlobal("fetch", vi.fn(() => Promise.resolve(new Response("{}", { status: 401 }))));
     const { result } = mount();
     await turnOn(result);
 
     say();
-    await waitFor(() => expect(result.current.notice).toBe("needsKey"));
+    await waitFor(() => expect(result.current.notice).toBe("keyRejected"));
     expect(result.current.status).toBe("off");
     expect(mic.stop).toHaveBeenCalled();
+
+    act(() => { saveGroqKey(TEST_GROQ_KEY); });
+    expect(result.current.notice).toBeNull();
+  });
+
+  it("switches off as soon as the key is removed, without another phrase", async () => {
+    const { fetchMock } = transcripts();
+    const { result } = mount();
+    await turnOn(result);
+
+    act(() => clearGroqKey());
+    expect(result.current.status).toBe("off");
+    expect(result.current.notice).toBe("needsKey");
+    expect(mic.stop).toHaveBeenCalledTimes(1);
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    act(() => { saveGroqKey(TEST_GROQ_KEY); });
+    expect(result.current.notice).toBeNull();
+  });
+
+  it("forgets what it heard when switched off", async () => {
+    transcripts("Jev, ¿qué hora es?");
+    const { result } = mount();
+    await turnOn(result);
+    say();
+    await waitFor(() => expect(result.current.heard).toBe("¿qué hora es?"));
+
+    act(() => result.current.onToggle());
+    expect(result.current.heard).toBe("");
   });
 
   it("keeps listening and says so when Groq runs out of quota", async () => {

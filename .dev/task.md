@@ -11,7 +11,37 @@ Handoff vivo de la feature. **Antes de continuar, leer `spec.md`, `plan.md`, est
   2. Para tener login en producción, a pedido: `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` en Vercel y `vercel deploy --prod`.
 - **Quiz de la fase 2 (2026-11-01):** voz «Puck» (animada); prueba real con `GEMINI_API_KEY` en `.env.local`, usada solo por un script del scratchpad que no se commitea.
 - **Estado del código:** fases 1 a 4 en GitHub (push pedido por el usuario el 2026-11-02). Producción quedó en `4773bfc`, desplegado por esos push, sin las variables `VITE_SUPABASE_*`: allí no aparece el login. Desde `1596ba6` un push ya no despliega. El SDD anterior («Jev compañero con memoria») se aprobó y se vació en `fb6b966`.
-- **Verificación de las fases 1 a 4 (2026-11-03):** hallazgos abajo, sin corregir. El usuario eligió «Reportar y tú decides»: esperan su decisión.
+- **Verificación de las fases 1 a 4 (2026-11-03):** hallazgos abajo. El usuario pidió «arregla todo y si tienes dudas preguntame».
+- **Correcciones (2026-11-03):** hechas y comprobadas, ver «Correcciones de los hallazgos». Sin push. Falta lo que solo puede hacer el usuario.
+
+## Correcciones de los hallazgos — 2026-11-03
+
+El usuario pidió «arregla todo y si tienes dudas preguntame». Sobre las dos preguntas abiertas se siguió la recomendación: Escape y tocar a Jev lo interrumpen, y se mantiene Gemini con un aviso del límite en Ajustes. Los números son los de la lista de abajo. Guiones en el scratchpad, sin commitear: Whisper y Groq reales; en navegador, `/api/speak` fue una voz grabada, porque hoy no queda cuota de Gemini, y en los casos de interrumpir `/api/decide` se fijó para que Jev siempre hable.
+
+| Hallazgo | Arreglo | Comprobado |
+|---|---|---|
+| 2 y 14, ruido | `voiceActivity` exige 60 ms de sonido que se repite a un tono de 70–400 Hz. `api/transcribe.ts` descarta su frase de contexto y variantes, frases de su entrenamiento, texto sin letras y segmentos con `avg_logprob` < -1. | Camino completo, 32 sonidos sin voz, 2 corridas: 20 no llegan a Whisper. De los 12 que llegan (zumbidos sintéticos), la 1.ª dejó 3 con texto y la 2.ª, ya con la variante añadida al filtro, 0. La 1.ª despertó a Jev una vez con «El Jev es una criatura digital.», ahora filtrada. **Queda:** «Estos sonidos de la Tierra» y «¿Qué pasa?» aún podrían pasar, solo dentro de los 8 s. Navegador: tecleo y tos, 0 envíos. |
+| 1, «Jev» | Variante «Jeph». Otra frase de contexto («Hablando con Jev.») acierta igual, pero en 13 de los 16 ruidos que pasan el detector devuelve el nombre y despertaría a Jev, así que se queda la actual. | Camino completo: con nombre 37/40 (Helena 8/10, David 9/10, Sabina y Zira 10/10), sin nombre 0/40. **Helena sigue bajo el listón** y Whisper pierde el nombre también con otra frase de contexto. Falta voz humana. |
+| 15, solo «Jev» | `LISTEN_SPEECH_MIN_MS` baja a 150 ms: «Jev» dura desde 200 ms y «No» desde 180 ms. | «Jev», «Oye, Jev» y similares 7/8 (se pierde «Jev» de Helena: Whisper oye otra cosa). Respuestas cortas 32/32. Navegador: Jev saluda y la frase siguiente no necesita el nombre. |
+| 3, interrumpir | Tocar su cuerpo o Escape, también desde el campo: si piensa, se descarta; si habla, se corta la voz y queda el texto. El canvas mide 1587 px y cubre casi todo el escenario, así que el toque se limita a su círculo. | Navegador, canvas real: Escape desde el campo, tocar su cuerpo y Escape al pensar PASS; tocar el canvas lejos de él no lo corta. |
+| 4 y 11 | Borrar la clave apaga el micrófono al momento y guardar otra quita el aviso. «Oí: …» se borra al apagar y «Hola, Jev» llega como «Hola». | Navegador PASS: pistas del micrófono en `ended` sin otra frase. |
+| 9 | `/api/talk` responde 401 si Groq rechaza la clave y Home lo dice. | Navegador PASS, con la respuesta de `/api/talk` simulada; unit test del servidor. |
+| 5, ruido constante | Una frase de 15 s sin pausa pasa a ser el nivel de la sala. | Unit tests. |
+| 6, plugin apagado | Prompt con la frase exacta, en el idioma de la respuesta. | GitHub apagado 9/9 ES y 2/2 EN (antes 0/6). WhatsApp apagado 4/4 ES y 2/2 EN. |
+| 7 y 8, WhatsApp | El borrador dice lo pedido, sin añadir nada. Un número de 7 o más dígitos se sustituye por «[…]» en lugar de rechazar el borrador. | «Llego tarde.» y «La reunión se movió al viernes.» en todas las respuestas ES, y «I'm running late.» en EN. A un número 7/7 con borrador y sin el número. Número en el mensaje 2/2 con «[…]». |
+| 10, tests con `.env` | `vitest.config.ts` fija `VITE_SUPABASE_*` vacías. | `settingsPanel` y `memoryPanel` pasan con el `.env` actual. |
+| 13, textos | `spec.md`, `plan.md` y `docs/` al día. | Revisión del diff. |
+| 16, voz | Aviso fijo en Ajustes. | Navegador PASS. |
+| Móvil, «no disponible» | **Causa encontrada:** el límite de Groq de 8000 tokens por minuto (cada mensaje pide unos 1600), que `/api/talk` devolvía como 502. Ahora es 429 y Home pide esperar. | Respuesta real de Groq capturada 14 veces. El aviso, en navegador con `/api/talk` simulado. |
+| «Llevar N notas» | El botón dice «Llevando…» mientras tarda. | Unit test. |
+
+**Checks finales:** Vitest PASS 354/354 en los 23 archivos afectados, con el `.env` actual. `tsc -b`, typecheck de tests y ESLint de los archivos tocados PASS. `vite build` PASS a una carpeta aparte. Sin CI ni e2e, por la regla del 2026-11-02.
+
+**Memoria del equipo:** el sistema paró una medición con 0,74 GB libres. El usuario pidió «Libera memoria tú y sigue después»: se usó `EmptyWorkingSet` de Windows, sin cerrar ningún programa, y subió de 0,96 a 2,88 GB disponibles.
+
+**Solo el usuario:** apagar el email en Supabase (hallazgo 12), crear `GITHUB_TOKEN` (13) y probar con su voz y ruido real (1). Si el ruido real pasa el filtro, la spec prevé proponer `@ricky0123/vad-web`.
+
+**Sin concluir:** `/api/speak` con 502 (2/5, hoy no queda cuota de Gemini para repetirlo; el plan B de pitidos lo cubre) y el final de la pose tras la voz (este navegador no tiene GPU).
 
 ## Verificación de las fases 1 a 4 — 2026-11-03
 

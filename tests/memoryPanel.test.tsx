@@ -115,6 +115,7 @@ describe("memory panel with an account", () => {
     expect(screen.getByText(/Este navegador tiene notas de antes/)).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: "Llevar 2 notas a tu cuenta" }));
+    expect(screen.getByRole("button", { name: "Llevando…" })).toHaveProperty("disabled", true);
     await waitFor(() => expect(screen.queryByRole("button", { name: /Llevar/ })).toBeNull());
     expect(rows.map(row => row.text)).toEqual(["Busca una carrera corta.", "Le gusta programar.", "Vive en Potosí."]);
     expect(texts()).toEqual(["Le gusta programar.", "Vive en Potosí.", "Busca una carrera corta."]);

@@ -8,7 +8,7 @@ import type { SpeechNotice } from "../hooks/useSpeechSession";
 import { openSettings } from "../stores/settingsDialogStore";
 
 const NOTICES: Record<NonNullable<SpeechNotice>, MessageKey> = {
-  unavailable: "speechUnavailable", needsKey: "speechNeedsKey", regenerating: "speechRegenerating", interrupted: "speechInterrupted",
+  unavailable: "speechUnavailable", needsKey: "speechNeedsKey", keyRejected: "speechKeyRejected", rateLimited: "speechRateLimited", regenerating: "speechRegenerating", interrupted: "speechInterrupted",
 };
 
 type Props = { decision: BrainDecision; status: BrainStatus; personality: Personality; speechNotice?: SpeechNotice; decisionInterrupted?: boolean };
@@ -96,7 +96,7 @@ export default function BrainHUD({ decision, status, personality, speechNotice, 
         </span>
       </m.button>
       {notice && <p className="brain-hud__notice" role="status">{notice}</p>}
-      {speechNotice === "needsKey" && (
+      {(speechNotice === "needsKey" || speechNotice === "keyRejected") && (
         <button type="button" className="brain-hud__notice-action" aria-haspopup="dialog" onClick={(event) => openSettings(event.currentTarget)}>{t.openSettings}</button>
       )}
       <AnimatePresence initial={false}>

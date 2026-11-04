@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { readGroqKey } from "../brain/groqKeyStore";
+import { groqKeyStore, readGroqKey } from "../brain/groqKeyStore";
 import { SpeechKeyRequiredError } from "../brain/speechClient";
 import type { SpeechLanguage } from "../brain/speechProtocol";
 import { MicUnavailableError, micSupported, startMicCapture, type MicCapture } from "./micCapture";
@@ -12,7 +12,7 @@ import { matchWakeWord } from "./wakeWord";
 export const HANDS_FREE_REPLY_WINDOW_MS = 8_000;
 
 export type HandsFreeStatus = "off" | "starting" | "listening" | "hearing" | "transcribing";
-export type HandsFreeNotice = "denied" | "noMic" | "unsupported" | "needsKey" | "quota" | null;
+export type HandsFreeNotice = "denied" | "noMic" | "unsupported" | "needsKey" | "keyRejected" | "quota" | null;
 
 type HandsFreeOptions = {
   /** Home is visible and conversational; false switches the microphone off. */
@@ -62,6 +62,7 @@ export function useHandsFree({ enabled, busy, speaking, language, onMessage, onS
     setPhase("off");
     setHearing(false);
     setTranscribing(false);
+    setHeard("");
   }, []);
 
   const deliver = useCallback((transcript: string, phrase: HeardPhrase) => {
@@ -93,7 +94,7 @@ export function useHandsFree({ enabled, busy, speaking, language, onMessage, onS
       if (session !== sessionRef.current) return;
       if (error instanceof SpeechKeyRequiredError) {
         stop();
-        setNotice("needsKey");
+        setNotice(readGroqKey() ? "keyRejected" : "needsKey");
         return;
       }
       if (error instanceof TranscribeQuotaError) setNotice("quota");
@@ -166,6 +167,15 @@ export function useHandsFree({ enabled, busy, speaking, language, onMessage, onS
   }, [enabled, stop]);
 
   useEffect(() => stop, [stop]);
+
+  // Removing the key in Ajustes ends listening at once; saving one clears the notice that asked for it.
+  useEffect(() => groqKeyStore.subscribe(() => {
+    if (readGroqKey()) setNotice(current => (current === "needsKey" || current === "keyRejected" ? null : current));
+    else if (phase !== "off") {
+      stop();
+      setNotice("needsKey");
+    }
+  }), [phase, stop]);
 
   // The reply window opens when Jev stops talking.
   const wasSpeakingRef = useRef(speaking);

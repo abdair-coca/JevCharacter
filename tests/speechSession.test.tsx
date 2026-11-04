@@ -5,7 +5,8 @@ import { StrictMode, type ReactNode } from "react";
 import type { CharacterController } from "../src/character/useCharacterController";
 import { useSpeechSession } from "../src/hooks/useSpeechSession";
 import type { SpeechBlock } from "../src/creature/brain/speechBlocks";
-import { SpeechKeyRequiredError, streamSpeechReply, type SpeechResult } from "../src/creature/brain/speechClient";
+import { SpeechKeyRequiredError, SpeechRateError, streamSpeechReply, type SpeechResult } from "../src/creature/brain/speechClient";
+import { clearGroqKey, saveGroqKey } from "../src/creature/brain/groqKeyStore";
 import { addMemory, readMemory } from "../src/creature/memory/memoryStore";
 import { SPEECH_REQUEST_TIMEOUT_MS, type SpeechLanguage } from "../src/creature/brain/speechProtocol";
 
@@ -202,6 +203,40 @@ describe("speech session generations", () => {
     expect(character.idle).toHaveBeenCalled();
     act(() => result.current.start("Otra", "Talk"));
     expect(requests[1].options.history).toEqual([]);
+  });
+
+  it("asks to wait, instead of a generic failure, when Groq hits its limit", async () => {
+    const { result } = mountSpeech();
+    act(() => result.current.start("Pregunta", "Talk"));
+    await act(async () => requests[0].reject(new SpeechRateError()));
+    expect(result.current.notice).toBe("rateLimited");
+  });
+
+  it("says the saved Groq key was rejected when the server refuses it", async () => {
+    saveGroqKey("gsk_test_visible_key_1234567890");
+    const { result } = mountSpeech();
+    act(() => result.current.start("Pregunta", "Talk"));
+    await act(async () => requests[0].reject(new SpeechKeyRequiredError()));
+    expect(result.current.notice).toBe("keyRejected");
+    clearGroqKey();
+  });
+
+  it("an interrupted reply on its way is dropped, and one being said stays written", async () => {
+    const { result, character } = mountSpeech();
+    act(() => result.current.start("Pregunta", "Talk"));
+    act(() => result.current.interrupt());
+    expect(requests[0].options.signal.aborted).toBe(true);
+    expect(result.current.status).toBe("idle");
+    expect(result.current.notice).toBeNull();
+
+    act(() => result.current.start("Otra", "Talk"));
+    await act(async () => requests[1].options.onSpoken("Te cuento."));
+    expect(result.current.speaking).toBe(true);
+    act(() => result.current.interrupt());
+    expect(result.current.speaking).toBe(false);
+    expect(character.idle).toHaveBeenCalled();
+    expect(requests[1].options.signal.aborted).toBe(false);
+    expect(result.current.caption?.text).toBe("Te cuento.");
   });
 
   it("asks for the Groq key instead of reporting a generic failure when the server needs it", async () => {

@@ -147,7 +147,7 @@ export default function SettingsPanel({ onClose, onOpenMemory, diagnostics }: Pr
         </section>
 
         <KeySection provider="groq" store={groqKeyStore} keysUrl={GROQ_KEYS_URL} placeholder="gsk_…" />
-        <KeySection provider="gemini" store={geminiKeyStore} keysUrl={GEMINI_KEYS_URL} placeholder="AIza…" note={t.geminiPrivacy}
+        <KeySection provider="gemini" store={geminiKeyStore} keysUrl={GEMINI_KEYS_URL} placeholder="AIza…" notes={[t.geminiLimit, t.geminiPrivacy]}
           problem={voiceProblem === "rejected" ? t.geminiRejected : voiceProblem === "quota" ? t.geminiQuota : null} onSaved={clearVoiceProblem} />
       </m.div>
     </div>,

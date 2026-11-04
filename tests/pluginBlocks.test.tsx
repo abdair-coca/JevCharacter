@@ -58,7 +58,8 @@ describe("plugin blocks", () => {
 
   it("drops a rejected link or draft whole instead of showing its text", () => {
     expect(parseBlock({ type: "links", items: [{ label: "Phish", url: "https://evil.example/x" }] })).toBeNull();
-    expect(parseBlock({ type: "whatsapp", text: "Llámame al 7123 4567" })).toBeNull();
+    expect(parseBlock({ type: "whatsapp", text: "Llámame al 7123 4567 o al 71234568." })).toEqual({ type: "whatsapp", text: "Llámame al […] o al […]." });
+    expect(parseBlock({ type: "whatsapp", text: "Llego a las 10 con 2 amigos." })).toEqual({ type: "whatsapp", text: "Llego a las 10 con 2 amigos." });
   });
 
   it("keeps a WhatsApp draft up to 500 characters and remembers it in the history", () => {

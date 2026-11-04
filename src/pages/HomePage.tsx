@@ -30,6 +30,9 @@ import "../features/enrollment/enrollment.css";
 const Character = lazy(() => import("../components/Character"));
 const ReplySheet = lazy(() => import("../features/reply/ReplySheet"));
 
+// Jev's round body, as a share of his box's width. His canvas spreads far beyond it, over most of the stage.
+const JEV_BODY_RADIUS = 0.3;
+
 type StageStyle = CSSProperties & { "--intensity": number; "--attention": number };
 type SpeechCaptionProps = Caption & { onRevealed: (generation: number) => void };
 
@@ -124,9 +127,15 @@ export default function HomePage({ active = true }: { active?: boolean }) {
     if (enrollment.tryOpen(message)) setDiagnostics(false);
     else brain.submitContext(message, { direct });
   };
+  const jevBusy = brain.status === "deciding" || brain.speaking;
+  const { interrupt: interruptBrain } = brain;
+  const interruptJev = useCallback(() => {
+    homeVoice.stopSpeech();
+    interruptBrain();
+  }, [interruptBrain]);
   const handsFree = useHandsFree({
     enabled: conversational,
-    busy: brain.status === "deciding" || brain.speaking,
+    busy: jevBusy,
     speaking: brain.speaking,
     language,
     onMessage: message => submitContext(message, true),
@@ -136,10 +145,16 @@ export default function HomePage({ active = true }: { active?: boolean }) {
   const handleStagePointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
     if (!conversational) return;
     const target = event.target;
+    const shell = creatureShellRef.current;
+    if (jevBusy && shell && target instanceof Node && shell.contains(target)) {
+      const box = shell.getBoundingClientRect();
+      const distance = Math.hypot(event.clientX - (box.left + box.width / 2), event.clientY - (box.top + box.height / 2));
+      if (distance <= box.width * JEV_BODY_RADIUS) interruptJev();
+    }
     if (target instanceof HTMLCanvasElement) return;
     if (target instanceof Element && target.closest("button, input, textarea, select, a, label, [role='button']")) return;
     void characterRef.current?.bump();
-  }, [conversational]);
+  }, [conversational, interruptJev, jevBusy]);
   const wakeCharacter = useCallback(() => {
     setCharacterStatus("ready");
     if (wakePlayedRef.current || !running) return;
@@ -163,6 +178,19 @@ export default function HomePage({ active = true }: { active?: boolean }) {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [conversational]);
+
+  // Escape stops Jev before anything else, from the field too: the next press closes what is open.
+  useEffect(() => {
+    if (!conversational || !jevBusy) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (event.target instanceof Element && event.target.closest("[role='dialog']")) return;
+      event.stopPropagation();
+      interruptJev();
+    };
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [conversational, interruptJev, jevBusy]);
 
   const style: StageStyle = { "--intensity": brain.decision.intensity, "--attention": brain.decision.wantsAttention };
   return (
